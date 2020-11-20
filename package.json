@@ -1,0 +1,90 @@
+{
+  "name": "pdnsx",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "bootstrap": "^4.1.3",
+    "cors": "^2.8.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.16.3",
+    "find-config": "^1.0.0",
+    "history": "^4.7.2",
+    "ibm-openapi-validator": "^0.31.1",
+    "js-yaml": "^3.14.0",
+    "md5": "^2.2.1",
+    "mongoose": "^5.9.26",
+    "mongoose-paginate-v2": "^1.3.9",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "4.0.0",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^1.1.3",
+    "swagger-client": "^3.12.0",
+    "swagger-model-validator": "^3.0.19",
+    "uuid": "^3.3.2",
+    "web-vitals": "^0.2.4",
+    "webpack": "^4.17.2",
+    "yaml-schema-validator": "^1.2.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "dev": "webpack-dev-server --open",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server": "babel-node src/server/server",
+    "server-dev": "nodemon src/server/server --exec babel-node src/server/server",
+    "start-dev": "concurrently \"npm run server-dev\" \"npm run dev\"",
+    "server-spec": "babel-node src/server/server.spec"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.2",
+    "concurrently": "^4.0.1",
+    "cross-env": "^5.2.0",
+    "file-loader": "^6.2.0",
+    "highground": "^1.0.3-beta",
+    "jest": "^23.6.0",
+    "mongoose": "^5.9.26",
+    "mongoose-paginate-v2": "^1.3.9",
+    "nodemon": "^1.18.4",
+    "style-loader": "^0.23.0",
+    "webpack": "^4.17.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.7"
+  }
+}
