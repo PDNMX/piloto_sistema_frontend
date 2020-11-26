@@ -8,7 +8,9 @@ import {ConnectedNavigation} from "./Navigation";
 import {ConnectTaskDetail} from "./TaskDetail";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {LoadFileV} from "./UploadFile/LoadFileV";
-    import { Redirect } from 'react-router';
+import { Redirect } from 'react-router';
+import { MenuV } from "./Menu/MenuV";
+import { LoginV } from "./Login/Login";
 
 const theme = createMuiTheme({
     typography: {
@@ -51,7 +53,7 @@ export const Main = ()=> (
     <Router history={history}>
         <Provider store = {store}>
             <div>
-                <ConnectedNavigation/>
+                
                 <Route exact
                        path="/dashboard"
                        render= {()=>(<ConnectedDashboard/>) }
@@ -64,6 +66,14 @@ export const Main = ()=> (
                 <Route exact
                        path= "/uploadFile"
                        render={() => (<LoadFileV/>)}
+                />
+                <Route exact
+                        path="/menu"
+                        render={({match}) => (<MenuV/>)}
+                />
+                <Route exact
+                        path="/login"
+                        render={({match}) => (<LoginV/>)}
                 />
             </div>
         </Provider>
