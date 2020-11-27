@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import {withStyles} from "@material-ui/core/styles";
 import Header from "../Header/Header"
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -64,7 +63,9 @@ const style = makeStyles((theme) => ({
     whiteText:{
         color: theme.palette.white
     },
-
+    fontblack:{
+      color: '#666666'
+    },
     purpleText:{
         color: '#FFFFFF'
     },
@@ -81,14 +82,17 @@ const style = makeStyles((theme) => ({
 
     avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.secondary.secondary,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
+    
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    backgroundColor: '#34b3eb',
+    color: '#666666'
   },
   logo:{
     margin: 'auto',
@@ -96,6 +100,24 @@ const style = makeStyles((theme) => ({
     maxWidth: '15%',
     maxHeight: '15%',
    
+  },
+  textfield:{
+    '&.Mui-focused fieldset': {
+        borderColor: '#666666',
+      },
+      '& label.Mui-focused': {
+      color: '#666666',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '#34b3eb',
+    },
+    '& .MuiOutlinedInput-root': {      
+      '&:hover fieldset': {
+        borderColor: '#34b3eb',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#34b3eb',
+      },}
   }
 }));
 
@@ -138,7 +160,7 @@ return (
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography className={classes.fontblack} component="h1" variant="h5">
           Inicio de sesión
         </Typography>
         <Typography component="h1" variant="h5">         
@@ -147,7 +169,7 @@ return (
 
         
         <form className={classes.form} onSubmit={e => handleSubmit(e)}>
-          <TextField
+          <TextField className={classes.textfield}
             variant="outlined"
             margin="normal"            
             fullWidth
@@ -158,7 +180,7 @@ return (
             autoFocus
             onChange={e => onChange(e)}
           />
-          <TextField
+          <TextField className={classes.textfield}
             variant="outlined"
             margin="normal"            
             fullWidth
@@ -173,15 +195,14 @@ return (
           <Button
             type="submit"
             fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
+            variant="contained"            
+            className={classes.fontblack,classes.submit}
           >
             Aceptar
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" className={classes.fontblack}>
                 Recuperar contraseña
               </Link>
             </Grid>
