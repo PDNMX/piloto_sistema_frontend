@@ -1,11 +1,14 @@
 import React from 'react';
-import {storeValidate} from "../store";
+import {store} from "../store";
 import {Provider} from 'react-redux';
 import {ConnectedDashboard} from './Dashboard';
 import {Router, Route} from "react-router-dom";
 import {history} from "../store/history";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {LoadFileV} from "./UploadFile/LoadFileV";
+import { Redirect } from 'react-router';
+import { MenuV } from "./Menu/MenuV";
+import { LoginV } from "./Login/Login";
 import {CreateUser} from "./users/createUser";
 import { Redirect } from 'react-router';
 
@@ -53,13 +56,26 @@ export const Main = ()=> (
 
         <Provider store = {storeValidate}>
             <div>
+
                 <Route exact
                        path= "/uploadFile"
                        render={() => ( <ThemeProvider theme = {theme}> <LoadFileV/></ThemeProvider>)}
                 />
                 <Route exact
+                       path="/dashboard"
+                       render= {()=>(<ConnectedDashboard/>) }
+                />
+                <Route exact
                        path= "/createUser"
                        render={() => ( <CreateUser/>)}
+                />
+                <Route exact
+                        path="/menu"
+                        render={({match}) => (<MenuV/>)}
+                />
+                <Route exact
+                        path="/login"
+                        render={({match}) => (<LoginV/>)}
                 />
             </div>
         </Provider>
