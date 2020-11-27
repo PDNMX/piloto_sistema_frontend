@@ -5,11 +5,11 @@ import path from 'path';
 const mongoose = require('mongoose');
 const yaml = require('js-yaml')
 const fs = require('fs');
-const validateSchema = require('yaml-schema-validator');
 const SwaggerClient = require('swagger-client');
-
 var Validator = require('swagger-model-validator');
 var validator = new Validator(SwaggerClient);
+var swaggerValidator = require('swagger-object-validator');
+
 
 console.log(path.resolve(__dirname, '../utils/.env'));
 
@@ -37,23 +37,48 @@ let server = app.listen(3004, function () {
 });
 
 
+async function validateSchema(doc,schema,validacion){
+     let result =  await validacion.validateModel(doc, schema);
+     if(result){
+        let objError={};
+        let arrayErrors = result.errorsWithStringTypes();
+        let textErrors;
+        objError["docId"]= doc.id;
+        objError["valid"] =  arrayErrors.length === 0 ? true : false;
+        objError["errorCount"]= arrayErrors.length;
+
+        let errors= [];
+        for(let error of arrayErrors){
+            let obj={};
+            obj["typeError"]= error.errorType;
+            let path = "";
+            for(let ruta of error.trace){
+                path = path+ ruta.stepName + "/";
+            }
+            obj["pathError"]= path;
+            errors.push(obj);
+        }
+        objError["errors"]= errors;
+        objError["errorsHumanReadable"]= result.humanReadable();
+        return objError;
+    }
+}
+
 app.post('/validateSchemaS2',async (req,res)=>{
     let fileContents = fs.readFileSync( path.resolve(__dirname, '../app/resource/openapis2.yaml'), 'utf8');
     let data = yaml.safeLoad(fileContents);
     let schemaS2 =  data.components.schemas.respSpic_inner;
+    let validacion = new swaggerValidator.Handler();
 
     let newdocument = req.body;
     let respuesta=[];
     if(Array.isArray(newdocument)){
         for (let doc of newdocument){
-            var validation = validator.validate(doc, schemaS2);
-            respuesta.push(validation);
+            respuesta.push(await validateSchema(doc,schemaS2,validacion));
         }
     }else{
-        var validation = validator.validate(newdocument, schemaS2);
-        respuesta.push(validation);
+            respuesta.push(await validateSchema(newdocument,schemaS2,validacion));
     }
-
     res.status(200).json(respuesta);
 });
 

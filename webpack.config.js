@@ -14,7 +14,7 @@ module.exports = {
         publicPath: '/',
     },
     resolve: {
-        extensions: ['.js','.jsx']
+        extensions: ['.js','.jsx','.tsx']
     },
     devServer: {
         historyApiFallback: true
@@ -31,6 +31,12 @@ module.exports = {
                         loader: 'file-loader',
                     },
                 ],
-            }]
+            },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
+            ]
     }
 }

@@ -8,20 +8,26 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Grid from "@material-ui/core/Grid";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
-import {requestSchemaS2Creation} from '../../store/mutations'
+import {requestErrorsValidation} from '../../store/mutations'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { TextField } from '@material-ui/core';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 export const LoadFileV = () => {
     let fileReader;
     const dispatch = useDispatch();
+    const errors = useSelector(state => state.errors);
     let systemChosen;
     let contentFileJson;
     let rowsError=[];
+
 
     const style = theme => ({
         root: {
@@ -47,28 +53,9 @@ export const LoadFileV = () => {
     });
 
 
-    const getErrorsFileUpload = async (contentFileJson, systemChosen) => {
-        const ur= "http://localhost:3004";
-
-        if(systemChosen === "s2"){
-            let SCHEMA = JSON.parse(contentFileJson);
-            const respuesta = await axios.post(ur + `/validateSchemaS2`,SCHEMA);
-            console.info("got responce",respuesta);
-
-            for (let errors of respuesta.data){
-                console.log(errors.valid);
-                if(!errors.valid){
-                    let idDoc = errors.idDoc;
-                    let errorCount = errors.errorCount;
-                    rowsError.push({idDoc,errorCount});
-                }
-            }
-
-        }
-    }
 
     const setValueSystem= (value) => {
-        systemChosen= value;
+        systemChosen = value;
         console.log(value);
     }
 
@@ -103,21 +90,22 @@ export const LoadFileV = () => {
             </Grid>
 
             <Paper elevation={3} className={classes.paper} >
-
                 <Grid container spacing={4}>
-
                     <Grid item xs={12} md={4}>
-                        <FormControl className={classes.field}>
-                            <InputLabel id="sistema-label"></InputLabel>
-                            <select onChange={e => setValueSystem(e.target.value) }>
-                                <option selected value="s2">Servidores públicos que intervienen en contrataciones</option>
+                        <FormControl required className={classes.field}>
+                            <InputLabel shrink htmlFor="system-native-required">
+                                Sistema
+                            </InputLabel>
+                            <select inputProps={{
+                                id: 'system-native-required',
+                            }}
+                                    onChange={e => setValueSystem(e.target.value) }>
+                                <option aria-label="None" value="" />
+                                <option value="s2">Servidores públicos que intervienen en contrataciones</option>
                                 <option value="s31">Públicos Sancionados</option>
                                 <option value="s32">Particulares Sancionados</option>
                             </select>
                         </FormControl>
-                    </Grid>
-                    <Grid item xs={12} md={1}>
-
                     </Grid>
 
                     <Grid item xs={12} md={6}>
@@ -131,27 +119,36 @@ export const LoadFileV = () => {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => getErrorsFileUpload(contentFileJson , systemChosen)} className={classes.button}>
+                            onClick={() => dispatch(requestErrorsValidation(contentFileJson , systemChosen))} className={classes.button}>
                             Guardar
                         </Button>
                     </Grid>
 
-                    {rowsError.length > 0 && <Grid item xs={12} >
+                    {errors && <Grid aling="center" item xs={8} >
                         <TableContainer component={Paper}>
                             <Table className={classes.table} size="small" aria-label="a dense table">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="right">Id</TableCell>
-                                        <TableCell align="right">Number errors</TableCell>
+                                        <TableCell align="right">Número de errores</TableCell>
+                                        <TableCell align="right">Estatus</TableCell>
+                                        <TableCell align="right">Descripción error </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rowsError.map((row) => (
-                                        <TableRow key={row.idDoc}>
-                                            <TableCell component="th" scope="row">
-                                                {row.idDoc}
-                                            </TableCell>
+                                    {errors.map((row) => (
+                                        <TableRow key={row.docId}>
+                                            <TableCell align="right">{row.docId}</TableCell>
                                             <TableCell align="right">{row.errorCount}</TableCell>
+                                            <TableCell align="right">{row.valid === true ? 'valido' : 'invalido'}</TableCell>
+                                            <TableCell align="right">
+                                                <TextField multiline  id="filled-read-only-input"
+                                                           InputProps={{
+                                                               readOnly: true,
+                                                           }}
+                                                           variant="filled"
+                                                           defaultValue={row.errorsHumanReadable} />
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -164,7 +161,6 @@ export const LoadFileV = () => {
 
         </div>
     );
-
 }
 
 
