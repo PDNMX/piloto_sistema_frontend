@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from "../Header/Header"
 import Paper from "@material-ui/core/Paper";
 import clsx from 'clsx';
@@ -21,18 +21,57 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
+import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { ListaPrincipal, ListaSecundaria } from './ItemsPrincipal';
-import CerrarSesion from './CerrarSesion';
+//import { ListaPrincipal, ListaSecundaria } from './ItemsPrincipal';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import PeopleIcon from '@material-ui/icons/People';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import LayersIcon from '@material-ui/icons/Layers';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import MenuItem from '@material-ui/core/MenuItem';
+import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
+import BallotIcon from '@material-ui/icons/Ballot';
+//import CerrarSesion from './CerrarSesion';
 import LOGO from "../assets/pdn.png";
 
 export const MenuV = () => {
+  //MSubmenus
+  const [submenuUsuario,setsubMenuUsuario]=useState(false);
+  const [submenuBitacora,setsubMenuBitacora]=useState(false);
+
+  const menuPrincipal=(e)=>{
+    setsubMenuUsuario(true);
+    setsubMenuBitacora(false);
+  }
+
+  const menuBitacora=(e)=>{
+    setsubMenuBitacora(true);
+    setsubMenuUsuario(false);
+  }
+
+  //Cerrar sesión
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  //Mostrar opciones de cerrar sesión
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  //Cerrar opciones de cerrar sesión
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
     function Copyright() {
       return (
-        <Typography variant="body2" color="textSecondary" align="center">
+        <Typography variant="body2" className={classes.fontblack} align="center">
           {'PDN Copyright © '}
           
           {new Date().getFullYear()}
@@ -64,6 +103,7 @@ const useStyles = makeStyles((theme) => ({
       },
       appBar: {
         zIndex: theme.zIndex.drawer + 1,
+        backgroundColor: '#34b3eb',
         transition: theme.transitions.create(['width', 'margin'], {
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
@@ -85,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
       },
       title: {
         flexGrow: 1,
-        textAlign: 'center'
+        textAlign: 'center',
       },
       drawerPaper: {
         position: 'relative',
@@ -125,6 +165,12 @@ const useStyles = makeStyles((theme) => ({
       },
       fixedHeight: {
         height: 240,
+      },
+      fontblack:{
+        color: '#666666'
+      },
+      colorico:{
+        color: '#ffffff'
       }
 
     }));
@@ -158,7 +204,22 @@ const useStyles = makeStyles((theme) => ({
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Sistema de Carga de datos S2 y S3
           </Typography>
-          <CerrarSesion></CerrarSesion>
+            <div>
+              <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                <BallotIcon className={classes.colorico} fontSize="large" />
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClose}>Perfil</MenuItem>
+                <MenuItem onClick={handleClose}>Avanzadas</MenuItem>
+                <MenuItem onClick={handleClose}>Cerrar sesión</MenuItem>
+              </Menu>
+            </div>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -174,9 +235,73 @@ const useStyles = makeStyles((theme) => ({
           </IconButton>
         </div>
         <Divider />
-        <List>{ListaPrincipal}</List>
+        <List className={classes.fontblack}>
+          <div>
+            <ListItem button onClick={e=>menuPrincipal(e)}>
+              <ListItemIcon>
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText  primary="Usuarios" />
+            </ListItem>
+            <ListItem button onClick={e=>menuBitacora(e)}>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Bitacora" />
+            </ListItem>
+          </div>
+        </List>
         <Divider />
-        <List>{ListaSecundaria}</List>
+        <List>
+        { submenuUsuario ?  
+          <div>
+            <ListSubheader inset>Opciones de Usuario</ListSubheader>
+            <ListItem button>
+              <ListItemIcon>
+                <LayersIcon />
+              </ListItemIcon>
+              <ListItemText primary="Administrar datos" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Carga de datos" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                 <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Captura de datos" />
+            </ListItem>
+          </div>
+          : ""
+        }
+        { submenuBitacora ? 
+          <div>
+            <ListSubheader inset>Opciones de Usuario</ListSubheader>
+            <ListItem button>
+              <ListItemIcon>
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Bitacora 1" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <ShoppingCartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Bitacora 2" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                 <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Bitacora 3" />
+            </ListItem>
+          </div>
+          : ""
+        }
+        </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

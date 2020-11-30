@@ -20,7 +20,7 @@ export default function CerrarSesion() {
   return (
     <div>
       <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-        <BallotIcon color="secondary" fontSize="large" />
+        <BallotIcon color="white" fontSize="large" />
       </Button>
       <Menu
         id="simple-menu"
