@@ -6,20 +6,17 @@ import  createSagaMiddleware from 'redux-saga';
 import * as sagas from './sagas.schemas';
 import * as mutations from './mutations';
 import {SET_ERRORS_VALIDATION} from "./mutations";
+import rootReducer from "../_reducers";
 
 const sagaMiddleware = createSagaMiddleware();
 
+
 export const storeValidate = createStore(
-    combineReducers({
-        errors(errors = null ,action){
-            switch (action.type){
-                case mutations.SET_ERRORS_VALIDATION :
-                    return  action.respuestaArray;
-            }
-            return errors;
-        }
-    }), applyMiddleware(createLogger(),sagaMiddleware)
-)
+    rootReducer,
+    applyMiddleware(
+        createLogger(),sagaMiddleware
+    )
+);
 
 for (let saga in sagas){
     sagaMiddleware.run(sagas[saga]);

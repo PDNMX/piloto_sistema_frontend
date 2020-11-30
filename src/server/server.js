@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
+import User from './schemas/model.user';
 const mongoose = require('mongoose');
 const yaml = require('js-yaml')
 const fs = require('fs');
@@ -80,6 +81,21 @@ app.post('/validateSchemaS2',async (req,res)=>{
             respuesta.push(await validateSchema(newdocument,schemaS2,validacion));
     }
     res.status(200).json(respuesta);
+});
+
+
+app.post('/create/user',async (req,res)=>{
+   console.log(req.body);
+   try {
+       const alldocs = await User.find({});
+       const nuevoUsuario = new User(req.body);
+       let savedUser = await nuevoUsuario.save();
+       console.log(nuevoUsuario);
+       res.status(200).json("OK");
+   }catch (e) {
+       console.log(e);
+   }
+
 });
 
 

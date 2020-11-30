@@ -13,14 +13,14 @@ export const CreateUser = () => {
 
 interface FormDataUser {
     nombre?:string;
-    apellido1?:string;
-    apellido2?:string;
+    apellidoUno?:string;
+    apellidoDos?:string;
     cargo?:string;
-    correo?:string;
+    correoElectronico?:string;
     telefono?:string;
-    extencion?:string;
+    extension?:string;
     usuario?:string;
-    password?:string;
+    constrasena?:string;
     sistemas?:string[];
 }
 
@@ -34,23 +34,20 @@ function MyForm(props: MyFormProps) {
 
     // yes, this can even be async!
     async function onSubmit(values: FormDataUser) {
-        console.log(values);
         dispatch(requestCreationUser(values));
 
     }
 
-    const phoneRegExp = /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/
-
     const schema = Yup.object().shape({
         nombre: Yup.string().required(),
-        apellido1: Yup.string().required(),
-        apellido2: Yup.string().required(),
+        apellidoUno: Yup.string().required(),
+        apellidoDos: Yup.string().required(),
         cargo: Yup.string().required(),
-        correo: Yup.string().required().email(),
+        correoElectronico: Yup.string().required().email(),
         telefono:  Yup.string().matches(new RegExp('[0-9]{10}'), 'Inserta un número de teléfono valido'),
-        extencion: Yup.string().required(),
+        extension: Yup.string().required(),
         usuario: Yup.string().required(),
-        password: Yup.string().required(),
+        constrasena: Yup.string().required(),
         sistemas: Yup.array().min(1).required(),
     });
 
@@ -79,14 +76,14 @@ function MyForm(props: MyFormProps) {
                 <form onSubmit={handleSubmit} noValidate>
                     <TextField label="Hello world" name="hello" required={true} />
                     <TextField label="Nombre" name="nombre" required={true} />
-                    <TextField label="Primer apellido" name="apellido1" required={true} />
-                    <TextField label="Segundo apellido" name="apellido2" />
+                    <TextField label="Primer apellido" name="apellidoUno" required={true} />
+                    <TextField label="Segundo apellido" name="apellidoDos" />
                     <TextField label="cargo" name="cargo" required={true} />
-                    <TextField label="Correo electronico" name="correo" required={true} />
+                    <TextField label="Correo electronico" name="correoElectronico" required={true} />
                     <TextField label="Número de teléfono" name="telefono" required={true} />
-                    <TextField label="Extención" name="extencion" required={true} />
+                    <TextField label="Extensión" name="extension" required={true} />
                     <TextField label="Nombre de usuario" name="usuario" required={true} />
-                    <TextField label="Contraseña" name="password"  type="password" required={true} />
+                    <TextField label="Contraseña" name="constrasena"  type="password" required={true} />
                     <Checkboxes name = "sistemas" label="Selecciona los sistemas aplicables" required={true} data={sistemasData}></Checkboxes>
                     <Button  variant="contained"
                              color="primary"
