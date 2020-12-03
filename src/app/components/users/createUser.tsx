@@ -12,8 +12,6 @@ import Typography from "@material-ui/core/Typography";
 
 export const CreateUser = () => {
 
-    let id = useSelector(ownProps => ownProps.match.params["id"]);
-    console.log("------------------------------------>"+ id);
     return <MyForm initialValues={{}} />;
 }
 
