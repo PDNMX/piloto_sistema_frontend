@@ -90,11 +90,34 @@ app.post('/create/user',async (req,res)=>{
        const alldocs = await User.find({});
        const nuevoUsuario = new User(req.body);
        let savedUser = await nuevoUsuario.save();
-       console.log(nuevoUsuario);
        res.status(200).json("OK");
    }catch (e) {
        console.log(e);
    }
+
+});
+
+
+app.post('/getUsers',async (req,res)=>{
+    try {
+
+        let sortObj = req.body.sort  === undefined ? {} : req.body.sort;
+        let page = req.body.page === undefined ? 1 : req.body.page ;  //numero de pagina a mostrar
+        let pageSize = req.body.pageSize === undefined ? 10 : req.body.pageSize;
+        let query = req.body.query === undefined ? {} : req.body.query;
+        console.log({page :page , limit: pageSize, sort: sortObj});
+        const paginationResult = await User.paginate(query, {page :page , limit: pageSize, sort: sortObj}).then();
+        let objpagination ={hasNextPage : paginationResult.hasNextPage, page:paginationResult.page, pageSize : paginationResult.limit, totalRows: paginationResult.totalDocs }
+        let objresults = paginationResult.docs;
+
+        let objResponse= {};
+        objResponse["pagination"] = objpagination;
+        objResponse["results"]= objresults;
+
+        res.status(200).json(objResponse);
+    }catch (e) {
+        console.log(e);
+    }
 
 });
 

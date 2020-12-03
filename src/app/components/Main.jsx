@@ -8,6 +8,8 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {LoadFileV} from "./UploadFile/LoadFileV";
 import {CreateUser} from "./users/createUser";
 import { Redirect } from 'react-router';
+import { ListUser} from "./users/listUser";
+import {userActions} from "../_actions/user.action";
 
 const theme = createMuiTheme({
     typography: {
@@ -49,8 +51,6 @@ const RouteGuard = Component =>({match})=>{
 export const Main = ()=> (
     <Router history={history}>
         <div>
-
-
         <Provider store = {storeValidate}>
             <div>
                 <Route exact
@@ -61,6 +61,18 @@ export const Main = ()=> (
                        path= "/createUser"
                        render={() => ( <CreateUser/>)}
                 />
+                <Route exact
+                       path= "/user/edit/:id"
+                       render={({match}) => ( <CreateUser match ={match} />)}
+                />
+                <Route exact
+                       path= "/users"
+                       render={() => {
+                           storeValidate.dispatch(userActions.requestPerPage({page : 1, pageSize: 10 }));
+                         return(<ListUser/>)
+                       }}
+                />
+
             </div>
         </Provider>
         </div>
