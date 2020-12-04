@@ -39,22 +39,33 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import MenuItem from '@material-ui/core/MenuItem';
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import BallotIcon from '@material-ui/icons/Ballot';
+import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
+import BookmarksIcon from '@material-ui/icons/Bookmarks';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
 //import CerrarSesion from './CerrarSesion';
 import LOGO from "../assets/pdn.png";
+import { CreateProvider } from '../providers/CreateProvider';
 
 export const MenuV = () => {
   //MSubmenus
   const [submenuUsuario,setsubMenuUsuario]=useState(false);
   const [submenuBitacora,setsubMenuBitacora]=useState(false);
+  const [crearProovedor,setcrearProovedor]=useState(false);
 
   const menuPrincipal=(e)=>{
     setsubMenuUsuario(true);
     setsubMenuBitacora(false);
+    setcrearProovedor(false);
   }
 
   const menuBitacora=(e)=>{
     setsubMenuBitacora(true);
     setsubMenuUsuario(false);
+    setcrearProovedor(false);
+  }
+
+  const compCrearProovedor=(e)=>{
+    setcrearProovedor(true);
   }
 
   //Cerrar sesión
@@ -184,6 +195,8 @@ const useStyles = makeStyles((theme) => ({
       setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+   
     
 
     return (
@@ -282,19 +295,19 @@ const useStyles = makeStyles((theme) => ({
             <ListSubheader inset>Opciones de Usuario</ListSubheader>
             <ListItem button>
               <ListItemIcon>
-                <PeopleIcon />
+                <BorderColorIcon />
               </ListItemIcon>
-              <ListItemText primary="Bitacora 1" />
+              <ListItemText onClick={e=>compCrearProovedor(e)} primary="Crear proovedor" />
             </ListItem>
             <ListItem button>
               <ListItemIcon>
-                <ShoppingCartIcon />
+                <BookmarksIcon />
               </ListItemIcon>
               <ListItemText primary="Bitacora 2" />
             </ListItem>
             <ListItem button>
               <ListItemIcon>
-                 <AssignmentIcon />
+                 <AssignmentLateIcon />
               </ListItemIcon>
               <ListItemText primary="Bitacora 3" />
             </ListItem>
@@ -308,23 +321,24 @@ const useStyles = makeStyles((theme) => ({
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Grid 1 */}
-            <Grid item xs={12} md={8} lg={9}>
+            <Grid item xs={12} md={12} lg={12}>
               <Paper className={fixedHeightPaper}>
-               
+                {crearProovedor ? <CreateProvider /> : ""}
+                
               </Paper>
             </Grid>
-            {/* Grid 2 */}
+            {/* Grid 2 
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 
               </Paper>
             </Grid>
-            {/* Grid 3 */}
+              Grid 3 *
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 
               </Paper>
-            </Grid>
+            </Grid>*/}
           </Grid>
           <Box pt={4}>
             <Copyright />
