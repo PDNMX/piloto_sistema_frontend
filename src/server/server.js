@@ -83,18 +83,31 @@ app.post('/validateSchemaS2',async (req,res)=>{
     res.status(200).json(respuesta);
 });
 
+app.post('/deleteUser',async (req,res)=>{
+    try {
+        console.log( "_________"+req.body._id);
+        let responce = await User.findByIdAndDelete( req.body._id ).exec();
+        console.log(responce);
+        res.status(200).json("OK");
+    }catch (e) {
+        console.log(e);
+    }
+
+});
+
 
 app.post('/create/user',async (req,res)=>{
-   console.log(req.body);
    try {
-       const alldocs = await User.find({});
        const nuevoUsuario = new User(req.body);
-       let savedUser = await nuevoUsuario.save();
+       if(req.body._id ){
+           let responce = await User.findByIdAndUpdate( req.body._id ,nuevoUsuario).exec();
+       }else{
+           let savedUser = await nuevoUsuario.save();
+       }
        res.status(200).json("OK");
    }catch (e) {
        console.log(e);
    }
-
 });
 
 
@@ -105,7 +118,7 @@ app.post('/getUsers',async (req,res)=>{
         let page = req.body.page === undefined ? 1 : req.body.page ;  //numero de pagina a mostrar
         let pageSize = req.body.pageSize === undefined ? 10 : req.body.pageSize;
         let query = req.body.query === undefined ? {} : req.body.query;
-        console.log({page :page , limit: pageSize, sort: sortObj});
+
         const paginationResult = await User.paginate(query, {page :page , limit: pageSize, sort: sortObj}).then();
         let objpagination ={hasNextPage : paginationResult.hasNextPage, page:paginationResult.page, pageSize : paginationResult.limit, totalRows: paginationResult.totalDocs }
         let objresults = paginationResult.docs;
@@ -136,17 +149,3 @@ app.post('/task/new',async (req,res)=>{
 });
 
 
-
-app.post('/task/update',async (req,res)=>{
-    let db = await connectDB();
-    await updateTask(req.body.task);
-    res.status(200).send();
-});
-
-app.post('/comment/new',async (req,res)=>{
-    let comment = req.body.comment;
-    let db = await connectDB();
-    let collection = db.collection(`comments`);
-    await collection.insertOne(comment);
-    res.status(200).send();
-});

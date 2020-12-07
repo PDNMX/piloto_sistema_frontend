@@ -2,8 +2,32 @@ import { userConstants } from '../_constants/user.constants';
 export const userActions = {
     requestPerPage,
     setPerPageSucces,
-    setPagination
+    setPagination,
+    fillUserUpdate,
+    deleteUser,
+    deleteUserDo
 };
+
+function deleteUser(id){
+    return{
+        type: userConstants.DELETE_REQUEST,
+        id
+    }
+}
+
+function deleteUserDo(id){
+    return{
+        type: userConstants.DELETE_OPERATION,
+        id
+    }
+}
+
+function fillUserUpdate(id){
+    return {
+        type: userConstants.USER_TEMPORAL_REQUEST,
+        id
+    }
+}
 
 function requestPerPage(objPaginationReq) {
     return {

@@ -6,10 +6,12 @@ import {Router, Route} from "react-router-dom";
 import {history} from "../store/history";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {LoadFileV} from "./UploadFile/LoadFileV";
-import {CreateUser} from "./users/createUser";
+import {ConnectedCreateUser} from "./users/createUser";
 import { Redirect } from 'react-router';
 import { ListUser} from "./users/listUser";
 import {userActions} from "../_actions/user.action";
+import {alertActions} from "../_actions/alert.actions";
+import {MenuV} from "./Menu/MenuV";
 
 const theme = createMuiTheme({
     typography: {
@@ -53,22 +55,24 @@ export const Main = ()=> (
         <div>
         <Provider store = {storeValidate}>
             <div>
+                <MenuV></MenuV>
                 <Route exact
                        path= "/uploadFile"
                        render={() => ( <ThemeProvider theme = {theme}> <LoadFileV/></ThemeProvider>)}
                 />
                 <Route exact
                        path= "/createUser"
-                       render={() => ( <CreateUser/>)}
+                       render={() => ( <ConnectedCreateUser/>)}
                 />
                 <Route exact
                        path= "/user/edit/:id"
-                       render={({match}) => ( <CreateUser match ={match} />)}
+                       render={({match}) => ( <ConnectedCreateUser match = {match} />)}
                 />
                 <Route exact
                        path= "/users"
                        render={() => {
                            storeValidate.dispatch(userActions.requestPerPage({page : 1, pageSize: 10 }));
+                           storeValidate.dispatch((alertActions.clear()));
                          return(<ListUser/>)
                        }}
                 />

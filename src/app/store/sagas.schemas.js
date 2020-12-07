@@ -35,6 +35,29 @@ export function* requestUserPerPage(){
     }
 }
 
+export function* fillTemporalUser(){
+    while (true) {
+        const {id} = yield take(userConstants.USER_TEMPORAL_REQUEST);
+        let query = {"query" : {"_id" : id}};
+        const respuestaArray = yield axios.post(ur + `/getUsers`, query);
+        yield put(userActions.setPerPageSucces(respuestaArray.data.results));
+    }
+}
+
+export function* deleteUser(){
+    while (true) {
+        const {id} = yield take (userConstants.DELETE_REQUEST);
+        let request = {"_id": id};
+        const {status} = yield axios.post(ur + `/deleteUser`,request, {validateStatus: () => true});
+        if(status === 200){
+            yield put(userActions.deleteUserDo(id));
+            yield put(alertActions.success("Usuario eliminado con exito"));
+        }else{
+            //error in responce
+        }
+    }
+}
+
 export function* creationUser(){
     while (true) {
         const {usuarioJson} = yield take (mutations.REQUEST_CREATION_USER);
@@ -43,15 +66,15 @@ export function* creationUser(){
         usuarioJson["estatus"] = true; // true is active
         usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
         usuarioJson["rol"]= [{clave  :  2, valor : "proveedor",  descripcion : "Contraloría del Estado de Oaxaca"}];
+        console.log(usuarioJson);
         const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {validateStatus: () => true});
         if(status === 200){
             //all OK
             yield put(alertActions.success("Usuario creado con exito"));
-            history.push('/uploadFile');
+            history.push('/users');
+            yield put(alertActions.clear());
         }else{
             //error in responce
         }
-
-
     }
 }

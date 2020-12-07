@@ -8,16 +8,13 @@ export function users(state = [], action) {
             return {
                 error: action.error
             };
-        case userConstants.DELETE_REQUEST:
-            // add 'deleting:true' property to user being deleted
-            return {
-                ...state,
-                items: state.items.map(user =>
-                    user.id === action.id
-                        ? { ...user, deleting: true }
-                        : user
-                )
-            };
+        case userConstants.DELETE_OPERATION:
+            for(let i =0 ; i < state.length; i++){
+                if(state[i]._id === action.id){
+                    state.splice(i,1);
+                }
+            }
+            return state;
         case userConstants.DELETE_SUCCESS:
             // remove deleted user from state
             return {

@@ -9,10 +9,13 @@ import {requestCreationUser} from "../../store/mutations";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
+import { connect } from 'react-redux';
+import {userActions} from "../../_actions/user.action";
+import {alertActions} from "../../_actions/alert.actions";
 
-export const CreateUser = () => {
 
-    return <MyForm initialValues={{}} />;
+const CreateUser = ({id, user,alert }) => {
+    return <MyForm initialValues={user}  id={id} alerta={alert}/>;
 }
 
 interface FormDataUser {
@@ -30,6 +33,8 @@ interface FormDataUser {
 
 interface MyFormProps {
     initialValues: FormDataUser;
+    id: string;
+    alerta: { status: boolean };
 }
 
 const override = css`
@@ -38,15 +43,20 @@ const override = css`
   border-color: red;
 `;
 
-function MyForm(props: MyFormProps) {
-    const { initialValues } = props;
-    const alert = useSelector(state => state.alert);
+function MyForm(props: MyFormProps ) {
+    let { initialValues , id , alerta } = props;
+    const alert = alerta;
     const dispatch = useDispatch();
 
     // yes, this can even be async!
     async function onSubmit(values: FormDataUser) {
-        alert.status= false ;
-        dispatch(requestCreationUser(values));
+        alert.status =false;
+        if(id != undefined){
+            dispatch(requestCreationUser({...values, _id : id}));
+        }else{
+            dispatch(requestCreationUser(values));
+        }
+
 
     }
 
@@ -123,3 +133,34 @@ function MyForm(props: MyFormProps) {
         />
     );
 }
+
+function mapStateToProps(state,ownProps){
+    let alert = state.alert;
+    if( ownProps.match != undefined ){
+        let id = ownProps.match.params.id;
+        let user = state.users.find(user=>user._id === id);
+        return {
+            id,
+            user,
+            alert
+        }
+    }else{
+        return {alert};
+    }
+}
+
+
+function mapDispatchToProps(dispatch, ownProps){
+    if(ownProps.match != undefined){
+        if(ownProps.match.params.id){
+            let id = ownProps.match.params.id;
+            dispatch(userActions.fillUserUpdate(id));
+            dispatch((alertActions.clear()));
+        }
+    }else{
+        return {};
+    }
+
+}
+
+export const ConnectedCreateUser = connect(mapStateToProps,mapDispatchToProps)(CreateUser);
