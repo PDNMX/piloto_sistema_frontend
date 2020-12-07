@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import User from './schemas/model.user';
+import Provider from './schemas/model.proovedor';
 const mongoose = require('mongoose');
 const yaml = require('js-yaml')
 const fs = require('fs');
@@ -95,6 +96,32 @@ app.post('/deleteUser',async (req,res)=>{
 
 });
 
+app.post('/deleteProvider',async (req,res)=>{
+    try {
+        console.log( "_________"+req.body._id);
+        let responce = await Provider.findByIdAndDelete( req.body._id ).exec();
+        console.log(responce);
+        res.status(200).json("OK");
+    }catch (e) {
+        console.log(e);
+    }
+
+});
+
+app.post('/create/provider',async(req, res)=>{
+    try {
+        const nuevoProovedor = new Provider(req.body);
+        if(req.body._id ){
+            let responce = await Provider.findByIdAndUpdate( req.body._id ,nuevoProovedor).exec();
+        }else{
+            let savedProovider = await nuevoProovedor.save();
+        }
+        res.status(200).json("OK");
+    }catch (e) {
+        console.log(e);
+    }
+});
+
 
 app.post('/create/user',async (req,res)=>{
    try {
@@ -127,6 +154,29 @@ app.post('/getUsers',async (req,res)=>{
         objResponse["pagination"] = objpagination;
         objResponse["results"]= objresults;
 
+        res.status(200).json(objResponse);
+    }catch (e) {
+        console.log(e);
+    }
+
+});
+
+app.post('/getProviders',async (req,res)=>{
+    try {
+
+        let sortObj = req.body.sort  === undefined ? {} : req.body.sort;
+        let page = req.body.page === undefined ? 1 : req.body.page ;  //numero de pagina a mostrar
+        let pageSize = req.body.pageSize === undefined ? 10 : req.body.pageSize;
+        let query = req.body.query === undefined ? {} : req.body.query;
+        console.log({page :page , limit: pageSize, sort: sortObj});
+        const paginationResult = await Provider.paginate(query, {page :page , limit: pageSize, sort: sortObj}).then();
+        let objpagination ={hasNextPage : paginationResult.hasNextPage, page:paginationResult.page, pageSize : paginationResult.limit, totalRows: paginationResult.totalDocs }
+        let objresults = paginationResult.docs;
+
+        let objResponse= {};
+        objResponse["pagination"] = objpagination;
+        objResponse["results"]= objresults;
+        
         res.status(200).json(objResponse);
     }catch (e) {
         console.log(e);

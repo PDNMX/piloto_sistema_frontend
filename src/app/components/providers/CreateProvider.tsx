@@ -1,16 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
-import { Checkboxes ,TextField,  makeValidate,makeRequired,Select } from 'mui-rff';
-import {MenuItem, Grid, Button, Paper} from "@material-ui/core";
+import { Checkboxes ,TextField,  makeValidate,makeRequired, Select} from 'mui-rff';
+import {MenuItem, Grid, Button,Paper} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
-import {requestCreationProvider} from "../../store/mutations";
+import {requestCreationProvider, requestCreationUser} from "../../store/mutations";
+import { css } from "@emotion/core";
+import ClipLoader from "react-spinners/ClipLoader";
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
+import {providerActions} from "../../_actions/provider.action";
+import {alertActions} from "../../_actions/alert.actions";
 
 
-export const CreateProvider = () => {
-    return <MyForm initialValues={{}} />;
+const CreateProvider = ({id, provider,alert }) => {
+    return <MyForm initialValues={provider}  id={id} alerta={alert}/>;
 }
 
 interface FormProvider {
@@ -19,25 +25,34 @@ interface FormProvider {
     estatus?:string;
 }
 
-
-
 interface MyFormProps {
     initialValues: FormProvider;
+    id: string;
+    alerta: { status: boolean };
 }
 
-function MyForm(props: MyFormProps) {
-    const { initialValues } = props;
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
+
+function MyForm(props: MyFormProps ) {
+    let { initialValues , id , alerta } = props;
+    const alert = alerta;
     const dispatch = useDispatch();
 
     // yes, this can even be async!
     async function onSubmit(values: FormProvider) {
-        console.log(values);
-        dispatch(requestCreationProvider(values));
-        
-      
-    }
+        alert.status =false;
+        if(id != undefined){
+            dispatch(requestCreationProvider({...values, _id : id}));
+        }else{
+            dispatch(requestCreationProvider(values));
+        }
 
-  
+
+    }
 
     const schema = Yup.object().shape({
         dependencia: Yup.string().required(),
@@ -62,29 +77,30 @@ function MyForm(props: MyFormProps) {
     }
 
     const useStyles = makeStyles((theme) => ({
-      root: {
-        display: 'flex',
-      },
-      fontblack:{
-        color: '#666666'
-      },
-      boton:{
-        backgroundColor:'#34b3eb',
-        color: '#666666'
-      }
+        root: {
+          display: 'flex',
+        },
+        fontblack:{
+          color: '#666666'
+        },
+        boton:{
+          backgroundColor:'#34b3eb',
+          color: '#666666'
+        }
+        
+      }));
       
-    }));
-    
     const classes = useStyles();
-    
+
     return (
         <Form
             onSubmit={onSubmit}
             initialValues={initialValues}
             validate={validate}
             render={({ handleSubmit,values, submitting   }) => (
-            <form onSubmit={handleSubmit} noValidate>
-              <Grid container spacing={3} className={classes.fontblack}>
+                <form  onSubmit={handleSubmit} noValidate>
+                    {alert.status === undefined &&  <div>
+                        <Grid container spacing={3} className={classes.fontblack}>
                 <Grid item xs>
                   <Paper elevation={0}>
                     <TextField label="Dependencia" name="dependencia" required={true} />
@@ -110,12 +126,59 @@ function MyForm(props: MyFormProps) {
                             type="submit"
                             disabled={submitting}> Guardar 
                       </Button>
-                      <pre>{JSON.stringify(values)}</pre>
+                      
                     </Paper>
                 </Grid>
               </Grid>
-            </form>
+                    </div>}
+                    <div className="sweet-loading">
+                        {alert.status != undefined && <div><Grid item xs={12}>
+                            <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>
+                                <b>Cargando ...</b>
+                            </Typography>
+                        </Grid>
+                        </div>}
+                        <ClipLoader
+                            css={override}
+                            size={150}
+                            color={"#123abc"}
+                            loading={alert.status === undefined ? false : !alert.status }
+                        />
+                    </div>
+                    
+                </form>
             )}
         />
     );
 }
+
+function mapStateToProps(state,ownProps){
+    let alert = state.alert;
+    if( ownProps.match != undefined ){
+        let id = ownProps.match.params.id;
+        let provider = state.providers.find(provider=>provider._id === id);
+        return {
+            id,
+            provider,
+            alert
+        }
+    }else{
+        return {alert};
+    }
+}
+
+
+function mapDispatchToProps(dispatch, ownProps){
+    if(ownProps.match != undefined){
+        if(ownProps.match.params.id){
+            let id = ownProps.match.params.id;
+            dispatch(providerActions.fillProviderUpdate(id));
+            dispatch((alertActions.clear()));
+        }
+    }else{
+        return {};
+    }
+
+}
+
+export const ConnectedCreateProvider = connect(mapStateToProps,mapDispatchToProps)(CreateProvider);

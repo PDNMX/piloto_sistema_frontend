@@ -12,6 +12,9 @@ import { ListUser} from "./users/listUser";
 import {userActions} from "../_actions/user.action";
 import {alertActions} from "../_actions/alert.actions";
 import {MenuV} from "./Menu/MenuV";
+import {ListProvider} from "./providers/ListProvider";
+import {providerActions} from "../_actions/provider.action";
+import {ConnectedCreateProvider} from "./providers/CreateProvider";
 
 const theme = createMuiTheme({
     typography: {
@@ -55,7 +58,7 @@ export const Main = ()=> (
         <div>
         <Provider store = {storeValidate}>
             <div>
-                <MenuV></MenuV>
+                
                 <Route exact
                        path= "/uploadFile"
                        render={() => ( <ThemeProvider theme = {theme}> <LoadFileV/></ThemeProvider>)}
@@ -74,6 +77,24 @@ export const Main = ()=> (
                            storeValidate.dispatch(userActions.requestPerPage({page : 1, pageSize: 10 }));
                            storeValidate.dispatch((alertActions.clear()));
                          return(<ListUser/>)
+                       }}
+                />
+
+                <Route exact
+                       path= "/createProvider"
+                       render={() => ( <ConnectedCreateProvider/>)}
+                />
+
+                <Route exact
+                       path= "/provider/edit/:id"
+                       render={({match}) => ( <ConnectedCreateProvider match = {match} />)}
+                />      
+
+                <Route exact
+                       path= "/providers"
+                       render={() => {
+                           storeValidate.dispatch(providerActions.requestPerPage({page : 1, pageSize: 10 }));
+                         return(<ListProvider/>)
                        }}
                 />
 

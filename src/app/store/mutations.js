@@ -17,6 +17,7 @@ export const USERNAME_RESERVED = `USERNAME_RESERVED`;
 export const REQUEST_USER_ACCOUNT_CREATION = `REQUEST_USER_ACCOUNT_CREATION`;
 export const REQUEST_CREATION_USER = 'REQUEST_CREATION_USER';
 export const SET_DATABASE_USER = 'SET_DATABASE_USER';
+export const REQUEST_CREATION_PROVIDER = 'REQUEST_CREATION_PROVIDER';
 
 export const requestCreationUser = (usuarioJson) => ({
     type: REQUEST_CREATION_USER,
@@ -69,3 +70,8 @@ export const setTaskGroup = (id, groupID) => ({
     taskID : id,
     groupID
 })
+
+export const requestCreationProvider = (usuarioJson) => ({
+    type: REQUEST_CREATION_PROVIDER,
+    usuarioJson
+});

@@ -8,7 +8,8 @@ import {alertActions} from "../_actions/alert.actions";
 import {history} from "./history";
 import {userConstants} from "../_constants/user.constants";
 import {userActions} from "../_actions/user.action";
-
+import {providerConstants} from "../_constants/provider.constants";
+import {providerActions} from "../_actions/provider.action";
 
 require('dotenv').config({ path: path.resolve(__dirname, '../../utils/.env')});
 const url = process.env.URLAPI;
@@ -35,12 +36,31 @@ export function* requestUserPerPage(){
     }
 }
 
+export function* requestProviderPerPage(){
+    while (true) {
+        const {objPaginationReq} = yield take(providerConstants.PROVIDERS_PAGINATION_REQUEST);
+        const respuestaArray = yield axios.post(ur + `/getProviders`,objPaginationReq);
+        yield put(providerActions.setPagination(respuestaArray.data.pagination));
+        yield put(providerActions.setPerPageSucces(respuestaArray.data.results));
+        
+    }
+}
+
 export function* fillTemporalUser(){
     while (true) {
         const {id} = yield take(userConstants.USER_TEMPORAL_REQUEST);
         let query = {"query" : {"_id" : id}};
         const respuestaArray = yield axios.post(ur + `/getUsers`, query);
         yield put(userActions.setPerPageSucces(respuestaArray.data.results));
+    }
+}
+
+export function* fillTemporalProvider(){
+    while (true) {
+        const {id} = yield take(providerConstants.PROVIDER_TEMPORAL_REQUEST);
+        let query = {"query" : {"_id" : id}};
+        const respuestaArray = yield axios.post(ur + `/getProviders`, query);
+        yield put(providerActions.setPerPageSucces(respuestaArray.data.results));
     }
 }
 
@@ -52,6 +72,20 @@ export function* deleteUser(){
         if(status === 200){
             yield put(userActions.deleteUserDo(id));
             yield put(alertActions.success("Usuario eliminado con exito"));
+        }else{
+            //error in responce
+        }
+    }
+}
+
+export function* deleteProvider(){
+    while (true) {
+        const {id} = yield take (providerConstants.DELETE_REQUEST);
+        let request = {"_id": id};
+        const {status} = yield axios.post(ur + `/deleteProvider`,request, {validateStatus: () => true});
+        if(status === 200){
+            yield put(providerActions.deleteProviderDo(id));
+            yield put(alertActions.success("Proveedor eliminado con exito"));
         }else{
             //error in responce
         }
@@ -76,5 +110,17 @@ export function* creationUser(){
         }else{
             //error in responce
         }
+    }
+}
+
+export function* creationProvider(){
+    while(true){
+        const {usuarioJson} = yield take (mutations.REQUEST_CREATION_PROVIDER);
+        let fechaActual =moment();
+        usuarioJson["fechaAlta"]=fechaActual.format();
+        const respuestaAlta =yield axios.post(ur + `/create/provider`, usuarioJson);
+        console.log("Respuesta");
+        console.log(respuestaAlta);
+
     }
 }
