@@ -68,13 +68,19 @@ export function* deleteUser(){
     while (true) {
         const {id} = yield take (userConstants.DELETE_REQUEST);
         let request = {"_id": id};
-        const {status} = yield axios.post(ur + `/deleteUser`,request, {validateStatus: () => true});
-        if(status === 200){
-            yield put(userActions.deleteUserDo(id));
-            yield put(alertActions.success("Usuario eliminado con exito"));
-        }else{
-            //error in responce
+        try{
+            const {status} = yield axios.post(ur + `/deleteUser`,request, {validateStatus: () => true});
+            if(status === 200){
+                yield put(userActions.deleteUserDo(id));
+                yield put(alertActions.success("Usuario eliminado con exito"));
+            }else{
+                //error in responce
+                yield put(alertActions.error("El usuario NO fue eliminado"));
+            }
+        }catch (e) {
+            yield put(alertActions.error("El usuario NO fue eliminado"));
         }
+
     }
 }
 

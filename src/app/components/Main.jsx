@@ -58,7 +58,6 @@ export const Main = ()=> (
         <div>
         <Provider store = {storeValidate}>
             <div>
-                
                 <Route exact
                        path= "/uploadFile"
                        render={() => ( <ThemeProvider theme = {theme}> <LoadFileV/></ThemeProvider>)}
@@ -88,7 +87,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/provider/edit/:id"
                        render={({match}) => ( <ConnectedCreateProvider match = {match} />)}
-                />      
+                />
 
                 <Route exact
                        path= "/providers"

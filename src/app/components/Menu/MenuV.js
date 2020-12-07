@@ -45,27 +45,36 @@ import BorderColorIcon from '@material-ui/icons/BorderColor';
 //import CerrarSesion from './CerrarSesion';
 import LOGO from "../assets/pdn.png";
 import { CreateProvider } from '../providers/CreateProvider';
+import {Main} from "../Main";
+import {history} from "../../store/history";
+import FolderSpecialIcon from '@material-ui/icons/FolderSpecial';
 
 export const MenuV = () => {
+
+
   //MSubmenus
-  const [submenuUsuario,setsubMenuUsuario]=useState(false);
+  const [submenuAdmonDatos,setsubmenuAdmonDatos]=useState(false);
   const [submenuBitacora,setsubMenuBitacora]=useState(false);
   const [crearProovedor,setcrearProovedor]=useState(false);
 
   const menuPrincipal=(e)=>{
-    setsubMenuUsuario(true);
+    setsubmenuAdmonDatos(true);
     setsubMenuBitacora(false);
     setcrearProovedor(false);
   }
 
   const menuBitacora=(e)=>{
     setsubMenuBitacora(true);
-    setsubMenuUsuario(false);
+    setsubmenuAdmonDatos(false);
     setcrearProovedor(false);
   }
 
   const compCrearProovedor=(e)=>{
     setcrearProovedor(true);
+  }
+
+  const redirectToRoute = (path) =>{
+      history.push(path);
   }
 
   //Cerrar sesión
@@ -188,6 +197,7 @@ const useStyles = makeStyles((theme) => ({
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+
     const handleDrawerOpen = () => {
       setOpen(true);
     };
@@ -195,11 +205,10 @@ const useStyles = makeStyles((theme) => ({
       setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-   
     
 
     return (
+
         <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -252,10 +261,16 @@ const useStyles = makeStyles((theme) => ({
           <div>
             <ListItem button onClick={e=>menuPrincipal(e)}>
               <ListItemIcon>
-                <PeopleIcon />
+                  <FolderSpecialIcon />
               </ListItemIcon>
-              <ListItemText  primary="Usuarios" />
+              <ListItemText  primary="Administración datos" />
             </ListItem>
+              <ListItem button onClick={ () => redirectToRoute("/users")}>
+                  <ListItemIcon>
+                      <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText  primary="Usuarios" />
+              </ListItem>
             <ListItem button onClick={e=>menuBitacora(e)}>
               <ListItemIcon>
                 <AssignmentIcon />
@@ -266,7 +281,7 @@ const useStyles = makeStyles((theme) => ({
         </List>
         <Divider />
         <List>
-        { submenuUsuario ?  
+        { submenuAdmonDatos ?
           <div>
             <ListSubheader inset>Opciones de Usuario</ListSubheader>
             <ListItem button>
@@ -275,7 +290,7 @@ const useStyles = makeStyles((theme) => ({
               </ListItemIcon>
               <ListItemText primary="Administrar datos" />
             </ListItem>
-            <ListItem button>
+            <ListItem onClick={ () => redirectToRoute("/uploadFile")} button>
               <ListItemIcon>
                 <BarChartIcon />
               </ListItemIcon>
@@ -297,7 +312,7 @@ const useStyles = makeStyles((theme) => ({
               <ListItemIcon>
                 <BorderColorIcon />
               </ListItemIcon>
-              <ListItemText onClick={e=>compCrearProovedor(e)} primary="Crear proovedor" />
+              <ListItemText onClick={ e=>compCrearProovedor(e)} primary="Crear proovedor" />
             </ListItem>
             <ListItem button>
               <ListItemIcon>
@@ -322,9 +337,9 @@ const useStyles = makeStyles((theme) => ({
           <Grid container spacing={3}>
             {/* Grid 1 */}
             <Grid item xs={12} md={12} lg={12}>
-              <Paper className={fixedHeightPaper}>
+              <Paper >
+                  <Main/>
                 {crearProovedor ? <CreateProvider /> : ""}
-                
               </Paper>
             </Grid>
             {/* Grid 2 

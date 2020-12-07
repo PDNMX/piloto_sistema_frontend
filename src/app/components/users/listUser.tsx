@@ -80,7 +80,7 @@ export const ListUser = () => {
                     </Button>
                 </Link>
 
-                {alerta.status == true && <Alert severity={alerta.type}>{alerta.message}</Alert>}
+                {alerta.status != undefined && <Alert severity={alerta.type}>{alerta.message}</Alert>}
 
 
                 <Dialog

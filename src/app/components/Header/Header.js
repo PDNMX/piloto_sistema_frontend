@@ -55,13 +55,6 @@ class Header extends React.Component{
             <div className={classes.root}>
                 <Grid container alignItems={"center"} justify={"center"} className={classes.root}>
                     <Grid item className={classes.toolbar} xs={12}>
-                        <Toolbar>
-                            <IconButton edge="start">
-                                <MenuIcon/>
-                            </IconButton>
-                            <div className={classes.space}></div>
-                            <Button>Iniciar sesión</Button>
-                        </Toolbar>
                     </Grid>
                 </Grid>
                 <Grid container spacing={0} className={classes.container1} justify='center'>

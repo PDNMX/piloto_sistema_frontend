@@ -56,7 +56,6 @@ export const LoadFileV = () => {
 
     const setValueSystem= (value) => {
         systemChosen = value;
-        console.log(value);
     }
 
     const handleFileRead = (e) => {

@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import {Main} from "./components/Main";
+import {MenuV} from "./components/Menu/MenuV";
 
 ReactDOM.render(
-    <Main/>,
+    <MenuV/>,
     document.getElementById("app")
 );
 
