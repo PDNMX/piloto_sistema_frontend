@@ -271,6 +271,12 @@ const useStyles = makeStyles((theme) => ({
                   </ListItemIcon>
                   <ListItemText  primary="Usuarios" />
               </ListItem>
+              <ListItem button onClick={ () => redirectToRoute("/providers")}>
+                  <ListItemIcon>
+                      <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText  primary="Proveedores" />
+              </ListItem>
             <ListItem button onClick={e=>menuBitacora(e)}>
               <ListItemIcon>
                 <AssignmentIcon />
