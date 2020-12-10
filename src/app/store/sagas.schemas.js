@@ -124,9 +124,15 @@ export function* creationProvider(){
         const {usuarioJson} = yield take (mutations.REQUEST_CREATION_PROVIDER);
         let fechaActual =moment();
         usuarioJson["fechaAlta"]=fechaActual.format();
-        const respuestaAlta =yield axios.post(ur + `/create/provider`, usuarioJson);
-        console.log("Respuesta");
-        console.log(respuestaAlta);
+        const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson);
+        if(status === 200){
+            //all OK
+            yield put(alertActions.success("Proovedor creado con exito"));
+            history.push('/providers');
+            yield put(alertActions.clear());
+        }else{
+            //error in responce
+        }
 
     }
 }

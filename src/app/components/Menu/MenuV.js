@@ -44,29 +44,53 @@ import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 //import CerrarSesion from './CerrarSesion';
 import LOGO from "../assets/pdn.png";
-import { CreateProvider } from '../providers/CreateProvider';
+import { ConnectedCreateProvider } from '../providers/createProvider';
 import {Main} from "../Main";
 import {history} from "../../store/history";
 import FolderSpecialIcon from '@material-ui/icons/FolderSpecial';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import Collapse from '@material-ui/core/Collapse';
+import Tooltip from '@material-ui/core/Tooltip';
 
 export const MenuV = () => {
 
 
   //MSubmenus
   const [submenuAdmonDatos,setsubmenuAdmonDatos]=useState(false);
+  const [submenuUsuario,setsubMenuUsuario]=useState(false);
   const [submenuBitacora,setsubMenuBitacora]=useState(false);
   const [crearProovedor,setcrearProovedor]=useState(false);
 
-  const menuPrincipal=(e)=>{
+  const menuDatos=(e)=>{
     setsubmenuAdmonDatos(true);
+    setsubMenuUsuario(true);
     setsubMenuBitacora(false);
     setcrearProovedor(false);
+    setCheckedDatos((prev) => !prev);
+    setCheckedBitacora((prev) => false);    
+    setCheckedUser((prev) => false);
+  }
+
+
+  const menuUser=(e)=>{
+    setsubmenuAdmonDatos(false);
+    setsubMenuUsuario(true);
+    setsubMenuBitacora(false);
+    setcrearProovedor(false);
+    setCheckedUser((prev) => !prev);
+    setCheckedBitacora((prev) => false);
+    setCheckedDatos((prev) => false);
+    
   }
 
   const menuBitacora=(e)=>{
-    setsubMenuBitacora(true);
     setsubmenuAdmonDatos(false);
+    setsubMenuBitacora(true);
+    setsubMenuUsuario(false);
     setcrearProovedor(false);
+    setCheckedBitacora((prev) => !prev);
+    setCheckedUser((prev) => false);
+    setCheckedDatos((prev) => false);
   }
 
   const compCrearProovedor=(e)=>{
@@ -191,12 +215,19 @@ const useStyles = makeStyles((theme) => ({
       },
       colorico:{
         color: '#ffffff'
+      },
+      submenuicono:{
+        paddingLeft:'35px',
+        backgroundColor:'#eee'
       }
 
     }));
 
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = useState(true);
+    const [checkedBitacora, setCheckedBitacora] = useState(false);
+    const [checkedUser, setCheckedUser] = useState(false);
+    const [checkedDatos, setCheckedDatos] = useState(false);
 
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -259,83 +290,107 @@ const useStyles = makeStyles((theme) => ({
         <Divider />
         <List className={classes.fontblack}>
           <div>
-            <ListItem button onClick={e=>menuPrincipal(e)}>
+          <ListItem button onClick={e=>menuDatos(e)}>
               <ListItemIcon>
                   <FolderSpecialIcon />
               </ListItemIcon>
               <ListItemText  primary="Administración datos" />
-            </ListItem>
-              <ListItem button onClick={ () => redirectToRoute("/users")}>
-                  <ListItemIcon>
-                      <PeopleIcon />
-                  </ListItemIcon>
-                  <ListItemText  primary="Usuarios" />
+          </ListItem>
+              
+            { submenuAdmonDatos ?
+              <Collapse in={checkedDatos}> 
+                <div>   
+                  <Tooltip title="Administrador datos" placement="right">        
+                    <ListItem button className={classes.submenuicono} >
+                      <ListItemIcon>
+                        <ArrowForwardIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Administrador datos" />
+                    </ListItem>
+                  </Tooltip>
+                  <Tooltip title="Carga datos" placement="right">     
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/uploadFile")}>
+                      <ListItemIcon>
+                        <ArrowForwardIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Carga datos" />
+                    </ListItem>
+                  </Tooltip>
+                  <Tooltip title="Captura datos" placement="right">     
+                    <ListItem button className={classes.submenuicono} >
+                      <ListItemIcon>
+                        <ArrowForwardIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Captura datos" />
+                    </ListItem>
+                  </Tooltip>
+                </div>
+              </Collapse>
+          : ""
+        }
+            <ListItem button onClick={e=>menuUser(e)}>
+              <ListItemIcon>
+                <PeopleIcon />
+            </ListItemIcon>
+              <ListItemText  primary="Usuarios" />
               </ListItem>
-              <ListItem button onClick={ () => redirectToRoute("/providers")}>
-                  <ListItemIcon>
-                      <PeopleIcon />
-                  </ListItemIcon>
-                  <ListItemText  primary="Proveedores" />
-              </ListItem>
+
+              { submenuUsuario ?
+              <Collapse in={checkedUser}> 
+                <div>   
+                  <Tooltip title="Crear usuario" placement="right">        
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/createUser")}>
+                      <ListItemIcon>
+                        <ArrowForwardIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Crear usuario" />
+                    </ListItem>
+                  </Tooltip>
+                  <Tooltip title="Listado de usuarios" placement="right">     
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/users")}>
+                      <ListItemIcon>
+                        <ArrowForwardIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Listado de usuarios" />
+                    </ListItem>
+                  </Tooltip>
+                </div>
+              </Collapse>
+          : ""
+        }
             <ListItem button onClick={e=>menuBitacora(e)}>
               <ListItemIcon>
                 <AssignmentIcon />
               </ListItemIcon>
-              <ListItemText primary="Bitacora" />
+              <ListItemText primary="Proveedores" />
             </ListItem>
+
+            { submenuBitacora ?
+              <Collapse in={checkedBitacora}> 
+                <div>   
+                  <Tooltip title="Crear proveedor" placement="right">        
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/createProvider")}>
+                      <ListItemIcon>
+                        <ArrowForwardIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Crear proveedor" />
+                    </ListItem>
+                  </Tooltip>
+                  <Tooltip title="Lista Proveedores" placement="right">        
+                  <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/providers")}>
+                    <ListItemIcon>
+                      <ArrowForwardIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Lista Proveedores" />
+                  </ListItem>
+                  </Tooltip>
+                </div>
+              </Collapse>
+          : ""
+        }
           </div>
         </List>
         <Divider />
-        <List>
-        { submenuAdmonDatos ?
-          <div>
-            <ListSubheader inset>Opciones de Usuario</ListSubheader>
-            <ListItem button>
-              <ListItemIcon>
-                <LayersIcon />
-              </ListItemIcon>
-              <ListItemText primary="Administrar datos" />
-            </ListItem>
-            <ListItem onClick={ () => redirectToRoute("/uploadFile")} button>
-              <ListItemIcon>
-                <BarChartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Carga de datos" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                 <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Captura de datos" />
-            </ListItem>
-          </div>
-          : ""
-        }
-        { submenuBitacora ? 
-          <div>
-            <ListSubheader inset>Opciones de Usuario</ListSubheader>
-            <ListItem button>
-              <ListItemIcon>
-                <BorderColorIcon />
-              </ListItemIcon>
-              <ListItemText onClick={ e=>compCrearProovedor(e)} primary="Crear proovedor" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <BookmarksIcon />
-              </ListItemIcon>
-              <ListItemText primary="Bitacora 2" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                 <AssignmentLateIcon />
-              </ListItemIcon>
-              <ListItemText primary="Bitacora 3" />
-            </ListItem>
-          </div>
-          : ""
-        }
-        </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -345,7 +400,7 @@ const useStyles = makeStyles((theme) => ({
             <Grid item xs={12} md={12} lg={12}>
               <Paper >
                   <Main/>
-                {crearProovedor ? <CreateProvider /> : ""}
+                {crearProovedor ? <ConnectedCreateProvider /> : ""}
               </Paper>
             </Grid>
             {/* Grid 2 
