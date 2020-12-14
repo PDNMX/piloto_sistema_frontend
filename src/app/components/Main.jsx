@@ -12,9 +12,9 @@ import { ListUser} from "./users/listUser";
 import {userActions} from "../_actions/user.action";
 import {alertActions} from "../_actions/alert.actions";
 import {MenuV} from "./Menu/MenuV";
-import {ListProvider} from "./providers/listProvider";
+import {ListProvider} from "./providers/ListProvider";
 import {providerActions} from "../_actions/provider.action";
-import {ConnectedCreateProvider} from "./providers/createProvider";
+import {ConnectedCreateProvider} from "./providers/CreateProvider";
 
 const theme = createMuiTheme({
     typography: {

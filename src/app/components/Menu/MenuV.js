@@ -44,7 +44,7 @@ import BookmarksIcon from '@material-ui/icons/Bookmarks';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 //import CerrarSesion from './CerrarSesion';
 import LOGO from "../assets/pdn.png";
-import { ConnectedCreateProvider } from '../providers/createProvider';
+import { ConnectedCreateProvider } from '../providers/CreateProvider';
 import {Main} from "../Main";
 import {history} from "../../store/history";
 import FolderSpecialIcon from '@material-ui/icons/FolderSpecial';
@@ -309,7 +309,7 @@ const useStyles = makeStyles((theme) => ({
                     </ListItem>
                   </Tooltip>
                   <Tooltip title="Carga datos" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/uploadFile")}>
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
