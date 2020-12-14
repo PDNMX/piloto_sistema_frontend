@@ -11,7 +11,6 @@ import {userActions} from "../_actions/user.action";
 import {providerConstants} from "../_constants/provider.constants";
 import {providerActions} from "../_actions/provider.action";
 
-require('dotenv').config({ path: path.resolve(__dirname, '../../utils/.env')});
 const url = process.env.URLAPI;
 const ur= "http://localhost:3004";
 
@@ -30,6 +29,7 @@ export function* validationErrors(){
 export function* requestUserPerPage(){
     while (true) {
         const {objPaginationReq} = yield take(userConstants.USERS_PAGINATION_REQUEST);
+        console.log("->>>>>>>>>>>>>>"+url);
         const respuestaArray = yield axios.post(ur + `/getUsers`,objPaginationReq);
         yield put(userActions.setPagination(respuestaArray.data.pagination));
         yield put(userActions.setPerPageSucces(respuestaArray.data.results));
@@ -111,7 +111,7 @@ export function* creationUser(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Usuario creado con exito"));
-            history.push('/users');
+            history.push('/usuarios');
             yield put(alertActions.clear());
         }else{
             //error in responce

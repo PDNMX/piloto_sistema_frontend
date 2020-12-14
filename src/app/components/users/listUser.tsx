@@ -9,7 +9,7 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup
+    makeStyles, Button, TableHead, ButtonGroup, Grid
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -69,8 +69,7 @@ export const ListUser = () => {
 
         return (
             <div>
-
-                <Link component={RouterLink}  to={`/createUser`}>
+                <Link component={RouterLink}  to={`/crear/usuario`}>
                     <Button
                         variant="contained"
                         color="primary"
@@ -104,72 +103,74 @@ export const ListUser = () => {
                         </Button>
                     </DialogActions>
                 </Dialog>
-
-            <TableContainer component={Paper}>
-                {users.length > 0  && <Table aria-label="custom pagination table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Primer apellido</TableCell>
-                            <TableCell align="right">Segundo apellido</TableCell>
-                            <TableCell align="right">Sistemas</TableCell>
-                            <TableCell align="right">Estatus</TableCell>
-                            <TableCell align="right">Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody key="usuarios">
-                        {(users).map((user) => (
-                            <TableRow key={user._id}>
-                                <TableCell component="th" scope="row">
-                                    {user._id}
-                                </TableCell>
-                                <TableCell style={{ width: 160 }} align="right">
-                                    {user.apellidoUno}
-                                </TableCell>
-                                <TableCell style={{ width: 160 }} align="right">
-                                    {user.apellidoDos}
-                                </TableCell>
-                                <TableCell style={{ width: 160 }} align="right">
-                                    {user.sistemas}
-                                </TableCell>
-                                <TableCell style={{ width: 160 }} align="right">
-                                    {user.estatus}
-                                </TableCell>
-                                <TableCell style={{ width: 160 }} align="right">
-                                        <Link component={RouterLink}  to={`/user/edit/${user._id}`}>
-                                         <Button><EditOutlinedIcon/></Button>
-                                        </Link>
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick= {()=> {handleClickOpen(user._id)}} >
-                                        <DeleteOutlineOutlinedIcon/>
-                                    </Button>
-                                         <Button></Button>
-                                </TableCell>
+            <Grid container >
+                <TableContainer component={Paper}>
+                    {users.length > 0  && <Table aria-label="custom pagination table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Nombre</TableCell>
+                                <TableCell>Primer apellido</TableCell>
+                                <TableCell align="right">Segundo apellido</TableCell>
+                                <TableCell align="right">Sistemas</TableCell>
+                                <TableCell align="right">Estatus</TableCell>
+                                <TableCell align="right">Acciones</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            {pagination.totalRows != undefined && pagination.pageSize && pagination.page  && <TablePagination
-                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                colSpan={3}
-                                count={pagination.totalRows}
-                                rowsPerPage={pagination.pageSize}
-                                page={pagination.page-1}
-                                SelectProps={{
-                                    inputProps: { 'aria-label': 'rows per page' },
-                                    native: true,
-                                }}
-                                onChangePage={handleChangePage}
-                                onChangeRowsPerPage={handleChangeRowsPerPage}
-                                ActionsComponent={TablePaginationActions}
-                            /> }
-                        </TableRow>
-                    </TableFooter>
-                </Table>}
-            </TableContainer>
+                        </TableHead>
+                        <TableBody key="usuarios">
+                            {(users).map((user) => (
+                                <TableRow key={user._id}>
+                                    <TableCell component="th" scope="row">
+                                        {user.nombre}
+                                    </TableCell>
+                                    <TableCell style={{ width: 160 }} align="right">
+                                        {user.apellidoUno}
+                                    </TableCell>
+                                    <TableCell style={{ width: 160 }} align="right">
+                                        {user.apellidoDos}
+                                    </TableCell>
+                                    <TableCell style={{ width: 160 }} align="right">
+                                        {user.sistemas}
+                                    </TableCell>
+                                    <TableCell style={{ width: 160 }} align="right">
+                                        {user.estatus? "Activo" : "Inactivo"}
+                                    </TableCell>
+                                    <TableCell style={{ width: 160 }} align="right">
+                                        <Link component={RouterLink}  to={`/usuario/editar/${user._id}`}>
+                                            <Button><EditOutlinedIcon/></Button>
+                                        </Link>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick= {()=> {handleClickOpen(user._id)}} >
+                                            <DeleteOutlineOutlinedIcon/>
+                                        </Button>
+                                        <Button></Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                            <TableFooter>
+                                    <TableRow>
+                                        {pagination.totalRows != undefined && pagination.pageSize && pagination.page  && <TablePagination
+                                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                            colSpan={6}
+                                            count={pagination.totalRows}
+                                            rowsPerPage={pagination.pageSize}
+                                            page={pagination.page-1}
+                                            SelectProps={{
+                                                inputProps: { 'aria-label': 'rows per page' },
+                                                native: true,
+                                            }}
+                                            onChangePage={handleChangePage}
+                                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                                            ActionsComponent={TablePaginationActions}
+                                        /> }
+                                    </TableRow>
+                            </TableFooter>
+                    </Table>}
+                </TableContainer>
+            </Grid>
+
             </div>
         );
 }

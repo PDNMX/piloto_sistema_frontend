@@ -59,19 +59,23 @@ export const Main = ()=> (
         <Provider store = {storeValidate}>
             <div>
                 <Route exact
-                       path= "/uploadFile"
+                       path= "/cargamasiva"
                        render={() => ( <ThemeProvider theme = {theme}> <LoadFileV/></ThemeProvider>)}
                 />
                 <Route exact
-                       path= "/createUser"
+                       path= "/crear/usuario"
                        render={() => ( <ConnectedCreateUser/>)}
                 />
                 <Route exact
-                       path= "/user/edit/:id"
-                       render={({match}) => ( <ConnectedCreateUser match = {match} />)}
+                       path= "/usuario/editar/:id"
+                       render={({match}) => {
+                           storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
+                           storeValidate.dispatch((alertActions.clear()));
+                           return (<ConnectedCreateUser match = {match} />)
+                       }}
                 />
                 <Route exact
-                       path= "/users"
+                       path= "/usuarios"
                        render={() => {
                            storeValidate.dispatch(userActions.requestPerPage({page : 1, pageSize: 10 }));
                            storeValidate.dispatch((alertActions.clear()));
@@ -80,17 +84,21 @@ export const Main = ()=> (
                 />
 
                 <Route exact
-                       path= "/createProvider"
+                       path= "/crear/proveedor"
                        render={() => ( <ConnectedCreateProvider/>)}
                 />
 
                 <Route exact
-                       path= "/provider/edit/:id"
-                       render={({match}) => ( <ConnectedCreateProvider match = {match} />)}
+                       path= "/proveedor/editar/:id"
+                       render={({match}) => {
+                           storeValidate.dispatch(providerActions.fillProviderUpdate(match.params.id));
+                           storeValidate.dispatch((alertActions.clear()));
+                           return ( <ConnectedCreateProvider match = {match} />)
+                       }}
                 />
 
                 <Route exact
-                       path= "/providers"
+                       path= "/proveedores"
                        render={() => {
                            storeValidate.dispatch(providerActions.requestPerPage({page : 1, pageSize: 10 }));
                          return(<ListProvider/>)

@@ -169,16 +169,7 @@ function mapStateToProps(state,ownProps){
 
 
 function mapDispatchToProps(dispatch, ownProps){
-    if(ownProps.match != undefined){
-        if(ownProps.match.params.id){
-            let id = ownProps.match.params.id;
-            dispatch(providerActions.fillProviderUpdate(id));
-            dispatch((alertActions.clear()));
-        }
-    }else{
         return {};
-    }
-
 }
 
 export const ConnectedCreateProvider = connect(mapStateToProps,mapDispatchToProps)(CreateProvider);

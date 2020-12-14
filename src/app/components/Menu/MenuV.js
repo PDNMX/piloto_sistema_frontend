@@ -67,7 +67,7 @@ export const MenuV = () => {
     setsubMenuBitacora(false);
     setcrearProovedor(false);
     setCheckedDatos((prev) => !prev);
-    setCheckedBitacora((prev) => false);    
+    setCheckedBitacora((prev) => false);
     setCheckedUser((prev) => false);
   }
 
@@ -80,7 +80,7 @@ export const MenuV = () => {
     setCheckedUser((prev) => !prev);
     setCheckedBitacora((prev) => false);
     setCheckedDatos((prev) => false);
-    
+
   }
 
   const menuBitacora=(e)=>{
@@ -296,11 +296,11 @@ const useStyles = makeStyles((theme) => ({
               </ListItemIcon>
               <ListItemText  primary="Administración datos" />
           </ListItem>
-              
+
             { submenuAdmonDatos ?
-              <Collapse in={checkedDatos}> 
-                <div>   
-                  <Tooltip title="Administrador datos" placement="right">        
+              <Collapse in={checkedDatos}>
+                <div>
+                  <Tooltip title="Administrador datos" placement="right">
                     <ListItem button className={classes.submenuicono} >
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
@@ -308,7 +308,7 @@ const useStyles = makeStyles((theme) => ({
                       <ListItemText primary="Administrador datos" />
                     </ListItem>
                   </Tooltip>
-                  <Tooltip title="Carga datos" placement="right">     
+                  <Tooltip title="Carga datos" placement="right">
                     <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/uploadFile")}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
@@ -316,7 +316,7 @@ const useStyles = makeStyles((theme) => ({
                       <ListItemText primary="Carga datos" />
                     </ListItem>
                   </Tooltip>
-                  <Tooltip title="Captura datos" placement="right">     
+                  <Tooltip title="Captura datos" placement="right">
                     <ListItem button className={classes.submenuicono} >
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
@@ -336,18 +336,18 @@ const useStyles = makeStyles((theme) => ({
               </ListItem>
 
               { submenuUsuario ?
-              <Collapse in={checkedUser}> 
-                <div>   
-                  <Tooltip title="Crear usuario" placement="right">        
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/createUser")}>
+              <Collapse in={checkedUser}>
+                <div>
+                  <Tooltip title="Crear usuario" placement="right">
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/crear/usuario")}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText primary="Crear usuario" />
                     </ListItem>
                   </Tooltip>
-                  <Tooltip title="Listado de usuarios" placement="right">     
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/users")}>
+                  <Tooltip title="Listado de usuarios" placement="right">
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuarios")}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
@@ -366,18 +366,18 @@ const useStyles = makeStyles((theme) => ({
             </ListItem>
 
             { submenuBitacora ?
-              <Collapse in={checkedBitacora}> 
-                <div>   
-                  <Tooltip title="Crear proveedor" placement="right">        
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/createProvider")}>
+              <Collapse in={checkedBitacora}>
+                <div>
+                  <Tooltip title="Crear proveedor" placement="right">
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/crear/proveedor")}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText primary="Crear proveedor" />
                     </ListItem>
                   </Tooltip>
-                  <Tooltip title="Lista Proveedores" placement="right">        
-                  <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/providers")}>
+                  <Tooltip title="Lista Proveedores" placement="right">
+                  <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedores")}>
                     <ListItemIcon>
                       <ArrowForwardIcon fontSize="small" />
                     </ListItemIcon>

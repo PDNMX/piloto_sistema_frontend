@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
-import { Checkboxes ,TextField,  makeValidate,makeRequired, } from 'mui-rff';
-import {MenuItem, Grid, Button} from "@material-ui/core";
+import { Checkboxes ,TextField,  makeValidate,makeRequired, Select} from 'mui-rff';
+import {MenuItem, Grid, Button, TableCell} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 import {requestCreationUser} from "../../store/mutations";
@@ -12,7 +12,10 @@ import Typography from "@material-ui/core/Typography";
 import { connect } from 'react-redux';
 import {userActions} from "../../_actions/user.action";
 import {alertActions} from "../../_actions/alert.actions";
-
+import Link from "@material-ui/core/Link";
+import { Link as RouterLink } from 'react-router-dom';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import {makeStyles} from "@material-ui/core/styles";
 
 const CreateUser = ({id, user,alert }) => {
     return <MyForm initialValues={user}  id={id} alerta={alert}/>;
@@ -76,6 +79,13 @@ function MyForm(props: MyFormProps ) {
     const validate = makeValidate(schema);
     const required = makeRequired(schema);
 
+    const styles = makeStyles({
+        gridpadding: {
+            padding: '30px',
+        },
+    });
+
+    const cla = styles();
 
     const sistemasData = [
         {label: 'Servidores públicos que intervienen en contrataciones', value: 's2'},
@@ -90,29 +100,67 @@ function MyForm(props: MyFormProps ) {
     }
 
     return (
+
+
+        <div>
+            <Grid container>
+                <Link component={RouterLink}  to={`/usuarios`}>
+                    <Button style = {{}}><ArrowBackIcon fontSize="large"/></Button>
+                </Link>
+            </Grid>
         <Form
             onSubmit={onSubmit}
             initialValues={initialValues}
             validate={validate}
             render={({ handleSubmit,values, submitting   }) => (
                 <form  onSubmit={handleSubmit} noValidate>
-                    {alert.status === undefined &&  <div>
-                        <TextField label="Hello world" name="hello" required={true} />
-                        <TextField label="Nombre" name="nombre" required={true} />
-                        <TextField label="Primer apellido" name="apellidoUno" required={true} />
-                        <TextField label="Segundo apellido" name="apellidoDos" />
-                        <TextField label="cargo" name="cargo" required={true} />
-                        <TextField label="Correo electronico" name="correoElectronico" required={true} />
-                        <TextField label="Número de teléfono" name="telefono" required={true} />
-                        <TextField label="Extensión" name="extension" required={true} />
-                        <TextField label="Nombre de usuario" name="usuario" required={true} />
-                        <TextField label="Contraseña" name="constrasena"  type="password" required={true} />
-                        <Checkboxes name = "sistemas" label="Selecciona los sistemas aplicables" required={true} data={sistemasData}></Checkboxes>
-                        <Button  variant="contained"
+                    {alert.status === undefined &&
+                        <div>
+                        <Grid className= {cla.gridpadding} spacing={3} container >
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Nombre" name="nombre" required={true} />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Primer apellido" name="apellidoUno" required={true} />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Segundo apellido" name="apellidoDos" />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Cargo" name="cargo" required={true} />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Correo electronico" name="correoElectronico" required={true} />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Número de teléfono" name="telefono" required={true} />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Extensión" name="extension" required={true} />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Nombre de usuario" name="usuario" required={true} />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <TextField label="Contraseña" name="constrasena"  type="password" required={true} />
+                        </Grid>
+                        <Grid item xs={12} md={3}>
+                            <Select  name = "sistemas" label="Selecciona los sistemas aplicables" required={true} data={sistemasData} multiple={true}></Select>
+                        </Grid>
+                        </Grid>
+                        <Grid  spacing={3} justify="flex-end"
+                              alignItems="flex-end"
+                              container
+                               item
+                              xs={12}
+                              md={12}>
+                        <Button  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
                                  color="primary"
                                  type="submit"
                                  disabled={submitting}> Guardar </Button>
-                    </div>}
+                        </Grid>
+                        </div>
+                       }
                     <div className="sweet-loading">
                         {alert.status != undefined && <div><Grid item xs={12}>
                             <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>
@@ -131,6 +179,7 @@ function MyForm(props: MyFormProps ) {
                 </form>
             )}
         />
+        </div>
     );
 }
 
@@ -151,16 +200,7 @@ function mapStateToProps(state,ownProps){
 
 
 function mapDispatchToProps(dispatch, ownProps){
-    if(ownProps.match != undefined){
-        if(ownProps.match.params.id){
-            let id = ownProps.match.params.id;
-            dispatch(userActions.fillUserUpdate(id));
-            dispatch((alertActions.clear()));
-        }
-    }else{
         return {};
-    }
-
 }
 
 export const ConnectedCreateUser = connect(mapStateToProps,mapDispatchToProps)(CreateUser);

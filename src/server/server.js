@@ -12,9 +12,6 @@ var Validator = require('swagger-model-validator');
 var validator = new Validator(SwaggerClient);
 var swaggerValidator = require('swagger-object-validator');
 
-
-console.log(path.resolve(__dirname, '../utils/.env'));
-
 require('dotenv').config({ path: path.resolve(__dirname, '../utils/.env')});
 
 //connection mongo db
@@ -24,7 +21,7 @@ const db = mongoose.connect('mongodb://'+process.env.USERMONGO+':'+process.env.P
     .catch(err => console.error('Could not connect to MongoDB..', err))
 
 
-let port = process.env.PORT || 7777;
+//let port = process.env.PORT || 7777;
 let app = express();
 app.use(
     cors(),

@@ -75,7 +75,7 @@ export const LoadFileV = () => {
     return (
         <div>
             <Header/>
-            <Grid container className={style.root}>
+                <Grid container className={style.root}>
                 <Grid item xs={12}>
                     <Typography variant={"h6"} paragraph color={"primary"} align={"center"}>
                         <b>Carga de datos</b>

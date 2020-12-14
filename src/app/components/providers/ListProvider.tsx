@@ -70,7 +70,7 @@ export const ListProvider = () => {
         return (
             <div>
 
-                <Link component={RouterLink}  to={`/createProvider`}>
+                <Link component={RouterLink}  to={`/crear/proveedor`}>
                     <Button
                         variant="contained"
                         color="primary"
@@ -128,7 +128,7 @@ export const ListProvider = () => {
                                     {provider.sistemas}
                                 </TableCell>                                
                                 <TableCell style={{ width: 160 }} align="right">
-                                        <Link component={RouterLink}  to={`/provider/edit/${provider._id}`}>
+                                        <Link component={RouterLink}  to={`/proveedor/editar/${provider._id}`}>
                                          <Button><EditOutlinedIcon/></Button>
                                         </Link>
                                     <Button
@@ -146,7 +146,7 @@ export const ListProvider = () => {
                         <TableRow>
                             {pagination.totalRows != undefined && pagination.pageSize && pagination.page  && <TablePagination
                                 rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                colSpan={3}
+                                colSpan={6}
                                 count={pagination.totalRows}
                                 rowsPerPage={pagination.pageSize}
                                 page={pagination.page-1}
