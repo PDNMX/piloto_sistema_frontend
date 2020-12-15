@@ -16,7 +16,8 @@ const userSchema = new Schema({
     fechaBaja:String,
     estatus:String,
     vigenciaContrasena:String,
-    rol: { type: [], default: void 0 },
+    rol: String,
+    proveedorDatos : String
 });
 
 userSchema.plugin(mongoosePaginate);

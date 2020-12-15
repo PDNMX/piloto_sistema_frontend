@@ -16,9 +16,10 @@ import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {makeStyles} from "@material-ui/core/styles";
+import {providerSelect} from "../../_reducers/providerTemporal.reducer";
 
-const CreateUser = ({id, user,alert }) => {
-    return <MyForm initialValues={user}  id={id} alerta={alert}/>;
+const CreateUser = ({id, user,alert, providers }) => {
+    return <MyForm initialValues={user}  id={id} alerta={alert} providers={providers}/>;
 }
 
 interface FormDataUser {
@@ -32,12 +33,14 @@ interface FormDataUser {
     usuario?:string;
     constrasena?:string;
     sistemas?:string[];
+    proveedorDatos?:string;
 }
 
 interface MyFormProps {
     initialValues: FormDataUser;
     id: string;
     alerta: { status: boolean };
+    providers : [];
 }
 
 const override = css`
@@ -47,7 +50,7 @@ const override = css`
 `;
 
 function MyForm(props: MyFormProps ) {
-    let { initialValues , id , alerta } = props;
+    let { initialValues , id , alerta , providers } = props;
     const alert = alerta;
     const dispatch = useDispatch();
 
@@ -64,16 +67,17 @@ function MyForm(props: MyFormProps ) {
     }
 
     const schema = Yup.object().shape({
-        nombre: Yup.string().required(),
-        apellidoUno: Yup.string().required(),
-        apellidoDos: Yup.string().required(),
-        cargo: Yup.string().required(),
+        nombre: Yup.string().matches(new RegExp('^[a-zA-Z ]*$'),'no se permiten números, ni cadenas vacias' ).required().trim(),
+        apellidoUno: Yup.string().matches(new RegExp('^[a-zA-Z ]*$'),'no se permiten números, ni cadenas vacias' ).required().trim(),
+        apellidoDos: Yup.string().matches(new RegExp('^[a-zA-Z ]*$'),'no se permiten números, ni cadenas vacias' ).required().trim(),
+        cargo: Yup.string().matches(new RegExp('^[a-zA-Z ]*$'),'no se permiten números, ni cadenas vacias' ).required().trim(),
         correoElectronico: Yup.string().required().email(),
-        telefono:  Yup.string().matches(new RegExp('[0-9]{10}'), 'Inserta un número de teléfono valido'),
-        extension: Yup.string().required(),
-        usuario: Yup.string().required(),
-        constrasena: Yup.string().required(),
+        telefono:  Yup.string().matches(new RegExp('^[0-9]{10}$'), 'Inserta un número de teléfono valido, 10 caracteres').required().trim(),
+        extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , maximo 10 caracteres').required().trim(),
+        usuario: Yup.string().matches(new RegExp('^[a-zA-Z0-9]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required().trim(),
+        constrasena: Yup.string().matches(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*()_+,.\\\\\\/;\':"-]).{8,}$'),'Inserta al menos 8 caracteres, al menos un número, almenos un caracter especial ' ).required().trim(),
         sistemas: Yup.array().min(1).required(),
+        proveedorDatos: Yup.string().required()
     });
 
     const validate = makeValidate(schema);
@@ -92,6 +96,10 @@ function MyForm(props: MyFormProps ) {
         {label: 'Públicos Sancionados', value: 's31'},
         {label: 'Particulares Sancionados', value: 's32'}
     ];
+    const roles = [
+        {label: 'Proveedor', value: '1'},
+        {label: 'Administrador', value: '2'}
+    ];
 
     const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
         variant:"contained",
@@ -103,11 +111,6 @@ function MyForm(props: MyFormProps ) {
 
 
         <div>
-            <Grid container>
-                <Link component={RouterLink}  to={`/usuarios`}>
-                    <Button style = {{}}><ArrowBackIcon fontSize="large"/></Button>
-                </Link>
-            </Grid>
         <Form
             onSubmit={onSubmit}
             initialValues={initialValues}
@@ -144,9 +147,15 @@ function MyForm(props: MyFormProps ) {
                         <Grid item xs={12} md={3}>
                             <TextField label="Contraseña" name="constrasena"  type="password" required={true} />
                         </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Select  name = "rol" label="Rol" required={true} data={roles} ></Select>
+                            </Grid>
                         <Grid item xs={12} md={3}>
                             <Select  name = "sistemas" label="Selecciona los sistemas aplicables" required={true} data={sistemasData} multiple={true}></Select>
                         </Grid>
+                            <Grid item xs={12} md={3}>
+                                <Select  name = "proveedorDatos" label="Proveedor de datos" required={true} data={providers} ></Select>
+                            </Grid>
                         </Grid>
                         <Grid  spacing={3} justify="flex-end"
                               alignItems="flex-end"
@@ -154,13 +163,26 @@ function MyForm(props: MyFormProps ) {
                                item
                               xs={12}
                               md={12}>
-                        <Button  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
+                            <Link component={RouterLink}  to={`/usuarios`}>
+                            <Button  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
+                                     color="secondary"
+                                     type="submit"
+                                     disabled={submitting}>
+
+                                 Cancelar
+
+                            </Button>
+                            </Link>
+
+
+                            <Button  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
                                  color="primary"
                                  type="submit"
                                  disabled={submitting}> Guardar </Button>
                         </Grid>
                         </div>
                        }
+                <pre>{JSON.stringify(values)}</pre>
                     <div className="sweet-loading">
                         {alert.status != undefined && <div><Grid item xs={12}>
                             <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>
@@ -185,16 +207,18 @@ function MyForm(props: MyFormProps ) {
 
 function mapStateToProps(state,ownProps){
     let alert = state.alert;
+    let providers = state.providerSelect;
     if( ownProps.match != undefined ){
         let id = ownProps.match.params.id;
         let user = state.users.find(user=>user._id === id);
         return {
             id,
             user,
-            alert
+            alert,
+            providers
         }
     }else{
-        return {alert};
+        return {alert, providers};
     }
 }
 

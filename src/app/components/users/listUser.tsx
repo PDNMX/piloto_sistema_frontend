@@ -88,7 +88,7 @@ export const ListUser = () => {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el usuario?"+usuarioId}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el usuario?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             Los cambios no seran reversibles
@@ -132,7 +132,7 @@ export const ListUser = () => {
                                         {user.sistemas}
                                     </TableCell>
                                     <TableCell style={{ width: 160 }} align="right">
-                                        {user.estatus? "Activo" : "Inactivo"}
+                                        {user.estatus? "Vigente" : "No vigente"}
                                     </TableCell>
                                     <TableCell style={{ width: 160 }} align="right">
                                         <Link component={RouterLink}  to={`/usuario/editar/${user._id}`}>

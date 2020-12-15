@@ -11,6 +11,8 @@ const SwaggerClient = require('swagger-client');
 var Validator = require('swagger-model-validator');
 var validator = new Validator(SwaggerClient);
 var swaggerValidator = require('swagger-object-validator');
+var _ = require('underscore');
+
 
 require('dotenv').config({ path: path.resolve(__dirname, '../utils/.env')});
 
@@ -108,13 +110,14 @@ app.post('/deleteProvider',async (req,res)=>{
 app.post('/create/provider',async(req, res)=>{
     try {
         const nuevoProovedor = new Provider(req.body);
+        let responce;
         if(req.body._id ){
-            let responce = await Provider.findByIdAndUpdate( req.body._id ,nuevoProovedor).exec();
+            responce = await Provider.findByIdAndUpdate( req.body._id ,nuevoProovedor).exec();
         }else{
-            let savedProovider = await nuevoProovedor.save();
+            responce = await nuevoProovedor.save();
         }
-        res.status(200).json("OK");
-    }catch (e) {
+        res.status(200).json(responce);
+    }catch (e){
         console.log(e);
     }
 });
@@ -123,12 +126,14 @@ app.post('/create/provider',async(req, res)=>{
 app.post('/create/user',async (req,res)=>{
    try {
        const nuevoUsuario = new User(req.body);
+       let responce;
        if(req.body._id ){
-           let responce = await User.findByIdAndUpdate( req.body._id ,nuevoUsuario).exec();
+           responce = await User.findByIdAndUpdate( req.body._id ,nuevoUsuario).exec();
        }else{
-           let savedUser = await nuevoUsuario.save();
+           responce = await nuevoUsuario.save();
        }
-       res.status(200).json("OK");
+       res.status(200).json(responce);
+
    }catch (e) {
        console.log(e);
    }
@@ -180,6 +185,30 @@ app.post('/getProviders',async (req,res)=>{
     }
 
 });
+
+app.post('/getProvidersFull',async (req,res)=>{
+    try {
+        const result = await Provider.find({}).then();
+        let objResponse= {};
+
+        try {
+            var strippedRows = _.map(result, function (row) {
+                let rowExtend=  _.extend({label: row.dependencia, value: row._id} , row.toObject());
+               return rowExtend;
+            });
+        }catch (e) {
+            console.log(e);
+        }
+
+
+        objResponse["results"]= strippedRows;
+        res.status(200).json(objResponse);
+    }catch (e) {
+        console.log(e);
+    }
+});
+
+
 
 
 if (process.env.NODE_ENV == `production`) {

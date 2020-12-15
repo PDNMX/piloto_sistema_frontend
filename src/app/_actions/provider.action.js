@@ -5,8 +5,16 @@ export const providerActions = {
     setPagination,
     fillProviderUpdate,
     deleteProvider,
-    deleteProviderDo
+    deleteProviderDo,
+    requestAllProviders,
+    setProvidersAll
 };
+
+function requestAllProviders(){
+    return {
+      type : providerConstants.PROVIDERS_GETALL,
+    }
+}
 
 function deleteProvider(id){
     return{
@@ -44,4 +52,7 @@ function setPerPageSucces(providers) {
     return {type : providerConstants.PROVIDERS_PAGINATION_SUCCESS, providers}
 }
 
+function setProvidersAll (providers){
+    return {type : providerConstants.PROVIDERS_GETALL_SET, providers}
+}
 

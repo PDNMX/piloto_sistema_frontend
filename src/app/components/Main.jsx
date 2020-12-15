@@ -64,7 +64,10 @@ export const Main = ()=> (
                 />
                 <Route exact
                        path= "/crear/usuario"
-                       render={() => ( <ConnectedCreateUser/>)}
+                       render={() => {
+                           storeValidate.dispatch(providerActions.requestAllProviders());
+                           return ( <ConnectedCreateUser/>)
+                       }}
                 />
                 <Route exact
                        path= "/usuario/editar/:id"

@@ -64,6 +64,13 @@ export function* fillTemporalProvider(){
     }
 }
 
+export function* fillAllProviders(){
+    while (true){
+        yield take(providerConstants.PROVIDERS_GETALL);
+        const respuestaArray = yield axios.post(ur + `/getProvidersFull`);
+        yield put(providerActions.setProvidersAll(respuestaArray.data.results));
+    }
+}
 export function* deleteUser(){
     while (true) {
         const {id} = yield take (userConstants.DELETE_REQUEST);
@@ -105,8 +112,6 @@ export function* creationUser(){
         usuarioJson["fechaAlta"]= fechaActual.format();
         usuarioJson["estatus"] = true; // true is active
         usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
-        usuarioJson["rol"]= [{clave  :  2, valor : "proveedor",  descripcion : "Contraloría del Estado de Oaxaca"}];
-        console.log(usuarioJson);
         const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {validateStatus: () => true});
         if(status === 200){
             //all OK
