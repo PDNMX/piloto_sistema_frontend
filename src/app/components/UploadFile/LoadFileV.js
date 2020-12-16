@@ -15,7 +15,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { TextField } from '@material-ui/core';
+import {MenuItem, Select, TextField} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -95,7 +95,14 @@ export const LoadFileV = () => {
                             <InputLabel shrink htmlFor="system-native-required">
                                 Sistema
                             </InputLabel>
-                            <select inputProps={{
+                            <Select inputProps={{
+                                id: 'system-native-required',
+                            }} label="Sistema"  required={true} onChange={e => setValueSystem(e.target.value) }>
+                                <MenuItem value={'s2'}>Servidores públicos que intervienen en contrataciones</MenuItem>
+                                <MenuItem value={'s31'}>Públicos Sancionados</MenuItem>
+                                <MenuItem value={'s32'}>Particulares Sancionados</MenuItem>
+                            </Select>
+                            {/*<select inputProps={{
                                 id: 'system-native-required',
                             }}
                                     onChange={e => setValueSystem(e.target.value) }>
@@ -104,6 +111,7 @@ export const LoadFileV = () => {
                                 <option value="s31">Públicos Sancionados</option>
                                 <option value="s32">Particulares Sancionados</option>
                             </select>
+                            */}
                         </FormControl>
                     </Grid>
 
