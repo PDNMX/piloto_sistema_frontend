@@ -16,9 +16,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { TextField } from '@material-ui/core';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+
 
 export const LoadFileV = () => {
     let fileReader;
@@ -74,7 +72,6 @@ export const LoadFileV = () => {
 
     return (
         <div>
-            <Header/>
                 <Grid container className={style.root}>
                 <Grid item xs={12}>
                     <Typography variant={"h6"} paragraph color={"primary"} align={"center"}>
