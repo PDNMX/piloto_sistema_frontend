@@ -15,10 +15,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { TextField } from '@material-ui/core';
+import {MenuItem, Select, TextField} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { makeStyles } from '@material-ui/core/styles';
 
 export const LoadFileV = () => {
     let fileReader;
@@ -29,16 +30,19 @@ export const LoadFileV = () => {
     let rowsError=[];
 
 
-    const style = theme => ({
+
+    const useStyles = makeStyles({
         root: {
             maxWidth: 1200,
             margin: '0 auto',
+            color: '#666666',
         },
         paper: {
-            padding: theme.spacing(3),
+            padding: '10pt',
             maxWidth: 1200,
-            margin: '0 auto',
-            marginBottom: theme.spacing(8)
+            margin: '30px',
+            marginBottom: '10pt'
+
         },
         field: {
             width: '100%'
@@ -46,13 +50,32 @@ export const LoadFileV = () => {
         botonera: {
             textAlign: "right"
         },
-        boton: {
-            margin: theme.spacing(2)
-        }
+        boton:{
+            backgroundColor:'#ffe01b',
+            color: '#666666',
+            marginBottom:'15pt',
+        },
+        gridpadding: {
+            padding: '30px',
+        },
+        marginright:{
+            marginRight: '30px',
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
+        marginleft:{
+            marginLeft: '30pt',
+        },
+        paddingLeft:{
+            paddingLeft:'30pt',
+        },
+        fontblack:{
+            color: '#666666'
+        },
 
     });
 
-
+    const style=useStyles();
 
     const setValueSystem= (value) => {
         systemChosen = value;
@@ -70,31 +93,37 @@ export const LoadFileV = () => {
     }
 
 
-    const classes = {};
+
 
     return (
         <div>
-                <Grid container className={style.root}>
+            
+            <Grid container className={style.root}>
                 <Grid item xs={12}>
-                    <Typography variant={"h6"} paragraph color={"primary"} align={"center"}>
+                    <Typography variant={"h6"} paragraph className={style.fontblack} align={"center"}>
                         <b>Carga de datos</b>
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography paragraph color={"textPrimary"}>
+                    <Typography paragraph className={style.fontblack}>
                         Importa un archivo .json para guardar la información del sistema seleccionado en la base de datos correspondiente.
                     </Typography>
                 </Grid>
             </Grid>
 
-            <Paper elevation={3} className={classes.paper} >
-                <Grid container spacing={4}>
-                    <Grid item xs={12} md={4}>
-                        <FormControl required className={classes.field}>
-                            <InputLabel shrink htmlFor="system-native-required">
-                                Sistema
-                            </InputLabel>
-                            <select inputProps={{
+            <Paper elevation={0} >
+                <Grid  container className={style.root}>
+                    <Grid item xs={12} md={5} >
+                        <FormControl required className={style.field}>
+
+                            <Select inputProps={{
+                                id: 'system-native-required',
+                            }} label="Sistema" className={style.marginLeft}  required={true} onChange={e => setValueSystem(e.target.value) }>
+                                <MenuItem value={'s2'}>Servidores públicos que intervienen en contrataciones</MenuItem>
+                                <MenuItem value={'s31'}>Públicos Sancionados</MenuItem>
+                                <MenuItem value={'s32'}>Particulares Sancionados</MenuItem>
+                            </Select>
+                            {/*<select inputProps={{
                                 id: 'system-native-required',
                             }}
                                     onChange={e => setValueSystem(e.target.value) }>
@@ -103,28 +132,29 @@ export const LoadFileV = () => {
                                 <option value="s31">Públicos Sancionados</option>
                                 <option value="s32">Particulares Sancionados</option>
                             </select>
+                            */}
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={5} >
                         <input type="file"
+                               className={style.paddingLeft}
                                accept='.json'
                                id='file'
                                onChange={e => handleFileChosen(e.target.files[0])} />
                     </Grid>
 
-                    <Grid item xs={12} className={classes.botonera} >
+                    <Grid item xs={12} className={style.botonera} >
                         <Button
                             variant="contained"
-                            color="primary"
-                            onClick={() => dispatch(requestErrorsValidation(contentFileJson , systemChosen))} className={classes.button}>
+                            onClick={() => dispatch(requestErrorsValidation(contentFileJson , systemChosen))} className={style.boton}>
                             Guardar
                         </Button>
                     </Grid>
 
                     {errors && <Grid aling="center" item xs={8} >
                         <TableContainer component={Paper}>
-                            <Table className={classes.table} size="small" aria-label="a dense table">
+                            <Table className={style.table} size="small" aria-label="a dense table">
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="right">Id</TableCell>
