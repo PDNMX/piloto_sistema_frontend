@@ -163,6 +163,20 @@ app.post('/getUsers',async (req,res)=>{
 
 });
 
+
+app.post('/getUsersFull',async (req,res)=>{
+    try {
+        const result = await User.find({}).then();
+        let objResponse= {};
+        objResponse["results"]= result;
+        res.status(200).json(objResponse);
+
+    }catch (e) {
+        console.log(e);
+    }
+
+});
+
 app.post('/getProviders',async (req,res)=>{
     try {
 

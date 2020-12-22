@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
 import { Checkboxes ,TextField,  makeValidate,makeRequired, Select} from 'mui-rff';
-import {MenuItem, Grid, Button,Paper, FormControlLabel} from "@material-ui/core";
-import { FormControl } from '@material-ui/core';
+import {MenuItem, Grid, Button,Paper} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 import {requestCreationProvider, requestCreationUser} from "../../store/mutations";
@@ -14,9 +13,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import {providerActions} from "../../_actions/provider.action";
 import {alertActions} from "../../_actions/alert.actions";
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Link from "@material-ui/core/Link";
-import { Link as RouterLink } from 'react-router-dom';
 
 
 const CreateProvider = ({id, provider,alert }) => {
@@ -27,7 +23,6 @@ interface FormProvider {
     dependencia?:string;
     sistemas?:string[];
     estatus?:string;
-    fechaAlta?:string;
 }
 
 interface MyFormProps {
@@ -60,10 +55,9 @@ function MyForm(props: MyFormProps ) {
     }
 
     const schema = Yup.object().shape({
-        dependencia:  Yup.string().required().matches(new RegExp('^[ñáéíóúáéíóúÁÉÍÓÚa-zA-Z ]*$'), 'Inserta solamente caracteres'),
+        dependencia: Yup.string().required(),
         sistemas: Yup.array().min(1).required(),
         estatus: Yup.boolean().required(),
-        fechaAlta: Yup.string(),
     });
 
     const validate = makeValidate(schema);
@@ -90,16 +84,8 @@ function MyForm(props: MyFormProps ) {
           color: '#666666'
         },
         boton:{
-          backgroundColor:'#ffe01b',
+          backgroundColor:'#34b3eb',
           color: '#666666'
-        },
-        gridpadding: {
-            padding: '30px',
-        },
-        marginright:{
-            marginRight: '30px',
-            backgroundColor:'#ffe01b',
-            color: '#666666'
         }
         
       }));
@@ -107,54 +93,43 @@ function MyForm(props: MyFormProps ) {
     const classes = useStyles();
 
     return (
-        <div>
-            <Grid container>
-                <Link component={RouterLink}  to={`/proveedores`}>
-                    <Button style = {{}}><ArrowBackIcon fontSize="large"/></Button>
-                </Link>
-            </Grid>
         <Form
             onSubmit={onSubmit}
             initialValues={initialValues}
             validate={validate}
             render={({ handleSubmit,values, submitting   }) => (
                 <form  onSubmit={handleSubmit} noValidate>
-                    {alert.status === undefined &&
-                    <div>
-                        <Grid className= {classes.gridpadding} spacing={3} container >
-                            <Grid item xs={12} md={3}>
-                                <TextField label="Dependencia" name="dependencia" required={true} />
-                            </Grid>
-                            <Grid item xs={12} md={5} className={classes.fontblack}>
-                                <Select  name = "sistemas" label="Selecciona los sistemas aplicables"  required={true} data={sistemasData} multiple={true}></Select>
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <Select name="estatus" label="Estatus" className={classes.fontblack}>
-                                     <MenuItem value="true">Vigente</MenuItem>
-                                     <MenuItem value="false">No vigente</MenuItem>
-                                 </Select>
-                            </Grid>
-                        </Grid>
-                        <Grid  spacing={3} justify="flex-end" className={classes.gridpadding}
-                                   alignItems="flex-end"
-                                   container
-                                   item
-                                   xs={12}
-                                   md={12}>
-                           
-                            <Link component={RouterLink}  to={`/proveedores`}>
-                                <Button  variant="contained"
-                                         className={classes.marginright}
-                                         > Cancelar
-                                </Button>
-                            </Link>
-                              <Button  variant="contained"
-                                    className={classes.boton}
-                                    type="submit"
-                                    disabled={submitting}> Guardar
-                              </Button>
-                        </Grid>
-
+                    {alert.status === undefined &&  <div>
+                        <Grid container spacing={3} className={classes.fontblack}>
+                <Grid item xs>
+                  <Paper elevation={0}>
+                    <TextField label="Dependencia" name="dependencia" required={true} />
+                  </Paper>
+                </Grid>
+                <Grid item xs >
+                  <Paper elevation={0} className={classes.fontblack}>
+                  <Checkboxes  name = "sistemas" label="Selecciona los sistemas aplicables"  required={true} data={sistemasData} ></Checkboxes>
+                  </Paper>
+                </Grid>
+                <Grid item xs>
+                  <Paper elevation={0}>
+                    <Select name="estatus" label="Estatus" formControlProps={{margin:'normal'}} className={classes.fontblack}>
+                        <MenuItem value="true">Vigente</MenuItem>
+                        <MenuItem value="false">No vigente</MenuItem>
+                    </Select>
+                  </Paper>
+                </Grid>
+                <Grid item xs>
+                  <Paper elevation={0}>
+                      <Button  variant="contained"
+                            className={classes.boton}
+                            type="submit"
+                            disabled={submitting}> Guardar 
+                      </Button>
+                      
+                    </Paper>
+                </Grid>
+              </Grid>
                     </div>}
                     <div className="sweet-loading">
                         {alert.status != undefined && <div><Grid item xs={12}>
@@ -170,11 +145,10 @@ function MyForm(props: MyFormProps ) {
                             loading={alert.status === undefined ? false : !alert.status }
                         />
                     </div>
-
+                    
                 </form>
             )}
         />
-        </div>
     );
 }
 
@@ -199,4 +173,3 @@ function mapDispatchToProps(dispatch, ownProps){
 }
 
 export const ConnectedCreateProvider = connect(mapStateToProps,mapDispatchToProps)(CreateProvider);
-                                                                                                     

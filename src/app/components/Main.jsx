@@ -63,9 +63,10 @@ export const Main = ()=> (
                        render={() => ( <ThemeProvider theme = {theme}> <LoadFileV/></ThemeProvider>)}
                 />
                 <Route exact
-                       path= "/crear/usuario"
+                       path= "/usuario/crear"
                        render={() => {
                            storeValidate.dispatch(providerActions.requestAllProviders());
+                           storeValidate.dispatch((alertActions.clear()));
                            return ( <ConnectedCreateUser/>)
                        }}
                 />
@@ -73,6 +74,7 @@ export const Main = ()=> (
                        path= "/usuario/editar/:id"
                        render={({match}) => {
                            storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
+                           storeValidate.dispatch(providerActions.requestAllProviders());
                            storeValidate.dispatch((alertActions.clear()));
                            return (<ConnectedCreateUser match = {match} />)
                        }}
@@ -80,6 +82,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/usuarios"
                        render={() => {
+                           storeValidate.dispatch(providerActions.requestAllProviders());
                            storeValidate.dispatch(userActions.requestPerPage({page : 1, pageSize: 10 }));
                            storeValidate.dispatch((alertActions.clear()));
                          return(<ListUser/>)
@@ -87,7 +90,7 @@ export const Main = ()=> (
                 />
 
                 <Route exact
-                       path= "/crear/proveedor"
+                       path= "/proveedor/crear"
                        render={() => ( <ConnectedCreateProvider/>)}
                 />
 
@@ -107,7 +110,6 @@ export const Main = ()=> (
                          return(<ListProvider/>)
                        }}
                 />
-
             </div>
         </Provider>
         </div>

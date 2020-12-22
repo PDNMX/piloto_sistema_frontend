@@ -14,9 +14,8 @@ const userSchema = new Schema({
     sistemas: { type: [], default: void 0 },
     fechaAlta:String,
     fechaBaja:String,
-    estatus:String,
+    estatus:Boolean,
     vigenciaContrasena:String,
-    rol: String,
     proveedorDatos : String
 });
 

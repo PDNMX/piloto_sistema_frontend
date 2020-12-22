@@ -40,6 +40,8 @@ function setPagination(objPagination){
     return {type : userConstants.PAGINATION_SET , objPagination}
 }
 
+
+
 function setPerPageSucces(users) {
     return {type : userConstants.USERS_PAGINATION_SUCCESS, users}
 }

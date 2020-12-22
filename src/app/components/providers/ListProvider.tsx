@@ -9,7 +9,7 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid
+    makeStyles, Button, TableHead, ButtonGroup
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -37,11 +37,9 @@ export const ListProvider = () => {
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [providerId, setProviderId] = React.useState("");
-    const [nombreDependencia, setnombreDependencia] =  React.useState("");
-    const handleClickOpen = (id, dependencia) => {
+    const handleClickOpen = (id) => {
         setOpen(true);
         setProviderId(id);
-        setnombreDependencia(dependencia);
     };
 
     const handleClose = () => {
@@ -69,37 +67,29 @@ export const ListProvider = () => {
         rowsPerPage: PropTypes.number.isRequired
     };
 
-    const useStyles = makeStyles((theme) => ({
-        fontblack:{
-            color: '#666666'
-        },
-        boton:{
-            backgroundColor:'#ffe01b',
-            color: '#666666'
-        },
-        gridpadding: {
-            padding: '30px',
-        },
-        marginright:{
-            marginRight: '30px',
-            backgroundColor:'#ffe01b',
-            color: '#666666',
-            marginBottom: '30px'
-        }
-    }));
-
-    const classes = useStyles();
-
         return (
             <div>
+
+                <Link component={RouterLink}  to={`/proveedor/crear`}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        endIcon={<AddBoxIcon>Agregar proveedor</AddBoxIcon>}
+                    >
+                        Agregar proveedor
+                    </Button>
+                </Link>
+
                 {alerta.status == true && <Alert severity={alerta.type}>{alerta.message}</Alert>}
+
+
                 <Dialog
                     open={open}
                     onClose={handleClose}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el proveedor?"+nombreDependencia}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el proveedor?"+providerId}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             Los cambios no seran reversibles
@@ -114,79 +104,64 @@ export const ListProvider = () => {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <Grid className= {classes.gridpadding} spacing={3} container >
-                        <TableContainer component={Paper} >
-                            {providers.length > 0  && <Table aria-label="custom pagination table">
-                                <TableHead >
-                                    <TableRow >
-                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Dependencia</TableCell>
-                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</TableCell>
-                                        <TableCell className={classes.fontblack} align="center">Sistema</TableCell>
-                                        <TableCell className={classes.fontblack} align="center">Acciones</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody key="providers">
-                                    {(providers).map((provider) => (
-                                        <TableRow key={provider._id}>
-                                            <TableCell className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="left">
-                                                {provider.dependencia}
-                                            </TableCell>
-                                            <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                                {provider.estatus=='true' ? 'Vigente' : 'No vigente'}
-                                            </TableCell>
-                                            <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                                {provider.sistemas}
-                                            </TableCell>
-                                            <TableCell style={{ width: 'auto' }} align="center">
-                                                    <Link component={RouterLink}  to={`/proveedor/editar/${provider._id}`}>
-                                                     <Button style={{ color: 'gray' }} ><EditOutlinedIcon/></Button>
-                                                    </Link>
-                                                    <Button>
-                                                    <DeleteOutlineOutlinedIcon style={{ color: 'gray' }} onClick= {()=> {handleClickOpen(provider._id, provider.dependencia)}} />
-                                                    </Button>
 
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                                <TableFooter>
-                                    <TableRow >
-                                        {pagination.totalRows != undefined && pagination.pageSize && pagination.page  && <TablePagination
-                                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                            colSpan={6}
-                                            count={pagination.totalRows}
-                                            rowsPerPage={pagination.pageSize}
-                                            page={pagination.page-1}
-                                            SelectProps={{
-                                                inputProps: { 'aria-label': 'rows per page' },
-                                                native: true,
-                                            }}
-                                            onChangePage={handleChangePage}
-                                            onChangeRowsPerPage={handleChangeRowsPerPage}
-                                            ActionsComponent={TablePaginationActions}
-                                            className={classes.fontblack}
-                                        /> }
-                                    </TableRow>
-                                </TableFooter>
-                            </Table>}
-                         </TableContainer>
-                </Grid>
-                <Grid  spacing={3} justify="flex-end"
-                       alignItems="flex-end"
-                       container
-                       item
-                       xs={12}
-                       md={12}>
-                    <Link component={RouterLink}  to={`/crear/proveedor`}>
-                        <Button
-                            variant="contained"
-                            className={classes.marginright}
-                            endIcon={<AddBoxIcon>Agregar proveedor</AddBoxIcon>}
-                        >
-                            Agregar proveedor
-                        </Button>
-                    </Link>
-                </Grid>
+            <TableContainer component={Paper}>
+                {providers.length > 0  && <Table aria-label="custom pagination table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Dependencia</TableCell>
+                            <TableCell>Estatus</TableCell>
+                            <TableCell align="right">Sistema</TableCell>
+                            <TableCell align="right">Acciones</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody key="providers">
+                        {(providers).map((provider) => (
+                            <TableRow key={provider._id}>
+                                <TableCell component="th" scope="row">
+                                    {provider.dependencia}
+                                </TableCell>
+                                <TableCell style={{ width: 160 }} align="right">
+                                    {provider.estatus=='true' ? 'Vigente' : 'No vigente'}
+                                </TableCell>
+                                <TableCell style={{ width: 160 }} align="right">
+                                    {provider.sistemas}
+                                </TableCell>                                
+                                <TableCell style={{ width: 160 }} align="right">
+                                        <Link component={RouterLink}  to={`/proveedor/editar/${provider._id}`}>
+                                         <Button><EditOutlinedIcon/></Button>
+                                        </Link>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick= {()=> {handleClickOpen(provider._id)}} >
+                                        <DeleteOutlineOutlinedIcon/>
+                                    </Button>
+                                         <Button></Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            {pagination.totalRows != undefined && pagination.pageSize && pagination.page  && <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                colSpan={6}
+                                count={pagination.totalRows}
+                                rowsPerPage={pagination.pageSize}
+                                page={pagination.page-1}
+                                SelectProps={{
+                                    inputProps: { 'aria-label': 'rows per page' },
+                                    native: true,
+                                }}
+                                onChangePage={handleChangePage}
+                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            /> }
+                        </TableRow>
+                    </TableFooter>
+                </Table>}
+            </TableContainer>
             </div>
         );
 }

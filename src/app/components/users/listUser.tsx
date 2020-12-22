@@ -1,6 +1,6 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import {
     Table,
     TableBody,
@@ -9,7 +9,7 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid
+    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -25,21 +25,42 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import {Alert} from "@material-ui/lab";
+import {createStyles, Theme, withStyles} from '@material-ui/core/styles';
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+
+
 
 
 export const ListUser = () => {
 
-    const {pagination, users,alerta} = useSelector(state => ({
-        pagination: state.pagination,
+    const {users,alerta,providerSelect} = useSelector(state => ({
         users: state.users,
-        alerta : state.alert
+        alerta : state.alert,
+        providerSelect : state.providerSelect
     }));
+
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [usuarioId, setUsuarioId] = React.useState("");
-    const handleClickOpen = (id) => {
+    const [nombreUsuario, setNombreUsuario] =  React.useState("");
+    const [pagination, setPagination] =  React.useState({page : 0 , pageSize : 10 });
+    const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
+    const [selectedUser, setSelectedUser] = React.useState({_id : "",cargo: "" , correoElectronico : "",  telefono : "" ,  extension : "" , usuario : "" , sistemas : [] , fechaAlta : "" , vigenciaContrasena :""  });
+    const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
+
+    const handleOpenModalUserInfo = (user) => {
+        setOpenModalUserInfo(true);
+        setSelectedUser(user);
+    };
+
+    const handleCloseModalUserInfo = () => {
+        setOpenModalUserInfo(false);
+    };
+
+    const handleClickOpen = (id,name,primerApellido,segundoApellido) => {
         setOpen(true);
         setUsuarioId(id);
+        setNombreUsuario(name+ " "+ primerApellido+ " "+ segundoApellido);
     };
 
     const handleClose = () => {
@@ -47,18 +68,34 @@ export const ListUser = () => {
     };
 
     const handleChangePage = (event, newPage) => {
-        newPage= newPage+1;
-       dispatch(userActions.requestPerPage({page : newPage ,pageSize: pagination.pageSize}));
+        setPagination({page : newPage , pageSize : pagination.pageSize });
+       //dispatch(userActions.requestPerPage({page : newPage ,pageSize: pagination.pageSize}));
     };
 
     const handleChangeRowsPerPage = (event) => {
-       dispatch(userActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
+        setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
+       //dispatch(userActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
     };
 
     const confirmAction = (id) => {
-        dispatch(userActions.deleteUser(id));
+         dispatch(userActions.deleteUser(id));
+        let initialRange=pagination.page * pagination.pageSize;
+        let endRange= pagination.page * pagination.pageSize + pagination.pageSize;
+        let totalUsers= users.length -1 ;
+        console.log("initialRange "+ initialRange + " end range "+ endRange+ " totalusers "+ totalUsers);
+        if(totalUsers <= initialRange ){
+            setPagination({page : pagination.page -1 , pageSize : pagination.pageSize });
+        }
+
         handleClose();
     }
+
+    const StyledTableCell = withStyles({
+        root: {
+            color: '#666666'
+        }
+    })(TableCell);
+
 
     TablePaginationActions.propTypes = {
         count: PropTypes.number.isRequired,
@@ -67,20 +104,103 @@ export const ListUser = () => {
         rowsPerPage: PropTypes.number.isRequired
     };
 
-        return (
-            <div>
-                <Link component={RouterLink}  to={`/crear/usuario`}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        endIcon={<AddBoxIcon>Agregar usuario</AddBoxIcon>}
-                    >
-                        Agregar usuario
-                    </Button>
-                </Link>
 
+
+
+    const useStyles = makeStyles((theme: Theme) =>
+        createStyles({
+            fontblack:{
+                color: '#666666'
+            },
+            boton:{
+                backgroundColor:'#ffe01b',
+                color: '#666666'
+            },
+            gridpadding: {
+                padding: '30px',
+            },
+            marginright:{
+                marginRight: '30px',
+                marginTop: '15px',
+                backgroundColor:'#ffe01b',
+                color: '#666666',
+                marginBottom: '30px'
+            },
+            paper: {
+                'text-align': 'center',
+                margin: 0,
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                backgroundColor: theme.palette.background.paper,
+                boxShadow: theme.shadows[5],
+                padding: theme.spacing(2, 4, 3),
+            },
+        }),
+    );
+
+    const classes = useStyles();
+
+        return (
+
+           <div >
                 {alerta.status != undefined && <Alert severity={alerta.type}>{alerta.message}</Alert>}
 
+               <Modal
+                   open={openModalUserInfo}
+                   onClose={handleCloseModalUserInfo}
+                   aria-labelledby="simple-modal-title"
+                   aria-describedby="simple-modal-description"
+               >
+                   <Grid container item md={8} className={classes.paper}>
+                       <TableContainer component={Paper}>
+                           <TableHead>
+                               <TableRow>
+                                   <StyledTableCell align="center" >Cargo</StyledTableCell>
+                                   <StyledTableCell align="center">Correo Electronico</StyledTableCell>
+                                   <StyledTableCell align="center">Telefono</StyledTableCell>
+                                   <StyledTableCell align="center" >Extención</StyledTableCell>
+                                   <StyledTableCell align="center" >Usuario</StyledTableCell>
+                                   <StyledTableCell align="center" >Sistemas</StyledTableCell>
+                                   <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
+                                   <StyledTableCell align="center" >Vigencia de Contraseña</StyledTableCell>
+                               </TableRow>
+                           </TableHead>
+                           <TableBody key="InfoPlusUser">
+                               <TableRow key={selectedUser._id + "InfoPlusUser"}>
+                                   <StyledTableCell align="center" style={{width: 160}} component="th" scope="row">
+                                       {selectedUser.cargo}
+                                   </StyledTableCell>
+                                   <StyledTableCell style={{width: 160}} align="center">
+                                       {selectedUser.correoElectronico}
+                                   </StyledTableCell>
+                                   <StyledTableCell style={{width: 160}} align="center">
+                                       {selectedUser.telefono}
+                                   </StyledTableCell>
+                                   <StyledTableCell style={{width: 160}}align="center">
+                                       {selectedUser.extension}
+                                   </StyledTableCell>
+                                   <StyledTableCell style={{width: 160}} align="center">
+                                       {selectedUser.usuario}
+                                   </StyledTableCell>
+                                   <StyledTableCell style={{width: 160}} align="center">
+                                       {selectedUser.sistemas.map( value => (
+                                           <Typography>{sistemas[value]}, </Typography>
+                                       ))}
+
+                                   </StyledTableCell>
+                                   <StyledTableCell style={{width: 160}} align="center">
+                                       {selectedUser.fechaAlta}
+                                   </StyledTableCell>
+                                   <StyledTableCell style={{width: 160}} align="center">
+                                       {selectedUser.vigenciaContrasena}
+                                   </StyledTableCell>
+                               </TableRow>
+                           </TableBody>
+                       </TableContainer>
+                   </Grid>
+               </Modal>
 
                 <Dialog
                     open={open}
@@ -88,7 +208,7 @@ export const ListUser = () => {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el usuario?"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el usuario "+ nombreUsuario+"?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             Los cambios no seran reversibles
@@ -104,59 +224,66 @@ export const ListUser = () => {
                     </DialogActions>
                 </Dialog>
             <Grid container >
-                <TableContainer component={Paper}>
+
+                <TableContainer  component={Paper}>
                     {users.length > 0  && <Table aria-label="custom pagination table">
-                        <TableHead>
+                        <TableHead >
                             <TableRow>
-                                <TableCell>Nombre</TableCell>
-                                <TableCell>Primer apellido</TableCell>
-                                <TableCell align="right">Segundo apellido</TableCell>
-                                <TableCell align="right">Sistemas</TableCell>
-                                <TableCell align="right">Estatus</TableCell>
-                                <TableCell align="right">Acciones</TableCell>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell align="center" >Nombre</StyledTableCell>
+                                <StyledTableCell align="center">Primer apellido</StyledTableCell>
+                                <StyledTableCell align="center">Segundo apellido</StyledTableCell>
+                                <StyledTableCell align="center">Proveedor</StyledTableCell>
+                                <StyledTableCell align="center">Estatus</StyledTableCell>
+                                <StyledTableCell align="center">Acciones</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody key="usuarios">
-                            {(users).map((user) => (
+                            {users.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((user)  => (
                                 <TableRow key={user._id}>
-                                    <TableCell component="th" scope="row">
+
+                                        <TableCell style={{ width: 40 }} align="center">
+                                            <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalUserInfo(user)}>
+                                                <KeyboardArrowDownIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                    <StyledTableCell style={{ width: 160 }}  align="center">
                                         {user.nombre}
-                                    </TableCell>
-                                    <TableCell style={{ width: 160 }} align="right">
+                                    </StyledTableCell>
+                                    <StyledTableCell style={{ width: 160 }} align="center">
                                         {user.apellidoUno}
-                                    </TableCell>
-                                    <TableCell style={{ width: 160 }} align="right">
+                                    </StyledTableCell>
+                                    <StyledTableCell style={{ width: 160 }} align="center">
                                         {user.apellidoDos}
-                                    </TableCell>
-                                    <TableCell style={{ width: 160 }} align="right">
-                                        {user.sistemas}
-                                    </TableCell>
-                                    <TableCell style={{ width: 160 }} align="right">
+                                    </StyledTableCell>
+                                    {providerSelect.map( value => (
+                                        value._id === user.proveedorDatos && <StyledTableCell key={value._id} style={{ width: 160 }} align="center">{value.label}</StyledTableCell>
+                                    ))}
+                                    <StyledTableCell  style={{ width: 160 }} align="center">
                                         {user.estatus? "Vigente" : "No vigente"}
-                                    </TableCell>
-                                    <TableCell style={{ width: 160 }} align="right">
+                                    </StyledTableCell>
+                                    <StyledTableCell style={{ width: 160 }} align="center">
                                         <Link component={RouterLink}  to={`/usuario/editar/${user._id}`}>
                                             <Button><EditOutlinedIcon/></Button>
                                         </Link>
                                         <Button
                                             variant="contained"
-                                            color="secondary"
-                                            onClick= {()=> {handleClickOpen(user._id)}} >
+                                            onClick= {()=> {handleClickOpen(user._id, user.nombre,user.apellidoUno,user.apellidoDos)}} >
                                             <DeleteOutlineOutlinedIcon/>
                                         </Button>
                                         <Button></Button>
-                                    </TableCell>
+                                    </StyledTableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                             <TableFooter>
                                     <TableRow>
-                                        {pagination.totalRows != undefined && pagination.pageSize && pagination.page  && <TablePagination
-                                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                        { pagination.pageSize != undefined  && pagination.page != undefined  && <TablePagination
+                                            rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
                                             colSpan={6}
-                                            count={pagination.totalRows}
+                                            count={users.length}
                                             rowsPerPage={pagination.pageSize}
-                                            page={pagination.page-1}
+                                            page={pagination.page}
                                             SelectProps={{
                                                 inputProps: { 'aria-label': 'rows per page' },
                                                 native: true,
@@ -164,11 +291,24 @@ export const ListUser = () => {
                                             onChangePage={handleChangePage}
                                             onChangeRowsPerPage={handleChangeRowsPerPage}
                                             ActionsComponent={TablePaginationActions}
-                                        /> }
+                                        />}
                                     </TableRow>
                             </TableFooter>
                     </Table>}
                 </TableContainer>
+                <Grid container item
+                      xs={12} md={12}
+                      justify="flex-end"
+                      alignItems="flex-end" >
+                <Link component={RouterLink}  to={`/usuario/crear`}>
+                    <Button className={classes.marginright}
+                        variant="contained"
+                        endIcon={<AddBoxIcon>Agregar usuario</AddBoxIcon>}
+                    >
+                        Agregar usuario
+                    </Button>
+                </Link>
+                </Grid>
             </Grid>
 
             </div>

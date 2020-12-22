@@ -17,7 +17,7 @@ const ur= "http://localhost:3004";
 export function* validationErrors(){
     while (true) {
         const {schema,systemId} = yield take (mutations.REQUEST_VALIDATION_ERRORS);
-        if(systemId === "s2"){
+        if(systemId === "S2"){
             let SCHEMA = JSON.parse(schema);
             const respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA);
             yield put(mutations.setErrorsValidation(respuestaArray.data));
@@ -29,12 +29,11 @@ export function* validationErrors(){
 export function* requestUserPerPage(){
     while (true) {
         const {objPaginationReq} = yield take(userConstants.USERS_PAGINATION_REQUEST);
-        console.log("->>>>>>>>>>>>>>"+url);
-        const respuestaArray = yield axios.post(ur + `/getUsers`,objPaginationReq);
-        yield put(userActions.setPagination(respuestaArray.data.pagination));
+        const respuestaArray = yield axios.post(ur + `/getUsersFull`,objPaginationReq);
         yield put(userActions.setPerPageSucces(respuestaArray.data.results));
     }
 }
+
 
 export function* requestProviderPerPage(){
     while (true) {
@@ -110,7 +109,6 @@ export function* creationUser(){
         const {usuarioJson} = yield take (mutations.REQUEST_CREATION_USER);
         let fechaActual = moment();
         usuarioJson["fechaAlta"]= fechaActual.format();
-        usuarioJson["estatus"] = true; // true is active
         usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
         const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {validateStatus: () => true});
         if(status === 200){

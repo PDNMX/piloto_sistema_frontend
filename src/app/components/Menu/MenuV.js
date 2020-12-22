@@ -207,6 +207,9 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'auto',
         flexDirection: 'column',
       },
+        paperPadding: {
+            padding: theme.spacing(2),
+        },
       fixedHeight: {
         height: 240,
       },
@@ -236,7 +239,8 @@ const useStyles = makeStyles((theme) => ({
       setOpen(false);
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-    
+
+
 
     return (
 
@@ -339,7 +343,7 @@ const useStyles = makeStyles((theme) => ({
               <Collapse in={checkedUser}>
                 <div>
                   <Tooltip title="Crear usuario" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/crear/usuario")}>
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuario/crear")}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
@@ -369,7 +373,7 @@ const useStyles = makeStyles((theme) => ({
               <Collapse in={checkedBitacora}>
                 <div>
                   <Tooltip title="Crear proveedor" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/crear/proveedor")}>
+                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedor/crear")}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
@@ -398,7 +402,7 @@ const useStyles = makeStyles((theme) => ({
           <Grid container spacing={3}>
             {/* Grid 1 */}
             <Grid item xs={12} md={12} lg={12}>
-              <Paper >
+              <Paper className={classes.paperPadding} >
                   <Main/>
                 {crearProovedor ? <ConnectedCreateProvider /> : ""}
               </Paper>
