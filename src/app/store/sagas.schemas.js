@@ -38,8 +38,7 @@ export function* requestUserPerPage(){
 export function* requestProviderPerPage(){
     while (true) {
         const {objPaginationReq} = yield take(providerConstants.PROVIDERS_PAGINATION_REQUEST);
-        const respuestaArray = yield axios.post(ur + `/getProviders`,objPaginationReq);
-        yield put(providerActions.setPagination(respuestaArray.data.pagination));
+        const respuestaArray = yield axios.post(ur + `/getProvidersFull`,objPaginationReq);
         yield put(providerActions.setPerPageSucces(respuestaArray.data.results));
         
     }
@@ -93,7 +92,11 @@ export function* deleteUser(){
 export function* deleteProvider(){
     while (true) {
         const {id} = yield take (providerConstants.DELETE_REQUEST);
-        let request = {"_id": id};
+
+        let fechaActual = moment();
+        let fechaBaja= fechaActual.subtract(1, 'd').format().toString();
+        console.log("Fecha baja"+fechaBaja);
+        let request = {"_id": id,"fechaBaja":fechaBaja};
         const {status} = yield axios.post(ur + `/deleteProvider`,request, {validateStatus: () => true});
         if(status === 200){
             yield put(providerActions.deleteProviderDo(id));
@@ -126,9 +129,19 @@ export function* creationProvider(){
     while(true){
         const {usuarioJson} = yield take (mutations.REQUEST_CREATION_PROVIDER);
         let fechaActual =moment();
-        usuarioJson["fechaAlta"]=fechaActual.format();
-        usuarioJson["estatus"]=true;
-        const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson);
+        if(usuarioJson["estatus"]==undefined || usuarioJson["estatus"]==null){
+            usuarioJson["estatus"]=true;
+            usuarioJson["fechaAlta"]=fechaActual.format();
+        }else{
+            /*if(usuarioJson["estatus"]==true){
+                usuarioJson["estatus"]=true;
+            }else{
+                usuarioJson["estatus"]=false;
+            }*/
+            usuarioJson["fechaActualizacion"]=fechaActual.format();
+        }
+
+        const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson, {validateStatus: () => true});
         if(status === 200){
             //all OK
             yield put(alertActions.success("Proovedor creado con exito"));

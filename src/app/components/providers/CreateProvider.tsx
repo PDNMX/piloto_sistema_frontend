@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
-import { Checkboxes ,TextField,  makeValidate,makeRequired, Select} from 'mui-rff';
+import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
 import {MenuItem, Grid, Button,Paper, FormControlLabel} from "@material-ui/core";
 import { FormControl } from '@material-ui/core';
 import * as Yup from 'yup';
@@ -17,8 +17,6 @@ import {alertActions} from "../../_actions/alert.actions";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Link from "@material-ui/core/Link";
 import { Link as RouterLink } from 'react-router-dom';
-import Switch from '@material-ui/core/Switch';
-
 
 
 const CreateProvider = ({id, provider,alert }) => {
@@ -29,7 +27,7 @@ const CreateProvider = ({id, provider,alert }) => {
 interface FormProvider {
     dependencia?:string;
     sistemas?:string[];
-    estatus?:string;
+    estatus?:Boolean;
     fechaAlta?:string;
 }
 
@@ -63,20 +61,14 @@ function MyForm(props: MyFormProps ) {
 
     }
 
-    const [state, setState] = React.useState({
-        estado: false
-    });
-
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-        console.log( event.target.name+" "+event.target.checked);
-        setState({estado:event.target.checked});
-    };
+    const estatus = [
+        {label: 'Vigente', value: true},
+    ];
 
       const schema = Yup.object().shape({
         dependencia:  Yup.string().required().matches(new RegExp('^[ñáéíóúáéíóúÁÉÍÓÚa-zA-Z ]*$'), 'Inserta solamente caracteres'),
         sistemas: Yup.array().min(1).required(),
-        estatus: Yup.boolean(),
+        //estatus: Yup.boolean(),
         fechaAlta: Yup.string(),
     });
 
@@ -85,9 +77,9 @@ function MyForm(props: MyFormProps ) {
 
 
     const sistemasData = [
-        {label: 'Servidores públicos que intervienen en contrataciones', value: 's2'},
-        {label: 'Públicos Sancionados', value: 's31'},
-        {label: 'Particulares Sancionados', value: 's32'}
+        {label: 'Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación', value: 'S2'},
+        {label: 'Sistema de los Servidores Públicos Sancionados', value: 'S3S'},
+        {label: 'Sistema de los Particulares Sancionados', value: 'S3P'}
     ];
 
     const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
@@ -137,47 +129,15 @@ function MyForm(props: MyFormProps ) {
                     <div>
                         <Grid className= {classes.gridpadding} spacing={3} container >
                             <Grid item xs={12} md={3}>
-                                <TextField label="Dependencia" name="dependencia" required={true} />
+                                <TextField label="Proveedor" name="dependencia" required={true} />
                             </Grid>
                             <Grid item xs={12} md={5} className={classes.fontblack}>
                                 <Select  name = "sistemas" label="Selecciona los sistemas aplicables"  required={true} data={sistemasData} multiple={true}></Select>
                             </Grid>
-                            { id!=null ?
-                            <Grid item xs={12} md={4} >
-                                {/*<Select name="estatus" label="Estatus" className={classes.fontblack}>
-                                     <MenuItem value="true">Vigente</MenuItem>
-                                     <MenuItem value="false">No vigente</MenuItem>
-                                 </Select>
-                                 */}
-                                <Switch
-                                   
-                                    onChange={handleChange}
-                                    color="primary"
-                                    name="estatus"
-                                    inputProps={{ 'aria-label': 'primary checkbox' }}
-                                />
-                            </Grid>
-                            :
-                                <Grid >
-
-                                    {/* <Switch
-                                        checked={state.estatus}
-                                        value={state.estatus}
-                                        onChange={handleChange}
-                                        color="primary"
-                                        name="estatus"
-                                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                                    />
-                                   <Select name="estatus" value="true" formControlProps={{ value:"true" }}>
-                                        <MenuItem value="true" >Vigente</MenuItem>
-                                        <MenuItem value="false">No vigente</MenuItem>
-                                    </Select>
-                                        */}
-
-                                    {/*<TextField  name="estatus" required={false} value={true} />*/}
-                                </Grid>
-                            }
-
+                            {id != null &&
+                            <Grid item xs={12} md={3}>
+                                <Switches label="estatus" name="estatus" required={true} data={estatus}/>
+                            </Grid>}
                         </Grid>
                         <Grid  spacing={3} justify="flex-end" className={classes.gridpadding}
                                    alignItems="flex-end"

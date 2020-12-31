@@ -6,7 +6,7 @@ const userSchema = new Schema({
     fechaAlta:String,
     fechaBaja:String,
     fechaActualizacion:String,
-    estatus:String,
+    estatus:Boolean,
     sistemas: { type: [], default: void 0 }
 });
 

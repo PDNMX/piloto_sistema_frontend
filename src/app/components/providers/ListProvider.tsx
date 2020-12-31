@@ -9,7 +9,7 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid
+    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -25,19 +25,35 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import {Alert} from "@material-ui/lab";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import {withStyles} from "@material-ui/core/styles";
+import {userActions} from "../../_actions/user.action";
 
 
 export const ListProvider = () => {
 
-    const {pagination, providers,alerta} = useSelector(state => ({
-        pagination: state.pagination,
+    const {providers,alerta,providerSelect} = useSelector(state => ({
         providers: state.providers,
-        alerta : state.alert
+        alerta : state.alert,
+        providerSelect : state.providerSelect
     }));
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [providerId, setProviderId] = React.useState("");
     const [nombreDependencia, setnombreDependencia] =  React.useState("");
+    const [pagination, setPagination] =  React.useState({page : 0 , pageSize : 10 });
+    const [openModalProviderInfo, setOpenModalProviderInfo] = React.useState(false);
+    const [selectedProvider, setSelectedProvider] = React.useState({_id : "",fechaAlta : "", fechaActualizacion:"" });
+
+    const handleOpenModalProviderInfo = (provider) => {
+        setOpenModalProviderInfo(true);
+        setSelectedProvider(provider);
+    };
+
+    const handleCloseModalProviderInfo = () => {
+        setOpenModalProviderInfo(false);
+    };
+
     const handleClickOpen = (id, dependencia) => {
         setOpen(true);
         setProviderId(id);
@@ -49,18 +65,33 @@ export const ListProvider = () => {
     };
 
     const handleChangePage = (event, newPage) => {
-        newPage= newPage+1;
-       dispatch(providerActions.requestPerPage({page : newPage ,pageSize: pagination.pageSize}));
+        setPagination({page : newPage , pageSize : pagination.pageSize });
+        //dispatch(userActions.requestPerPage({page : newPage ,pageSize: pagination.pageSize}));
     };
 
     const handleChangeRowsPerPage = (event) => {
-       dispatch(providerActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
+        setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
+        //dispatch(userActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
     };
 
     const confirmAction = (id) => {
         dispatch(providerActions.deleteProvider(id));
+        let initialRange=pagination.page * pagination.pageSize;
+        let endRange= pagination.page * pagination.pageSize + pagination.pageSize;
+        let totalProviders= providers.length -1 ;
+        console.log("initialRange "+ initialRange + " end range "+ endRange+ " totalproviders "+ totalProviders);
+        if(totalProviders <= initialRange ){
+            setPagination({page : pagination.page -1 , pageSize : pagination.pageSize });
+        }
+
         handleClose();
     }
+
+    const StyledTableCell = withStyles({
+        root: {
+            color: '#666666'
+        }
+    })(TableCell);
 
     TablePaginationActions.propTypes = {
         count: PropTypes.number.isRequired,
@@ -85,7 +116,18 @@ export const ListProvider = () => {
             backgroundColor:'#ffe01b',
             color: '#666666',
             marginBottom: '30px'
-        }
+        },
+        paper: {
+            'text-align': 'center',
+            margin: 0,
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 4, 3),
+        },
     }));
 
     const classes = useStyles();
@@ -93,6 +135,36 @@ export const ListProvider = () => {
         return (
             <div>
                 {alerta.status == true && <Alert severity={alerta.type}>{alerta.message}</Alert>}
+                <Modal
+                    open={openModalProviderInfo}
+                    onClose={handleCloseModalProviderInfo}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                >
+                    <Grid container item md={8} className={classes.paper}>
+                        <TableContainer component={Paper}>
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
+                                    <StyledTableCell align="center" >Fecha de Actualización</StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody key="InfoPlusProvider">
+                                <TableRow key={selectedProvider._id + "InfoPlusProvider"}>
+
+                                    <StyledTableCell style={{width: 160}} align="center">
+                                        {selectedProvider.fechaAlta}
+                                    </StyledTableCell>
+                                    <StyledTableCell style={{width: 160}} align="center">
+                                        {selectedProvider.fechaActualizacion}
+                                    </StyledTableCell>
+
+                                </TableRow>
+                            </TableBody>
+                        </TableContainer>
+                    </Grid>
+                </Modal>
+
                 <Dialog
                     open={open}
                     onClose={handleClose}
@@ -119,6 +191,7 @@ export const ListProvider = () => {
                             {providers.length > 0  && <Table aria-label="custom pagination table">
                                 <TableHead >
                                     <TableRow >
+                                        <StyledTableCell></StyledTableCell>
                                         <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Proveedor</TableCell>
                                         <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</TableCell>
                                         <TableCell className={classes.fontblack} align="center">Sistema</TableCell>
@@ -126,16 +199,28 @@ export const ListProvider = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody key="providers">
-                                    {(providers).map((provider) => (
+                                    {providers.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((provider)  => (
                                         <TableRow key={provider._id}>
+                                            <TableCell style={{ width: 40 }} align="center">
+                                                <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalProviderInfo(provider)}>
+                                                    <KeyboardArrowDownIcon />
+                                                </IconButton>
+                                            </TableCell>
                                             <TableCell className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="left">
                                                 {provider.dependencia}
                                             </TableCell>
                                             <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                                {provider.estatus=='true' ? 'Vigente' : 'No vigente'}
+                                                {provider.estatus? 'Vigente' : 'No vigente'}
                                             </TableCell>
                                             <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                                {provider.sistemas}
+                                                {(provider.sistemas).map((sistema)=>
+                                                    <div>
+                                                        {sistema=='S2' ? <li>Servidores Públicos que Intervienen en Procedimientos de Contratación</li> :
+                                                        sistema=='S3S' ? <li>Sistema de los Servidores Públicos Sancionados</li> :
+                                                        sistema=='S3P' ? <li>Sistema de los Particulares Sancionados</li> : ''}
+                                                    </div>
+
+                                                )}
                                             </TableCell>
                                             <TableCell style={{ width: 'auto' }} align="center">
                                                     <Link component={RouterLink}  to={`/proveedor/editar/${provider._id}`}>
@@ -150,13 +235,13 @@ export const ListProvider = () => {
                                     ))}
                                 </TableBody>
                                 <TableFooter>
-                                    <TableRow >
-                                        {pagination.totalRows != undefined && pagination.pageSize && pagination.page  && <TablePagination
-                                            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                    <TableRow>
+                                        { pagination.pageSize != undefined  && pagination.page != undefined  && <TablePagination
+                                            rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
                                             colSpan={6}
-                                            count={pagination.totalRows}
+                                            count={providers.length}
                                             rowsPerPage={pagination.pageSize}
-                                            page={pagination.page-1}
+                                            page={pagination.page}
                                             SelectProps={{
                                                 inputProps: { 'aria-label': 'rows per page' },
                                                 native: true,
@@ -164,8 +249,7 @@ export const ListProvider = () => {
                                             onChangePage={handleChangePage}
                                             onChangeRowsPerPage={handleChangeRowsPerPage}
                                             ActionsComponent={TablePaginationActions}
-                                            className={classes.fontblack}
-                                        /> }
+                                        />}
                                     </TableRow>
                                 </TableFooter>
                             </Table>}

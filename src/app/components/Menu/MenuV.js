@@ -220,7 +220,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#ffffff'
       },
       submenuicono:{
-        paddingLeft:'35px',
+        paddingLeft:'15px',
         backgroundColor:'#eee'
       }
 

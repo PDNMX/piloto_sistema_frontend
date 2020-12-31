@@ -97,8 +97,14 @@ app.post('/deleteUser',async (req,res)=>{
 
 app.post('/deleteProvider',async (req,res)=>{
     try {
-        console.log( "_________"+req.body._id);
-        let responce = await Provider.findByIdAndDelete( req.body._id ).exec();
+        const nuevoProovedor = new Provider(req.body);
+        console.log( "_________"+req.body._id+" Fecha Baja"+req.body.fechaBaja);
+        if(req.body._id=="" || req.body._id==null){
+            res.status(500).json([{"Error":"Datos incompletos"}]);
+            return false;
+        }
+        let responce = await Provider.findByIdAndUpdate( req.body._id ,nuevoProovedor).exec();
+        //let responce = await Provider.findByIdAndDelete( req.body._id ).exec();
         console.log(responce);
         res.status(200).json("OK");
     }catch (e) {
@@ -111,6 +117,10 @@ app.post('/create/provider',async(req, res)=>{
     try {
         const nuevoProovedor = new Provider(req.body);
         let responce;
+        if(req.body['dependencia']=="" || req.body['dependencia']==null || req.body['sistemas']=="" || req.body['sistemas']==null){
+            res.status(500).json([{"Error":"Datos incompletos"}]);
+            return false;
+        }
         if(req.body._id ){
             responce = await Provider.findByIdAndUpdate( req.body._id ,nuevoProovedor).exec();
         }else{
@@ -202,7 +212,7 @@ app.post('/getProviders',async (req,res)=>{
 
 app.post('/getProvidersFull',async (req,res)=>{
     try {
-        const result = await Provider.find({}).then();
+        const result = await Provider.find({fechaBaja: null}).then();
         let objResponse= {};
 
         try {
