@@ -12,7 +12,7 @@ export function alert(state = {}, action) {
             return {
                 type: 'error',
                 message: action.message,
-                status: false
+                status: true
             };
         case alertConstants.CLEAR:
             return {};

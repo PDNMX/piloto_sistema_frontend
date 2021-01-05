@@ -5,7 +5,7 @@ import {Main} from "./components/Main";
 import {MenuV} from "./components/Menu/MenuV";
 
 ReactDOM.render(
-    <MenuV/>,
+    <Main/>,
     document.getElementById("app")
 );
 

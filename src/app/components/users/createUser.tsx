@@ -12,11 +12,12 @@ import Typography from "@material-ui/core/Typography";
 import { connect } from 'react-redux';
 import {userActions} from "../../_actions/user.action";
 import {alertActions} from "../../_actions/alert.actions";
-import Link from "@material-ui/core/Link";
-import { Link as RouterLink } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {makeStyles} from "@material-ui/core/styles";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import {history} from "../../store/history";
+import ListItem from "@material-ui/core/ListItem";
 
 
 const CreateUser = ({id, user,alert, providers }) => {
@@ -64,8 +65,6 @@ function MyForm(props: MyFormProps ) {
         }else{
             dispatch(requestCreationUser(values));
         }
-
-
     }
 
     const schema = Yup.object().shape({
@@ -103,6 +102,10 @@ function MyForm(props: MyFormProps ) {
     });
 
 
+    const redirectToRoute = (path) =>{
+        history.push(path);
+    }
+
     const cla = styles();
 
     const sistemasData = [
@@ -136,7 +139,6 @@ function MyForm(props: MyFormProps ) {
                     {alert.status === undefined &&
                         <div>
                         <Grid className= {cla.gridpadding} spacing={3} container >
-
                         <Grid item xs={12} md={3}>
                             <TextField label="Nombre" name="nombre" required={true} />
                         </Grid>
@@ -181,8 +183,8 @@ function MyForm(props: MyFormProps ) {
                                item
                               xs={12}
                               md={12}>
-                            <Link component={RouterLink}  to={`/usuarios`}>
-                            <Button  className= {cla.secondary} style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
+
+                            <Button  onClick={ () => redirectToRoute("/usuarios")} className= {cla.secondary} style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
                                      color="secondary"
                                      type="submit"
                                      disabled={submitting}>
@@ -190,8 +192,6 @@ function MyForm(props: MyFormProps ) {
                                  Cancelar
 
                             </Button>
-                            </Link>
-
 
                             <Button  className= {cla.primary}  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
                                  color="primary"

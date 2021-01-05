@@ -15,8 +15,10 @@ import { connect } from 'react-redux';
 import {providerActions} from "../../_actions/provider.action";
 import {alertActions} from "../../_actions/alert.actions";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Link from "@material-ui/core/Link";
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Switch from '@material-ui/core/Switch';
+import {history} from "../../store/history";
+
 
 
 const CreateProvider = ({id, provider,alert }) => {
@@ -75,6 +77,9 @@ function MyForm(props: MyFormProps ) {
     const validate = makeValidate(schema);
     const required = makeRequired(schema);
 
+    const redirectToRoute = (path) =>{
+        history.push(path);
+    }
 
     const sistemasData = [
         {label: 'Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación', value: 'S2'},
@@ -115,9 +120,7 @@ function MyForm(props: MyFormProps ) {
     return (
         <div>
             <Grid container>
-                <Link component={RouterLink}  to={`/proveedores`}>
-                    <Button style = {{}}><ArrowBackIcon fontSize="large"/></Button>
-                </Link>
+                    <Button  onClick={ () => redirectToRoute("/proveedores")} style = {{}}><ArrowBackIcon fontSize="large"/></Button>
             </Grid>
         <Form
             onSubmit={onSubmit}
@@ -146,12 +149,11 @@ function MyForm(props: MyFormProps ) {
                                    xs={12}
                                    md={12}>
 
-                            <Link component={RouterLink}  to={`/proveedores`}>
-                                <Button  variant="contained"
+                                <Button  onClick={ () => redirectToRoute("/proveedores")}  variant="contained"
                                          className={classes.marginright}
                                          > Cancelar
                                 </Button>
-                            </Link>
+
                               <Button  variant="contained"
                                     className={classes.boton}
                                     type="submit"
@@ -203,4 +205,3 @@ function mapDispatchToProps(dispatch, ownProps){
 }
 
 export const ConnectedCreateProvider = connect(mapStateToProps,mapDispatchToProps)(CreateProvider);
-                                                                                                     

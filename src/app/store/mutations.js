@@ -18,10 +18,16 @@ export const REQUEST_USER_ACCOUNT_CREATION = `REQUEST_USER_ACCOUNT_CREATION`;
 export const REQUEST_CREATION_USER = 'REQUEST_CREATION_USER';
 export const SET_DATABASE_USER = 'SET_DATABASE_USER';
 export const REQUEST_CREATION_PROVIDER = 'REQUEST_CREATION_PROVIDER';
+export const REQUEST_TOKEN_AUTH = 'REQUEST_TOKEN_AUTH' ;
 
 export const requestCreationUser = (usuarioJson) => ({
     type: REQUEST_CREATION_USER,
     usuarioJson
+});
+
+export const requestTokenAuth = (credentialUser) => ({
+    type: REQUEST_TOKEN_AUTH,
+    credentialUser
 });
 
 export const requestErrorsValidation = (schema,systemId) =>({

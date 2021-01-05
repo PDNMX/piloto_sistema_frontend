@@ -16,8 +16,7 @@ import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined'
 import {providerActions} from "../../_actions/provider.action";
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
-import Link from '@material-ui/core/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -25,6 +24,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import {Alert} from "@material-ui/lab";
+import {history} from "../../store/history";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import {withStyles} from "@material-ui/core/styles";
 import {userActions} from "../../_actions/user.action";
@@ -92,6 +92,11 @@ export const ListProvider = () => {
             color: '#666666'
         }
     })(TableCell);
+
+    const redirectToRoute = (path) =>{
+        history.push(path);
+    }
+
 
     TablePaginationActions.propTypes = {
         count: PropTypes.number.isRequired,
@@ -191,7 +196,6 @@ export const ListProvider = () => {
                             {providers.length > 0  && <Table aria-label="custom pagination table">
                                 <TableHead >
                                     <TableRow >
-                                        <StyledTableCell></StyledTableCell>
                                         <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Proveedor</TableCell>
                                         <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</TableCell>
                                         <TableCell className={classes.fontblack} align="center">Sistema</TableCell>
@@ -223,9 +227,7 @@ export const ListProvider = () => {
                                                 )}
                                             </TableCell>
                                             <TableCell style={{ width: 'auto' }} align="center">
-                                                    <Link component={RouterLink}  to={`/proveedor/editar/${provider._id}`}>
-                                                     <Button style={{ color: 'gray' }} ><EditOutlinedIcon/></Button>
-                                                    </Link>
+                                                    <Button  onClick={ () => redirectToRoute(`/proveedor/editar/${provider._id}`)}  style={{ color: 'gray' }} ><EditOutlinedIcon/></Button>
                                                     <Button>
                                                     <DeleteOutlineOutlinedIcon style={{ color: 'gray' }} onClick= {()=> {handleClickOpen(provider._id, provider.dependencia)}} />
                                                     </Button>
@@ -261,15 +263,13 @@ export const ListProvider = () => {
                        item
                        xs={12}
                        md={12}>
-                    <Link component={RouterLink}  to={`/proveedor/crear`}>
-                        <Button
-                            variant="contained"
+                        <Button  onClick={ () => redirectToRoute("/proveedor/crear")}
+                                 variant="contained"
                             className={classes.marginright}
                             endIcon={<AddBoxIcon>Agregar proveedor</AddBoxIcon>}
                         >
                             Agregar proveedor
                         </Button>
-                    </Link>
                 </Grid>
             </div>
         );

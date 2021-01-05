@@ -11,10 +11,11 @@ import { Redirect } from 'react-router';
 import { ListUser} from "./users/listUser";
 import {userActions} from "../_actions/user.action";
 import {alertActions} from "../_actions/alert.actions";
-import {MenuV} from "./Menu/MenuV";
+import {ConnectedMenuV} from "./Menu/MenuV";
 import {ListProvider} from "./providers/ListProvider";
 import {providerActions} from "../_actions/provider.action";
 import {ConnectedCreateProvider} from "./providers/CreateProvider";
+import {LoginV} from "./Login/Login";
 
 const theme = createMuiTheme({
     typography: {
@@ -45,13 +46,6 @@ const theme = createMuiTheme({
 
 
 
-const RouteGuard = Component =>({match})=>{
-    if(!store.getState().session.authenticated ){
-        return <Redirect to="/"/> ;
-    }else{
-        return <Component match={match}/>;
-    }
-}
 
 export const Main = ()=> (
     <Router history={history}>
@@ -59,55 +53,99 @@ export const Main = ()=> (
         <Provider store = {storeValidate}>
             <div>
                 <Route exact
+                       path= "/login"
+                       render={() => (<LoginV/>)}
+                />
+
+                <Route exact
                        path= "/cargamasiva"
-                       render={() => ( <ThemeProvider theme = {theme}> <LoadFileV/></ThemeProvider>)}
+                       render={() => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               return <ConnectedMenuV propiedades = {{renderView : "cargamasiva"}} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
                 />
                 <Route exact
                        path= "/usuario/crear"
                        render={() => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            storeValidate.dispatch(providerActions.requestAllProviders());
                            storeValidate.dispatch((alertActions.clear()));
-                           return ( <ConnectedCreateUser/>)
+                           return <ConnectedMenuV propiedades = {{renderView : "createuser"}} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
                        }}
                 />
                 <Route exact
                        path= "/usuario/editar/:id"
                        render={({match}) => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
                            storeValidate.dispatch(providerActions.requestAllProviders());
                            storeValidate.dispatch((alertActions.clear()));
-                           return (<ConnectedCreateUser match = {match} />)
+                               return (<ConnectedMenuV propiedades = {{renderView : "edituser"}} match = {match} /> )
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
                        }}
                 />
                 <Route exact
                        path= "/usuarios"
                        render={() => {
-                           storeValidate.dispatch(providerActions.requestAllProviders());
-                           storeValidate.dispatch(userActions.requestPerPage({page : 1, pageSize: 10 }));
-                           storeValidate.dispatch((alertActions.clear()));
-                         return(<ListUser/>)
+                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                           if (localStorage.token) {
+                               storeValidate.dispatch(providerActions.requestAllProviders());
+                               storeValidate.dispatch(userActions.requestPerPage({page: 1, pageSize: 10}));
+                               storeValidate.dispatch((alertActions.clear()));
+                               return (<ConnectedMenuV propiedades={{renderView: "users"}}/>)
+                           } else {
+                               return <Redirect to="/login"/>;
+                           }
                        }}
                 />
 
                 <Route exact
                        path= "/proveedor/crear"
-                       render={() => ( <ConnectedCreateProvider/>)}
+                       render={() =>{
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                           return (<ConnectedMenuV propiedades = {{renderView : "createprovider"}} /> )
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
                 />
 
                 <Route exact
                        path= "/proveedor/editar/:id"
                        render={({match}) => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            storeValidate.dispatch(providerActions.fillProviderUpdate(match.params.id));
                            storeValidate.dispatch((alertActions.clear()));
-                           return ( <ConnectedCreateProvider match = {match} />)
+                           return (<ConnectedMenuV propiedades = {{renderView : "editprovider"}} match = {match} /> )
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
                        }}
                 />
 
                 <Route exact
                        path= "/proveedores"
                        render={() => {
-                           storeValidate.dispatch(providerActions.requestPerPage({page : 1, pageSize: 10 }));
-                         return(<ListProvider/>)
+                           if ( localStorage.token) {
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
+                               return (<ConnectedMenuV propiedades={{renderView: "providers"}}/>)
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
                        }}
                 />
             </div>

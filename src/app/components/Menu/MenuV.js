@@ -7,9 +7,8 @@ import Button from "@material-ui/core/Button";
 import InputLabel from '@material-ui/core/InputLabel';
 import Grid from "@material-ui/core/Grid";
 import axios from 'axios';
-import { useDispatch, useSelector } from "react-redux";
-import {requestSchemaS2Creation} from '../../store/mutations'
-import { makeStyles } from '@material-ui/core/styles';
+import {requestSchemaS2Creation, requestTaskCreation} from '../../store/mutations'
+import {makeStyles, ThemeProvider} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -51,9 +50,18 @@ import FolderSpecialIcon from '@material-ui/icons/FolderSpecial';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import Collapse from '@material-ui/core/Collapse';
 import Tooltip from '@material-ui/core/Tooltip';
+import {LoadFileV} from "../UploadFile/LoadFileV";
+import {connect} from "react-redux";
+import {ConnectedCreateUser} from "../users/createUser";
+import {ListUser} from "../users/listUser";
+import {ListProvider} from "../providers/ListProvider";
+import { useLocation } from 'react-router-dom'
+import {userActions} from "../../_actions/user.action";
 
-export const MenuV = () => {
+export const MenuV =({ vistaRender, match , closeSession }) => {
 
+
+    const location = useLocation();
 
   //MSubmenus
   const [submenuAdmonDatos,setsubmenuAdmonDatos]=useState(false);
@@ -112,6 +120,11 @@ export const MenuV = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
+  const cerrarSesion  = () => {
+        closeSession();
+  }
 
     function Copyright() {
       return (
@@ -274,7 +287,7 @@ const useStyles = makeStyles((theme) => ({
               >
                 <MenuItem onClick={handleClose}>Perfil</MenuItem>
                 <MenuItem onClick={handleClose}>Avanzadas</MenuItem>
-                <MenuItem onClick={handleClose}>Cerrar sesión</MenuItem>
+                <MenuItem onClick={ ()=>cerrarSesion()}>Cerrar sesión</MenuItem>
               </Menu>
             </div>
         </Toolbar>
@@ -403,8 +416,14 @@ const useStyles = makeStyles((theme) => ({
             {/* Grid 1 */}
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={classes.paperPadding} >
-                  <Main/>
-                {crearProovedor ? <ConnectedCreateProvider /> : ""}
+                  <span>Path : {location.pathname}</span>
+                  {vistaRender === "cargamasiva" && <LoadFileV/>  }
+                  {vistaRender === "createuser" && <ConnectedCreateUser/>}
+                  {vistaRender === "edituser" && <ConnectedCreateUser match = {match} />}
+                  {vistaRender === "users" && <ListUser/> }
+                  {vistaRender === "createprovider" && <ConnectedCreateProvider/> }
+                  {vistaRender === "editprovider" && <ConnectedCreateProvider match = {match} /> }
+                  {vistaRender === "providers" && <ListProvider/> }
               </Paper>
             </Grid>
             {/* Grid 2 
@@ -429,5 +448,24 @@ const useStyles = makeStyles((theme) => ({
   
     );
 
+
+
 }
+
+
+function mapStateToProps(state,ownProps){
+    let vistaRender = ownProps.propiedades.renderView;
+    let match = ownProps.match;
+   return {vistaRender, match} ;
+}
+
+
+const mapDispatchToProps = (dispatch, ownProps)=>({
+    closeSession(){
+        dispatch(userActions.removeSessionLogIn());
+    }
+});
+
+export const ConnectedMenuV = connect(mapStateToProps,mapDispatchToProps)(MenuV);
+
 

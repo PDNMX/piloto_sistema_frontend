@@ -14,7 +14,7 @@ module.exports = {
         publicPath: '/',
     },
     resolve: {
-        extensions: ['.js','.jsx','.tsx']
+        extensions: ['.js','.jsx','.tsx','.json']
     },
     devServer: {
         historyApiFallback: true
@@ -37,6 +37,11 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
+            {
+                test: /\.json$/,
+                use: ['json-loader'],
+                type: 'javascript/auto'
+            }
             ]
     }
 }

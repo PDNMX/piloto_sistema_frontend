@@ -6,7 +6,7 @@ import { alert } from './alert.reducer';
 import {errors} from "./uploadfile.reducer";
 import { providers } from './providers.reducer';
 import {providerSelect } from './providerTemporal.reducer';
-
+import {userInSession} from './userInSession.reducer';
 const rootReducer = combineReducers({
     users,
     alert,
@@ -14,7 +14,8 @@ const rootReducer = combineReducers({
     pagination,
     errors,
     providers,
-    providerSelect
+    providerSelect,
+    userInSession
 });
 
 export default rootReducer;

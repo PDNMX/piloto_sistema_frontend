@@ -9,15 +9,14 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography
+    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import {userActions} from "../../_actions/user.action";
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
-import Link from '@material-ui/core/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -27,7 +26,8 @@ import AddBoxIcon from '@material-ui/icons/AddBox';
 import {Alert} from "@material-ui/lab";
 import {createStyles, Theme, withStyles} from '@material-ui/core/styles';
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-
+import {alertActions} from "../../_actions/alert.actions";
+import {history} from "../../store/history";
 
 
 
@@ -48,6 +48,9 @@ export const ListUser = () => {
     const [selectedUser, setSelectedUser] = React.useState({_id : "",cargo: "" , correoElectronico : "",  telefono : "" ,  extension : "" , usuario : "" , sistemas : [] , fechaAlta : "" , vigenciaContrasena :""  });
     const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
 
+
+
+
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
         setSelectedUser(user);
@@ -65,6 +68,10 @@ export const ListUser = () => {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleCloseSnackbar = () => {
+        dispatch(alertActions.clear());
     };
 
     const handleChangePage = (event, newPage) => {
@@ -96,6 +103,9 @@ export const ListUser = () => {
         }
     })(TableCell);
 
+    const redirectToRoute = (path) =>{
+        history.push(path);
+    }
 
     TablePaginationActions.propTypes = {
         count: PropTypes.number.isRequired,
@@ -145,7 +155,12 @@ export const ListUser = () => {
         return (
 
            <div >
-                {alerta.status != undefined && <Alert severity={alerta.type}>{alerta.message}</Alert>}
+               <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+                   <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
+                       {alerta.message}
+                   </Alert>
+               </Snackbar>
+
 
                <Modal
                    open={openModalUserInfo}
@@ -263,9 +278,7 @@ export const ListUser = () => {
                                         {user.estatus? "Vigente" : "No vigente"}
                                     </StyledTableCell>
                                     <StyledTableCell style={{ width: 160 }} align="center">
-                                        <Link component={RouterLink}  to={`/usuario/editar/${user._id}`}>
-                                            <Button><EditOutlinedIcon/></Button>
-                                        </Link>
+                                            <Button  onClick={ () => redirectToRoute(`/usuario/editar/${user._id}`)}  ><EditOutlinedIcon/></Button>
                                         <Button
                                             variant="contained"
                                             onClick= {()=> {handleClickOpen(user._id, user.nombre,user.apellidoUno,user.apellidoDos)}} >
@@ -300,14 +313,14 @@ export const ListUser = () => {
                       xs={12} md={12}
                       justify="flex-end"
                       alignItems="flex-end" >
-                <Link component={RouterLink}  to={`/usuario/crear`}>
-                    <Button className={classes.marginright}
+
+                    <Button  onClick={ () => redirectToRoute(`/usuario/crear`)} className={classes.marginright}
                         variant="contained"
                         endIcon={<AddBoxIcon>Agregar usuario</AddBoxIcon>}
                     >
                         Agregar usuario
                     </Button>
-                </Link>
+
                 </Grid>
             </Grid>
 
