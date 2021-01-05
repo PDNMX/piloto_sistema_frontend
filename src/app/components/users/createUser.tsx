@@ -86,6 +86,15 @@ function MyForm(props: MyFormProps ) {
 
 
     const styles = makeStyles({
+        boton:{
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
+        marginright:{
+            marginRight: '30px',
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
         gridpadding: {
             padding: '30px',
         },
@@ -184,17 +193,14 @@ function MyForm(props: MyFormProps ) {
                               xs={12}
                               md={12}>
 
-                            <Button  onClick={ () => redirectToRoute("/usuarios")} className= {cla.secondary} style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
-                                     color="secondary"
-                                     type="submit"
-                                     disabled={submitting}>
+                            <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.marginright}
+                                     type="submit">
 
                                  Cancelar
 
                             </Button>
 
-                            <Button  className= {cla.primary}  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
-                                 color="primary"
+                            <Button  className={cla.boton}  variant="contained"
                                  type="submit"
                                  disabled={submitting}> Guardar </Button>
                         </Grid>

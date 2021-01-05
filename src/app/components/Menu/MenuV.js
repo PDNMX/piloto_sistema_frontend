@@ -91,6 +91,8 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
 
   }
 
+
+
   const menuBitacora=(e)=>{
     setsubmenuAdmonDatos(false);
     setsubMenuBitacora(true);
@@ -254,13 +256,11 @@ const useStyles = makeStyles((theme) => ({
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
 
-
     return (
 
         <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
@@ -416,7 +416,6 @@ const useStyles = makeStyles((theme) => ({
             {/* Grid 1 */}
             <Grid item xs={12} md={12} lg={12}>
               <Paper className={classes.paperPadding} >
-                  <span>Path : {location.pathname}</span>
                   {vistaRender === "cargamasiva" && <LoadFileV/>  }
                   {vistaRender === "createuser" && <ConnectedCreateUser/>}
                   {vistaRender === "edituser" && <ConnectedCreateUser match = {match} />}

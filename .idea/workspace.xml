@@ -1,30 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="gui users update">
-      <change afterPath="$PROJECT_DIR$/src/app/_reducers/userInSession.reducer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/components/Login/Login.tsx" afterDir="false" />
+    <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_actions/user.action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_actions/user.action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_constants/user.constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_constants/user.constants.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_reducers/alert.reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_reducers/alert.reducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_reducers/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_reducers/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_reducers/users.reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_reducers/users.reducer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/Login/Login.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/Main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Main.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/components/Menu/MenuV.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Menu/MenuV.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/providers/CreateProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/providers/CreateProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/providers/ListProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/providers/ListProvider.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/components/users/createUser.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/users/createUser.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/users/listUser.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/users/listUser.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/store/mutations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/mutations.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/.env" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +82,7 @@
       <workItem from="1609168333568" duration="9829000" />
       <workItem from="1609255766591" duration="44128000" />
       <workItem from="1609717277382" duration="6150000" />
-      <workItem from="1609795283655" duration="1522000" />
+      <workItem from="1609795283655" duration="17049000" />
     </task>
     <task id="LOCAL-00001" summary="gui users update">
       <created>1608605064025</created>
@@ -108,7 +91,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608605064025</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add login and oauth2 module">
+      <created>1609806426815</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1609806426815</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -128,6 +118,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="gui users update" />
-    <option name="LAST_COMMIT_MESSAGE" value="gui users update" />
+    <MESSAGE value="add login and oauth2 module" />
+    <option name="LAST_COMMIT_MESSAGE" value="add login and oauth2 module" />
   </component>
 </project>

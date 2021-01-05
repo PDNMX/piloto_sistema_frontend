@@ -128,13 +128,14 @@ app.post('/validateSchemaS2',async (req,res)=>{
     }
 });
 
-app.post('/deleteUser',async (req,res)=>{
+app.delete('/deleteUser',async (req,res)=>{
     try {
+        console.log( req);
         var code = validateToken(req);
         if(code.code == 401){
             res.status(401).json({code: '401', message: code.message});
         }else if (code.code == 200 ){
-            let response = await User.findByIdAndUpdate( req.body._id , {$set: {estatus : false}} ).exec();
+            let response = await User.findByIdAndUpdate( req.body.request._id , {$set: {estatus : false}} ).exec();
             res.status(200).json({message : "OK" , Status : 200, response : response} );
         }
     }catch (e) {
@@ -143,19 +144,19 @@ app.post('/deleteUser',async (req,res)=>{
 
 });
 
-app.post('/deleteProvider',async (req,res)=>{
+app.delete('/deleteProvider',async (req,res)=>{
     try {
         var code = validateToken(req);
         if(code.code == 401){
             res.status(401).json({code: '401', message: code.message});
         }else if (code.code == 200 ){
-            const nuevoProovedor = new Provider(req.body);
-            console.log( "_________"+req.body._id+" Fecha Baja"+req.body.fechaBaja);
-            if(req.body._id=="" || req.body._id==null){
+            const nuevoProovedor = new Provider(req.body.request);
+            console.log( "_________"+req.body.request._id+" Fecha Baja"+req.body.request.fechaBaja);
+            if(req.body.request._id=="" || req.body.request._id==null){
                 res.status(500).json([{"Error":"Datos incompletos"}]);
                 return false;
             }
-            let responce = await Provider.findByIdAndUpdate( req.body._id ,nuevoProovedor).exec();
+            let responce = await Provider.findByIdAndUpdate( req.body.request._id ,nuevoProovedor).exec();
             //let responce = await Provider.findByIdAndDelete( req.body._id ).exec();
             console.log(responce);
             res.status(200).json("OK");

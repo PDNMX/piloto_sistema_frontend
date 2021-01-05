@@ -25,7 +25,11 @@ export function* validationErrors(){
         if(token){
             if(systemId === "S2"){
                 let SCHEMA = JSON.parse(schema);
-                const respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA);
+                const respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA, { headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }});
                 yield put(mutations.setErrorsValidation(respuestaArray.data));
                 console.info("got response",respuestaArray);
             }
@@ -51,7 +55,12 @@ export function* requestUserPerPage(){
 export function* requestProviderPerPage(){
     while (true) {
         const {objPaginationReq} = yield take(providerConstants.PROVIDERS_PAGINATION_REQUEST);
-        const respuestaArray = yield axios.post(ur + `/getProvidersFull`,objPaginationReq);
+        const token = localStorage.token;
+        const respuestaArray = yield axios.post(ur + `/getProvidersFull`,objPaginationReq, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
         yield put(providerActions.setPerPageSucces(respuestaArray.data.results));
         
     }
@@ -63,7 +72,11 @@ export function* fillTemporalUser(){
         const token = localStorage.token;
         if(token){
             let query = {"query" : {"_id" : id}};
-            const respuestaArray = yield axios.post(ur + `/getUsers`, query);
+            const respuestaArray = yield axios.post(ur + `/getUsers`, query, { headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }});
             yield put(userActions.setPerPageSucces(respuestaArray.data.results));
         }
     }
@@ -105,7 +118,7 @@ export function* deleteUser(){
         if(token){
             let request = {"_id": id};
             try{
-                const {status} = yield axios.post(ur + `/deleteUser`,request, { headers: {
+                const {status} = yield axios.delete(ur + `/deleteUser`, { data : {request} , headers: {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`
@@ -134,7 +147,12 @@ export function* deleteProvider(){
         let fechaBaja= fechaActual.subtract(1, 'd').format().toString();
         console.log("Fecha baja"+fechaBaja);
         let request = {"_id": id,"fechaBaja":fechaBaja};
-        const {status} = yield axios.post(ur + `/deleteProvider`,request, {validateStatus: () => true});
+        const token = localStorage.token;
+        const {status} = yield axios.delete(ur + `/deleteProvider`, { data : {request} ,headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            },validateStatus: () => true});
         if(status === 200){
             yield put(providerActions.deleteProviderDo(id));
             yield put(alertActions.success("Proveedor eliminado con exito"));
@@ -161,11 +179,17 @@ export function* loginUser(){
         }
 
         try{
-            const token = yield axios.post('http://localhost:9003' + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
+            const token = yield axios.post('http://localhost:9004' + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
             localStorage.setItem("token", token.data.access_token);
             history.push('/usuarios');
-        }catch (e) {
-            yield put(alertActions.error(e.response.data.message));
+        }catch (err) {
+if(err.response){
+    yield put(alertActions.error(err.response.data.message));
+}else{
+    yield put(alertActions.error(err.toString()));
+}
+
+
         }
     }
 }
@@ -193,7 +217,12 @@ export function* creationUser(){
         let fechaActual = moment();
         usuarioJson["fechaAlta"]= fechaActual.format();
         usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
-        const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {validateStatus: () => true});
+        const token = localStorage.token;
+        const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } , validateStatus: () => true});
         if(status === 200){
             //all OK
             yield put(alertActions.success("Usuario creado con exito"));
@@ -220,8 +249,12 @@ export function* creationProvider(){
             }*/
             usuarioJson["fechaActualizacion"]=fechaActual.format();
         }
-
-        const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson, {validateStatus: () => true});
+        const token = localStorage.token;
+        const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } ,validateStatus: () => true});
         if(status === 200){
             //all OK
             yield put(alertActions.success("Proovedor creado con exito"));
