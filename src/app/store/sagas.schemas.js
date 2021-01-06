@@ -15,7 +15,9 @@ const qs = require('querystring')
 const jwt = require('jsonwebtoken');
 
 const url = process.env.URLAPI;
-const ur= "http://localhost:3004";
+const host = "http://localhost";
+const urOauth2 = host+":9004"
+const ur= host+":3004";
 
 
 export function* validationErrors(){
@@ -175,7 +177,7 @@ export function* loginUser(){
         }
 
         try{
-            const token = yield axios.post('http://localhost:9004' + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
+            const token = yield axios.post(urOauth2 + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
             localStorage.setItem("token", token.data.access_token);
             history.push('/usuarios');
         }catch (err) {
