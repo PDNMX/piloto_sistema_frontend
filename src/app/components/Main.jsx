@@ -6,7 +6,7 @@ import {Router, Route} from "react-router-dom";
 import {history} from "../store/history";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {LoadFileV} from "./UploadFile/LoadFileV";
-import {ConnectedCreateUser} from "./users/createUser";
+import {Connected} from "./users/createUser";
 import { Redirect } from 'react-router';
 import { ListUser} from "./users/listUser";
 import {userActions} from "../_actions/user.action";

@@ -125,10 +125,10 @@ export function* deleteUser(){
                     } , validateStatus: () => true});
                 if(status === 200){
                     yield put(userActions.deleteUserDo(id));
-                    yield put(alertActions.success("Se desactivo el usuario con exito"));
+                    yield put(alertActions.success("Se elimino el usuario con exito"));
                 }else{
                     //error in response
-                    yield put(alertActions.error("El usuario NO fue desactivado"));
+                    yield put(alertActions.error("El usuario NO fue eliminado"));
                 }
             }catch (e) {
                 yield put(alertActions.error("El usuario NO fue eliminado"));
@@ -142,11 +142,7 @@ export function* deleteUser(){
 export function* deleteProvider(){
     while (true) {
         const {id} = yield take (providerConstants.DELETE_REQUEST);
-
-        let fechaActual = moment();
-        let fechaBaja= fechaActual.subtract(1, 'd').format().toString();
-        console.log("Fecha baja"+fechaBaja);
-        let request = {"_id": id,"fechaBaja":fechaBaja};
+        let request = {"_id": id};
         const token = localStorage.token;
         const {status} = yield axios.delete(ur + `/deleteProvider`, { data : {request} ,headers: {
                 'Content-Type': 'application/json',
@@ -234,6 +230,32 @@ export function* creationUser(){
     }
 }
 
+
+
+export function* editUser(){
+    while (true) {
+        const {usuarioJson} = yield take (mutations.REQUEST_EDIT_USER);
+        let fechaActual = moment();
+        usuarioJson["fechaAlta"]= fechaActual.format();
+        usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
+        const token = localStorage.token;
+        const {status} = yield axios.put(ur + `/edit/user`,usuarioJson, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } , validateStatus: () => true});
+        if(status === 200){
+            //all OK
+            yield put(alertActions.success("Usuario creado con exito"));
+            history.push('/usuarios');
+            yield put(alertActions.clear());
+        }else{
+            //error in response
+        }
+    }
+}
+
+
 export function* creationProvider(){
     while(true){
         const {usuarioJson} = yield take (mutations.REQUEST_CREATION_PROVIDER);
@@ -251,6 +273,40 @@ export function* creationProvider(){
         }
         const token = localStorage.token;
         const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } ,validateStatus: () => true});
+        if(status === 200){
+            //all OK
+            yield put(alertActions.success("Proovedor creado con exito"));
+            history.push('/proveedores');
+            yield put(alertActions.clear());
+        }else{
+            //error in response
+        }
+
+    }
+}
+
+
+export function* editProvider(){
+    while(true){
+        const {usuarioJson} = yield take (mutations.REQUEST_EDIT_PROVIDER);
+        let fechaActual =moment();
+        if(usuarioJson["estatus"]==undefined || usuarioJson["estatus"]==null){
+            usuarioJson["estatus"]=true;
+            usuarioJson["fechaAlta"]=fechaActual.format();
+        }else{
+            /*if(usuarioJson["estatus"]==true){
+                usuarioJson["estatus"]=true;
+            }else{
+                usuarioJson["estatus"]=false;
+            }*/
+            usuarioJson["fechaActualizacion"]=fechaActual.format();
+        }
+        const token = localStorage.token;
+        const {status}  =yield axios.put(ur + `/edit/provider`, usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`

@@ -16,12 +16,19 @@ export const SET_STATE = `SET_STATE`;
 export const USERNAME_RESERVED = `USERNAME_RESERVED`;
 export const REQUEST_USER_ACCOUNT_CREATION = `REQUEST_USER_ACCOUNT_CREATION`;
 export const REQUEST_CREATION_USER = 'REQUEST_CREATION_USER';
+export const REQUEST_EDIT_USER = 'REQUEST_EDIT_USER';
 export const SET_DATABASE_USER = 'SET_DATABASE_USER';
 export const REQUEST_CREATION_PROVIDER = 'REQUEST_CREATION_PROVIDER';
+export const REQUEST_EDIT_PROVIDER = 'REQUEST_EDIT_PROVIDER';
 export const REQUEST_TOKEN_AUTH = 'REQUEST_TOKEN_AUTH' ;
 
 export const requestCreationUser = (usuarioJson) => ({
     type: REQUEST_CREATION_USER,
+    usuarioJson
+});
+
+export const requestEditUser = (usuarioJson) => ({
+    type : REQUEST_EDIT_USER,
     usuarioJson
 });
 
@@ -79,5 +86,10 @@ export const setTaskGroup = (id, groupID) => ({
 
 export const requestCreationProvider = (usuarioJson) => ({
     type: REQUEST_CREATION_PROVIDER,
+    usuarioJson
+});
+
+export const requestEditProvider = (usuarioJson) => ({
+    type: REQUEST_EDIT_PROVIDER,
     usuarioJson
 });

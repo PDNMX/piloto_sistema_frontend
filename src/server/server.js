@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import User from './schemas/model.user';
 import Provider from './schemas/model.proovedor';
+import moment from "moment";
 const mongoose = require('mongoose');
 const yaml = require('js-yaml')
 const fs = require('fs');
@@ -130,13 +131,17 @@ app.post('/validateSchemaS2',async (req,res)=>{
 
 app.delete('/deleteUser',async (req,res)=>{
     try {
-        console.log( req);
         var code = validateToken(req);
         if(code.code == 401){
             res.status(401).json({code: '401', message: code.message});
         }else if (code.code == 200 ){
-            let response = await User.findByIdAndUpdate( req.body.request._id , {$set: {estatus : false}} ).exec();
-            res.status(200).json({message : "OK" , Status : 200, response : response} );
+            if(req.body.request._id){
+                let fechabaja = moment().format();
+                let response = await User.findByIdAndUpdate( req.body.request._id , {$set: {fechaBaja : fechabaja}} ).exec();
+                res.status(200).json({message : "OK" , Status : 200, response : response} );
+            }else{
+                res.status(500).json([{"Error":"Datos incompletos"}]);
+            }
         }
     }catch (e) {
         console.log(e);
@@ -150,16 +155,12 @@ app.delete('/deleteProvider',async (req,res)=>{
         if(code.code == 401){
             res.status(401).json({code: '401', message: code.message});
         }else if (code.code == 200 ){
-            const nuevoProovedor = new Provider(req.body.request);
-            console.log( "_________"+req.body.request._id+" Fecha Baja"+req.body.request.fechaBaja);
-            if(req.body.request._id=="" || req.body.request._id==null){
-                res.status(500).json([{"Error":"Datos incompletos"}]);
-                return false;
+
+            if(req.body.request._id){
+                let fechabaja = moment().format();
+                let response = await Provider.findByIdAndUpdate( req.body.request._id , {$set: {fechaBaja : fechabaja}} ).exec();
+                res.status(200).json({message : "OK" , Status : 200, response : response});
             }
-            let responce = await Provider.findByIdAndUpdate( req.body.request._id ,nuevoProovedor).exec();
-            //let responce = await Provider.findByIdAndDelete( req.body._id ).exec();
-            console.log(responce);
-            res.status(200).json("OK");
         }
     }catch (e) {
         console.log(e);
@@ -192,6 +193,32 @@ app.post('/create/provider',async(req, res)=>{
 });
 
 
+app.put('/edit/provider',async(req, res)=>{
+    try {
+        var code = validateToken(req);
+        if(code.code == 401){
+            res.status(401).json({code: '401', message: code.message});
+        }else if (code.code == 200 ) {
+            const nuevoProovedor = new Provider(req.body);
+            let responce;
+            if (req.body['dependencia'] == "" || req.body['dependencia'] == null || req.body['sistemas'] == "" || req.body['sistemas'] == null) {
+                res.status(500).json([{"Error": "Datos incompletos"}]);
+                return false;
+            }
+            if (req.body._id) {
+                responce = await Provider.findByIdAndUpdate(req.body._id, nuevoProovedor).exec();
+                res.status(200).json(responce);
+            } else {
+                res.status(500).json({message : "Error : Datos incompletos" , Status : 500});
+            }
+
+        }
+    }catch (e){
+        console.log(e);
+    }
+});
+
+
 app.post('/create/user',async (req,res)=>{
     try {
         var code = validateToken(req);
@@ -206,6 +233,28 @@ app.post('/create/user',async (req,res)=>{
                 response = await nuevoUsuario.save();
             }
             res.status(200).json(response);
+        }
+    }catch (e) {
+        console.log(e);
+    }
+});
+
+
+app.put('/edit/user',async (req,res)=>{
+    try {
+        var code = validateToken(req);
+        if(code.code == 401){
+            res.status(401).json({code: '401', message: code.message});
+        }else if (code.code == 200 ){
+            const nuevoUsuario = new User(req.body);
+            let response;
+            if(req.body._id ){
+                response = await User.findByIdAndUpdate( req.body._id ,nuevoUsuario).exec();
+                res.status(200).json(response);
+            }else{
+                res.status(500).json({message : "Error : Datos incompletos" , Status : 500});
+            }
+
         }
     }catch (e) {
         console.log(e);
@@ -243,7 +292,7 @@ app.post('/getUsersFull',async (req,res)=>{
         if(code.code == 401){
             res.status(401).json({code: '401', message: code.message});
         }else if (code.code == 200 ){
-            const result = await User.find({}).then();
+            const result = await User.find({fechaBaja: null}).then();
             let objResponse= {};
             objResponse["results"]= result;
             res.status(200).json(objResponse);

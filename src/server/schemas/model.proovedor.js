@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
-const userSchema = new Schema({
+const providerSchema = new Schema({
     dependencia:String,
     fechaAlta:String,
     fechaBaja:String,
@@ -10,8 +10,8 @@ const userSchema = new Schema({
     sistemas: { type: [], default: void 0 }
 });
 
-userSchema.plugin(mongoosePaginate);
+providerSchema.plugin(mongoosePaginate);
 
-let Proovedor = model('Proovedores', userSchema, 'proovedores');
+let Proovedor = model('Proovedores', providerSchema, 'proovedores');
 
 module.exports = Proovedor;

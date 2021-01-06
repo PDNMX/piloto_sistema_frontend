@@ -5,7 +5,7 @@ import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} fr
 import {MenuItem, Grid, Button, TableCell, Switch, IconButton} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
-import {requestCreationUser} from "../../store/mutations";
+import {requestCreationUser, requestEditUser} from "../../store/mutations";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
@@ -61,7 +61,7 @@ function MyForm(props: MyFormProps ) {
     async function onSubmit(values: FormDataUser) {
         alert.status =false;
         if(id != undefined){
-            dispatch(requestCreationUser({...values, _id : id}));
+            dispatch(requestEditUser({...values, _id : id}));
         }else{
             dispatch(requestCreationUser(values));
         }

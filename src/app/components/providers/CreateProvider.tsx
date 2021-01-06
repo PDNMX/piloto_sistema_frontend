@@ -6,7 +6,7 @@ import {MenuItem, Grid, Button,Paper, FormControlLabel} from "@material-ui/core"
 import { FormControl } from '@material-ui/core';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
-import {requestCreationProvider, requestCreationUser} from "../../store/mutations";
+import {requestCreationProvider, requestEditProvider} from "../../store/mutations";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
@@ -56,7 +56,7 @@ function MyForm(props: MyFormProps ) {
     async function onSubmit(values: FormProvider) {
         alert.status =false;
         if(id != undefined){
-            dispatch(requestCreationProvider({...values, _id : id}));
+            dispatch(requestEditProvider({...values, _id : id}));
         }else{
             dispatch(requestCreationProvider(values));
         }

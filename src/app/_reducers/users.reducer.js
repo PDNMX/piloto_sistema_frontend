@@ -12,8 +12,7 @@ export function users(state = [], action) {
         case userConstants.DELETE_OPERATION:
             for(let i =0 ; i < state.length; i++){
                 if(state[i]._id === action.id){
-                    state[i].estatus = false;
-                    //state.splice(i,1);
+                    state.splice(i,1);
                 }
             }
             return state;
