@@ -196,6 +196,7 @@ export const ListProvider = () => {
                             {providers.length > 0  && <Table aria-label="custom pagination table">
                                 <TableHead >
                                     <TableRow >
+                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center"></TableCell>
                                         <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Proveedor</TableCell>
                                         <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</TableCell>
                                         <TableCell className={classes.fontblack} align="center">Sistema</TableCell>
