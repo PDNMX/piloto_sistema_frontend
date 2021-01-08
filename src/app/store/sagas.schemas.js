@@ -14,10 +14,11 @@ import {REQUEST_TOKEN_AUTH, requestTokenAuth} from "./mutations";
 const qs = require('querystring')
 const jwt = require('jsonwebtoken');
 
-const url = process.env.URLAPI;
-const host = "http://localhost";
-const urOauth2 = host+":9004"
-const ur= host+":3004";
+const host = process.env.URLAPI;
+const urOauth2 = host+process.env.PORTOAUTH
+const ur= host+process.env.PORTAPI;
+const clientId = process.env.CLIENTID;
+const clientSecret = process.env.CLIENTSECRET;
 
 
 export function* validationErrors(){
@@ -165,8 +166,6 @@ export function* loginUser(){
         const {credentialUser} = yield take (mutations.REQUEST_TOKEN_AUTH);
         let userName = credentialUser.username;
         let password = credentialUser.password;
-        let clientId = 'txm.global'; //configure with enviroment vars
-        let clientSecret= 'pass';
 
         const requestBody = {
             client_id: clientId,

@@ -1,6 +1,5 @@
-// import path from 'path';
-
 const path = require("path");
+const Dotenv = require('dotenv-webpack');
 // export default {
 module.exports = {
     mode: 'development',
@@ -43,5 +42,8 @@ module.exports = {
                 type: 'javascript/auto'
             }
             ]
-    }
+    },
+    plugins: [
+        new Dotenv()
+    ]
 }

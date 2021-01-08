@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "dotenv-webpack": "^6.0.0",
     "@material-ui/core": "^4.11.1",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
@@ -41,9 +42,6 @@
     "redux-form": "^8.3.7",
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.1.3",
-    "swagger-client": "^3.12.0",
-    "swagger-model-validator": "^3.0.19",
-    "swagger-object-validator": "^1.3.0",
     "tslib": "^2.0.3",
     "underscore": "^1.12.0",
     "uuid": "^3.3.2",
@@ -53,14 +51,12 @@
     "yup": "^0.31.0"
   },
   "scripts": {
+    "build": "webpack -p",
     "start": "react-scripts start",
     "dev": "webpack-dev-server --open",
-    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "babel-node src/server/server",
-    "server-dev": "nodemon src/server/server --exec babel-node src/server/server",
-    "start-dev": "concurrently \"npm run server-dev\" \"npm run dev\"",
+    "start-dev": "npm run dev",
     "server-spec": "babel-node src/server/server.spec"
   },
   "eslintConfig": {
@@ -94,7 +90,6 @@
     "cross-env": "^5.2.0",
     "file-loader": "^6.2.0",
     "highground": "^1.0.3-beta",
-    "jest": "^23.6.0",
     "json-loader": "^0.5.7",
     "mongoose": "^5.9.26",
     "mongoose-paginate-v2": "^1.3.9",

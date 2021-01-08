@@ -2,12 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/Menu/MenuV.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Menu/MenuV.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/users/createUser.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/users/createUser.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/defaultState.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/errorValidator/defaultStateValidator.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/schemas/model.proovedor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/schemas/model.user.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/server.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +68,9 @@
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -82,7 +92,10 @@
       <workItem from="1609168333568" duration="9829000" />
       <workItem from="1609255766591" duration="44128000" />
       <workItem from="1609717277382" duration="6150000" />
-      <workItem from="1609795283655" duration="17049000" />
+      <workItem from="1609795283655" duration="28319000" />
+      <workItem from="1610047521140" duration="7104000" />
+      <workItem from="1610119084165" duration="2153000" />
+      <workItem from="1610126563245" duration="5210000" />
     </task>
     <task id="LOCAL-00001" summary="gui users update">
       <created>1608605064025</created>
@@ -98,7 +111,35 @@
       <option name="project" value="LOCAL" />
       <updated>1609806426815</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add login and oauth2 module">
+      <created>1609890535079</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1609890535079</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add HTTP METHOD">
+      <created>1609973119129</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1609973119129</updated>
+    </task>
+    <task id="LOCAL-00005" summary="add HTTP METHOD">
+      <created>1609973531488</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1609973531488</updated>
+    </task>
+    <task id="LOCAL-00006" summary="add HTTP METHOD">
+      <created>1609973805414</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1609973805414</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -119,6 +160,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="gui users update" />
     <MESSAGE value="add login and oauth2 module" />
-    <option name="LAST_COMMIT_MESSAGE" value="add login and oauth2 module" />
+    <MESSAGE value="add HTTP METHOD" />
+    <option name="LAST_COMMIT_MESSAGE" value="add HTTP METHOD" />
   </component>
 </project>
