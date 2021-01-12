@@ -16,8 +16,11 @@ module.exports = {
         extensions: ['.js','.jsx','.tsx','.json']
     },
     devServer: {
+        host:'localhost',
+        port: 3000,
         historyApiFallback: true
     },
+
     module: {
         rules: [{
             test: /\.jsx?/,
