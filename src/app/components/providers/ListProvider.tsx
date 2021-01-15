@@ -220,7 +220,7 @@ export const ListProvider = () => {
                                             <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
                                                 {(provider.sistemas).map((sistema)=>
                                                     <div>
-                                                        {sistema=='S2' ? <li>Servidores Públicos que Intervienen en Procedimientos de Contratación</li> :
+                                                        {sistema=='S2' ? <li>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</li> :
                                                         sistema=='S3S' ? <li>Sistema de los Servidores Públicos Sancionados</li> :
                                                         sistema=='S3P' ? <li>Sistema de los Particulares Sancionados</li> : ''}
                                                     </div>

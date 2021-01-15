@@ -19,7 +19,7 @@ import {MenuItem, Select, TextField} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 export const LoadFileV = () => {
     let fileReader;
@@ -36,13 +36,6 @@ export const LoadFileV = () => {
             maxWidth: 1200,
             margin: '0 auto',
             color: '#666666',
-        },
-        paper: {
-            padding: '10pt',
-            maxWidth: 1200,
-            margin: '30px',
-            marginBottom: '10pt'
-
         },
         field: {
             width: '100%'
@@ -72,6 +65,13 @@ export const LoadFileV = () => {
         fontblack:{
             color: '#666666'
         },
+        paper: {
+            padding: '10pt',
+            maxWidth: 1200,
+            margin: '30px',
+            marginBottom: '10pt'
+
+        },
 
     });
 
@@ -92,7 +92,6 @@ export const LoadFileV = () => {
         fileReader.onloadend = handleFileRead;
         fileReader.readAsText(file);
     }
-
 
 
 
@@ -120,9 +119,9 @@ export const LoadFileV = () => {
                             <Select inputProps={{
                                 id: 'system-native-required',
                             }} label="Sistema" className={style.marginLeft}  required={true} onChange={e => setValueSystem(e.target.value) }>
-                                <MenuItem value={'s2'}>Servidores públicos que intervienen en contrataciones</MenuItem>
-                                <MenuItem value={'s31'}>Públicos Sancionados</MenuItem>
-                                <MenuItem value={'s32'}>Particulares Sancionados</MenuItem>
+                                <MenuItem value={'S2'}>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</MenuItem>
+                                <MenuItem value={'S3S'}>Sistema de los Servidores Públicos Sancionados</MenuItem>
+                                <MenuItem value={'S3P'}>Sistema de los Particulares Sancionados</MenuItem>
                             </Select>
                             {/*<select inputProps={{
                                 id: 'system-native-required',
@@ -153,36 +152,36 @@ export const LoadFileV = () => {
                         </Button>
                     </Grid>
 
-                    {errors && <Grid aling="center" item xs={8} >
-                        <TableContainer component={Paper}>
-                            <Table className={style.table} size="small" aria-label="a dense table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell align="right">Id</TableCell>
-                                        <TableCell align="right">Número de errores</TableCell>
-                                        <TableCell align="right">Estatus</TableCell>
-                                        <TableCell align="right">Descripción error </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {errors.map((row) => (
-                                        <TableRow key={row.docId}>
-                                            <TableCell align="right">{row.docId}</TableCell>
-                                            <TableCell align="right">{row.errorCount}</TableCell>
-                                            <TableCell align="right">{row.valid === true ? 'valido' : 'invalido'}</TableCell>
-                                            <TableCell align="right">
-                                                <TextField multiline  id="filled-read-only-input"
-                                                           InputProps={{
-                                                               readOnly: true,
-                                                           }}
-                                                           variant="filled"
-                                                           defaultValue={row.errorsHumanReadable} />
-                                            </TableCell>
+                    {errors && <Grid container item md={12} className={style.paper}>
+                            <TableContainer component={Paper}>
+                                <Table className={style.table} size="small" aria-label="a dense table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell align="center">Id</TableCell>
+                                            <TableCell align="center">Número de errores</TableCell>
+                                            <TableCell align="center">Estatus</TableCell>
+                                            <TableCell align="center">Descripción error </TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                                    </TableHead>
+                                    <TableBody>
+                                        {errors.map((row) => (
+                                            <TableRow key={row.docId}>
+                                                <TableCell style={{width: 160}} align="center">{row.docId}</TableCell>
+                                                <TableCell style={{width: 160}} align="center">{row.errorCount}</TableCell>
+                                                <TableCell  style={{width: 160}} align="center">{row.valid === true ? 'valido' : 'invalido'}</TableCell>
+                                                <TableCell style={{width: 260}} align="center">
+                                                    <TextField style={{width: '100%'}} multiline  id="filled-read-only-input"
+                                                               InputProps={{
+                                                                   readOnly: true,
+                                                               }}
+                                                               variant="filled"
+                                                               defaultValue={row.errorsHumanReadable} />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                     </Grid>}
                 </Grid>
 

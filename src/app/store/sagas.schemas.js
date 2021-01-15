@@ -11,6 +11,8 @@ import {userActions} from "../_actions/user.action";
 import {providerConstants} from "../_constants/provider.constants";
 import {providerActions} from "../_actions/provider.action";
 import {REQUEST_TOKEN_AUTH, requestTokenAuth} from "./mutations";
+import {catalogConstants} from "../_constants/catalogs.constants";
+import {catalogActions} from "../_actions/catalog.action";
 const qs = require('querystring')
 const jwt = require('jsonwebtoken');
 
@@ -111,7 +113,6 @@ export function* fillAllProviders(){
                     'Authorization': `Bearer ${token}`
                 }});
             yield put(providerActions.setProvidersAll(respuestaArray.data.results));
-
     }
 }
 export function* deleteUser(){
@@ -195,8 +196,8 @@ export function* verifyTokenGetUser(){
     while(true){
         const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
         let payload = jwt.decode(token);
-        yield put (userActions.setUserInSession(payload.username))
-        console.log(payload.username);
+        yield put (userActions.setUserInSession(payload.idUser))
+        console.log(payload.idUser);
     }
 }
 
@@ -321,5 +322,18 @@ export function* editProvider(){
             //error in response
         }
 
+    }
+}
+
+export function* getCatalogGenero(){
+    while(true){
+        yield take (catalogConstants.GENERO_REQUEST);
+        const token = localStorage.token;
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: "genero"},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+        yield put (catalogActions.setGeneroSucces(catalogs))
     }
 }
