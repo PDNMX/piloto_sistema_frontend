@@ -13,6 +13,7 @@ import {providerActions} from "../_actions/provider.action";
 import {REQUEST_TOKEN_AUTH, requestTokenAuth} from "./mutations";
 import {catalogConstants} from "../_constants/catalogs.constants";
 import {catalogActions} from "../_actions/catalog.action";
+import {bitacoraActions} from "../_actions/bitacora.action";
 const qs = require('querystring')
 const jwt = require('jsonwebtoken');
 
@@ -29,6 +30,9 @@ export function* validationErrors(){
         const token = localStorage.token;
         if(token){
             if(systemId === "S2"){
+                let payload = jwt.decode(token);
+                yield put (userActions.setUserInSession(payload.idUser));
+                let query = { "usuario":payload.idUser};
                 let SCHEMA = JSON.parse(schema);
                 const respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA, { headers: {
                         'Content-Type': 'application/json',
@@ -61,6 +65,9 @@ export function* requestProviderPerPage(){
     while (true) {
         const {objPaginationReq} = yield take(providerConstants.PROVIDERS_PAGINATION_REQUEST);
         const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser));
+        let query = { "usuario":payload.idUser};
         const respuestaArray = yield axios.post(ur + `/getProvidersFull`,objPaginationReq, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -106,8 +113,13 @@ export function* fillTemporalProvider(){
 export function* fillAllProviders(){
     while (true){
         yield take(providerConstants.PROVIDERS_GETALL);
+
         const token = localStorage.token;
-            const respuestaArray = yield axios.post(ur + `/getProvidersFull`,{},{ headers: {
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser));
+        let query = { "usuario":payload.idUser};
+
+            const respuestaArray = yield axios.post(ur + `/getProvidersFull`,query,{ headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -115,6 +127,26 @@ export function* fillAllProviders(){
             yield put(providerActions.setProvidersAll(respuestaArray.data.results));
     }
 }
+
+export function* fillAllUsers(){
+    while (true){
+        yield take(userConstants.USERS_GETALL);
+
+        const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser));
+        let query = { "usuario":payload.idUser};
+
+        const respuestaArray = yield axios.post(ur + `/getUsersAll`,query,{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+        yield put(userActions.setUsersAll(respuestaArray.data.results));
+    }
+}
+
+
 export function* deleteUser(){
     while (true) {
         const {id} = yield take (userConstants.DELETE_REQUEST);
@@ -122,6 +154,10 @@ export function* deleteUser(){
         if(token){
             let request = {"_id": id};
             try{
+                let payload = jwt.decode(token);
+                yield put (userActions.setUserInSession(payload.idUser))
+                console.log(payload.idUser);
+                let request = {"_id": id,"user":payload.idUser};
                 const {status} = yield axios.delete(ur + `/deleteUser`, { data : {request} , headers: {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
@@ -146,8 +182,11 @@ export function* deleteUser(){
 export function* deleteProvider(){
     while (true) {
         const {id} = yield take (providerConstants.DELETE_REQUEST);
-        let request = {"_id": id};
         const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser))
+        console.log(payload.idUser);
+        let request = {"_id": id,"usuario":payload.idUser};
         const {status} = yield axios.delete(ur + `/deleteProvider`, { data : {request} ,headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -216,6 +255,10 @@ export function* creationUser(){
         usuarioJson["fechaAlta"]= fechaActual.format();
         usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
         const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser))
+        console.log(payload.idUser);
+        usuarioJson["user"]=payload.idUser;
         const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -241,6 +284,10 @@ export function* editUser(){
         usuarioJson["fechaAlta"]= fechaActual.format();
         usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
         const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser))
+        console.log(payload.idUser);
+        usuarioJson["user"]=payload.idUser;
         const {status} = yield axios.put(ur + `/edit/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -260,6 +307,7 @@ export function* editUser(){
 
 export function* creationProvider(){
     while(true){
+        console.log("Crear proveedor.....");
         const {usuarioJson} = yield take (mutations.REQUEST_CREATION_PROVIDER);
         let fechaActual =moment();
         if(usuarioJson["estatus"]==undefined || usuarioJson["estatus"]==null){
@@ -274,6 +322,11 @@ export function* creationProvider(){
             usuarioJson["fechaActualizacion"]=fechaActual.format();
         }
         const token = localStorage.token;
+        //const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser))
+        console.log(payload.idUser);
+        usuarioJson["usuario"]=payload.idUser;
         const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -294,6 +347,7 @@ export function* creationProvider(){
 
 export function* editProvider(){
     while(true){
+        console.log("Editar Proveedor........");
         const {usuarioJson} = yield take (mutations.REQUEST_EDIT_PROVIDER);
         let fechaActual =moment();
         if(usuarioJson["estatus"]==undefined || usuarioJson["estatus"]==null){
@@ -308,6 +362,10 @@ export function* editProvider(){
             usuarioJson["fechaActualizacion"]=fechaActual.format();
         }
         const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser))
+        console.log(payload.idUser);
+        usuarioJson["usuario"]=payload.idUser;
         const {status}  =yield axios.put(ur + `/edit/provider`, usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -335,5 +393,29 @@ export function* getCatalogGenero(){
                 'Authorization': `Bearer ${token}`
             }});
         yield put (catalogActions.setGeneroSucces(catalogs))
+    }
+}
+
+export function* consultBitacora(){
+    while(true){
+        console.log("Consultar Bitacora........");
+        const {usuarioJson} = yield take (mutations.REQUEST_CONSULT_BITACORA);
+        let fechaActual =moment();
+        console.log(usuarioJson);
+
+        const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser))
+        console.log(payload.idUser);
+        usuarioJson["usuario"]=payload.idUser;
+        const respuestaArray  =yield axios.post(ur + `/getBitacora`, usuarioJson, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } ,validateStatus: () => true});
+            yield put(bitacoraActions.setBitacoraAll(respuestaArray.data.results));
+            yield put(alertActions.success("Consulta realizada con éxito"));
+            yield put(alertActions.clear());
+
     }
 }

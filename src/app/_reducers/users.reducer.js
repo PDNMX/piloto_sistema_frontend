@@ -1,5 +1,4 @@
 import { userConstants } from "../_constants/user.constants";
-import {providerConstants} from "../_constants/provider.constants";
 
 export function users(state = [], action) {
     switch (action.type) {

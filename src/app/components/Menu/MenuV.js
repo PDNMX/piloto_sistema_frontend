@@ -57,6 +57,8 @@ import {ListUser} from "../users/listUser";
 import {ListProvider} from "../providers/ListProvider";
 import { useLocation } from 'react-router-dom'
 import {userActions} from "../../_actions/user.action";
+import {ConnectedConsultarBitacora} from "../Bitacora/ConsultarBitacora";
+import {ListBitacora} from "../Bitacora/ListBitacora";
 
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
@@ -77,6 +79,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
     setCheckedDatos((prev) => !prev);
     setCheckedBitacora((prev) => false);
     setCheckedUser((prev) => false);
+    setcrearProovedor(false);
   }
 
 
@@ -88,10 +91,18 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
     setCheckedUser((prev) => !prev);
     setCheckedBitacora((prev) => false);
     setCheckedDatos((prev) => false);
-
   }
 
-
+    const menuProveedor=(e)=>{
+        setsubmenuAdmonDatos(false);
+        setsubMenuUsuario(false);
+        setcrearProovedor(true);
+        setCheckedProveedor((prev) => !prev);
+        setCheckedUser((prev) => false);
+        setCheckedDatos((prev) => false);
+        setCheckedBitacora((prev) => !prev);
+        setsubMenuBitacora(false);
+    }
 
   const menuBitacora=(e)=>{
     setsubmenuAdmonDatos(false);
@@ -246,6 +257,7 @@ const useStyles = makeStyles((theme) => ({
     const [checkedBitacora, setCheckedBitacora] = useState(false);
     const [checkedUser, setCheckedUser] = useState(false);
     const [checkedDatos, setCheckedDatos] = useState(false);
+    const [checkedProveedor, setCheckedProveedor] = useState(false);
 
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -375,15 +387,15 @@ const useStyles = makeStyles((theme) => ({
               </Collapse>
           : ""
         }
-            <ListItem button onClick={e=>menuBitacora(e)}>
+            <ListItem button onClick={e=>menuProveedor(e)}>
               <ListItemIcon>
                 <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary="Proveedores" />
             </ListItem>
 
-            { submenuBitacora ?
-              <Collapse in={checkedBitacora}>
+            { crearProovedor ?
+              <Collapse in={checkedProveedor}>
                 <div>
                   <Tooltip title="Crear proveedor" placement="right">
                     <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedor/crear")}>
@@ -405,6 +417,29 @@ const useStyles = makeStyles((theme) => ({
               </Collapse>
           : ""
         }
+
+        <ListItem button onClick={e=>menuBitacora(e)}>
+              <ListItemIcon>
+                  <BookmarksIcon />
+              </ListItemIcon>
+              <ListItemText primary="Bitácora" />
+          </ListItem>
+
+              { submenuBitacora ?
+                  <Collapse in={checkedBitacora}>
+                      <div>
+                          <Tooltip title="Crear reporte" placement="right">
+                              <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/bitacora")}>
+                                  <ListItemIcon>
+                                      <ArrowForwardIcon fontSize="small" />
+                                  </ListItemIcon>
+                                  <ListItemText primary="Crear reporte" />
+                              </ListItem>
+                          </Tooltip>
+                      </div>
+                  </Collapse>
+                  : ""
+              }
           </div>
         </List>
         <Divider />
@@ -423,6 +458,8 @@ const useStyles = makeStyles((theme) => ({
                   {vistaRender === "createprovider" && <ConnectedCreateProvider/> }
                   {vistaRender === "editprovider" && <ConnectedCreateProvider match = {match} /> }
                   {vistaRender === "providers" && <ListProvider/> }
+                  {vistaRender === "consultarbitacora" && <ConnectedConsultarBitacora/>}
+                  {vistaRender === "reportebitacora" && <ListBitacora/> }
               </Paper>
             </Grid>
             {/* Grid 2 

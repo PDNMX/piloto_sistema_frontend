@@ -9,7 +9,8 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography
+    Tooltip,
+    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography,Snackbar
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -27,7 +28,9 @@ import {Alert} from "@material-ui/lab";
 import {history} from "../../store/history";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import {withStyles} from "@material-ui/core/styles";
-import {userActions} from "../../_actions/user.action";
+import {userActions} from "../../_actions/user.action"
+import {alertActions} from "../../_actions/alert.actions";
+
 
 
 export const ListProvider = () => {
@@ -62,6 +65,10 @@ export const ListProvider = () => {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const handleCloseSnackbar = () => {
+        dispatch(alertActions.clear());
     };
 
     const handleChangePage = (event, newPage) => {
@@ -86,6 +93,8 @@ export const ListProvider = () => {
 
         handleClose();
     }
+
+
 
     const StyledTableCell = withStyles({
         root: {
@@ -137,143 +146,164 @@ export const ListProvider = () => {
 
     const classes = useStyles();
 
-        return (
-            <div>
-                {alerta.status == true && <Alert severity={alerta.type}>{alerta.message}</Alert>}
-                <Modal
-                    open={openModalProviderInfo}
-                    onClose={handleCloseModalProviderInfo}
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                >
-                    <Grid container item md={8} className={classes.paper}>
-                        <TableContainer component={Paper}>
-                            <TableHead>
-                                <TableRow>
-                                    <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
-                                    <StyledTableCell align="center" >Fecha de Actualización</StyledTableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody key="InfoPlusProvider">
-                                <TableRow key={selectedProvider._id + "InfoPlusProvider"}>
+    return (
+        <div>
+            <Grid item xs={12}>
+                <Typography variant={"h6"} paragraph className={classes.fontblack} align={"center"}>
+                    <b>Lista de proveedores</b>
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+                    <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
+                        {alerta.message}
+                    </Alert>
+                </Snackbar>
+            </Grid>
+            {alerta.status == true && <Alert severity={alerta.type}>{alerta.message}</Alert>}
+            <Modal
+                open={openModalProviderInfo}
+                onClose={handleCloseModalProviderInfo}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                <Grid container item md={8} className={classes.paper}>
 
-                                    <StyledTableCell style={{width: 160}} align="center">
-                                        {selectedProvider.fechaAlta}
-                                    </StyledTableCell>
-                                    <StyledTableCell style={{width: 160}} align="center">
-                                        {selectedProvider.fechaActualizacion}
-                                    </StyledTableCell>
+                    <TableContainer component={Paper}>
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
+                                <StyledTableCell align="center" >Fecha de Actualización</StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody key="InfoPlusProvider">
+                            <TableRow key={selectedProvider._id + "InfoPlusProvider"}>
 
-                                </TableRow>
-                            </TableBody>
-                        </TableContainer>
-                    </Grid>
-                </Modal>
+                                <StyledTableCell style={{width: 160}} align="center">
+                                    {selectedProvider.fechaAlta}
+                                </StyledTableCell>
+                                <StyledTableCell style={{width: 160}} align="center">
+                                    {selectedProvider.fechaActualizacion}
+                                </StyledTableCell>
 
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el proveedor: "+nombreDependencia+"?"}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Los cambios no seran reversibles
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancelar
-                        </Button>
-                        <Button onClick={()=> {confirmAction(providerId)}} color="primary" autoFocus>
-                            Aceptar
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                <Grid className= {classes.gridpadding} spacing={3} container >
-                        <TableContainer component={Paper} >
-                            {providers.length > 0  && <Table aria-label="custom pagination table">
-                                <TableHead >
-                                    <TableRow >
-                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center"></TableCell>
-                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Proveedor</TableCell>
-                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</TableCell>
-                                        <TableCell className={classes.fontblack} align="center">Sistema</TableCell>
-                                        <TableCell className={classes.fontblack} align="center">Acciones</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody key="providers">
-                                    {providers.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((provider)  => (
-                                        <TableRow key={provider._id}>
-                                            <TableCell style={{ width: 40 }} align="center">
-                                                <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalProviderInfo(provider)}>
-                                                    <KeyboardArrowDownIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                            <TableCell className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="left">
-                                                {provider.dependencia}
-                                            </TableCell>
-                                            <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                                {provider.estatus? 'Vigente' : 'No vigente'}
-                                            </TableCell>
-                                            <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                                {(provider.sistemas).map((sistema)=>
-                                                    <div>
-                                                        {sistema=='S2' ? <li>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</li> :
-                                                        sistema=='S3S' ? <li>Sistema de los Servidores Públicos Sancionados</li> :
+                            </TableRow>
+                        </TableBody>
+                    </TableContainer>
+                </Grid>
+            </Modal>
+
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el proveedor: "+nombreDependencia+"?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Los cambios no seran reversibles
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancelar
+                    </Button>
+                    <Button onClick={()=> {confirmAction(providerId)}} color="primary" autoFocus>
+                        Aceptar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Grid className= {classes.gridpadding} spacing={3} container >
+                <TableContainer component={Paper} >
+                    {providers.length > 0  && <Table aria-label="custom pagination table">
+                        <TableHead >
+                            <TableRow >
+                                <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Más Info.</TableCell>
+                                <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Proveedor</TableCell>
+                                <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</TableCell>
+                                <TableCell className={classes.fontblack} align="center">Sistema</TableCell>
+                                <TableCell className={classes.fontblack} align="center">Acciones</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody key="providers">
+                            {providers.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((provider)  => (
+                                <TableRow key={provider._id}>
+                                    <TableCell style={{ width: 40 }} align="center">
+                                        <Tooltip title="Más información" placement="right">
+                                            <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalProviderInfo(provider)}>
+                                                <KeyboardArrowDownIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                    <TableCell className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="left">
+                                        {provider.dependencia}
+                                    </TableCell>
+                                    <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
+                                        {provider.estatus? 'Vigente' : 'No vigente'}
+                                    </TableCell>
+                                    <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="left">
+                                        {(provider.sistemas).map((sistema)=>
+                                            <div>
+                                                {sistema=='S2' ? <li>Servidores Públicos que Intervienen en Procedimientos de Contratación</li> :
+                                                    sistema=='S3S' ? <li>Sistema de los Servidores Públicos Sancionados</li> :
                                                         sistema=='S3P' ? <li>Sistema de los Particulares Sancionados</li> : ''}
-                                                    </div>
+                                            </div>
 
-                                                )}
-                                            </TableCell>
-                                            <TableCell style={{ width: 'auto' }} align="center">
-                                                    <Button  onClick={ () => redirectToRoute(`/proveedor/editar/${provider._id}`)}  style={{ color: 'gray' }} ><EditOutlinedIcon/></Button>
-                                                    <Button>
-                                                    <DeleteOutlineOutlinedIcon style={{ color: 'gray' }} onClick= {()=> {handleClickOpen(provider._id, provider.dependencia)}} />
-                                                    </Button>
-
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                                <TableFooter>
-                                    <TableRow>
-                                        { pagination.pageSize != undefined  && pagination.page != undefined  && <TablePagination
-                                            rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
-                                            colSpan={6}
-                                            count={providers.length}
-                                            rowsPerPage={pagination.pageSize}
-                                            page={pagination.page}
-                                            SelectProps={{
-                                                inputProps: { 'aria-label': 'rows per page' },
-                                                native: true,
-                                            }}
-                                            onChangePage={handleChangePage}
-                                            onChangeRowsPerPage={handleChangeRowsPerPage}
-                                            ActionsComponent={TablePaginationActions}
-                                        />}
-                                    </TableRow>
-                                </TableFooter>
-                            </Table>}
-                         </TableContainer>
-                </Grid>
-                <Grid  spacing={3} justify="flex-end"
-                       alignItems="flex-end"
-                       container
-                       item
-                       xs={12}
-                       md={12}>
-                        <Button  onClick={ () => redirectToRoute("/proveedor/crear")}
-                                 variant="contained"
-                            className={classes.marginright}
-                            endIcon={<AddBoxIcon>Agregar proveedor</AddBoxIcon>}
-                        >
-                            Agregar proveedor
-                        </Button>
-                </Grid>
-            </div>
-        );
+                                        )}
+                                    </TableCell>
+                                    <TableCell style={{ width: 160 }} align="center">
+                                        <Tooltip title="Editar proveedor" placement="right">
+                                            <Button  onClick={ () => redirectToRoute(`/proveedor/editar/${provider._id}`)}  style={{ color: 'gray' }} ><EditOutlinedIcon/>
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip title="Eliminar proveedor" placement="right">
+                                            <Button>
+                                                <DeleteOutlineOutlinedIcon style={{ color: 'gray' }} onClick= {()=> {handleClickOpen(provider._id, provider.dependencia)}} />
+                                            </Button>
+                                        </Tooltip>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                { pagination.pageSize != undefined  && pagination.page != undefined  && <TablePagination
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
+                                    colSpan={6}
+                                    count={providers.length}
+                                    rowsPerPage={pagination.pageSize}
+                                    page={pagination.page}
+                                    SelectProps={{
+                                        inputProps: { 'aria-label': 'rows per page' },
+                                        native: true,
+                                    }}
+                                    onChangePage={handleChangePage}
+                                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                                    ActionsComponent={TablePaginationActions}
+                                />}
+                            </TableRow>
+                        </TableFooter>
+                    </Table>}
+                </TableContainer>
+            </Grid>
+            <Grid  spacing={3} justify="flex-end"
+                   alignItems="flex-end"
+                   container
+                   item
+                   xs={12}
+                   md={12}>
+                <Tooltip title="Agregar proveedor" placement="right">
+                    <Button  onClick={ () => redirectToRoute("/proveedor/crear")}
+                             variant="contained"
+                             className={classes.marginright}
+                             endIcon={<AddBoxIcon>Agregar proveedor</AddBoxIcon>}
+                    >
+                        Agregar proveedor
+                    </Button>
+                </Tooltip>
+            </Grid>
+        </div>
+    );
 }
 
 

@@ -235,11 +235,13 @@ function mapStateToProps(state,ownProps){
     if( ownProps.match != undefined ){
         let id = ownProps.match.params.id;
         let user = state.users.find(user=>user._id === id);
+        let idUser = state.setUserInSession;
         return {
             id,
             user,
             alert,
-            providers
+            providers,
+            idUser
         }
     }else{
         return {alert, providers};

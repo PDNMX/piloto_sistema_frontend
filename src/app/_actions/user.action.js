@@ -1,4 +1,5 @@
 import { userConstants } from '../_constants/user.constants';
+import {providerConstants} from "../_constants/provider.constants";
 export const userActions = {
     requestPerPage,
     setPerPageSucces,
@@ -8,8 +9,16 @@ export const userActions = {
     deleteUserDo,
     requesUserInSession,
     setUserInSession,
-    removeSessionLogIn
+    removeSessionLogIn,
+    requestAllUsers,
+    setUsersAll
 };
+
+function requestAllUsers(){
+    return {
+        type :  userConstants.USERS_GETALL,
+    }
+}
 
 function requesUserInSession(token){
     return{
@@ -69,4 +78,6 @@ function setPerPageSucces(users) {
     return {type : userConstants.USERS_PAGINATION_SUCCESS, users}
 }
 
-
+function setUsersAll (users){
+    return {type : userConstants.USERS_GETALL_SET, users}
+}
