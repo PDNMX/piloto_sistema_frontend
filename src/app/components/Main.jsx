@@ -10,12 +10,14 @@ import {Connected} from "./users/createUser";
 import { Redirect } from 'react-router';
 import { ListUser} from "./users/listUser";
 import {userActions} from "../_actions/user.action";
+import {catalogActions} from "../_actions/catalog.action";
 import {alertActions} from "../_actions/alert.actions";
 import {ConnectedMenuV} from "./Menu/MenuV";
 import {ListProvider} from "./providers/ListProvider";
 import {providerActions} from "../_actions/provider.action";
 import {ConnectedCreateProvider} from "./providers/CreateProvider";
 import {LoginV} from "./Login/Login";
+import {S2Actions} from "../_actions/s2.action";
 
 const theme = createMuiTheme({
     typography: {
@@ -69,6 +71,54 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
+                       path= "/cargaformulario"
+                       render={() => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                               storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
+                               storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
+                               storeValidate.dispatch(catalogActions.requestTipoAreaCatalogo("tipoArea"));
+                               storeValidate.dispatch(catalogActions.requestNivelResponsabilidadCatalogo("nivelResponsabilidad"));
+                               storeValidate.dispatch(catalogActions.requestTipoProcedimientoCatalogo("tipoProcedimiento"));
+                               storeValidate.dispatch((alertActions.clear()));
+                               return <ConnectedMenuV propiedades = {{renderView : "createReg"}} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/esquemaS2"
+                       render={() => {
+                           if (localStorage.token) {
+                               storeValidate.dispatch(S2Actions.requestListS2({}));
+                               storeValidate.dispatch((alertActions.clear()));
+                               return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
+                           } else {
+                               return <Redirect to="/login"/>;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/esquemaS2/editar/:id"
+                       render={({match}) => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                               storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
+                               storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
+                               storeValidate.dispatch(catalogActions.requestTipoAreaCatalogo("tipoArea"));
+                               storeValidate.dispatch(catalogActions.requestNivelResponsabilidadCatalogo("nivelResponsabilidad"));
+                               storeValidate.dispatch(catalogActions.requestTipoProcedimientoCatalogo("tipoProcedimiento"));
+                               storeValidate.dispatch(S2Actions.fillRegEdit(match.params.id));
+                               return <ConnectedMenuV propiedades = {{renderView : "editRegS2"}} match = {match} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
                        path= "/usuario/crear"
                        render={() => {
                            if ( localStorage.token){
@@ -85,10 +135,10 @@ export const Main = ()=> (
                        path= "/usuario/editar/:id"
                        render={({match}) => {
                            if ( localStorage.token){
-                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                           storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
-                           storeValidate.dispatch(providerActions.requestAllProviders());
-                           storeValidate.dispatch((alertActions.clear()));
+                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
+                                storeValidate.dispatch(providerActions.requestAllProviders());
+                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades = {{renderView : "edituser"}} match = {match} /> )
                            }else{
                                return <Redirect to="/login"/> ;

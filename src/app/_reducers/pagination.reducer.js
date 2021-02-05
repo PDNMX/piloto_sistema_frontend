@@ -1,9 +1,9 @@
-import { userConstants } from "../_constants/user.constants";
+import { S2Constants } from "../_constants/s2.constants";
 
 export function pagination(state = {}, action) {
     switch (action.type) {
-        case userConstants.PAGINATION_SET:
-            return action.objPagination;
+        case S2Constants.PAGINATION_SET_SCHEMA2:
+            return action.pagination;
         default:
             return state
     }

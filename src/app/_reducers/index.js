@@ -7,6 +7,8 @@ import {errors} from "./uploadfile.reducer";
 import { providers } from './providers.reducer';
 import {providerSelect } from './providerTemporal.reducer';
 import {userInSession} from './userInSession.reducer';
+import {catalogs} from './catalog.reducer';
+import {S2} from './S2Schema.reducer'
 const rootReducer = combineReducers({
     users,
     alert,
@@ -15,7 +17,9 @@ const rootReducer = combineReducers({
     errors,
     providers,
     providerSelect,
-    userInSession
+    userInSession,
+    catalogs,
+    S2
 });
 
 export default rootReducer;

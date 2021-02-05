@@ -5,8 +5,6 @@ const spicSchema = new Schema({
    fechaCaptura: String,
    ejercicioFiscal: String,
    ramo: { clave: Number, valor: String },
-   rfc: String,
-   curp: String,
    nombres: String,
    primerApellido: String,
    segundoApellido: String,

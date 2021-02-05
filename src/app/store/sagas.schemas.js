@@ -13,8 +13,13 @@ import {providerActions} from "../_actions/provider.action";
 import {REQUEST_TOKEN_AUTH, requestTokenAuth} from "./mutations";
 import {catalogConstants} from "../_constants/catalogs.constants";
 import {catalogActions} from "../_actions/catalog.action";
+import {S2Constants} from "../_constants/s2.constants";
+import {storeValidate} from "./index";
+import {S2Actions} from "../_actions/s2.action";
 const qs = require('querystring')
 const jwt = require('jsonwebtoken');
+const _ = require('underscore');
+
 
 const host = process.env.URLAPI;
 const urOauth2 = host+process.env.PORTOAUTH
@@ -181,13 +186,11 @@ export function* loginUser(){
             localStorage.setItem("token", token.data.access_token);
             history.push('/usuarios');
         }catch (err) {
-if(err.response){
-    yield put(alertActions.error(err.response.data.message));
-}else{
-    yield put(alertActions.error(err.toString()));
-}
-
-
+            if(err.response){
+                yield put(alertActions.error(err.response.data.message));
+            }else{
+                yield put(alertActions.error(err.toString()));
+            }
         }
     }
 }
@@ -215,6 +218,7 @@ export function* creationUser(){
         let fechaActual = moment();
         usuarioJson["fechaAlta"]= fechaActual.format();
         usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
+        usuarioJson["estatus"]=  true;
         const token = localStorage.token;
         const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
@@ -238,8 +242,6 @@ export function* editUser(){
     while (true) {
         const {usuarioJson} = yield take (mutations.REQUEST_EDIT_USER);
         let fechaActual = moment();
-        usuarioJson["fechaAlta"]= fechaActual.format();
-        usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
         const token = localStorage.token;
         const {status} = yield axios.put(ur + `/edit/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
@@ -291,7 +293,6 @@ export function* creationProvider(){
     }
 }
 
-
 export function* editProvider(){
     while(true){
         const {usuarioJson} = yield take (mutations.REQUEST_EDIT_PROVIDER);
@@ -321,19 +322,260 @@ export function* editProvider(){
         }else{
             //error in response
         }
-
     }
 }
 
-export function* getCatalogGenero(){
+export function* getCatalogRamo(){
     while(true){
-        yield take (catalogConstants.GENERO_REQUEST);
+        const {docType} = yield take (catalogConstants.RAMO_REQUEST);
         const token = localStorage.token;
-        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: "genero"},{ headers: {
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-        yield put (catalogActions.setGeneroSucces(catalogs))
+        yield put (catalogActions.setRamoSucces(respuestaArray.data.results));
+
+    }
+}
+
+
+export function* getCatalogGenero(){
+    while(true){
+        const {docType} = yield take (catalogConstants.GENERO_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        console.log(respuestaArray.data.results);
+
+        yield put (catalogActions.setGeneroSucces(respuestaArray.data.results));
+    }
+}
+
+
+export function* getCatalogPuesto(){
+    while(true){
+        const {docType} = yield take (catalogConstants.PUESTO_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+        yield put (catalogActions.setPuestoSucces(respuestaArray.data.results));
+    }
+}
+
+
+export function* getCatalogTipoArea(){
+    while(true){
+        const {docType} = yield take (catalogConstants.TIPO_AREA_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (catalogActions.setTipoAreaSucces(respuestaArray.data.results));
+    }
+}
+
+export function* getCatalogNivelResponsabilidad(){
+    while(true){
+        const {docType} = yield take (catalogConstants.NIVEL_RESPONSABILIDAD_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (catalogActions.setNivelResponsabilidadSucces(respuestaArray.data.results));
+    }
+}
+
+export function* getCatalogTipoProcedimiento(){
+    while(true){
+        const {docType} = yield take (catalogConstants.TIPO_PROCEDIMIENTO_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (catalogActions.setTipoProcedimientoSucces(respuestaArray.data.results));
+    }
+}
+
+export function* creationS2Schema(){
+    while (true) {
+        const {values} = yield take (S2Constants.REQUEST_CREATION_S2);
+        let docSend = {};
+        const token = localStorage.token;
+        let state = storeValidate.getState();
+        docSend["id"]= "FAKEID";
+        docSend["fechaCaptura"]= moment().format();
+        docSend["ejercicioFiscal"]= values.ejercicioFiscal;
+         if(values.ramo){
+             let ramoObj = JSON.parse(values.ramo);
+             docSend["ramo"]= {clave:  parseInt(ramoObj.clave) , valor: ramoObj.valor };
+         }
+        docSend["nombres"]= values.nombres;
+        docSend["primerApellido"] =values.primerApellido;
+        docSend["segundoApellido"]= values.segundoApellido;
+        if(values.genero){
+            docSend["genero"]= JSON.parse(values.genero);
+        }
+        docSend["institucionDependencia"] = {nombre : values.idnombre , clave: values.idclave, siglas: values.idsiglas};
+        docSend["puesto"]= {nombre: values.puestoNombre, nivel: values.puestoNivel};
+       if(values.tipoArea){
+           docSend["tipoArea"]=JSON.parse("["+values.tipoArea+"]");
+       }
+       if(values.tipoProcedimiento){
+           let ObjTipoProcedimiento= JSON.parse("["+values.tipoProcedimiento+"]");
+           docSend["tipoProcedimiento"]= getArrayFormatTipoProcedimiento(ObjTipoProcedimiento);
+       }
+       if(values.nivelResponsabilidad){
+           docSend["nivelResponsabilidad"] = JSON.parse("[" + values.nivelResponsabilidad + "]");
+       }
+
+        docSend["superiorInmediato"]= {nombres: values.sinombres, primerApellido: values.siPrimerApellido, segundoApellido : values.siSegundoApellido,
+        puesto: {nombre:values.siPuestoNombre, nivel: values.siPuestoNivel}};
+
+        console.log(docSend);
+
+        const {status} = yield axios.post(ur + `/insertS2Schema`,docSend, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } , validateStatus: () => true});
+        if(status === 200){
+            //all OK
+            yield put(alertActions.success("documento creado con exito "));
+            history.push('/usuarios');
+            yield put(alertActions.clear());
+        }else{
+            yield put(alertActions.error("Error al crear"));
+            //error in response
+        }
+
+    }
+}
+
+function getArrayFormatTipoProcedimiento(array){
+    _.each(array, function(p){
+        p.clave = parseInt(p.clave);
+    });
+    return array;
+}
+
+
+export function* getListSchemaS2(){
+    while(true){
+        const {filters} = yield take (S2Constants.REQUEST_LIST_S2);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/listSchemaS2`,filters,{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (S2Actions.setListS2(respuestaArray.data.results));
+        yield put (S2Actions.setpaginationS2(respuestaArray.data.pagination));
+
+    }
+}
+
+
+
+export function* fillUpdateRegS2(){
+    while(true){
+        const {id} = yield take (S2Constants.FILL_REG_S2_EDIT);
+        const token = localStorage.token;
+        let query = {"query" : {"_id" : id}};
+
+        const respuestaArray = yield axios.post(ur + `/listSchemaS2`,query,{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        let registro = respuestaArray.data.results[0];
+
+        let newRow={};
+        for (let [key, row] of Object.entries(registro)) {
+
+            if(key ===  "genero" || key === "ramo"){
+                   newRow[key]=  JSON.stringify({clave:row.clave.toString() ,valor : row.valor});
+            }else if(key === "tipoArea" || key === "nivelResponsabilidad" || key === "tipoProcedimiento") {
+                let newArray=[];
+                for(let item of row){
+                    newArray.push(JSON.stringify({clave:item.clave.toString() ,valor : item.valor}));
+                }
+                newRow[key]= newArray;
+            }else if (key === "superiorInmediato") {
+                if(row.nombres){ newRow["sinombres"] = row.nombres ;}
+                if(row.primerApellido){ newRow["siPrimerApellido"] = row.primerApellido;}
+                if(row.segundoApellido){ newRow["siSegundoApellido"] = row.segundoApellido;}
+                if(row.puesto.nombre){ newRow["siPuestoNombre"] = row.puesto.nombre;}
+                if(row.puesto.nivel){ newRow["siPuestoNivel"] = row.puesto.nivel;}
+            } else if (key === "puesto" ) {
+                if(row.nombre){ newRow["puestoNombre"] = row.nombre ; }
+                if(row.nivel){newRow["puestoNivel"] = row.nivel ;}
+            }else if(key === "institucionDependencia" ){
+                if(row.nombre ){newRow["idnombre"] = row.nombre ;}
+                if(row.siglas ){newRow["idsiglas"] = row.siglas ;}
+                if(row.clave ){ newRow["idclave"] = row.clave ;}
+            }else {
+                newRow[key] = row ;
+            }
+        }
+
+        yield put (S2Actions.setListS2([newRow]));
+    }
+}
+
+
+
+
+
+export function* deleteSchemaS2(){
+    while (true) {
+        const {id} = yield take (S2Constants.DELETE_REQUEST);
+        const token = localStorage.token;
+        if(token){
+            let request = {"_id": id};
+            try{
+                const {status} = yield axios.delete(ur + `/deleteRecordS2`, { data : {request} , headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    } , validateStatus: () => true});
+                if(status === 200){
+                    yield put(S2Actions.deleteRecordDo(id));
+                    yield put(alertActions.success("Se elimino el Registro con exito"));
+                }else{
+                    //error in response
+                    yield put(alertActions.error("El Registro NO fue eliminado"));
+                }
+            }catch (e) {
+                yield put(alertActions.error("El Registro NO fue eliminado"));
+            }
+        }
+
+
     }
 }

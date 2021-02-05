@@ -55,8 +55,10 @@ import {connect} from "react-redux";
 import {ConnectedCreateUser} from "../users/createUser";
 import {ListUser} from "../users/listUser";
 import {ListProvider} from "../providers/ListProvider";
+import {ConnectedCreateReg} from "../CargaDatos/createReg"
 import { useLocation } from 'react-router-dom'
 import {userActions} from "../../_actions/user.action";
+import {ListS2Schema} from "../CargaDatos/listSchemaS2";
 
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
@@ -423,6 +425,10 @@ const useStyles = makeStyles((theme) => ({
                   {vistaRender === "createprovider" && <ConnectedCreateProvider/> }
                   {vistaRender === "editprovider" && <ConnectedCreateProvider match = {match} /> }
                   {vistaRender === "providers" && <ListProvider/> }
+                  {vistaRender === "createReg" && <ConnectedCreateReg/> }
+                  {vistaRender === "editRegS2" && <ConnectedCreateReg match = {match}/> }
+                  {vistaRender === "S2Schema" && <ListS2Schema/> }
+
               </Paper>
             </Grid>
             {/* Grid 2 

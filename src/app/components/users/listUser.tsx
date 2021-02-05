@@ -80,7 +80,13 @@ export const ListUser = () => {
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
+        let newSize= parseInt(event.target.value, 10);
+        if(pagination.page * newSize > users.length){
+            setPagination({page : 0 , pageSize : parseInt(event.target.value, 10) });
+        }else{
+            setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
+        }
+
        //dispatch(userActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
     };
 
@@ -203,7 +209,6 @@ export const ListUser = () => {
                                        {selectedUser.sistemas.map( value => (
                                            <Typography>{sistemas[value]}, </Typography>
                                        ))}
-
                                    </StyledTableCell>
                                    <StyledTableCell style={{width: 160}} align="center">
                                        {selectedUser.fechaAlta}
