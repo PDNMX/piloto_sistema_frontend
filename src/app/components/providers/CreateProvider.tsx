@@ -67,7 +67,7 @@ function MyForm(props: MyFormProps ) {
         {label: 'Vigente', value: true},
     ];
 
-      const schema = Yup.object().shape({
+    const schema = Yup.object().shape({
         dependencia:  Yup.string().required().matches(new RegExp('^[ñáéíóúáéíóúÁÉÍÓÚa-zA-Z ]*$'), 'Inserta solamente caracteres'),
         sistemas: Yup.array().min(1).required(),
         //estatus: Yup.boolean(),
@@ -95,14 +95,14 @@ function MyForm(props: MyFormProps ) {
 
     const useStyles = makeStyles((theme) => ({
         root: {
-          display: 'flex',
+            display: 'flex',
         },
         fontblack:{
-          color: '#666666'
+            color: '#666666'
         },
         boton:{
-          backgroundColor:'#ffe01b',
-          color: '#666666'
+            backgroundColor:'#ffe01b',
+            color: '#666666'
         },
         gridpadding: {
             padding: '30px',
@@ -112,37 +112,39 @@ function MyForm(props: MyFormProps ) {
             backgroundColor:'#ffe01b',
             color: '#666666'
         }
-        
-      }));
-      
+
+    }));
+
     const classes = useStyles();
 
     return (
         <div>
-            <Grid container>
-                    <Button  onClick={ () => redirectToRoute("/proveedores")} style = {{}}><ArrowBackIcon fontSize="large"/></Button>
+            <Grid item xs={12}>
+                <Typography variant={"h6"} paragraph className={classes.fontblack} align={"center"}>
+                    <b>Crear proveedor</b>
+                </Typography>
             </Grid>
-        <Form
-            onSubmit={onSubmit}
-            initialValues={initialValues}
-            validate={validate}
-            render={({ handleSubmit,values, submitting   }) => (
-                <form  onSubmit={handleSubmit} noValidate>
-                    {alert.status === undefined &&
-                    <div>
-                        <Grid className= {classes.gridpadding} spacing={3} container >
-                            <Grid item xs={12} md={3}>
-                                <TextField label="Proveedor" name="dependencia" required={true} />
+            <Form
+                onSubmit={onSubmit}
+                initialValues={initialValues}
+                validate={validate}
+                render={({ handleSubmit,values, submitting   }) => (
+                    <form  onSubmit={handleSubmit} noValidate>
+                        {alert.status === undefined &&
+                        <div>
+                            <Grid className= {classes.gridpadding} spacing={3} container >
+                                <Grid item xs={12} md={6}>
+                                    <TextField label="Proveedor" name="dependencia" required={true} />
+                                </Grid>
+                                <Grid item xs={12} md={6} className={classes.fontblack}>
+                                    <Select  name = "sistemas" label="Selecciona los sistemas aplicables"  required={true} data={sistemasData} multiple={true}></Select>
+                                </Grid>
+                                {id != null &&
+                                <Grid item xs={12} md={3}>
+                                    <Switches label="Estatus" name="estatus" required={true} data={estatus}/>
+                                </Grid>}
                             </Grid>
-                            <Grid item xs={12} md={5} className={classes.fontblack}>
-                                <Select  name = "sistemas" label="Selecciona los sistemas aplicables"  required={true} data={sistemasData} multiple={true}></Select>
-                            </Grid>
-                            {id != null &&
-                            <Grid item xs={12} md={3}>
-                                <Switches label="estatus" name="estatus" required={true} data={estatus}/>
-                            </Grid>}
-                        </Grid>
-                        <Grid  spacing={3} justify="flex-end" className={classes.gridpadding}
+                            <Grid  spacing={3} justify="flex-end" className={classes.gridpadding}
                                    alignItems="flex-end"
                                    container
                                    item
@@ -151,35 +153,35 @@ function MyForm(props: MyFormProps ) {
 
                                 <Button  onClick={ () => redirectToRoute("/proveedores")}  variant="contained"
                                          className={classes.marginright}
-                                         > Cancelar
+                                > Cancelar
                                 </Button>
 
-                              <Button  variant="contained"
-                                    className={classes.boton}
-                                    type="submit"
-                                    disabled={submitting}> Guardar
-                              </Button>
-                        </Grid>
+                                <Button  variant="contained"
+                                         className={classes.boton}
+                                         type="submit"
+                                         disabled={submitting}> Guardar
+                                </Button>
+                            </Grid>
 
-                    </div>}
-                    <div className="sweet-loading">
-                        {alert.status != undefined && <div><Grid item xs={12}>
-                            <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>
-                                <b>Cargando ...</b>
-                            </Typography>
-                        </Grid>
                         </div>}
-                        <ClipLoader
-                            css={override}
-                            size={150}
-                            color={"#123abc"}
-                            loading={alert.status === undefined ? false : !alert.status }
-                        />
-                    </div>
+                        <div className="sweet-loading">
+                            {alert.status != undefined && <div><Grid item xs={12}>
+                                <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>
+                                    <b>Cargando ...</b>
+                                </Typography>
+                            </Grid>
+                            </div>}
+                            <ClipLoader
+                                css={override}
+                                size={150}
+                                color={"#123abc"}
+                                loading={alert.status === undefined ? false : !alert.status }
+                            />
+                        </div>
 
-                </form>
-            )}
-        />
+                    </form>
+                )}
+            />
         </div>
     );
 }
@@ -201,7 +203,7 @@ function mapStateToProps(state,ownProps){
 
 
 function mapDispatchToProps(dispatch, ownProps){
-        return {};
+    return {};
 }
 
 export const ConnectedCreateProvider = connect(mapStateToProps,mapDispatchToProps)(CreateProvider);

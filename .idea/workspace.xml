@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/store/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/defaultState.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/errorValidator/defaultStateValidator.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/schemas/model.proovedor.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/schemas/model.user.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/server.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
-    </list>
+    <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,7 +37,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -65,12 +51,23 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\FRANCISCO\Documents\GitHub\piloto_sistema_frontend\src\app\components\Bitacora" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="server.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/../piloto_sistema_backend/src/server/server.js" working-dir="$PROJECT_DIR$/../piloto_sistema_backend/src/server">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.server.js" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -96,6 +93,15 @@
       <workItem from="1610047521140" duration="7104000" />
       <workItem from="1610119084165" duration="2153000" />
       <workItem from="1610126563245" duration="5210000" />
+      <workItem from="1610752251814" duration="1323000" />
+      <workItem from="1610754323525" duration="626000" />
+      <workItem from="1610983845803" duration="44763000" />
+      <workItem from="1611157288428" duration="33756000" />
+      <workItem from="1611339494740" duration="16619000" />
+      <workItem from="1611587774541" duration="20628000" />
+      <workItem from="1611672797108" duration="68787000" />
+      <workItem from="1612279384886" duration="29772000" />
+      <workItem from="1612392379680" duration="8492000" />
     </task>
     <task id="LOCAL-00001" summary="gui users update">
       <created>1608605064025</created>

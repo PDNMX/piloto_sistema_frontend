@@ -6,9 +6,11 @@ import { alert } from './alert.reducer';
 import {errors} from "./uploadfile.reducer";
 import { providers } from './providers.reducer';
 import {providerSelect } from './providerTemporal.reducer';
+import {userSelect } from './userTemporal.reducer';
 import {userInSession} from './userInSession.reducer';
 import {catalogs} from './catalog.reducer';
 import {S2} from './S2Schema.reducer'
+import {bitacora} from './bitacoraTemporal.reducer';
 const rootReducer = combineReducers({
     users,
     alert,
@@ -17,9 +19,11 @@ const rootReducer = combineReducers({
     errors,
     providers,
     providerSelect,
-    userInSession,
     catalogs,
-    S2
+    S2,
+    userInSession,
+    userSelect,
+    bitacora
 });
 
 export default rootReducer;

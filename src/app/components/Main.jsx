@@ -18,6 +18,9 @@ import {providerActions} from "../_actions/provider.action";
 import {ConnectedCreateProvider} from "./providers/CreateProvider";
 import {LoginV} from "./Login/Login";
 import {S2Actions} from "../_actions/s2.action";
+import {ConnectedConsultarBitacora} from "./Bitacora/ConsultarBitacora";
+import {bitacoraActions} from "../_actions/bitacora.action";
+import {ListBitacora} from "./Bitacora/ListBitacora";
 
 const theme = createMuiTheme({
     typography: {
@@ -193,6 +196,34 @@ export const Main = ()=> (
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
                                return (<ConnectedMenuV propiedades={{renderView: "providers"}}/>)
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/bitacora"
+                       render={() =>{
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestAllUsers());
+                               storeValidate.dispatch(providerActions.requestAllProviders());
+                               storeValidate.dispatch(bitacoraActions.requestAllBitacora());
+                               storeValidate.dispatch((alertActions.clear()));
+                               return (<ConnectedMenuV propiedades = {{renderView : "consultarbitacora"}} /> )
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/reportebitacora"
+                       render={() => {
+                           if ( localStorage.token) {
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(bitacoraActions.requestAllBitacora());
+                               storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
+                               return (<ConnectedMenuV propiedades={{renderView: "reportebitacora"}}/>)
                            }else{
                                return <Redirect to="/login"/> ;
                            }
