@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
 import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
-import {MenuItem, Grid, Button, TableCell, Switch, IconButton} from "@material-ui/core";
+import {MenuItem, Grid, Button, TableCell, Switch, IconButton, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 import {requestCreationUser, requestEditUser} from "../../store/mutations";
@@ -107,6 +107,9 @@ function MyForm(props: MyFormProps ) {
             main: "#ffe01b",
             light: "#ffff5c",
             dark: "#c8af00"
+        },
+        fontblack:{
+            color: '#666666'
         }
     });
 
@@ -139,6 +142,11 @@ function MyForm(props: MyFormProps ) {
 
 
         <div>
+            <Grid item xs={12}>
+                <Typography variant={"h6"} paragraph className={cla.fontblack} align={"center"}>
+                    <b>Crear usuario</b>
+                </Typography>
+            </Grid>
         <Form
             onSubmit={onSubmit}
             initialValues={initialValues}
@@ -186,24 +194,26 @@ function MyForm(props: MyFormProps ) {
                                 <Select  name = "proveedorDatos" label="Proveedor de datos" required={true} data={providers} ></Select>
                             </Grid>
                         </Grid>
-                        <Grid  spacing={3} justify="flex-end"
-                              alignItems="flex-end"
-                              container
-                               item
-                              xs={12}
-                              md={12}>
+                            <Grid  spacing={3} justify="flex-end"
+                                   alignItems="flex-end"
+                                   container
+                                   item
+                                   xs={12}
+                                   md={12}>
+                                <Tooltip title="Cancelar" placement="left">
+                                    <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.marginright}
+                                             type="submit">
+                                        Cancelar
+                                    </Button>
+                                </Tooltip>
 
-                            <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.marginright}
-                                     type="submit">
-
-                                 Cancelar
-
-                            </Button>
-
-                            <Button  className={cla.boton}  variant="contained"
-                                 type="submit"
-                                 disabled={submitting}> Guardar </Button>
-                        </Grid>
+                                <Tooltip title="Guardar" placement="right">
+                                    <Button  className={cla.boton}  variant="contained"
+                                             type="submit"
+                                             disabled={submitting}> Guardar
+                                    </Button>
+                                </Tooltip>
+                            </Grid>
                         </div>
                        }
 

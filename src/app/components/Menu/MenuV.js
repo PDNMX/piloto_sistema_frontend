@@ -103,18 +103,19 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedProveedor((prev) => !prev);
         setCheckedUser((prev) => false);
         setCheckedDatos((prev) => false);
-        setCheckedBitacora((prev) => !prev);
+        setCheckedBitacora((prev) => false);
         setsubMenuBitacora(false);
     }
 
   const menuBitacora=(e)=>{
-    setsubmenuAdmonDatos(false);
-    setsubMenuBitacora(true);
-    setsubMenuUsuario(false);
-    setcrearProovedor(false);
-    setCheckedBitacora((prev) => !prev);
-    setCheckedUser((prev) => false);
-    setCheckedDatos((prev) => false);
+      setsubmenuAdmonDatos(false);
+      setsubMenuBitacora(true);
+      setsubMenuUsuario(false);
+      setcrearProovedor(false);
+      setCheckedBitacora((prev) => !prev);
+      setCheckedUser((prev) => false);
+      setCheckedDatos((prev) => false);
+      setCheckedProveedor((prev) => false)
   }
 
   const compCrearProovedor=(e)=>{

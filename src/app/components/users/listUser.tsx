@@ -9,6 +9,7 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
+    Tooltip,
     makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -161,6 +162,11 @@ export const ListUser = () => {
         return (
 
            <div >
+               <Grid item xs={12}>
+                   <Typography variant={"h6"} paragraph className={classes.fontblack} align={"center"}>
+                       <b>Lista de usuarios</b>
+                   </Typography>
+               </Grid>
                <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
                    <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
                        {alerta.message}
@@ -263,9 +269,11 @@ export const ListUser = () => {
                                 <TableRow key={user._id}>
 
                                         <TableCell style={{ width: 40 }} align="center">
-                                            <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalUserInfo(user)}>
-                                                <KeyboardArrowDownIcon />
-                                            </IconButton>
+                                            <Tooltip title="Más información" placement="right">
+                                                <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalUserInfo(user)}>
+                                                    <KeyboardArrowDownIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                         </TableCell>
                                     <StyledTableCell style={{ width: 160 }}  align="center">
                                         {user.nombre}
@@ -283,13 +291,15 @@ export const ListUser = () => {
                                         {user.estatus? "Vigente" : "No vigente"}
                                     </StyledTableCell>
                                     <StyledTableCell style={{ width: 160 }} align="center">
-                                            <Button  onClick={ () => redirectToRoute(`/usuario/editar/${user._id}`)}  ><EditOutlinedIcon/></Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick= {()=> {handleClickOpen(user._id, user.nombre,user.apellidoUno,user.apellidoDos)}} >
-                                            <DeleteOutlineOutlinedIcon/>
-                                        </Button>
-                                        <Button></Button>
+                                        <Tooltip title="Editar usuario" placement="right">
+                                            <Button  onClick={ () => redirectToRoute(`/usuario/editar/${user._id}`)} style={{ color: 'gray' }} ><EditOutlinedIcon/></Button>
+                                        </Tooltip>
+                                        <Tooltip title="Eliminar usuario" placement="right">
+                                            <Button
+                                                onClick= {()=> {handleClickOpen(user._id, user.nombre,user.apellidoUno,user.apellidoDos)}} >
+                                                <DeleteOutlineOutlinedIcon style={{ color: 'gray' }}/>
+                                            </Button>
+                                        </Tooltip>
                                     </StyledTableCell>
                                 </TableRow>
                             ))}
@@ -319,12 +329,14 @@ export const ListUser = () => {
                       justify="flex-end"
                       alignItems="flex-end" >
 
-                    <Button  onClick={ () => redirectToRoute(`/usuario/crear`)} className={classes.marginright}
-                        variant="contained"
-                        endIcon={<AddBoxIcon>Agregar usuario</AddBoxIcon>}
-                    >
-                        Agregar usuario
-                    </Button>
+                    <Tooltip title="Agregar usuario" placement="right">
+                        <Button  onClick={ () => redirectToRoute(`/usuario/crear`)} className={classes.marginright}
+                                 variant="contained"
+                                 endIcon={<AddBoxIcon>Agregar usuario</AddBoxIcon>}
+                        >
+                            Agregar usuario
+                        </Button>
+                    </Tooltip>
 
                 </Grid>
             </Grid>

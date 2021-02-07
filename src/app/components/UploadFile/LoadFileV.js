@@ -113,7 +113,7 @@ export const LoadFileV = () => {
 
             <Paper elevation={0} >
                 <Grid  container className={style.root}>
-                    <Grid item xs={12} md={5} >
+                    <Grid item xs={12} md={8} >
                         <FormControl required className={style.field}>
 
                             <Select inputProps={{
@@ -136,7 +136,7 @@ export const LoadFileV = () => {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} md={5} >
+                    <Grid item xs={12} md={4} >
                         <input type="file"
                                className={style.paddingLeft}
                                accept='.json'

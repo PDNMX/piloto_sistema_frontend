@@ -15,6 +15,7 @@ import {
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import {providerActions} from "../../_actions/provider.action";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
@@ -30,6 +31,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import {withStyles} from "@material-ui/core/styles";
 import {userActions} from "../../_actions/user.action";
 import {bitacoraActions} from "../../_actions/bitacora.action";
+import { CSVLink, CSVDownload } from "react-csv";
 
 export const ListBitacora = () => {
 
@@ -101,6 +103,16 @@ export const ListBitacora = () => {
             padding: theme.spacing(2, 4, 3),
         },
     }));
+
+    const headers = [
+        { label: "Tipo de Operación", key: "tipoOperacion" },
+        { label: "Fecha", key: "fechaOperacion" },
+        { label: "Sistema", key: "sistema" },
+        { label: "Número Registros", key: "numeroRegistros" },
+        { label: "Usuario", key: "usuario" }
+    ];
+
+    const data = bitacora;
 
     const classes = useStyles();
     console.log(bitacora);
@@ -186,6 +198,19 @@ export const ListBitacora = () => {
                             Reporte Nuevo
                         </Button>
                     </Tooltip>
+                    <Tooltip title="Descargar CSV" placement="right">
+                        <CSVLink data={data} headers={headers} filename={"Bitacora.csv"}>
+                        <Button
+                                 variant="contained"
+                                 className={classes.marginright}
+                                 endIcon={<FileCopyIcon>Descargar CSV</FileCopyIcon>}
+                        >
+                            Descargar CSV
+                        </Button>
+                        </CSVLink>
+                    </Tooltip>
+
+
             </Grid>
         </div>
     );

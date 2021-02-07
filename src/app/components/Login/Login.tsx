@@ -170,8 +170,8 @@ return (
 
 
           <Grid container spacing={0} className={classes.container1} justify='center'>
-            <Grid item xs={12} md={6} className={classes.item2}>
-              <Typography variant="h4" paragraph className={classes.purpleText} style={{fontWeight: 600}}>
+            <Grid item xs={12} md={6} className={classes.item2} container direction="row" justify="center" alignItems="center">
+              <Typography variant="h4" paragraph className={classes.fontblack} style={{fontWeight: 600}}>
                 Sistema de carga de datos S2 Y S3
               </Typography>
             </Grid>
@@ -200,10 +200,12 @@ return (
                     <Grid item xs={12} md={12}>
                       <TextField label="Contraseña" name="password"  type="password" required={true} />
                     </Grid>
-                    <Button  className= {classes.primary}  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
-                             color="primary"
-                             type="submit"
-                             disabled={submitting}> Entrar </Button>
+                    <Grid item xs={12} md={12} container direction="row" justify="center" alignItems="center">
+                      <Button className= {classes.primary}  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
+                              color="primary"
+                              type="submit"
+                              disabled={submitting}> Entrar </Button>
+                    </Grid>
                   </Grid>
                 </form>
             )}
