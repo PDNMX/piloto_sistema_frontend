@@ -255,7 +255,6 @@ export const ListUser = () => {
                     {users.length > 0  && <Table aria-label="custom pagination table">
                         <TableHead >
                             <TableRow>
-                                <StyledTableCell></StyledTableCell>
                                 <StyledTableCell align="center" >Nombre</StyledTableCell>
                                 <StyledTableCell align="center">Primer apellido</StyledTableCell>
                                 <StyledTableCell align="center">Segundo apellido</StyledTableCell>
@@ -267,14 +266,6 @@ export const ListUser = () => {
                         <TableBody key="usuarios">
                             {users.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((user)  => (
                                 <TableRow key={user._id}>
-
-                                        <TableCell style={{ width: 40 }} align="center">
-                                            <Tooltip title="Más información" placement="right">
-                                                <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalUserInfo(user)}>
-                                                    <KeyboardArrowDownIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </TableCell>
                                     <StyledTableCell style={{ width: 160 }}  align="center">
                                         {user.nombre}
                                     </StyledTableCell>
@@ -290,10 +281,19 @@ export const ListUser = () => {
                                     <StyledTableCell  style={{ width: 160 }} align="center">
                                         {user.estatus? "Vigente" : "No vigente"}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        <Tooltip title="Editar usuario" placement="right">
-                                            <Button  onClick={ () => redirectToRoute(`/usuario/editar/${user._id}`)} style={{ color: 'gray' }} ><EditOutlinedIcon/></Button>
-                                        </Tooltip>
+                                    <StyledTableCell style={{ width: 230 }} align="center">
+                                        <Button onClick={() => handleOpenModalUserInfo(user)}>
+                                            <Tooltip title="Más información" placement="left">
+                                                <IconButton aria-label="expand row" size="small" >
+                                                    <KeyboardArrowDownIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Button>
+                                        <Button onClick={ () => redirectToRoute(`/usuario/editar/${user._id}`)}>
+                                            <Tooltip title="Editar usuario" placement="top">
+                                                <Button   style={{ color: 'gray' }} ><EditOutlinedIcon/></Button>
+                                            </Tooltip>
+                                        </Button>
                                         <Tooltip title="Eliminar usuario" placement="right">
                                             <Button
                                                 onClick= {()=> {handleClickOpen(user._id, user.nombre,user.apellidoUno,user.apellidoDos)}} >

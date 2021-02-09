@@ -46,7 +46,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
-    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.3.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="ts.external.directory.path" value="C:\Users\FRANCISCO\Documents\GitHub\piloto_sistema_frontend\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -104,6 +104,9 @@
       <workItem from="1612392379680" duration="8492000" />
       <workItem from="1612670622550" duration="1604000" />
       <workItem from="1612673202593" duration="5926000" />
+      <workItem from="1612754300302" duration="39000" />
+      <workItem from="1612754344035" duration="962000" />
+      <workItem from="1612801070083" duration="17040000" />
     </task>
     <task id="LOCAL-00001" summary="gui users update">
       <created>1608605064025</created>

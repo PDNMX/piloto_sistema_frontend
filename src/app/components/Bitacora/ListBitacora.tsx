@@ -51,8 +51,12 @@ export const ListBitacora = () => {
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
-        //dispatch(userActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
+        let newSize= parseInt(event.target.value, 10);
+        if(pagination.page * newSize > bitacora.length){
+            setPagination({page : 0 , pageSize : parseInt(event.target.value, 10) });
+        }else{
+            setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
+        }
     };
 
 
@@ -167,7 +171,7 @@ export const ListBitacora = () => {
                                 { pagination.pageSize != undefined  && pagination.page != undefined  && <TablePagination
                                     rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
                                     colSpan={6}
-                                    count={providers.length}
+                                    count={bitacora.length}
                                     rowsPerPage={pagination.pageSize}
                                     page={pagination.page}
                                     SelectProps={{
@@ -189,7 +193,7 @@ export const ListBitacora = () => {
                        item
                        xs={12}
                        md={12}>
-                    <Tooltip title="Reporte Nuevo" placement="right">
+                    <Tooltip title="Reporte Nuevo" placement="left">
                         <Button  onClick={ () => redirectToRoute("/bitacora")}
                                  variant="contained"
                                  className={classes.marginright}
@@ -209,8 +213,6 @@ export const ListBitacora = () => {
                         </Button>
                         </CSVLink>
                     </Tooltip>
-
-
             </Grid>
         </div>
     );
