@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
 import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
-import {MenuItem, Grid, Button, TableCell, Switch, IconButton} from "@material-ui/core";
+import {MenuItem, Grid, Button, TableCell, Switch, IconButton, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 import {requestConsultBitacora} from "../../store/mutations";
@@ -55,16 +55,8 @@ function MyForm(props: MyFormProps ) {
     // yes, this can even be async!
     async function onSubmit(values: FormBitacora) {
         alert.status =false;
-        if(id != undefined){
-            console.log("Actualizar");
-            console.log(values);
-            //dispatch(requestEditUser({...values, _id : id}));
-        }else{
-            console.log("Crear");
-            console.log(values);
-            dispatch(requestConsultBitacora(values));
-            history.push('/reportebitacora');
-        }
+        dispatch(requestConsultBitacora(values));
+        history.push('/reportebitacora');
     }
 
     const schema = Yup.object().shape({
@@ -118,9 +110,6 @@ function MyForm(props: MyFormProps ) {
     ];
 
 
-    const estatus = [
-        {label: 'Vigente', value: true},
-    ];
     const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
         variant:"contained",
         color:"primary",
@@ -178,10 +167,12 @@ function MyForm(props: MyFormProps ) {
                                    item
                                    xs={12}
                                    md={12}>
+                                <Tooltip title="Generar" placement="right">
                                 <Button  className={cla.boton}  variant="contained"
                                          type="submit"
                                          disabled={submitting}> Generar
                                 </Button>
+                                </Tooltip>
                             </Grid>
                         </div>
                         }

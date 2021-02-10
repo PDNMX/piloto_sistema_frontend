@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
 import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
-import {MenuItem, Grid, Button,Paper, FormControlLabel} from "@material-ui/core";
+import {MenuItem, Grid, Button,Paper, FormControlLabel,Tooltip} from "@material-ui/core";
 import { FormControl } from '@material-ui/core';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
@@ -150,17 +150,19 @@ function MyForm(props: MyFormProps ) {
                                    item
                                    xs={12}
                                    md={12}>
-
+                                <Tooltip title="Cancelar" placement="left">
                                 <Button  onClick={ () => redirectToRoute("/proveedores")}  variant="contained"
                                          className={classes.marginright}
                                 > Cancelar
                                 </Button>
-
+                                </Tooltip>
+                                <Tooltip title="Guardar" placement="right">
                                 <Button  variant="contained"
                                          className={classes.boton}
                                          type="submit"
                                          disabled={submitting}> Guardar
                                 </Button>
+                                </Tooltip>
                             </Grid>
 
                         </div>}

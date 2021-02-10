@@ -178,14 +178,12 @@ export const ListProvider = () => {
                         </TableHead>
                         <TableBody key="InfoPlusProvider">
                             <TableRow key={selectedProvider._id + "InfoPlusProvider"}>
-
                                 <StyledTableCell style={{width: 160}} align="center">
                                     {selectedProvider.fechaAlta}
                                 </StyledTableCell>
                                 <StyledTableCell style={{width: 160}} align="center">
                                     {selectedProvider.fechaActualizacion}
                                 </StyledTableCell>
-
                             </TableRow>
                         </TableBody>
                     </TableContainer>
@@ -218,7 +216,6 @@ export const ListProvider = () => {
                     {providers.length > 0  && <Table aria-label="custom pagination table">
                         <TableHead >
                             <TableRow >
-                                <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Más Info.</TableCell>
                                 <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Proveedor</TableCell>
                                 <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</TableCell>
                                 <TableCell className={classes.fontblack} align="center">Sistema</TableCell>
@@ -228,13 +225,6 @@ export const ListProvider = () => {
                         <TableBody key="providers">
                             {providers.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((provider)  => (
                                 <TableRow key={provider._id}>
-                                    <TableCell style={{ width: 40 }} align="center">
-                                        <Tooltip title="Más información" placement="right">
-                                            <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalProviderInfo(provider)}>
-                                                <KeyboardArrowDownIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </TableCell>
                                     <TableCell className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="left">
                                         {provider.dependencia}
                                     </TableCell>
@@ -251,14 +241,22 @@ export const ListProvider = () => {
 
                                         )}
                                     </TableCell>
-                                    <TableCell style={{ width: 160 }} align="center">
-                                        <Tooltip title="Editar proveedor" placement="right">
-                                            <Button  onClick={ () => redirectToRoute(`/proveedor/editar/${provider._id}`)}  style={{ color: 'gray' }} ><EditOutlinedIcon/>
+                                    <TableCell style={{ width: 230 }} align="center">
+                                        <Tooltip title="Más información" placement="left">
+                                            <Button onClick={() => handleOpenModalProviderInfo(provider)}>
+                                            <IconButton aria-label="expand row" size="small" >
+                                                <KeyboardArrowDownIcon />
+                                            </IconButton>
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip title="Editar proveedor" placement="top">
+                                            <Button  onClick={ () => redirectToRoute(`/proveedor/editar/${provider._id}`)}  style={{ color: 'gray' }} >
+                                                <EditOutlinedIcon/>
                                             </Button>
                                         </Tooltip>
                                         <Tooltip title="Eliminar proveedor" placement="right">
-                                            <Button>
-                                                <DeleteOutlineOutlinedIcon style={{ color: 'gray' }} onClick= {()=> {handleClickOpen(provider._id, provider.dependencia)}} />
+                                            <Button onClick= {()=> {handleClickOpen(provider._id, provider.dependencia)}}>
+                                                <DeleteOutlineOutlinedIcon style={{ color: 'gray' }}  />
                                             </Button>
                                         </Tooltip>
                                     </TableCell>

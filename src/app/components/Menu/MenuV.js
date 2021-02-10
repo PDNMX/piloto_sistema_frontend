@@ -61,6 +61,7 @@ import {userActions} from "../../_actions/user.action";
 import {ListS2Schema} from "../CargaDatos/listSchemaS2";
 import {ConnectedConsultarBitacora} from "../Bitacora/ConsultarBitacora";
 import {ListBitacora} from "../Bitacora/ListBitacora";
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
@@ -72,6 +73,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
   const [submenuUsuario,setsubMenuUsuario]=useState(false);
   const [submenuBitacora,setsubMenuBitacora]=useState(false);
   const [crearProovedor,setcrearProovedor]=useState(false);
+  const [submenuAdmonDatosS2,setsubmenuAdmonDatosS2]=useState(false);
 
   const menuDatos=(e)=>{
     setsubmenuAdmonDatos(true);
@@ -93,6 +95,8 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
     setCheckedUser((prev) => !prev);
     setCheckedBitacora((prev) => false);
     setCheckedDatos((prev) => false);
+    setcheckedDatos2((prev) => false);
+    setcheckedAdminDatos2((prev) => false);
 
   }
 
@@ -103,19 +107,50 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedProveedor((prev) => !prev);
         setCheckedUser((prev) => false);
         setCheckedDatos((prev) => false);
-        setCheckedBitacora((prev) => !prev);
+        setCheckedBitacora((prev) => false);
         setsubMenuBitacora(false);
+        setcheckedDatos2((prev) => false);
+        setcheckedAdminDatos2((prev) => false);
     }
 
   const menuBitacora=(e)=>{
-    setsubmenuAdmonDatos(false);
-    setsubMenuBitacora(true);
-    setsubMenuUsuario(false);
-    setcrearProovedor(false);
-    setCheckedBitacora((prev) => !prev);
-    setCheckedUser((prev) => false);
-    setCheckedDatos((prev) => false);
+      setsubmenuAdmonDatos(false);
+      setsubMenuBitacora(true);
+      setsubMenuUsuario(false);
+      setcrearProovedor(false);
+      setCheckedBitacora((prev) => !prev);
+      setCheckedUser((prev) => false);
+      setCheckedDatos((prev) => false);
+      setCheckedProveedor((prev) => false);
+      setcheckedDatos2((prev) => false);
+      setcheckedAdminDatos2((prev) => false);
   }
+
+    const menuDatos2=(e)=>{
+        setsubmenuAdmonDatos(true);
+        setsubMenuBitacora(false);
+        setsubMenuUsuario(false);
+        setcrearProovedor(false);
+        setCheckedBitacora((prev) => false);
+        setCheckedUser((prev) => false);
+        setCheckedDatos(true);
+        setCheckedProveedor((prev) => false);
+        setcheckedDatos2((prev) => !prev);
+        setcheckedAdminDatos2((prev) => false);
+    }
+
+    const menuAdminDatos2=(e)=>{
+        setsubmenuAdmonDatos(true);
+        setsubMenuBitacora(false);
+        setsubMenuUsuario(false);
+        setcrearProovedor(false);
+        setCheckedBitacora((prev) => false);
+        setCheckedUser((prev) => false);
+        setCheckedDatos(true);
+        setCheckedProveedor((prev) => false);
+        setcheckedDatos2((prev) => false);
+        setcheckedAdminDatos2((prev) => !prev);
+    }
 
   const compCrearProovedor=(e)=>{
     setcrearProovedor(true);
@@ -251,7 +286,11 @@ const useStyles = makeStyles((theme) => ({
       submenuicono:{
         paddingLeft:'15px',
         backgroundColor:'#eee'
-      }
+      },
+      submenuicono2:{
+        paddingLeft:'30px',
+        backgroundColor:'#eee'
+    }
 
     }));
 
@@ -261,6 +300,8 @@ const useStyles = makeStyles((theme) => ({
     const [checkedUser, setCheckedUser] = useState(false);
     const [checkedDatos, setCheckedDatos] = useState(false);
     const [checkedProveedor, setCheckedProveedor] = useState(false);
+    const [checkedDatos2, setcheckedDatos2] = useState(false);
+    const [checkedAdminDatos2, setcheckedAdminDatos2] = useState(false);
 
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -333,13 +374,25 @@ const useStyles = makeStyles((theme) => ({
               <Collapse in={checkedDatos}>
                 <div>
                   <Tooltip title="Administrador datos" placement="right">
-                    <ListItem button className={classes.submenuicono} >
+                    <ListItem button className={classes.submenuicono} onClick={e=>menuAdminDatos2(e)}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText primary="Administrador datos" />
                     </ListItem>
                   </Tooltip>
+                    <Collapse in={checkedAdminDatos2}>
+                        <div>
+                            <Tooltip title="S2" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/cargaformulario")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S2" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
                   <Tooltip title="Carga datos" placement="right">
                     <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
                       <ListItemIcon>
@@ -349,13 +402,25 @@ const useStyles = makeStyles((theme) => ({
                     </ListItem>
                   </Tooltip>
                   <Tooltip title="Captura datos" placement="right">
-                    <ListItem button className={classes.submenuicono} >
+                    <ListItem button className={classes.submenuicono} onClick={e=>menuDatos2(e)}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText primary="Captura datos" />
                     </ListItem>
                   </Tooltip>
+                        <Collapse in={checkedDatos2}>
+                            <div>
+                                <Tooltip title="S2" placement="right">
+                                    <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/esquemaS2")}>
+                                        <ListItemIcon>
+                                            <ArrowRightIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="S2" />
+                                    </ListItem>
+                                </Tooltip>
+                            </div>
+                        </Collapse>
                 </div>
               </Collapse>
           : ""

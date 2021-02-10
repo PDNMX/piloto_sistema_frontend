@@ -9,6 +9,7 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
+    Tooltip,
     makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -161,6 +162,11 @@ export const ListUser = () => {
         return (
 
            <div >
+               <Grid item xs={12}>
+                   <Typography variant={"h6"} paragraph className={classes.fontblack} align={"center"}>
+                       <b>Lista de usuarios</b>
+                   </Typography>
+               </Grid>
                <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
                    <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
                        {alerta.message}
@@ -249,7 +255,6 @@ export const ListUser = () => {
                     {users.length > 0  && <Table aria-label="custom pagination table">
                         <TableHead >
                             <TableRow>
-                                <StyledTableCell></StyledTableCell>
                                 <StyledTableCell align="center" >Nombre</StyledTableCell>
                                 <StyledTableCell align="center">Primer apellido</StyledTableCell>
                                 <StyledTableCell align="center">Segundo apellido</StyledTableCell>
@@ -261,12 +266,6 @@ export const ListUser = () => {
                         <TableBody key="usuarios">
                             {users.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((user)  => (
                                 <TableRow key={user._id}>
-
-                                        <TableCell style={{ width: 40 }} align="center">
-                                            <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalUserInfo(user)}>
-                                                <KeyboardArrowDownIcon />
-                                            </IconButton>
-                                        </TableCell>
                                     <StyledTableCell style={{ width: 160 }}  align="center">
                                         {user.nombre}
                                     </StyledTableCell>
@@ -282,14 +281,25 @@ export const ListUser = () => {
                                     <StyledTableCell  style={{ width: 160 }} align="center">
                                         {user.estatus? "Vigente" : "No vigente"}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                            <Button  onClick={ () => redirectToRoute(`/usuario/editar/${user._id}`)}  ><EditOutlinedIcon/></Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick= {()=> {handleClickOpen(user._id, user.nombre,user.apellidoUno,user.apellidoDos)}} >
-                                            <DeleteOutlineOutlinedIcon/>
+                                    <StyledTableCell style={{ width: 230 }} align="center">
+                                        <Button onClick={() => handleOpenModalUserInfo(user)}>
+                                            <Tooltip title="Más información" placement="left">
+                                                <IconButton aria-label="expand row" size="small" >
+                                                    <KeyboardArrowDownIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                         </Button>
-                                        <Button></Button>
+                                        <Button onClick={ () => redirectToRoute(`/usuario/editar/${user._id}`)}>
+                                            <Tooltip title="Editar usuario" placement="top">
+                                                <Button   style={{ color: 'gray' }} ><EditOutlinedIcon/></Button>
+                                            </Tooltip>
+                                        </Button>
+                                        <Tooltip title="Eliminar usuario" placement="right">
+                                            <Button
+                                                onClick= {()=> {handleClickOpen(user._id, user.nombre,user.apellidoUno,user.apellidoDos)}} >
+                                                <DeleteOutlineOutlinedIcon style={{ color: 'gray' }}/>
+                                            </Button>
+                                        </Tooltip>
                                     </StyledTableCell>
                                 </TableRow>
                             ))}
@@ -319,12 +329,14 @@ export const ListUser = () => {
                       justify="flex-end"
                       alignItems="flex-end" >
 
-                    <Button  onClick={ () => redirectToRoute(`/usuario/crear`)} className={classes.marginright}
-                        variant="contained"
-                        endIcon={<AddBoxIcon>Agregar usuario</AddBoxIcon>}
-                    >
-                        Agregar usuario
-                    </Button>
+                    <Tooltip title="Agregar usuario" placement="right">
+                        <Button  onClick={ () => redirectToRoute(`/usuario/crear`)} className={classes.marginright}
+                                 variant="contained"
+                                 endIcon={<AddBoxIcon>Agregar usuario</AddBoxIcon>}
+                        >
+                            Agregar usuario
+                        </Button>
+                    </Tooltip>
 
                 </Grid>
             </Grid>

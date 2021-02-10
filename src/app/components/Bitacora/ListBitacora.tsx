@@ -15,6 +15,7 @@ import {
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import {providerActions} from "../../_actions/provider.action";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
@@ -30,6 +31,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import {withStyles} from "@material-ui/core/styles";
 import {userActions} from "../../_actions/user.action";
 import {bitacoraActions} from "../../_actions/bitacora.action";
+import { CSVLink, CSVDownload } from "react-csv";
 
 export const ListBitacora = () => {
 
@@ -49,8 +51,12 @@ export const ListBitacora = () => {
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
-        //dispatch(userActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
+        let newSize= parseInt(event.target.value, 10);
+        if(pagination.page * newSize > bitacora.length){
+            setPagination({page : 0 , pageSize : parseInt(event.target.value, 10) });
+        }else{
+            setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
+        }
     };
 
 
@@ -101,6 +107,16 @@ export const ListBitacora = () => {
             padding: theme.spacing(2, 4, 3),
         },
     }));
+
+    const headers = [
+        { label: "Tipo de Operación", key: "tipoOperacion" },
+        { label: "Fecha", key: "fechaOperacion" },
+        { label: "Sistema", key: "sistema" },
+        { label: "Número Registros", key: "numeroRegistros" },
+        { label: "Usuario", key: "usuario" }
+    ];
+
+    const data = bitacora;
 
     const classes = useStyles();
     console.log(bitacora);
@@ -155,7 +171,7 @@ export const ListBitacora = () => {
                                 { pagination.pageSize != undefined  && pagination.page != undefined  && <TablePagination
                                     rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
                                     colSpan={6}
-                                    count={providers.length}
+                                    count={bitacora.length}
                                     rowsPerPage={pagination.pageSize}
                                     page={pagination.page}
                                     SelectProps={{
@@ -177,7 +193,7 @@ export const ListBitacora = () => {
                        item
                        xs={12}
                        md={12}>
-                    <Tooltip title="Reporte Nuevo" placement="right">
+                    <Tooltip title="Reporte Nuevo" placement="left">
                         <Button  onClick={ () => redirectToRoute("/bitacora")}
                                  variant="contained"
                                  className={classes.marginright}
@@ -185,6 +201,17 @@ export const ListBitacora = () => {
                         >
                             Reporte Nuevo
                         </Button>
+                    </Tooltip>
+                    <Tooltip title="Descargar CSV" placement="right">
+                        <CSVLink data={data} headers={headers} filename={"Bitacora.csv"}>
+                        <Button
+                                 variant="contained"
+                                 className={classes.marginright}
+                                 endIcon={<FileCopyIcon>Descargar CSV</FileCopyIcon>}
+                        >
+                            Descargar CSV
+                        </Button>
+                        </CSVLink>
                     </Tooltip>
             </Grid>
         </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
 import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
-import {MenuItem, Grid, Button, TableCell, Switch, IconButton} from "@material-ui/core";
+import {MenuItem, Grid, Button, TableCell, Switch, IconButton, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 import {requestCreationUser, requestEditUser} from "../../store/mutations";
@@ -68,15 +68,15 @@ function MyForm(props: MyFormProps ) {
     }
 
     const schema = Yup.object().shape({
-        nombre: Yup.string().matches(new RegExp("^['A-zÀ-ú ]*$"),'no se permiten números, ni cadenas vacias' ).required().trim(),
-        apellidoUno: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacias' ).required().trim(),
-        apellidoDos: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacias' ).required().trim(),
-        cargo: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacias' ).required().trim(),
+        nombre: Yup.string().matches(new RegExp("^['A-zÀ-ú ]*$"),'no se permiten números, ni cadenas vacías' ).required().trim(),
+        apellidoUno: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required().trim(),
+        apellidoDos: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required().trim(),
+        cargo: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required().trim(),
         correoElectronico: Yup.string().required().email(),
-        telefono:  Yup.string().matches(new RegExp('^[0-9]{10}$'), 'Inserta un número de teléfono valido, 10 caracteres').required().trim(),
-        extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , maximo 10 caracteres').required().trim(),
+        telefono:  Yup.string().matches(new RegExp('^[0-9]{10}$'), 'Inserta un número de teléfono válido, 10 caracteres').required().trim(),
+        extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , máximo 10 caracteres').required().trim(),
         usuario: Yup.string().matches(new RegExp('^[a-zA-Z0-9]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required().trim(),
-        constrasena: Yup.string().matches(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*()_+,.\\\\\\/;\':"-]).{8,}$'),'Inserta al menos 8 caracteres, al menos un número, almenos un caracter especial ' ).required().trim(),
+        constrasena: Yup.string().matches(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*()_+,.\\\\\\/;\':"-]).{8,}$'),'Inserta al menos 8 caracteres, al menos un número, al menos un caracter especial ' ).required().trim(),
         sistemas: Yup.array().min(1).required(),
         proveedorDatos: Yup.string().required()
     });
@@ -107,6 +107,9 @@ function MyForm(props: MyFormProps ) {
             main: "#ffe01b",
             light: "#ffff5c",
             dark: "#c8af00"
+        },
+        fontblack:{
+            color: '#666666'
         }
     });
 
@@ -139,6 +142,11 @@ function MyForm(props: MyFormProps ) {
 
 
         <div>
+            <Grid item xs={12}>
+                <Typography variant={"h6"} paragraph className={cla.fontblack} align={"center"}>
+                    <b>Crear usuario</b>
+                </Typography>
+            </Grid>
         <Form
             onSubmit={onSubmit}
             initialValues={initialValues}
@@ -186,24 +194,26 @@ function MyForm(props: MyFormProps ) {
                                 <Select  name = "proveedorDatos" label="Proveedor de datos" required={true} data={providers} ></Select>
                             </Grid>
                         </Grid>
-                        <Grid  spacing={3} justify="flex-end"
-                              alignItems="flex-end"
-                              container
-                               item
-                              xs={12}
-                              md={12}>
+                            <Grid  spacing={3} justify="flex-end"
+                                   alignItems="flex-end"
+                                   container
+                                   item
+                                   xs={12}
+                                   md={12}>
+                                <Tooltip title="Cancelar" placement="left">
+                                    <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.marginright}
+                                             type="submit">
+                                        Cancelar
+                                    </Button>
+                                </Tooltip>
 
-                            <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.marginright}
-                                     type="submit">
-
-                                 Cancelar
-
-                            </Button>
-
-                            <Button  className={cla.boton}  variant="contained"
-                                 type="submit"
-                                 disabled={submitting}> Guardar </Button>
-                        </Grid>
+                                <Tooltip title="Guardar" placement="right">
+                                    <Button  className={cla.boton}  variant="contained"
+                                             type="submit"
+                                             disabled={submitting}> Guardar
+                                    </Button>
+                                </Tooltip>
+                            </Grid>
                         </div>
                        }
 
