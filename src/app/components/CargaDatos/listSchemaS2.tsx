@@ -444,6 +444,7 @@ export const ListS2Schema = () => {
                         </Typography>
                         <Divider orientation="horizontal"  className={classes.divider} />
                     </Grid>
+                    {selectedRegistro.institucionDependencia &&
                     <Grid container>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
@@ -470,6 +471,7 @@ export const ListS2Schema = () => {
                             </Typography>
                         </Grid>
                     </Grid>
+                    }
 
                     <Grid container justify={"center"} item md={12}>
                         <Typography  className={classes.titleModal} variant="h6"  align="center">
@@ -507,42 +509,55 @@ export const ListS2Schema = () => {
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                 Nombres
                             </Typography>
+                            {selectedRegistro.superiorInmediato?.nombres &&
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.superiorInmediato?.nombres}
-                            </Typography>
+                            </Typography>}
+
                         </Grid>
+
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                 Primer Apellido
                             </Typography>
+                            {selectedRegistro.superiorInmediato?.primerApellido &&
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.superiorInmediato?.primerApellido}
                             </Typography>
+                            }
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                 Segundo apellido
                             </Typography>
+                            {selectedRegistro.superiorInmediato?.segundoApellido &&
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.superiorInmediato?.segundoApellido}
                             </Typography>
+                            }
                         </Grid>
+
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                 Puesto nombre
                             </Typography>
+                            {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nombre &&
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.superiorInmediato?.puesto.nombre}
                             </Typography>
+                            }
                         </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Puesto nivel
+                            Puesto nivel
                             </Typography>
+                        {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nivel &&
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato?.puesto.nivel}
+                        {selectedRegistro.superiorInmediato?.puesto.nivel}
                             </Typography>
+                        }
                         </Grid>
+
                     </Grid>
                 </Grid>
             </Modal>
@@ -654,12 +669,17 @@ export const ListS2Schema = () => {
                                     <StyledTableCell style={{ width: 160 }} align="center">
                                         {schema.segundoApellido}
                                     </StyledTableCell>
+                                    {schema.institucionDependencia &&
                                     <StyledTableCell style={{ width: 160 }} align="center">
                                         {schema.institucionDependencia.nombre}
                                     </StyledTableCell>
+                                    }
+                                    {schema.puesto &&
                                     <StyledTableCell style={{ width: 160 }} align="center">
                                         {schema.puesto.nombre}
                                     </StyledTableCell>
+                                    }
+
                                     <StyledTableCell style={{ width: 160 }} align="center">
                                         <Button  onClick={ () => redirectToRoute(`/esquemaS2/editar/${schema._id}`)}  ><EditOutlinedIcon/></Button>
                                         <Button

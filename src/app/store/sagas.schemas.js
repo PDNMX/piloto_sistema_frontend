@@ -482,7 +482,7 @@ export function* creationS2Schema(){
         const {values} = yield take (S2Constants.REQUEST_CREATION_S2);
         let docSend = {};
         const token = localStorage.token;
-        let state = storeValidate.getState();
+
         docSend["id"]= "FAKEID";
         docSend["fechaCaptura"]= moment().format();
         docSend["ejercicioFiscal"]= values.ejercicioFiscal;
@@ -521,8 +521,8 @@ export function* creationS2Schema(){
             } , validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("documento creado con exito "));
-            history.push('/usuarios');
+            yield put(alertActions.success("Registro creado con exito "));
+            history.push('/esquemaS2');
             yield put(alertActions.clear());
         }else{
             yield put(alertActions.error("Error al crear"));
@@ -532,13 +532,38 @@ export function* creationS2Schema(){
     }
 }
 
+
+export function* updateS2Schema(){
+    while (true) {
+        const {values} = yield take (S2Constants.UPDATE_REG_S2);
+        const token = localStorage.token;
+        let S2Item = storeValidate.getState().S2.find(reg=>reg._id === values._id);
+
+              const {status} = yield axios.post(ur + `/updateS2Schema`,{...values, fechaCaptura: S2Item.fechaCaptura}, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } , validateStatus: () => true});
+        if(status === 200){
+            //all OK
+            yield put(alertActions.success("Registro actualizado con exito "));
+            history.push('/esquemaS2');
+            yield put(alertActions.clear());
+        }else{
+            yield put(alertActions.error("Error al crear"));
+            //error in response
+        }
+
+    }
+}
+
+
 function getArrayFormatTipoProcedimiento(array){
     _.each(array, function(p){
         p.clave = parseInt(p.clave);
     });
     return array;
 }
-
 
 export function* getListSchemaS2(){
     while(true){
@@ -588,8 +613,10 @@ export function* fillUpdateRegS2(){
                 if(row.nombres){ newRow["sinombres"] = row.nombres ;}
                 if(row.primerApellido){ newRow["siPrimerApellido"] = row.primerApellido;}
                 if(row.segundoApellido){ newRow["siSegundoApellido"] = row.segundoApellido;}
-                if(row.puesto.nombre){ newRow["siPuestoNombre"] = row.puesto.nombre;}
-                if(row.puesto.nivel){ newRow["siPuestoNivel"] = row.puesto.nivel;}
+                if(row.puesto){
+                    if(row.puesto.nombre){ newRow["siPuestoNombre"] = row.puesto.nombre;}
+                    if(row.puesto.nivel){ newRow["siPuestoNivel"] = row.puesto.nivel;}
+                }
             } else if (key === "puesto" ) {
                 if(row.nombre){ newRow["puestoNombre"] = row.nombre ; }
                 if(row.nivel){newRow["puestoNivel"] = row.nivel ;}
@@ -601,7 +628,6 @@ export function* fillUpdateRegS2(){
                 newRow[key] = row ;
             }
         }
-
         yield put (S2Actions.setListS2([newRow]));
     }
 }

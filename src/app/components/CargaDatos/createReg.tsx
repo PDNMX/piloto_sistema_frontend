@@ -11,10 +11,11 @@ import { connect } from 'react-redux';
 import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../../store/history";
 import { useDispatch } from "react-redux";
+import {requestCreationUser, requestEditUser} from "../../store/mutations";
 
 
-const CreateReg = ({alert, catalogos, registry}) => {
-    return <MyForm initialValues={registry} catalogos={catalogos}  alerta={alert}/>;
+const CreateReg = ({id ,alert, catalogos, registry}) => {
+    return <MyForm initialValues={registry} catalogos={catalogos}  alerta={alert} id={id}/>;
 }
 
 interface FormDataEsquemaS2 {
@@ -44,6 +45,7 @@ interface MyFormProps {
     initialValues: FormDataEsquemaS2;
     alerta: { status: boolean };
     catalogos:{genero: [], ramo: [], puesto: [], tipoArea: [], nivelResponsabilidad:[], tipoProcedimiento:[] };
+    id: string;
 }
 
 const override = css`
@@ -53,7 +55,7 @@ const override = css`
 `;
 
 function MyForm(props: MyFormProps ) {
-    let { initialValues ,  alerta, catalogos } = props;
+    let { initialValues ,  alerta, catalogos, id } = props;
     const alert = alerta;
     const dispatch = useDispatch();
 
@@ -134,7 +136,12 @@ function MyForm(props: MyFormProps ) {
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS2) {
         console.error("entre al submit ");
-        dispatch(S2Actions.requestCreationS2(values));
+        if(id != undefined){
+            dispatch(S2Actions.requestEditDo({...values, _id : id}));
+        }else{
+            dispatch(S2Actions.requestCreationS2(values));
+        }
+
     }
 
     return (
@@ -234,7 +241,6 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Puesto nivel" name="siPuestoNivel"  />
                                 </Grid>
-                            <pre>{JSON.stringify(values)}</pre>
 
                             </Grid>
                             <Grid  spacing={3} justify="flex-end"
@@ -244,7 +250,7 @@ function MyForm(props: MyFormProps ) {
                                    xs={12}
                                    md={12}>
 
-                                <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.marginright}
+                                <Button  onClick={ () => redirectToRoute("/esquemaS2")} variant="contained"  className={cla.marginright}
                                          type="submit">
                                     Cancelar
                                 </Button>

@@ -7,9 +7,14 @@ export const S2Actions = {
     setListS2,
     deleteRecordRequest,
     deleteRecordDo,
-    fillRegEdit
+    fillRegEdit,
+    requestEditDo
 
 };
+
+function requestEditDo(values){
+    return { type: S2Constants.UPDATE_REG_S2, values };
+}
 
 function fillRegEdit(id){
     return {type: S2Constants.FILL_REG_S2_EDIT, id }
