@@ -384,7 +384,7 @@ const useStyles = makeStyles((theme) => ({
                     <Collapse in={checkedAdminDatos2}>
                         <div>
                             <Tooltip title="S2" placement="right">
-                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/esquemaS2")}>
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")}>
                                     <ListItemIcon>
                                         <ArrowRightIcon fontSize="small" />
                                     </ListItemIcon>
@@ -412,7 +412,7 @@ const useStyles = makeStyles((theme) => ({
                         <Collapse in={checkedDatos2}>
                             <div>
                                 <Tooltip title="S2" placement="right">
-                                    <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/cargaformulario")}>
+                                    <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S2")}>
                                         <ListItemIcon>
                                             <ArrowRightIcon fontSize="small" />
                                         </ListItemIcon>

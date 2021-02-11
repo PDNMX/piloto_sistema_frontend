@@ -9,7 +9,7 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar, Divider
+    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar, Divider, Tooltip
 } from "@material-ui/core";
 import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
@@ -78,6 +78,7 @@ export const ListS2Schema = () => {
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
     const [nombreUsuario, setNombreUsuario] =  React.useState("");
+    const [query, setQuery] =  React.useState({});
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS2>({});
     const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
@@ -106,15 +107,15 @@ export const ListS2Schema = () => {
     };
 
     const handleChangePage = (event, newPage) => {
-        dispatch(S2Actions.requestListS2({page : newPage +1  ,pageSize: paginationSuper.pageSize}));
+        dispatch(S2Actions.requestListS2({query: query, page : newPage +1  ,pageSize: paginationSuper.pageSize}));
     };
 
     const handleChangeRowsPerPage = (event) => {
         let newSize= parseInt(event.target.value, 10);
         if(paginationSuper.page * newSize > paginationSuper.totalRows){
-            dispatch(S2Actions.requestListS2({page: 1 , pageSize: parseInt(event.target.value, 10) }));
+            dispatch(S2Actions.requestListS2({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
         }else{
-            dispatch(S2Actions.requestListS2({page:  paginationSuper.page , pageSize: parseInt(event.target.value, 10) }));
+            dispatch(S2Actions.requestListS2({query: query, page:  paginationSuper.page , pageSize: parseInt(event.target.value, 10) }));
         }
     };
 
@@ -124,9 +125,9 @@ export const ListS2Schema = () => {
 
         if(S2List.length <= 1 ){
             if(paginationSuper.page -1 > 0 ){
-                dispatch(S2Actions.requestListS2({page:  paginationSuper.page -1 , pageSize: paginationSuper.pageSize}));
+                dispatch(S2Actions.requestListS2({query: query, page:  paginationSuper.page -1 , pageSize: paginationSuper.pageSize}));
             }else{
-                dispatch(S2Actions.requestListS2({page: 1 , pageSize: paginationSuper.pageSize }));
+                dispatch(S2Actions.requestListS2({query: query, page: 1 , pageSize: paginationSuper.pageSize }));
             }
 
         }
@@ -181,11 +182,13 @@ export const ListS2Schema = () => {
                 newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }
         }
-        dispatch(S2Actions.requestListS2({query : newQuery, page: paginationSuper.page , pageSize: paginationSuper.pageSize }));
+        setQuery(newQuery);
+        dispatch(S2Actions.requestListS2({query : newQuery, page: 1 , pageSize: paginationSuper.pageSize }));
     }
 
     function resetForm (form){
         form.reset();
+        setQuery({});
         dispatch(S2Actions.requestListS2({page: paginationSuper.page , pageSize: paginationSuper.pageSize }));
     }
 
@@ -230,6 +233,10 @@ export const ListS2Schema = () => {
             },
             gridpadding: {
                 'padding-top': '10px',
+            },
+            gridpaddingBottom: {
+                'padding-bottom': '10px',
+                'padding-left': '10px'
             },
             titlegridModal: {
                 color: '#585858'
@@ -587,7 +594,7 @@ export const ListS2Schema = () => {
             <Grid container>
                 <Grid container justify={"center"}>
                     <Typography  variant="h6" className={classes.fontblack}>
-                        Lista de registros S2
+                        S2
                     </Typography>
                 </Grid>
                 <Grid container className={classes.filterContainer} >
@@ -598,6 +605,12 @@ export const ListS2Schema = () => {
                             <form onSubmit={handleSubmit} noValidate>
                                 {alerta.status === undefined &&
                                 <div>
+                                    <Grid className= {classes.gridpadding} container justify={"flex-start"}>
+                                        <Typography  variant="h6" className={classes.fontblack}>
+                                            Búsqueda
+                                        </Typography>
+                                    </Grid>
+
                                     <Grid className= {classes.gridpadding} spacing={3} container >
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Nombres" name="nombres"  />
@@ -620,10 +633,10 @@ export const ListS2Schema = () => {
                                     </Grid>
                                     <Grid container justify={"flex-end"}>
                                         <Button style={{margin: "0px 8px 0px 0px"}} className={classes.boton}  variant="contained"
-                                                 onClick={()=> {resetForm(form)}}> Restablecer </Button>
+                                                 onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
                                         <Button  className={classes.boton}  variant="contained"
                                                  type="submit"
-                                                 disabled={submitting}> Filtrar </Button>
+                                                 disabled={submitting}> BUSCAR </Button>
                                     </Grid>
 
 
@@ -634,30 +647,28 @@ export const ListS2Schema = () => {
                     />
                 </Grid>
 
+                <Grid className= {`${classes.gridpadding} ${classes.gridpaddingBottom} `} container justify={"flex-start"}>
+                    <Typography  variant="h6" className={classes.fontblack}>
+                        Resultados
+                    </Typography>
+                </Grid>
                 <TableContainer  component={Paper}>
-                    {S2List.length > 0  && <Table aria-label="custom pagination table">
+                    <Table aria-label="custom pagination table">
                         <TableHead >
                             <TableRow>
-                                <StyledTableCell></StyledTableCell>
                                 <StyledTableCell align="center" >Ejercicio fiscal</StyledTableCell>
                                 <StyledTableCell align="center" >Nombres</StyledTableCell>
                                 <StyledTableCell align="center">Primer apellido</StyledTableCell>
                                 <StyledTableCell align="center">Segundo apellido</StyledTableCell>
-                                <StyledTableCell align="center">Institución dependencia Nombre</StyledTableCell>
-                                <StyledTableCell align="center">Puesto Nombre</StyledTableCell>
+                                <StyledTableCell align="center">Institución</StyledTableCell>
+                                <StyledTableCell align="center">Puesto</StyledTableCell>
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody key="usuarios">
                             {S2List.map((schema)  => (
                                 <TableRow key={schema._id}>
-
-                                    <TableCell style={{ width: 40 }} align="center">
-                                        <IconButton aria-label="expand row" size="small" onClick={() => handleOpenModalUserInfo(schema)}>
-                                            <KeyboardArrowDownIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                    <StyledTableCell style={{ width: 160 }}  align="center">
+                                    <StyledTableCell style={{ width: 140 }}  align="center">
                                         {schema.ejercicioFiscal}
                                     </StyledTableCell>
                                     <StyledTableCell style={{ width: 160 }}  align="center">
@@ -680,14 +691,27 @@ export const ListS2Schema = () => {
                                     </StyledTableCell>
                                     }
 
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        <Button  onClick={ () => redirectToRoute(`/esquemaS2/editar/${schema._id}`)}  ><EditOutlinedIcon/></Button>
-                                        <Button
-                                            variant="contained"
-                                            onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
-                                            <DeleteOutlineOutlinedIcon/>
+                                    <StyledTableCell style={{ width: 230 }} align="center">
+                                        <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
+                                            <Tooltip title="Más información" placement="left">
+                                                <IconButton aria-label="expand row" size="small" >
+                                                    <KeyboardArrowDownIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                         </Button>
-                                        <Button></Button>
+                                        <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S2/${schema._id}`)} >
+                                            <Tooltip title="Editar registro" placement="top">
+                                                <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
+                                            </Tooltip>
+                                        </Button>
+                                        <Tooltip title="Eliminar registro" placement="right">
+                                            <Button style={{ color: 'gray', padding: '0px' }}
+                                                    onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
+                                                <DeleteOutlineOutlinedIcon/>
+                                            </Button>
+                                        </Tooltip>
+
+
                                     </StyledTableCell>
                                 </TableRow>
                             ))}
@@ -710,7 +734,7 @@ export const ListS2Schema = () => {
                                 />}
                             </TableRow>
                         </TableFooter>
-                    </Table>}
+                    </Table>
                 </TableContainer>
             </Grid>
 

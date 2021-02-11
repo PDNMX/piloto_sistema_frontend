@@ -522,7 +522,7 @@ export function* creationS2Schema(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Registro creado con exito "));
-            history.push('/esquemaS2');
+            history.push('/consulta/S2');
             yield put(alertActions.clear());
         }else{
             yield put(alertActions.error("Error al crear"));
@@ -547,7 +547,7 @@ export function* updateS2Schema(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Registro actualizado con exito "));
-            history.push('/esquemaS2');
+            history.push('/consulta/S2');
             yield put(alertActions.clear());
         }else{
             yield put(alertActions.error("Error al crear"));

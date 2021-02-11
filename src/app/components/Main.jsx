@@ -74,7 +74,7 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
-                       path= "/cargaformulario"
+                       path= "/captura/S2"
                        render={() => {
                            if ( localStorage.token){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
@@ -92,7 +92,7 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
-                       path= "/esquemaS2"
+                       path= "/consulta/S2"
                        render={() => {
                            if (localStorage.token) {
                                storeValidate.dispatch(S2Actions.requestListS2({}));
@@ -104,7 +104,7 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
-                       path= "/esquemaS2/editar/:id"
+                       path= "/editar/S2/:id"
                        render={({match}) => {
                            if ( localStorage.token){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));

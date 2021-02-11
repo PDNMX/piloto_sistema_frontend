@@ -117,7 +117,14 @@ function MyForm(props: MyFormProps ) {
             main: "#ffe01b",
             light: "#ffff5c",
             dark: "#c8af00"
-        }
+        },
+        fontblack:{
+            color: '#666666'
+        },
+        gridpaddingBottom: {
+            'padding-bottom': '10px',
+            'padding-left': '10px'
+        },
     });
 
 
@@ -148,6 +155,16 @@ function MyForm(props: MyFormProps ) {
 
 
         <div>
+            <Grid  container justify={"center"}>
+                <Typography  noWrap variant="h6" className={cla.fontblack}>
+                    Captura
+                </Typography>
+            </Grid>
+            <Grid  container justify={"center"}>
+                <Typography  noWrap variant="h6" className={cla.fontblack}>
+                   S2
+                </Typography>
+            </Grid>
             <Form
                 onSubmit={onSubmit}
                 initialValues={initialValues}
@@ -157,6 +174,12 @@ function MyForm(props: MyFormProps ) {
                         {alert.status === undefined &&
                         <div>
                             <Grid className= {cla.gridpadding} spacing={3} container >
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                        Datos del generales
+                                    </Typography>
+                                    <Divider className={cla.boton} />
+                                </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
                                 </Grid>
@@ -250,7 +273,7 @@ function MyForm(props: MyFormProps ) {
                                    xs={12}
                                    md={12}>
 
-                                <Button  onClick={ () => redirectToRoute("/esquemaS2")} variant="contained"  className={cla.marginright}
+                                <Button  onClick={ () => redirectToRoute("/consulta/S2")} variant="contained"  className={cla.marginright}
                                          type="submit">
                                     Cancelar
                                 </Button>
