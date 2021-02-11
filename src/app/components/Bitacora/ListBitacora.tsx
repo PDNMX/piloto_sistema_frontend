@@ -131,8 +131,7 @@ export const ListBitacora = () => {
 
             <Grid className= {classes.gridpadding} spacing={3} container >
                 <TableContainer component={Paper} >
-                    {bitacora.length > 0 ?
-                        <Table aria-label="custom pagination table">
+                    {bitacora.length > 0  && <Table aria-label="custom pagination table">
                         <TableHead >
                             <TableRow >
                                 <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Operación</TableCell>
@@ -144,7 +143,6 @@ export const ListBitacora = () => {
                         </TableHead>
                         <TableBody key="bitacora">
                             {bitacora.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((rowbitacora)  => (
-
                                 <TableRow key={rowbitacora._id}>
                                     <TableCell className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="center">
                                         {rowbitacora.tipoOperacion}
@@ -186,15 +184,7 @@ export const ListBitacora = () => {
                                 />}
                             </TableRow>
                         </TableFooter>
-                    </Table>
-                    :
-                        <Table>
-                            <TableRow>
-                                <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                    No hay registros para está consulta.
-                                </TableCell>
-                            </TableRow>
-                        </Table>}
+                    </Table>}
                 </TableContainer>
             </Grid>
                 <Grid  spacing={3} justify="flex-end"

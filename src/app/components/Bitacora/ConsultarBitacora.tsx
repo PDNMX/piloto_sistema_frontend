@@ -59,8 +59,6 @@ function MyForm(props: MyFormProps ) {
         history.push('/reportebitacora');
     }
 
-
-
     const schema = Yup.object().shape({
         fechaInicial: Yup.string().required(),
         fechaFinal: Yup.string().required(),
@@ -118,10 +116,6 @@ function MyForm(props: MyFormProps ) {
         type:"submit"
     }
 
-    const reset = () => {
-        dispatch({ type: 'reset' })
-    }
-
     return (
         <div>
             <Grid item xs={12}>
@@ -133,7 +127,7 @@ function MyForm(props: MyFormProps ) {
                 onSubmit={onSubmit}
                 initialValues={initialValues}
                 validate={validate}
-                render={({ handleSubmit,values, submitting }) => (
+                render={({ handleSubmit,values, submitting   }) => (
                     <form  onSubmit={handleSubmit} noValidate>
                         {alert.status === undefined &&
                         <div>
@@ -141,14 +135,14 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <DateTimePicker
                                         format={"yyyy-MM-dd'T'HH:mm:ss"}
-                                        label="Fecha Inicial *"
+                                        label="Fecha Inicial"
                                         name="fechaInicial"
                                         dateFunsUtils={DateFnsUtils} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <DateTimePicker
                                         format={"yyyy-MM-dd'T'HH:mm:ss"}
-                                        label="Fecha Final *"
+                                        label="Fecha Final"
                                         name="fechaFinal"
                                         dateFunsUtils={DateFnsUtils} />
                                 </Grid>
@@ -156,8 +150,7 @@ function MyForm(props: MyFormProps ) {
                                     <Select
                                         name = "sistema"
                                         label="Selecciona el sistema aplicable"
-                                        data={sistemasData}
-                                        multiple={true}>
+                                        data={sistemasData} >
                                     </Select>
                                 </Grid>
                                 <Grid item xs={12} md={3}>
@@ -174,14 +167,6 @@ function MyForm(props: MyFormProps ) {
                                    item
                                    xs={12}
                                    md={12}>
-                                {/*
-                                <Tooltip title="Limpiar" placement="right">
-                                    <Button  className={cla.boton}  variant="contained"
-                                             onClick={ reset }
-                                             disabled={submitting}> Limpiar
-                                    </Button>
-                                </Tooltip>
-                                */}
                                 <Tooltip title="Generar" placement="right">
                                 <Button  className={cla.boton}  variant="contained"
                                          type="submit"
