@@ -30,7 +30,6 @@ interface FormBitacora {
     sistema?:string[];
     fechaInicial:string;
     fechaFinal:string;
-    usuario:string;
 }
 
 interface MyFormProps {
@@ -218,17 +217,15 @@ function mapStateToProps(state,ownProps){
     let alert = state.alert;
     let providers = state.providerSelect;
     let users = state.userSelect;
-    let usuario=state.userSelect;
     if( ownProps.match != undefined ){
         let users = state.userSelect;
         return {
             alert,
             providers,
-            users,
-            usuario
+            users
         }
     }else{
-        return {alert, providers,users,usuario};
+        return {alert, providers,users};
     }
 }
 

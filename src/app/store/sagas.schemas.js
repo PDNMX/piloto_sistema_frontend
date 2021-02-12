@@ -190,7 +190,6 @@ export function* deleteProvider(){
         const token = localStorage.token;
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
         let request = {"_id": id,"usuario":payload.idUser};
         const {status} = yield axios.delete(ur + `/deleteProvider`, { data : {request} ,headers: {
                 'Content-Type': 'application/json',
@@ -309,25 +308,18 @@ export function* editUser(){
 
 export function* creationProvider(){
     while(true){
-        console.log("Crear proveedor.....");
         const {usuarioJson} = yield take (mutations.REQUEST_CREATION_PROVIDER);
         let fechaActual =moment();
         if(usuarioJson["estatus"]==undefined || usuarioJson["estatus"]==null){
             usuarioJson["estatus"]=true;
             usuarioJson["fechaAlta"]=fechaActual.format();
         }else{
-            /*if(usuarioJson["estatus"]==true){
-                usuarioJson["estatus"]=true;
-            }else{
-                usuarioJson["estatus"]=false;
-            }*/
             usuarioJson["fechaActualizacion"]=fechaActual.format();
         }
         const token = localStorage.token;
         //const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
         usuarioJson["usuario"]=payload.idUser;
         const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson, {headers: {
                 'Content-Type': 'application/json',
@@ -348,24 +340,18 @@ export function* creationProvider(){
 
 export function* editProvider(){
     while(true){
-        console.log("Editar Proveedor........");
         const {usuarioJson} = yield take (mutations.REQUEST_EDIT_PROVIDER);
         let fechaActual =moment();
         if(usuarioJson["estatus"]==undefined || usuarioJson["estatus"]==null){
             usuarioJson["estatus"]=true;
             usuarioJson["fechaAlta"]=fechaActual.format();
         }else{
-            /*if(usuarioJson["estatus"]==true){
-                usuarioJson["estatus"]=true;
-            }else{
-                usuarioJson["estatus"]=false;
-            }*/
+
             usuarioJson["fechaActualizacion"]=fechaActual.format();
         }
         const token = localStorage.token;
         let payload = jwt.decode(token);
-        yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
+        yield put (userActions.setUserInSession(payload.idUser));
         usuarioJson["usuario"]=payload.idUser;
         const {status}  =yield axios.put(ur + `/edit/provider`, usuarioJson, {headers: {
                 'Content-Type': 'application/json',
@@ -666,16 +652,12 @@ export function* deleteSchemaS2(){
 
 export function* consultBitacora(){
     while(true){
-        console.log("Consultar Bitacora........");
         const {usuarioJson} = yield take (mutations.REQUEST_CONSULT_BITACORA);
         let fechaActual =moment();
-        console.log(usuarioJson);
-
         const token = localStorage.token;
         let payload = jwt.decode(token);
-        yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
-        usuarioJson["usuario"]=payload.idUser;
+        yield put (userActions.setUserInSession(payload.idUser));
+        //usuarioJson["usuario"]=payload.idUser;
         const respuestaArray  =yield axios.post(ur + `/getBitacora`, usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
