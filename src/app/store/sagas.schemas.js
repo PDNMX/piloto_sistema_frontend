@@ -393,6 +393,9 @@ export function* getCatalogRamo(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
+
+        respuestaArray.data.results.push({label: "Ninguno", value:""});
+
         yield put (catalogActions.setRamoSucces(respuestaArray.data.results));
 
     }
@@ -409,9 +412,7 @@ export function* getCatalogGenero(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-
-        console.log(respuestaArray.data.results);
-
+        respuestaArray.data.results.push({label: "Ninguno", value:""});
         yield put (catalogActions.setGeneroSucces(respuestaArray.data.results));
     }
 }
@@ -427,6 +428,8 @@ export function* getCatalogPuesto(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
+
+        respuestaArray.data.results.push({label: "Ninguno", value:""});
         yield put (catalogActions.setPuestoSucces(respuestaArray.data.results));
     }
 }
@@ -443,6 +446,7 @@ export function* getCatalogTipoArea(){
                 'Authorization': `Bearer ${token}`
             }});
 
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setTipoAreaSucces(respuestaArray.data.results));
     }
 }
@@ -457,7 +461,7 @@ export function* getCatalogNivelResponsabilidad(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setNivelResponsabilidadSucces(respuestaArray.data.results));
     }
 }
@@ -472,7 +476,7 @@ export function* getCatalogTipoProcedimiento(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setTipoProcedimientoSucces(respuestaArray.data.results));
     }
 }
@@ -522,8 +526,6 @@ export function* creationS2Schema(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Registro creado con exito "));
-            history.push('/consulta/S2');
-            yield put(alertActions.clear());
         }else{
             yield put(alertActions.error("Error al crear"));
             //error in response
@@ -547,8 +549,6 @@ export function* updateS2Schema(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Registro actualizado con exito "));
-            history.push('/consulta/S2');
-            yield put(alertActions.clear());
         }else{
             yield put(alertActions.error("Error al crear"));
             //error in response

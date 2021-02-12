@@ -12,6 +12,12 @@ import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../../store/history";
 import { useDispatch } from "react-redux";
 import {requestCreationUser, requestEditUser} from "../../store/mutations";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import {alertActions} from "../../_actions/alert.actions";
 
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
@@ -43,7 +49,7 @@ interface FormDataEsquemaS2 {
 
 interface MyFormProps {
     initialValues: FormDataEsquemaS2;
-    alerta: { status: boolean };
+    alerta: { status: boolean , message :""};
     catalogos:{genero: [], ramo: [], puesto: [], tipoArea: [], nivelResponsabilidad:[], tipoProcedimiento:[] };
     id: string;
 }
@@ -58,31 +64,33 @@ function MyForm(props: MyFormProps ) {
     let { initialValues ,  alerta, catalogos, id } = props;
     const alert = alerta;
     const dispatch = useDispatch();
+    const [open, setOpen] = React.useState(false);
+
 
     const schema = Yup.object().shape({
         ejercicioFiscal: Yup.string().matches(new RegExp('^[0-9]{4}$'),'Debe tener 4 dígitos'),
         ramo: Yup.string(),
-        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).required().trim(),
-        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).required().trim(),
+        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).required("El campo Nombres es requerido").trim(),
+        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).required("El campo Primer apellido es requerido").trim(),
         segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
         genero : Yup.object(),
-        idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').required().trim(),
-        idsiglas: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
-        idclave: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
+        idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').required("El campo Nombres de la sección Institución Dependencia es requerido").trim(),
+        idsiglas: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
+        idclave: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
         puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim()
             .when('puestoNivel',  (puestoNivel) => {
             if(!puestoNivel)
-                return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim().required("Al menos un campo seccion Puesto, es requerido ")
+                return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim().required("Al menos un campo de la sección Puesto, es requerido ")
         }),
         puestoNivel :Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
         tipoArea: Yup.array(),
         nivelResponsabilidad : Yup.array(),
-        tipoProcedimiento :Yup.array().min(1).required(),
+        tipoProcedimiento :Yup.array().min(1).required("Se requiere seleccionar mínimo una opción del campo Tipo de procedimiento"),
         sinombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim() ,
         siPrimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim() ,
         siSegundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim() ,
         siPuestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim(),
-        siPuestoNivel: Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim()
+        siPuestoNivel: Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres  ' ).trim()
     });
 
     const validate = makeValidate(schema);
@@ -130,6 +138,7 @@ function MyForm(props: MyFormProps ) {
 
     const redirectToRoute = (path) =>{
         history.push(path);
+        dispatch(alertActions.clear());
     }
 
     const cla = styles();
@@ -142,12 +151,12 @@ function MyForm(props: MyFormProps ) {
 
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS2) {
-        console.error("entre al submit ");
         if(id != undefined){
             dispatch(S2Actions.requestEditDo({...values, _id : id}));
         }else{
             dispatch(S2Actions.requestCreationS2(values));
         }
+        setOpen(true);
 
     }
 
@@ -157,12 +166,12 @@ function MyForm(props: MyFormProps ) {
         <div>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    Captura
+                    Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación
                 </Typography>
             </Grid>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                   S2
+                    {id != undefined ? "Edición" :  "Captura" }
                 </Typography>
             </Grid>
             <Form
@@ -181,22 +190,6 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
-                                </Grid>
-                                {catalogos.ramo &&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "ramo" label="Ramo" data={catalogos.ramo} ></Select>
-                                </Grid>}
-                                {catalogos.tipoArea &&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "tipoArea" label="Tipo de area" data={catalogos.tipoArea} multiple={true} ></Select>
-                                </Grid>}
-
-                                {catalogos.nivelResponsabilidad &&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "nivelResponsabilidad" label="Nivel de responsabilidad" data={catalogos.nivelResponsabilidad} multiple={true} ></Select>
-                                </Grid>}
-                                <Grid item xs={12} md={3}>
                                     <TextField label="Nombres" name="nombres"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
@@ -208,6 +201,22 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <Select  name = "genero" label="Genero" data={catalogos.genero} ></Select>
                                 </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
+                                </Grid>
+                                {catalogos.ramo &&
+                                <Grid item xs={12} md={3}>
+                                    <Select  name = "ramo" label="Ramo" data={catalogos.ramo} ></Select>
+                                </Grid>}
+                                {catalogos.tipoArea &&
+                                <Grid item xs={12} md={3}>
+                                    <Select  name = "tipoArea" label="Tipo de área" data={catalogos.tipoArea} multiple={true} ></Select>
+                                </Grid>}
+
+                                {catalogos.nivelResponsabilidad &&
+                                <Grid item xs={12} md={3}>
+                                    <Select  name = "nivelResponsabilidad" label="Nivel de responsabilidad" data={catalogos.nivelResponsabilidad} multiple={true} ></Select>
+                                </Grid>}
                                 {catalogos.tipoProcedimiento &&
                                 <Grid item xs={12} md={6}>
                                     <Select  name = "tipoProcedimiento" label="Tipo de procedimiento" data={catalogos.tipoProcedimiento} multiple={true} ></Select>
@@ -266,6 +275,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
                             </Grid>
+                            <pre>{JSON.stringify(values)}</pre>
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"
                                    container
@@ -284,21 +294,29 @@ function MyForm(props: MyFormProps ) {
                         </div>
                         }
 
-                        <div className="sweet-loading">
-                            {alert.status != undefined && <div><Grid item xs={12}>
-                                <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>
-                                    <b>Cargando ...</b>
-                                </Typography>
-                            </Grid>
-                            </div>}
-                            <ClipLoader
-                                css={override}
-                                size={150}
-                                color={"#123abc"}
-                                loading={alert.status === undefined ? false : !alert.status }
-                            />
-                        </div>
-                        <pre>{alert.status}</pre>
+
+
+                        <Dialog
+                            disableBackdropClick
+                            disableEscapeKeyDown
+                            open={open}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Resultado sobre la acción "}</DialogTitle>
+                            <DialogContent>
+                                <DialogContent id="alert-dialog-description">
+                                    <Typography  noWrap variant="h6" className={cla.fontblack}>
+                                        {alert.message}
+                                    </Typography>
+                                </DialogContent>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={ () => redirectToRoute("/consulta/S2")} color="primary" autoFocus>
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </form>
                 )}
             />

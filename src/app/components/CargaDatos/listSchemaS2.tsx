@@ -594,7 +594,7 @@ export const ListS2Schema = () => {
             <Grid container>
                 <Grid container justify={"center"}>
                     <Typography  variant="h6" className={classes.fontblack}>
-                        S2
+                        Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación
                     </Typography>
                 </Grid>
                 <Grid container className={classes.filterContainer} >

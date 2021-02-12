@@ -160,6 +160,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
       history.push(path);
   }
 
+
   //Cerrar sesión
   const [anchorEl, setAnchorEl] = useState(null);
 
