@@ -18,7 +18,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import {history} from "../../store/history";
 import ListItem from "@material-ui/core/ListItem";
-
+import { OnChange } from 'react-final-form-listeners'
 
 const CreateUser = ({id, user,alert, providers }) => {
     return <MyForm initialValues={user}  id={id} alerta={alert} providers={providers}/>;
@@ -123,7 +123,7 @@ function MyForm(props: MyFormProps ) {
 
     const cla = styles();
 
-    const sistemasData = [
+    let sistemasData = [
         {label: 'Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación', value: 'S2'},
         {label: 'Sistema de los Servidores Públicos Sancionados', value: 'S3S'},
         {label: 'Sistema de los Particulares Sancionados', value: 'S3P'}
@@ -194,11 +194,39 @@ function MyForm(props: MyFormProps ) {
                                 <Switches label="Estatus" name="estatus" required={true} data={estatus}/>
                             </Grid>}
                             <Grid item xs={12} md={3}>
-                                <Select  name = "sistemas" label="Selecciona los sistemas aplicables" required={true} data={sistemasData} multiple={true}></Select>
+                                <Select  name = "proveedorDatos" label="Proveedor de datos" required={true} data={providers} ></Select>
+                                <OnChange name="proveedorDatos">
+                                    {(value, previous) => {
+                                        let sistemasDataNew: [] = [];
+                                        let sistemasDisponibles: string[] = [];
+                                        for(let prov of providers){
+                                            let obj: {value:string, sistemas:[]}= prov;
+                                            if(value == obj.value){
+                                                sistemasDisponibles= obj.sistemas;
+                                            }
+                                        }
+
+                                        for (let sistema of sistemasDisponibles){
+                                            if(sistema === "S2"){
+                                                // @ts-ignore
+                                                sistemasDataNew.push({label : 'Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación', value: 'S2'})
+                                            }else if(sistema === "S3S"){
+                                                // @ts-ignore
+                                                sistemasDataNew.push({label: 'Sistema de los Servidores Públicos Sancionados', value: 'S3S'});
+                                            }else if(sistema === "S3P"){
+                                                // @ts-ignore
+                                                sistemasDataNew.push( {label: 'Sistema de los Particulares Sancionados', value: 'S3P'});
+                                            }
+                                        }
+                                        sistemasData= sistemasDataNew;
+                                    }}
+                                </OnChange>
+
                             </Grid>
                             <Grid item xs={12} md={3}>
-                                <Select  name = "proveedorDatos" label="Proveedor de datos" required={true} data={providers} ></Select>
+                                <Select  name = "sistemas" label="Selecciona los sistemas aplicables" required={true} data={sistemasData} multiple={true}></Select>
                             </Grid>
+
                         </Grid>
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"
@@ -222,7 +250,6 @@ function MyForm(props: MyFormProps ) {
                             </Grid>
                         </div>
                        }
-                    <pre>{JSON.stringify(values)}</pre>
                     <div className="sweet-loading">
                         {alert.status != undefined && <div><Grid item xs={12}>
                             <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>

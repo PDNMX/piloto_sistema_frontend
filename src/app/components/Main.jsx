@@ -67,6 +67,7 @@ export const Main = ()=> (
                        render={() => {
                            if ( localStorage.token){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch((alertActions.clear()));
                                return <ConnectedMenuV propiedades = {{renderView : "cargamasiva"}} />
                            }else{
                                return <Redirect to="/login"/> ;
