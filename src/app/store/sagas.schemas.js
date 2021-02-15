@@ -155,7 +155,7 @@ export function* fillAllUsers(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-        respuestaArray.data.results.push({label: "Ninguno", value:""});
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put(userActions.setUsersAll(respuestaArray.data.results));
     }
 }
@@ -385,7 +385,7 @@ export function* getCatalogRamo(){
                 'Authorization': `Bearer ${token}`
             }});
 
-        respuestaArray.data.results.push({label: "Ninguno", value:""});
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
 
         yield put (catalogActions.setRamoSucces(respuestaArray.data.results));
 
@@ -403,7 +403,7 @@ export function* getCatalogGenero(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-        respuestaArray.data.results.push({label: "Ninguno", value:""});
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setGeneroSucces(respuestaArray.data.results));
     }
 }
@@ -420,7 +420,7 @@ export function* getCatalogPuesto(){
                 'Authorization': `Bearer ${token}`
             }});
 
-        respuestaArray.data.results.push({label: "Ninguno", value:""});
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setPuestoSucces(respuestaArray.data.results));
     }
 }

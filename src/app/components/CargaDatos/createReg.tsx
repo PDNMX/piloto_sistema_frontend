@@ -199,7 +199,7 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Segundo apellido" name="segundoApellido" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <Select  name = "genero" label="Genero" data={catalogos.genero} ></Select>
+                                    <Select  name = "genero" label="Género" data={catalogos.genero} ></Select>
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
@@ -297,9 +297,7 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Puesto nivel" name="siPuestoNivel"  />
                                 </Grid>
-
                             </Grid>
-                            <pre>{JSON.stringify(values)}</pre>
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"
                                    container
