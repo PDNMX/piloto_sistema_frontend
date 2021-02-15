@@ -155,6 +155,7 @@ export function* fillAllUsers(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
+        respuestaArray.data.results.push({label: "Ninguno", value:""});
         yield put(userActions.setUsersAll(respuestaArray.data.results));
     }
 }
