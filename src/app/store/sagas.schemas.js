@@ -467,7 +467,7 @@ export function* getCatalogTipoProcedimiento(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-        respuestaArray.data.results.push({label: "NINGUNO", value:""});
+       // respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setTipoProcedimientoSucces(respuestaArray.data.results));
     }
 }

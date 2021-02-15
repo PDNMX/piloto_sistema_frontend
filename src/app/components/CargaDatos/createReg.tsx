@@ -18,7 +18,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import {alertActions} from "../../_actions/alert.actions";
-
+import { OnChange } from 'react-final-form-listeners'
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
     return <MyForm initialValues={registry} catalogos={catalogos}  alerta={alert} id={id}/>;
@@ -70,27 +70,27 @@ function MyForm(props: MyFormProps ) {
     const schema = Yup.object().shape({
         ejercicioFiscal: Yup.string().matches(new RegExp('^[0-9]{4}$'),'Debe tener 4 dígitos'),
         ramo: Yup.string(),
-        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).required("El campo Nombres es requerido").trim(),
-        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).required("El campo Primer apellido es requerido").trim(),
-        segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
+        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Nombres es requerido").trim(),
+        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Primer apellido es requerido").trim(),
+        segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).trim(),
         genero : Yup.object(),
-        idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').required("El campo Nombres de la sección Institución Dependencia es requerido").trim(),
-        idsiglas: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
-        idclave: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
-        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim()
+        idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Nombres de la sección Institución Dependencia es requerido").trim(),
+        idsiglas: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres ').trim(),
+        idclave: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
+        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten cadenas vacías, máximo 25 caracteres' ).trim()
             .when('puestoNivel',  (puestoNivel) => {
             if(!puestoNivel)
-                return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim().required("Al menos un campo de la sección Puesto, es requerido ")
+                return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim().required("Al menos un campo de la sección Puesto, es requerido ")
         }),
-        puestoNivel :Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
+        puestoNivel :Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).trim(),
         tipoArea: Yup.array(),
         nivelResponsabilidad : Yup.array(),
         tipoProcedimiento :Yup.array().min(1).required("Se requiere seleccionar mínimo una opción del campo Tipo de procedimiento"),
-        sinombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim() ,
-        siPrimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim() ,
-        siSegundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim() ,
-        siPuestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres ' ).trim(),
-        siPuestoNivel: Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'no se permiten números, ni cadenas vacias, max 25 caracteres  ' ).trim()
+        sinombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim() ,
+        siPrimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim() ,
+        siSegundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim() ,
+        siPuestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim(),
+        siPuestoNivel: Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres' ).trim()
     });
 
     const validate = makeValidate(schema);
@@ -212,16 +212,40 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <Select  name = "tipoArea" label="Tipo de área" data={catalogos.tipoArea} multiple={true} ></Select>
                                 </Grid>}
+                                {catalogos.tipoArea &&
+                                <OnChange name="tipoArea">
+                                    {(value, previous) => {
+                                        for (let item of value) {
+                                            if (item == "") {
+                                                // @ts-ignore
+                                                values.tipoArea = [];
+                                            }
+                                        }
+                                    }}
+                                </OnChange>
+                                }
 
                                 {catalogos.nivelResponsabilidad &&
                                 <Grid item xs={12} md={3}>
                                     <Select  name = "nivelResponsabilidad" label="Nivel de responsabilidad" data={catalogos.nivelResponsabilidad} multiple={true} ></Select>
                                 </Grid>}
+
+                                {catalogos.nivelResponsabilidad &&
+                                <OnChange name="nivelResponsabilidad">
+                                    {(value, previous) => {
+                                        for (let item of value) {
+                                            if (item == "") {
+                                                // @ts-ignore
+                                                values.nivelResponsabilidad = [];
+                                            }
+                                        }
+                                    }}
+                                </OnChange>
+                                }
                                 {catalogos.tipoProcedimiento &&
                                 <Grid item xs={12} md={6}>
                                     <Select  name = "tipoProcedimiento" label="Tipo de procedimiento" data={catalogos.tipoProcedimiento} multiple={true} ></Select>
                                 </Grid>}
-
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Institución Dependencia
@@ -312,7 +336,7 @@ function MyForm(props: MyFormProps ) {
                                 </DialogContent>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={ () => redirectToRoute("/consulta/S2")} color="primary" autoFocus>
+                                <Button disabled={!alert.status} onClick={ () => redirectToRoute("/consulta/S2")} color="primary" autoFocus>
                                     Aceptar
                                 </Button>
                             </DialogActions>
