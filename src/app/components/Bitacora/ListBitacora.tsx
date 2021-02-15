@@ -152,7 +152,7 @@ export const ListBitacora = () => {
                                     <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
                                         {rowbitacora.fechaOperacion}
                                     </TableCell>
-                                    <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
+                                    <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="left">
                                             <div>
                                                 {rowbitacora.sistema=='S2' ? <li>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</li> : "" }
                                                 {rowbitacora.sistema=='S3S' ? <li>Sistema de los Servidores Públicos Sancionados</li> : "" }

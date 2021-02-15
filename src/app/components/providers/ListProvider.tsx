@@ -160,7 +160,7 @@ export const ListProvider = () => {
                     </Alert>
                 </Snackbar>
             </Grid>
-            {alerta.status == true && <Alert severity={alerta.type}>{alerta.message}</Alert>}
+
             <Modal
                 open={openModalProviderInfo}
                 onClose={handleCloseModalProviderInfo}
