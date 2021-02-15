@@ -622,10 +622,10 @@ export const ListS2Schema = () => {
                                             <TextField label="Segundo apellido" name="segundoApellido" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Institución dependencia nombre" name="idnombre" />
+                                            <TextField label="Institución dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Puesto nombre" name="puestoNombre" />
+                                            <TextField label="Puesto" name="puestoNombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />

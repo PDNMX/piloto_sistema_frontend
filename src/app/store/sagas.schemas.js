@@ -44,8 +44,16 @@ export function* validationErrors(){
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`
                     }});
-                yield put(mutations.setErrorsValidation(respuestaArray.data));
-                console.info("got response",respuestaArray);
+
+                let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
+
+                console.log(numeroRegistros);
+                if(respuestaArray.data.Status === 500){
+                    console.log(respuestaArray.data);
+                    yield put(mutations.setErrorsValidation(respuestaArray.data.response));
+                }else{
+                    yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
+                }
             }
         }
     }
@@ -254,10 +262,6 @@ export function* closeSession(){
 export function* creationUser(){
     while (true) {
         const {usuarioJson} = yield take (mutations.REQUEST_CREATION_USER);
-        let fechaActual = moment();
-        usuarioJson["fechaAlta"]= fechaActual.format();
-        usuarioJson["vigenciaContrasena"] = fechaActual.add(3 , 'months').format().toString();
-        usuarioJson["estatus"]=  true;
         const token = localStorage.token;
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))

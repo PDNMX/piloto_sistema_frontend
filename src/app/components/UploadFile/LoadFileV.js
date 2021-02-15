@@ -20,16 +20,35 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import ClipLoader from "react-spinners/ClipLoader";
+import {css} from "@emotion/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import {history} from "../../store/history";
 
 export const LoadFileV = () => {
     let fileReader;
     const dispatch = useDispatch();
-    const errors = useSelector(state => state.errors);
+
+    const {errors,alert} = useSelector(state => ({
+        errors: state.errors,
+        alert: state.alert
+    }));
+
+    const [open, setOpen] = React.useState(false);
+
     let systemChosen;
     let contentFileJson;
     let rowsError=[];
 
 
+    const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
     const useStyles = makeStyles({
         root: {
@@ -77,6 +96,10 @@ export const LoadFileV = () => {
 
     const style=useStyles();
 
+    const redirectToRoute = (path) =>{
+        history.push(path);
+    }
+
     const setValueSystem= (value) => {
         systemChosen = value;
         console.log(value);
@@ -93,11 +116,10 @@ export const LoadFileV = () => {
         fileReader.readAsText(file);
     }
 
-
-
     return (
         <div>
-            
+            {alert.status === undefined &&
+                <div>
             <Grid container className={style.root}>
                 <Grid item xs={12}>
                     <Typography variant={"h6"} paragraph className={style.fontblack} align={"center"}>
@@ -147,7 +169,7 @@ export const LoadFileV = () => {
                     <Grid item xs={12} className={style.botonera} >
                         <Button
                             variant="contained"
-                            onClick={() => dispatch(requestErrorsValidation(contentFileJson , systemChosen))} className={style.boton}>
+                            onClick={() =>{   setOpen(true); dispatch(requestErrorsValidation(contentFileJson , systemChosen)) } } className={style.boton}>
                             Guardar
                         </Button>
                     </Grid>
@@ -186,7 +208,30 @@ export const LoadFileV = () => {
                 </Grid>
 
             </Paper>
+            </div>
+            }
 
+            <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                open={open}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Resultado sobre la acción "}</DialogTitle>
+                <DialogContent>
+                    <DialogContent id="alert-dialog-description">
+                        <Typography  noWrap variant="h6" className={style.fontblack}>
+                            {alert.message}
+                        </Typography>
+                    </DialogContent>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={ () => redirectToRoute("/consulta/S2")} color="primary" autoFocus>
+                        Aceptar
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

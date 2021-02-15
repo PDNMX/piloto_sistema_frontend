@@ -70,13 +70,16 @@ function MyForm(props: MyFormProps ) {
     const schema = Yup.object().shape({
         nombre: Yup.string().matches(new RegExp("^['A-zÀ-ú ]*$"),'no se permiten números, ni cadenas vacías' ).required().trim(),
         apellidoUno: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required().trim(),
-        apellidoDos: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required().trim(),
+        apellidoDos: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).trim(),
         cargo: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required().trim(),
         correoElectronico: Yup.string().required().email(),
         telefono:  Yup.string().matches(new RegExp('^[0-9]{10}$'), 'Inserta un número de teléfono válido, 10 caracteres').required().trim(),
-        extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , máximo 10 caracteres').required().trim(),
+        extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , máximo 10 caracteres').trim(),
         usuario: Yup.string().matches(new RegExp('^[a-zA-Z0-9]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required().trim(),
         constrasena: Yup.string().matches(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*()_+,.\\\\\\/;\':"-]).{8,}$'),'Inserta al menos 8 caracteres, al menos un número, al menos un caracter especial ' ).required().trim(),
+        passwordConfirmation: Yup.string().when('constrasena', (password, field) =>
+            password ? field.required("Confirmar contraseña es un campo requerido").oneOf([Yup.ref('constrasena')],"Este campo tiene que coincidir con el campo contraseña") : field
+        ),
         sistemas: Yup.array().min(1).required(),
         proveedorDatos: Yup.string().required()
     });
@@ -144,7 +147,7 @@ function MyForm(props: MyFormProps ) {
         <div>
             <Grid item xs={12}>
                 <Typography variant={"h6"} paragraph className={cla.fontblack} align={"center"}>
-                    <b>Crear usuario</b>
+                    {id != null ? <b>Editar usuario</b> :  <b>Crear usuario</b> }
                 </Typography>
             </Grid>
         <Form
@@ -169,7 +172,7 @@ function MyForm(props: MyFormProps ) {
                             <TextField label="Cargo" name="cargo" required={true} />
                         </Grid>
                         <Grid item xs={12} md={3}>
-                            <TextField label="Correo electronico" name="correoElectronico" required={true} />
+                            <TextField label="Correo electrónico" name="correoElectronico" required={true} />
                         </Grid>
                         <Grid item xs={12} md={3}>
                             <TextField label="Número de teléfono" name="telefono" required={true} />
@@ -183,9 +186,12 @@ function MyForm(props: MyFormProps ) {
                         <Grid item xs={12} md={3}>
                             <TextField label="Contraseña" name="constrasena"  type="password" required={true} />
                         </Grid>
+                            <Grid item xs={12} md={3}>
+                                <TextField label="Confirmar contraseña" name="passwordConfirmation"  type="password" required={true} />
+                            </Grid>
                             {id != null &&
                             <Grid item xs={12} md={3}>
-                                <Switches label="estatus" name="estatus" required={true} data={estatus}/>
+                                <Switches label="Estatus" name="estatus" required={true} data={estatus}/>
                             </Grid>}
                             <Grid item xs={12} md={3}>
                                 <Select  name = "sistemas" label="Selecciona los sistemas aplicables" required={true} data={sistemasData} multiple={true}></Select>
@@ -216,7 +222,7 @@ function MyForm(props: MyFormProps ) {
                             </Grid>
                         </div>
                        }
-
+                    <pre>{JSON.stringify(values)}</pre>
                     <div className="sweet-loading">
                         {alert.status != undefined && <div><Grid item xs={12}>
                             <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>

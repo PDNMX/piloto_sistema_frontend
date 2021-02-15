@@ -32,6 +32,7 @@ import {history} from "../../store/history";
 
 
 
+
 export const ListUser = () => {
 
     const {users,alerta,providerSelect} = useSelector(state => ({
@@ -50,7 +51,18 @@ export const ListUser = () => {
     const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
 
 
-
+    const renderSelect = (user) => {
+        let c1= false;
+        for(let value of providerSelect){
+            if(value._id === user.proveedorDatos ) {
+                c1=true;
+                return (<StyledTableCell key={value._id} style={{width: 160}} align="center">{value.label}</StyledTableCell>);
+            }
+        }
+        if(!c1){
+            return <StyledTableCell></StyledTableCell>;
+        }
+    }
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -122,8 +134,6 @@ export const ListUser = () => {
     };
 
 
-
-
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
             fontblack:{
@@ -185,9 +195,9 @@ export const ListUser = () => {
                            <TableHead>
                                <TableRow>
                                    <StyledTableCell align="center" >Cargo</StyledTableCell>
-                                   <StyledTableCell align="center">Correo Electronico</StyledTableCell>
-                                   <StyledTableCell align="center">Telefono</StyledTableCell>
-                                   <StyledTableCell align="center" >Extención</StyledTableCell>
+                                   <StyledTableCell align="center">Correo Electrónico</StyledTableCell>
+                                   <StyledTableCell align="center">Teléfono</StyledTableCell>
+                                   <StyledTableCell align="center" >Extensión</StyledTableCell>
                                    <StyledTableCell align="center" >Usuario</StyledTableCell>
                                    <StyledTableCell align="center" >Sistemas</StyledTableCell>
                                    <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
@@ -275,9 +285,9 @@ export const ListUser = () => {
                                     <StyledTableCell style={{ width: 160 }} align="center">
                                         {user.apellidoDos}
                                     </StyledTableCell>
-                                    {providerSelect.map( value => (
-                                        value._id === user.proveedorDatos && <StyledTableCell key={value._id} style={{ width: 160 }} align="center">{value.label}</StyledTableCell>
-                                    ))}
+
+                                    {renderSelect(user)}
+
                                     <StyledTableCell  style={{ width: 160 }} align="center">
                                         {user.estatus? "Vigente" : "No vigente"}
                                     </StyledTableCell>
