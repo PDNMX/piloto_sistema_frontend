@@ -117,8 +117,9 @@ function MyForm(props: MyFormProps ) {
         type:"submit"
     }
 
-    const reset = () => {
-        dispatch({ type: 'reset' })
+    function resetForm (form){
+        form.reset();
+
     }
 
     return (
@@ -132,7 +133,7 @@ function MyForm(props: MyFormProps ) {
                 onSubmit={onSubmit}
                 initialValues={initialValues}
                 validate={validate}
-                render={({ handleSubmit,values, submitting }) => (
+                render={({ handleSubmit,values, submitting, form }) => (
                     <form  onSubmit={handleSubmit} noValidate>
                         {alert.status === undefined &&
                         <div>
@@ -173,14 +174,12 @@ function MyForm(props: MyFormProps ) {
                                    item
                                    xs={12}
                                    md={12}>
-                                {/*
-                                <Tooltip title="Limpiar" placement="right">
-                                    <Button  className={cla.boton}  variant="contained"
-                                             onClick={ reset }
-                                             disabled={submitting}> Limpiar
-                                    </Button>
-                                </Tooltip>
-                                */}
+                                {
+                                    <Tooltip title="Limpiar" placement="right">
+                                        <Button style={{margin: "0px 8px 0px 0px"}} className={cla.boton}  variant="contained"
+                                                onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
+                                    </Tooltip>
+                                }
                                 <Tooltip title="Generar" placement="right">
                                 <Button  className={cla.boton}  variant="contained"
                                          type="submit"

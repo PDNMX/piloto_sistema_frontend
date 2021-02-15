@@ -109,9 +109,9 @@ export const ListBitacora = () => {
     }));
 
     const headers = [
-        { label: "Tipo de Operación", key: "tipoOperacion" },
-        { label: "Fecha", key: "fechaOperacion" },
-        { label: "Sistema", key: "sistema" },
+        { label: "Tipo de Operación", key: "tipo" },
+        { label: "Fecha", key: "fecha" },
+        { label: "Sistema", key: "sistema_label" },
         { label: "Número Registros", key: "numeroRegistros" },
         { label: "Usuario", key: "usuario" }
     ];
@@ -147,17 +147,15 @@ export const ListBitacora = () => {
 
                                 <TableRow key={rowbitacora._id}>
                                     <TableCell className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="center">
-                                        {rowbitacora.tipoOperacion}
+                                        {rowbitacora.tipo}
                                     </TableCell>
                                     <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                        {rowbitacora.fechaOperacion}
+                                        {rowbitacora.fecha}
                                     </TableCell>
                                     <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="left">
-                                            <div>
-                                                {rowbitacora.sistema=='S2' ? <li>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</li> : "" }
-                                                {rowbitacora.sistema=='S3S' ? <li>Sistema de los Servidores Públicos Sancionados</li> : "" }
-                                                {rowbitacora.sistema=='S3P' ? <li>Sistema de los Particulares Sancionados</li> : "" }
-                                            </div>
+                                        <div>
+                                            {rowbitacora.sistema_label}
+                                        </div>
                                     </TableCell>
                                     <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
                                         {rowbitacora.numeroRegistros}
