@@ -77,7 +77,7 @@ function MyForm(props: MyFormProps ) {
         extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , máximo 10 caracteres').trim(),
         usuario: Yup.string().matches(new RegExp('^[a-zA-Z0-9]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required().trim(),
         constrasena: Yup.string().matches(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*()_+,.\\\\\\/;\':"-]).{8,}$'),'Inserta al menos 8 caracteres, al menos un número, al menos un caracter especial ' ).required().trim(),
-        passwordConfirmation: Yup.string().when('constrasena', (password, field) =>
+        passwordConfirmation: Yup.string().required("Confirmar contraseña es un campo requerido").when('constrasena', (password, field) =>
             password ? field.required("Confirmar contraseña es un campo requerido").oneOf([Yup.ref('constrasena')],"Este campo tiene que coincidir con el campo contraseña") : field
         ),
         sistemas: Yup.array().min(1).required(),
@@ -178,7 +178,7 @@ function MyForm(props: MyFormProps ) {
                             <TextField label="Número de teléfono" name="telefono" required={true} />
                         </Grid>
                         <Grid item xs={12} md={3}>
-                            <TextField label="Extensión" name="extension" required={true} />
+                            <TextField label="Extensión" name="extension"  />
                         </Grid>
                         <Grid item xs={12} md={3}>
                             <TextField label="Nombre de usuario" name="usuario" required={true} />
