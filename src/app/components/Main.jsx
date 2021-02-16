@@ -18,6 +18,7 @@ import {providerActions} from "../_actions/provider.action";
 import {ConnectedCreateProvider} from "./providers/CreateProvider";
 import {LoginV} from "./Login/Login";
 import {S2Actions} from "../_actions/s2.action";
+import {clearErrorsValidation} from "../store/mutations"
 import {ConnectedConsultarBitacora} from "./Bitacora/ConsultarBitacora";
 import {bitacoraActions} from "../_actions/bitacora.action";
 import {ListBitacora} from "./Bitacora/ListBitacora";
@@ -68,6 +69,7 @@ export const Main = ()=> (
                            if ( localStorage.token){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch((alertActions.clear()));
+                               storeValidate.dispatch(clearErrorsValidation());
                                return <ConnectedMenuV propiedades = {{renderView : "cargamasiva"}} />
                            }else{
                                return <Redirect to="/login"/> ;

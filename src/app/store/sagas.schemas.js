@@ -33,6 +33,8 @@ export function* validationErrors(){
     while (true) {
         const {schema,systemId} = yield take (mutations.REQUEST_VALIDATION_ERRORS);
         const token = localStorage.token;
+        console.log("token"+token);
+        console.log("system"+systemId);
         if(token){
             if(systemId === "S2"){
                 let payload = jwt.decode(token);
@@ -48,13 +50,16 @@ export function* validationErrors(){
                         }});
 
                 if(respuestaArray.data.Status === 500){
+                    console.log(respuestaArray.data.response);
                     yield put(mutations.setErrorsValidation(respuestaArray.data.response));
-                    yield put(alertActions.error("Se encontraron errores en la validación verificar"));
+                    yield put(alertActions.error("No se realizó el registro ya que se encontraron errores en la validación, favor de verificar"));
                 }else{
                     let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
                     yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
                 }
             }
+        }else{
+            console.log("error in token");
         }
     }
 }

@@ -22,6 +22,12 @@ export const REQUEST_CREATION_PROVIDER = 'REQUEST_CREATION_PROVIDER';
 export const REQUEST_EDIT_PROVIDER = 'REQUEST_EDIT_PROVIDER';
 export const REQUEST_TOKEN_AUTH = 'REQUEST_TOKEN_AUTH' ;
 export const REQUEST_CONSULT_BITACORA = 'REQUEST_CONSULT_BITACORA';
+export const CLEAR_ERRORS_VALIDATION = 'CLEAR_ERRORS_VALIDATION';
+
+
+export const clearErrorsValidation = () => ({
+    type : CLEAR_ERRORS_VALIDATION
+});
 
 export const requestCreationUser = (usuarioJson) => ({
     type: REQUEST_CREATION_USER,

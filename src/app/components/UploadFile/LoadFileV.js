@@ -8,14 +8,14 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Grid from "@material-ui/core/Grid";
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
-import {requestErrorsValidation} from '../../store/mutations'
+import {clearErrorsValidation, requestErrorsValidation} from '../../store/mutations'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {MenuItem, Select, TextField} from '@material-ui/core';
+import {Divider, MenuItem, Select, TextField} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -27,6 +27,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {history} from "../../store/history";
+import {storeValidate} from "../../store";
+import {alertActions} from "../../_actions/alert.actions";
 
 export const LoadFileV = () => {
     let fileReader;
@@ -38,6 +40,8 @@ export const LoadFileV = () => {
     }));
 
     const [open, setOpen] = React.useState(false);
+    const fileInputRef = React.useRef();
+    const [system, setSystem]= React.useState("");
 
     let systemChosen;
     let contentFileJson;
@@ -51,6 +55,9 @@ export const LoadFileV = () => {
 `;
 
     const useStyles = makeStyles({
+        titleCategory:{
+            color: '#666666'
+        },
         root: {
             maxWidth: 1200,
             margin: '0 auto',
@@ -104,7 +111,7 @@ export const LoadFileV = () => {
     }
 
     const setValueSystem= (value) => {
-        systemChosen = value;
+        setSystem(value);
     }
 
     const handleFileRead = (e) => {
@@ -143,8 +150,6 @@ export const LoadFileV = () => {
                                 id: 'system-native-required',
                             }} label="Sistema" className={style.marginLeft}  required={true} onChange={e => setValueSystem(e.target.value) }>
                                 <MenuItem value={'S2'}>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</MenuItem>
-                                <MenuItem value={'S3S'}>Sistema de los Servidores Públicos Sancionados</MenuItem>
-                                <MenuItem value={'S3P'}>Sistema de los Particulares Sancionados</MenuItem>
                             </Select>
                             {/*<select inputProps={{
                                 id: 'system-native-required',
@@ -164,26 +169,36 @@ export const LoadFileV = () => {
                                className={style.paddingLeft}
                                accept='.json'
                                id='file'
+                               name='fileInput'
+                               ref={fileInputRef}
                                onChange={e => handleFileChosen(e.target.files[0])} />
                     </Grid>
 
                     <Grid item xs={12} className={style.botonera} >
                         <Button
                             variant="contained"
-                            onClick={() =>{   setOpen(true); dispatch(requestErrorsValidation(contentFileJson , systemChosen)) } } className={style.boton}>
+                            onClick={() =>{dispatch(clearErrorsValidation()); dispatch(alertActions.clear()); fileInputRef.current.value = "";  setOpen(true); dispatch(requestErrorsValidation(contentFileJson , system)) } } className={style.boton}>
                             Guardar
                         </Button>
                     </Grid>
 
-                    {errors && <Grid container item md={12} className={style.paper}>
+                    {errors &&
+                    <Grid  container justify={"center"}>
+                        <Typography  noWrap variant="h6" className={style.fontblack}>
+                            Errores
+                        </Typography>
+                    </Grid>}
+                    {errors &&
+                    <Grid container item md={12}  className={style.paper}>
+
                             <TableContainer component={Paper}>
                                 <Table className={style.table} size="small" aria-label="a dense table">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell align="center">Id</TableCell>
+                                            <TableCell align="center">Identificador</TableCell>
                                             <TableCell align="center">Número de errores</TableCell>
                                             <TableCell align="center">Estatus</TableCell>
-                                            <TableCell align="center">Descripción error </TableCell>
+                                            <TableCell align="center">Detalle </TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -191,7 +206,7 @@ export const LoadFileV = () => {
                                             <TableRow key={row.docId}>
                                                 <TableCell style={{width: 160}} align="center">{row.docId}</TableCell>
                                                 <TableCell style={{width: 160}} align="center">{row.errorCount}</TableCell>
-                                                <TableCell  style={{width: 160}} align="center">{row.valid === true ? 'valido' : 'invalido'}</TableCell>
+                                                <TableCell  style={{width: 160}} align="center">{row.valid === true ? 'Válido' : 'Inválido'}</TableCell>
                                                 <TableCell style={{width: 260}} align="center">
                                                     <TextField style={{width: '100%'}} multiline  id="filled-read-only-input"
                                                                InputProps={{
@@ -219,10 +234,10 @@ export const LoadFileV = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Resultado sobre la acción "}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"Resultado"}</DialogTitle>
                 <DialogContent>
                     <DialogContent id="alert-dialog-description">
-                        <Typography  noWrap variant="h6" className={style.fontblack}>
+                        <Typography variant="h6" className={style.fontblack}>
                             {alert.message}
                         </Typography>
                     </DialogContent>
