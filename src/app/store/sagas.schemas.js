@@ -39,19 +39,19 @@ export function* validationErrors(){
                 yield put (userActions.setUserInSession(payload.idUser));
                 let query = { "usuario":payload.idUser};
                 let SCHEMA = JSON.parse(schema);
-                const respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA, { headers: {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }});
+                let respuestaArray;
 
-                let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
+                        respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA, { headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }});
 
-                console.log(numeroRegistros);
                 if(respuestaArray.data.Status === 500){
-                    console.log(respuestaArray.data);
                     yield put(mutations.setErrorsValidation(respuestaArray.data.response));
+                    yield put(alertActions.error("Se encontraron errores en la validación verificar"));
                 }else{
+                    let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
                     yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
                 }
             }

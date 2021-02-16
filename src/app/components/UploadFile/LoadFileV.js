@@ -96,13 +96,15 @@ export const LoadFileV = () => {
 
     const style=useStyles();
 
+    const closeDialog = () => {
+        setOpen(false);
+    }
     const redirectToRoute = (path) =>{
         history.push(path);
     }
 
     const setValueSystem= (value) => {
         systemChosen = value;
-        console.log(value);
     }
 
     const handleFileRead = (e) => {
@@ -118,7 +120,6 @@ export const LoadFileV = () => {
 
     return (
         <div>
-            {alert.status === undefined &&
                 <div>
             <Grid container className={style.root}>
                 <Grid item xs={12}>
@@ -209,7 +210,7 @@ export const LoadFileV = () => {
 
             </Paper>
             </div>
-            }
+
 
             <Dialog
                 disableBackdropClick
@@ -227,7 +228,7 @@ export const LoadFileV = () => {
                     </DialogContent>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={ () => redirectToRoute("/consulta/S2")} color="primary" autoFocus>
+                    <Button onClick={ () => closeDialog()} color="primary" autoFocus>
                         Aceptar
                     </Button>
                 </DialogActions>
