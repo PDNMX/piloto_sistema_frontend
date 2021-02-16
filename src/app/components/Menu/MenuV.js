@@ -394,20 +394,20 @@ const useStyles = makeStyles((theme) => ({
                             </Tooltip>
                         </div>
                     </Collapse>
-                  <Tooltip title="Carga datos" placement="right">
+                  <Tooltip title="Cargar datos" placement="right">
                     <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
-                      <ListItemText primary="Carga datos" />
+                      <ListItemText primary="Cargar datos" />
                     </ListItem>
                   </Tooltip>
-                  <Tooltip title="Captura datos" placement="right">
+                  <Tooltip title="Capturar datos" placement="right">
                     <ListItem button className={classes.submenuicono} onClick={e=>menuDatos2(e)}>
                       <ListItemIcon>
                         <ArrowForwardIcon fontSize="small" />
                       </ListItemIcon>
-                      <ListItemText primary="Captura datos" />
+                      <ListItemText primary="Capturar datos" />
                     </ListItem>
                   </Tooltip>
                         <Collapse in={checkedDatos2}>

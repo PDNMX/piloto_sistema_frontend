@@ -633,6 +633,9 @@ export function* deleteSchemaS2(){
         const token = localStorage.token;
         if(token){
             let request = {"_id": id};
+            let payload = jwt.decode(token);
+            yield put (userActions.setUserInSession(payload.idUser));
+            request["usuario"]=payload.idUser;
             try{
                 const {status} = yield axios.delete(ur + `/deleteRecordS2`, { data : {request} , headers: {
                         'Content-Type': 'application/json',

@@ -78,6 +78,9 @@ export const ListProvider = () => {
 
     const handleChangeRowsPerPage = (event) => {
         setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
+        if(event.target.value<0){
+            setPagination({page : 0 ,pageSize: providers.length+1 });
+        }
         //dispatch(userActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
     };
 

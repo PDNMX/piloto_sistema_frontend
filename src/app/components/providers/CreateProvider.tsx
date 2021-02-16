@@ -121,7 +121,7 @@ function MyForm(props: MyFormProps ) {
         <div>
             <Grid item xs={12}>
                 <Typography variant={"h6"} paragraph className={classes.fontblack} align={"center"}>
-                    <b>Crear proveedor</b>
+                    {id===undefined ? <b>Crear proveedor</b> :<b>Editar proveedor</b> }
                 </Typography>
             </Grid>
             <Form
