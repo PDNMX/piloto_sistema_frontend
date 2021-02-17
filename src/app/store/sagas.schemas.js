@@ -39,14 +39,15 @@ export function* validationErrors(){
             if(systemId === "S2"){
                 let payload = jwt.decode(token);
                 yield put (userActions.setUserInSession(payload.idUser));
-                let query = { "usuario":payload.idUser};
+                var usuario=payload.idUser;
                 let SCHEMA = JSON.parse(schema);
                 let respuestaArray;
 
                         respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA, { headers: {
                             'Content-Type': 'application/json',
                             Accept: 'application/json',
-                            'Authorization': `Bearer ${token}`
+                            'Authorization': `Bearer ${token}`,
+                                'usuario':usuario
                         }});
 
                 if(respuestaArray.data.Status === 500){
@@ -509,6 +510,10 @@ export function* creationS2Schema(){
         puesto: {nombre:values.siPuestoNombre, nivel: values.siPuestoNivel}};
 
         console.log(docSend);
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser));
+        let usuario=payload.idUser;
+        docSend["usuario"]=usuario;
 
         const {status} = yield axios.post(ur + `/insertS2Schema`,docSend, {headers: {
                 'Content-Type': 'application/json',
@@ -532,8 +537,11 @@ export function* updateS2Schema(){
         const {values} = yield take (S2Constants.UPDATE_REG_S2);
         const token = localStorage.token;
         let S2Item = storeValidate.getState().S2.find(reg=>reg._id === values._id);
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser));
+        let usuario=payload.idUser;
 
-              const {status} = yield axios.post(ur + `/updateS2Schema`,{...values, fechaCaptura: S2Item.fechaCaptura}, {headers: {
+              const {status} = yield axios.post(ur + `/updateS2Schema`,{...values, fechaCaptura: S2Item.fechaCaptura,usuario:usuario}, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
