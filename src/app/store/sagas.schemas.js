@@ -40,24 +40,30 @@ export function* validationErrors(){
                 let payload = jwt.decode(token);
                 yield put (userActions.setUserInSession(payload.idUser));
                 var usuario=payload.idUser;
-                let SCHEMA = JSON.parse(schema);
-                let respuestaArray;
+                try{
+                    let SCHEMA = JSON.parse(schema);
+                    let respuestaArray;
 
-                        respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA, { headers: {
+                    respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA, { headers: {
                             'Content-Type': 'application/json',
                             Accept: 'application/json',
                             'Authorization': `Bearer ${token}`,
-                                'usuario':usuario
+                            'usuario':usuario
                         }});
 
-                if(respuestaArray.data.Status === 500){
-                    console.log(respuestaArray.data.response);
-                    yield put(mutations.setErrorsValidation(respuestaArray.data.response));
-                    yield put(alertActions.error("No se realizó el registro ya que se encontraron errores en la validación, favor de verificar"));
-                }else{
-                    let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
-                    yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
+                    if(respuestaArray.data.Status === 500){
+                        console.log(respuestaArray.data.response);
+                        yield put(mutations.setErrorsValidation(respuestaArray.data.response));
+                        yield put(alertActions.error("No se realizó el registro ya que se encontraron errores en la validación, favor de verificar"));
+                    }else{
+                        let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
+                        yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
+                    }
+                }catch (e) {
+                    yield put(alertActions.error("Error encontrado en syntaxis del archivo Json "+ e));
                 }
+
+
             }
         }else{
             console.log("error in token");
