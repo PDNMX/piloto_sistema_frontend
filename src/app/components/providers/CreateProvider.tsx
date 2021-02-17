@@ -18,6 +18,10 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Link } from 'react-router-dom';
 import Switch from '@material-ui/core/Switch';
 import {history} from "../../store/history";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
 
 
 
@@ -36,7 +40,7 @@ interface FormProvider {
 interface MyFormProps {
     initialValues: FormProvider;
     id: string;
-    alerta: { status: boolean };
+    alerta: { status: boolean, message:string };
 }
 
 
@@ -51,15 +55,17 @@ function MyForm(props: MyFormProps ) {
     let { initialValues , id , alerta } = props;
     const alert = alerta;
     const dispatch = useDispatch();
+    const [loaderDisplay, setLoaderDisplay] = React.useState(false);
 
     // yes, this can even be async!
     async function onSubmit(values: FormProvider) {
-        alert.status =false;
+
         if(id != undefined){
             dispatch(requestEditProvider({...values, _id : id}));
         }else{
             dispatch(requestCreationProvider(values));
         }
+        setLoaderDisplay(true);
 
     }
 
@@ -130,7 +136,7 @@ function MyForm(props: MyFormProps ) {
                 validate={validate}
                 render={({ handleSubmit,values, submitting   }) => (
                     <form  onSubmit={handleSubmit} noValidate>
-                        {alert.status === undefined &&
+                        {loaderDisplay == false &&
                         <div>
                             <Grid className= {classes.gridpadding} spacing={3} container >
                                 <Grid item xs={12} md={6}>
@@ -166,8 +172,31 @@ function MyForm(props: MyFormProps ) {
                             </Grid>
 
                         </div>}
+
+                        <Dialog
+                            disableBackdropClick
+                            disableEscapeKeyDown
+                            open={alert.status}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                        >
+                            <DialogTitle id="alert-dialog-title">{"Resultado"}</DialogTitle>
+                            <DialogContent>
+                                <DialogContent id="alert-dialog-description">
+                                    <Typography  noWrap variant="h6" className={classes.fontblack}>
+                                        {alert.message}
+                                    </Typography>
+                                </DialogContent>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button disabled={!alert.status} onClick={ () => redirectToRoute("/proveedores")} color="primary" autoFocus>
+                                    Aceptar
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+
                         <div className="sweet-loading">
-                            {alert.status != undefined && <div><Grid item xs={12}>
+                            {loaderDisplay == true && alert.status === undefined && <div><Grid item xs={12}>
                                 <Typography variant={"h5"} paragraph color={"primary"} align={"center"}>
                                     <b>Cargando ...</b>
                                 </Typography>
@@ -177,7 +206,7 @@ function MyForm(props: MyFormProps ) {
                                 css={override}
                                 size={150}
                                 color={"#123abc"}
-                                loading={alert.status === undefined ? false : !alert.status }
+                                loading={loaderDisplay && alert.status === undefined}
                             />
                         </div>
 

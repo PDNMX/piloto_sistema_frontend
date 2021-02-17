@@ -183,7 +183,7 @@ export const LoadFileV = () => {
                     </Grid>
 
                     {errors &&
-                    <Grid  container justify={"center"}>
+                    <Grid  container justify={"flex-start"}>
                         <Typography  noWrap variant="h6" className={style.fontblack}>
                             Errores
                         </Typography>

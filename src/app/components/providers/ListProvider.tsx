@@ -46,7 +46,8 @@ export const ListProvider = () => {
     const [nombreDependencia, setnombreDependencia] =  React.useState("");
     const [pagination, setPagination] =  React.useState({page : 0 , pageSize : 10 });
     const [openModalProviderInfo, setOpenModalProviderInfo] = React.useState(false);
-    const [selectedProvider, setSelectedProvider] = React.useState({_id : "",fechaAlta : "", fechaActualizacion:"" });
+    const [selectedProvider, setSelectedProvider] = React.useState({_id : "",fechaAlta : "", fechaActualizacion:"", dependencia: "" , estatus: "" , sistemas :[]});
+    var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
 
     const handleOpenModalProviderInfo = (provider) => {
         setOpenModalProviderInfo(true);
@@ -77,11 +78,12 @@ export const ListProvider = () => {
     };
 
     const handleChangeRowsPerPage = (event) => {
-        setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
-        if(event.target.value<0){
-            setPagination({page : 0 ,pageSize: providers.length+1 });
+       let newSize= parseInt(event.target.value, 10);
+        if(pagination.page * newSize > providers.length){
+            setPagination({page : 0 , pageSize : parseInt(event.target.value, 10) });
+        }else{
+            setPagination({page : pagination.page , pageSize : parseInt(event.target.value, 10) });
         }
-        //dispatch(userActions.requestPerPage({pageSize: parseInt(event.target.value, 10) }));
     };
 
     const confirmAction = (id) => {
@@ -175,19 +177,36 @@ export const ListProvider = () => {
                     <TableContainer component={Paper}>
                         <TableHead>
                             <TableRow>
+                                <StyledTableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Proveedor</StyledTableCell>
+                                <StyledTableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</StyledTableCell>
+                                <StyledTableCell className={classes.fontblack} align="center">Sistema</StyledTableCell>
                                 <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
-                                <StyledTableCell align="center" >Fecha de Actualización</StyledTableCell>
+                                <StyledTableCell align="center" >Fecha de actualización</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody key="InfoPlusProvider">
-                            <TableRow key={selectedProvider._id + "InfoPlusProvider"}>
-                                <StyledTableCell style={{width: 160}} align="center">
-                                    {selectedProvider.fechaAlta}
-                                </StyledTableCell>
-                                <StyledTableCell style={{width: 160}} align="center">
-                                    {selectedProvider.fechaActualizacion}
-                                </StyledTableCell>
-                            </TableRow>
+                            <StyledTableCell key={""} className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="left">
+                                {selectedProvider.dependencia}
+                            </StyledTableCell>
+                            <StyledTableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
+                                {selectedProvider.estatus? 'Vigente' : 'No vigente'}
+                            </StyledTableCell>
+                            <StyledTableCell className={classes.fontblack} style={{ width: 'auto' }} align="left">
+                                {(selectedProvider.sistemas).map((sistema)=>
+                                    <div>
+                                        {sistema=='S2' ? <li key ={"S2ListModal"}>Servidores Públicos que Intervienen en Procedimientos de Contratación</li> :
+                                            sistema=='S3S' ? <li key ={"S3SListModal"} >Sistema de los Servidores Públicos Sancionados</li> :
+                                                sistema=='S3P' ? <li key ={"S3PListModal"} >Sistema de los Particulares Sancionados</li> : ''}
+                                    </div>
+
+                                )}
+                            </StyledTableCell>
+                            <StyledTableCell style={{width: 160}} align="center">
+                                    {new Date(selectedProvider.fechaAlta).toLocaleDateString("es-ES", optionsDate)}
+                            </StyledTableCell>
+                            <StyledTableCell style={{width: 160}} align="center">
+                                {new Date(selectedProvider.fechaActualizacion).toLocaleDateString("es-ES", optionsDate)}
+                            </StyledTableCell>
                         </TableBody>
                     </TableContainer>
                 </Grid>

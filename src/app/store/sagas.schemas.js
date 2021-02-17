@@ -339,8 +339,6 @@ export function* creationProvider(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Proovedor creado con exito"));
-            history.push('/proveedores');
-            yield put(alertActions.clear());
         }else{
             //error in response
         }
@@ -371,8 +369,6 @@ export function* editProvider(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Proovedor creado con exito"));
-            history.push('/proveedores');
-            yield put(alertActions.clear());
         }else{
             //error in response
         }

@@ -325,7 +325,7 @@ function MyForm(props: MyFormProps ) {
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                         >
-                            <DialogTitle id="alert-dialog-title">{"Resultado sobre la acción "}</DialogTitle>
+                            <DialogTitle id="alert-dialog-title">{"Resultado"}</DialogTitle>
                             <DialogContent>
                                 <DialogContent id="alert-dialog-description">
                                     <Typography  noWrap variant="h6" className={cla.fontblack}>
