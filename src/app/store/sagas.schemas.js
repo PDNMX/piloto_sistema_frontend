@@ -10,7 +10,7 @@ import {userConstants} from "../_constants/user.constants";
 import {userActions} from "../_actions/user.action";
 import {providerConstants} from "../_constants/provider.constants";
 import {providerActions} from "../_actions/provider.action";
-import {REQUEST_TOKEN_AUTH, requestTokenAuth} from "./mutations";
+import {REQUEST_TOKEN_AUTH, requestTokenAuth, REQUEST_RESET_PASSWORD} from "./mutations";
 import {catalogConstants} from "../_constants/catalogs.constants";
 import {catalogActions} from "../_actions/catalog.action";
 import {S2Constants} from "../_constants/s2.constants";
@@ -690,5 +690,33 @@ export function* consultBitacora(){
             yield put(alertActions.success("Consulta realizada con éxito"));
             yield put(alertActions.clear());
 
+    }
+}
+
+export function* ResetPassword(){
+    while (true){
+        const {credentialUser} = yield take (mutations.REQUEST_RESET_PASSWORD);
+        let correo = credentialUser.correo;
+        let status;
+
+        const requestBody = {
+            correo: correo
+        }
+
+        try{
+            status = yield axios.post(ur + `/resetpassword`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
+            //localStorage.setItem("token", token.data.access_token);
+            history.push('/restaurarpassword');
+
+            console.log(status.data.message);
+            if(status.data.Status === 200){
+                yield put(alertActions.success(status.data.message));
+            }else{
+                //error in response
+                yield put(alertActions.error(status.data.message));
+            }
+        }catch (err) {
+
+        }
     }
 }

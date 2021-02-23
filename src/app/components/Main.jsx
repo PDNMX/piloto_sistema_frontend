@@ -22,6 +22,7 @@ import {clearErrorsValidation} from "../store/mutations"
 import {ConnectedConsultarBitacora} from "./Bitacora/ConsultarBitacora";
 import {bitacoraActions} from "../_actions/bitacora.action";
 import {ListBitacora} from "./Bitacora/ListBitacora";
+import {ResetPasswordV} from "./Login/ResetPassword";
 
 const theme = createMuiTheme({
     typography: {
@@ -61,6 +62,10 @@ export const Main = ()=> (
                 <Route exact
                        path= "/login"
                        render={() => (<LoginV/>)}
+                />
+                <Route exact
+                       path= "/restaurarpassword"
+                       render={() => (<ResetPasswordV/>)}
                 />
 
                 <Route exact

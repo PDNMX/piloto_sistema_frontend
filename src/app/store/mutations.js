@@ -23,7 +23,7 @@ export const REQUEST_EDIT_PROVIDER = 'REQUEST_EDIT_PROVIDER';
 export const REQUEST_TOKEN_AUTH = 'REQUEST_TOKEN_AUTH' ;
 export const REQUEST_CONSULT_BITACORA = 'REQUEST_CONSULT_BITACORA';
 export const CLEAR_ERRORS_VALIDATION = 'CLEAR_ERRORS_VALIDATION';
-
+export const REQUEST_RESET_PASSWORD = 'REQUEST_RESET_PASSWORD';
 
 export const clearErrorsValidation = () => ({
     type : CLEAR_ERRORS_VALIDATION
@@ -104,4 +104,9 @@ export const requestEditProvider = (usuarioJson) => ({
 export const requestConsultBitacora = (usuarioJson) => ({
     type: REQUEST_CONSULT_BITACORA,
     usuarioJson
+});
+
+export const requestResetPassword = (credentialUser) => ({
+    type: REQUEST_RESET_PASSWORD,
+    credentialUser
 });
