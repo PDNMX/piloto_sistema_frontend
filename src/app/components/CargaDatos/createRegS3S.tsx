@@ -24,31 +24,55 @@ const CreateReg = ({id ,alert, catalogos, registry}) => {
     return <MyForm initialValues={registry} catalogos={catalogos}  alerta={alert} id={id}/>;
 }
 
-interface FormDataEsquemaS2 {
-    ejercicioFiscal: string,
-    ramo?: string,
-    nombres?: string,
-    primerApellido?: string,
-    segundoApellido?: string,
-    genero?: { },
-    institucionDependencia?:{ },
-    tipoArea?: [],
-    tipoProcedimiento?:[],
-    nivelResponsabilidad?: [],
-    idnombre?: string,
-    idsiglas?:string,
-    idclave?:string ,
-    puestoNombre?: string,
-    puestoNivel?:string,
-    sinombres?: string ,
-    siPrimerApellido?: string,
-    siSegundoApellido?: string,
-    siPuestoNombre?: string,
-    siPuestoNivel?:string
+interface FormDataEsquemaS3S {
+    fechaCaptura?: String,
+    expediente?: String,
+    institucionDependencia?: {
+        nombre: String,
+        clave: String,
+        siglas: String
+    },
+    servidorPublicoSancionado?:{
+        nombres: String,
+        primerApellido: String,
+        segundoApellido: String,
+        genero: {
+            clave: String,
+            valor: String
+        },
+        puesto: String,
+        nivel: String
+    },
+    autoridadSancionadora?: String,
+    tipoFalta?: {
+        clave: String,
+        valor: String,
+        descripcion: String
+    },
+    tipoSancion?: [{clave :String , valor: String , descripcion: String}],
+    causaMotivoHechos?: String,
+    resolucion?:{
+        url:String,
+        fechaResolucion: String
+    },
+    multa?:{
+        monto: Number,
+        moneda: {
+            clave:String,
+            valor:String
+        }
+    },
+    inhabilitacion?:{
+        plazo: String,
+        fechaInicial:String,
+        fechaFinal:String
+    },
+    documentos?: [{id: String, tipo:String, titulo:String , descripcion :String , url: String, fecha:String}],
+    observaciones?:String
 }
 
 interface MyFormProps {
-    initialValues: FormDataEsquemaS2;
+    initialValues: FormDataEsquemaS3S;
     alerta: { status: boolean , message :""};
     catalogos:{genero: [], ramo: [], puesto: [], tipoArea: [], nivelResponsabilidad:[], tipoProcedimiento:[] };
     id: string;
@@ -68,20 +92,24 @@ function MyForm(props: MyFormProps ) {
 
 
     const schema = Yup.object().shape({
-        ejercicioFiscal: Yup.string().matches(new RegExp('^[0-9]{4}$'),'Debe tener 4 dígitos'),
-        ramo: Yup.string(),
-        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Nombres es requerido").trim(),
-        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Primer apellido es requerido").trim(),
-        segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).trim(),
-        genero : Yup.object(),
+        expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
         idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Nombres de la sección Institución Dependencia es requerido").trim(),
         idsiglas: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres ').trim(),
         idclave: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
+        SPSnombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres ' ).required("El campo Nombres de Servidor público es requerido").trim(),
+        SPSprimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Primer apellido de Servidor público es requerido").trim(),
+        SPSsegundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        SPSgenero : Yup.object(),
+
+        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Nombres es requerido").trim(),
+        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Primer apellido es requerido").trim(),
+        segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).trim(),
+
         puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten cadenas vacías, máximo 25 caracteres' ).trim()
             .when('puestoNivel',  (puestoNivel) => {
-            if(!puestoNivel)
-                return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim().required("Al menos un campo de la sección Puesto, es requerido ")
-        }),
+                if(!puestoNivel)
+                    return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim().required("Al menos un campo de la sección Puesto, es requerido ")
+            }),
         puestoNivel :Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).trim(),
         tipoArea: Yup.array(),
         nivelResponsabilidad : Yup.array(),
@@ -150,7 +178,7 @@ function MyForm(props: MyFormProps ) {
     }
 
     // yes, this can even be async!
-    async function onSubmit(values: FormDataEsquemaS2) {
+    async function onSubmit(values: FormDataEsquemaS3S) {
         if(id != undefined){
             dispatch(S2Actions.requestEditDo({...values, _id : id}));
         }else{
@@ -161,6 +189,8 @@ function MyForm(props: MyFormProps ) {
     }
 
     return (
+
+
         <div>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
@@ -261,7 +291,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                       Puesto
+                                        Puesto
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
@@ -366,4 +396,4 @@ function mapDispatchToProps(dispatch, ownProps){
     return {};
 }
 
-export const ConnectedCreateReg = connect(mapStateToProps,mapDispatchToProps)(CreateReg);
+export const ConnectedCreateRegS3S = connect(mapStateToProps,mapDispatchToProps)(CreateReg);

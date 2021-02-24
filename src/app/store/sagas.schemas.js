@@ -17,6 +17,8 @@ import {S2Constants} from "../_constants/s2.constants";
 import {storeValidate} from "./index";
 import {S2Actions} from "../_actions/s2.action";
 import {bitacoraActions} from "../_actions/bitacora.action";
+import {S3SConstants} from "../_constants/s3s.constants";
+import {S3SActions} from "../_actions/s3s.action";
 const qs = require('querystring')
 const jwt = require('jsonwebtoken');
 const _ = require('underscore');
@@ -36,10 +38,11 @@ export function* validationErrors(){
         console.log("token"+token);
         console.log("system"+systemId);
         if(token){
+            let payload = jwt.decode(token);
+            yield put (userActions.setUserInSession(payload.idUser));
+            var usuario=payload.idUser;
+
             if(systemId === "S2"){
-                let payload = jwt.decode(token);
-                yield put (userActions.setUserInSession(payload.idUser));
-                var usuario=payload.idUser;
                 try{
                     let SCHEMA = JSON.parse(schema);
                     let respuestaArray;
@@ -60,10 +63,31 @@ export function* validationErrors(){
                         yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
                     }
                 }catch (e) {
-                    yield put(alertActions.error("Error encontrado en syntaxis del archivo Json "+ e));
+                    yield put(alertActions.error("Error encontrado en sintaxis del archivo Json "+ e));
                 }
+            }else if(systemId === "S3S"){
+                try{
+                    let SCHEMA = JSON.parse(schema);
+                    let respuestaArray;
 
+                    respuestaArray = yield axios.post(ur + `/validateSchemaS3S`,SCHEMA, { headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                            'Authorization': `Bearer ${token}`,
+                            'usuario':usuario
+                        }});
 
+                    if(respuestaArray.data.Status === 500){
+                        console.log(respuestaArray.data.response);
+                        yield put(mutations.setErrorsValidation(respuestaArray.data.response));
+                        yield put(alertActions.error("No se realizó el registro ya que se encontraron errores en la validación, favor de verificar"));
+                    }else{
+                        let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
+                        yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
+                    }
+                }catch (e) {
+                    yield put(alertActions.error("Error encontrado en sintaxis del archivo Json "+ e));
+                }
             }
         }else{
             console.log("error in token");
@@ -589,6 +613,25 @@ export function* getListSchemaS2(){
 }
 
 
+export function* getListSchemaS3S(){
+    while(true){
+        const {filters} = yield take (S3SConstants.REQUEST_LIST_S3S);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/listSchemaS3S`,filters,{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (S3SActions.setListS3S(respuestaArray.data.results));
+        console.log(respuestaArray.data.pagination);
+        yield put (S3SActions.setpaginationS3S(respuestaArray.data.pagination));
+
+    }
+}
+
+
 
 export function* fillUpdateRegS2(){
     while(true){
@@ -639,9 +682,6 @@ export function* fillUpdateRegS2(){
 }
 
 
-
-
-
 export function* deleteSchemaS2(){
     while (true) {
         const {id} = yield take (S2Constants.DELETE_REQUEST);
@@ -652,14 +692,47 @@ export function* deleteSchemaS2(){
             yield put (userActions.setUserInSession(payload.idUser));
             request["usuario"]=payload.idUser;
             try{
-                const {status} = yield axios.delete(ur + `/deleteRecordS2`, { data : {request} , headers: {
+                const {status, data} = yield axios.delete(ur + `/deleteRecordS2`, { data : {request} , headers: {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`
                     } , validateStatus: () => true});
                 if(status === 200){
+                    console.log("Response",  );
                     yield put(S2Actions.deleteRecordDo(id));
-                    yield put(alertActions.success("Se elimino el Registro con exito"));
+                    yield put(alertActions.success(data.messageFront));
+                }else{
+                    //error in response
+                    yield put(alertActions.error("El Registro NO fue eliminado"));
+                }
+            }catch (e) {
+                yield put(alertActions.error("El Registro NO fue eliminado"));
+            }
+        }
+
+
+    }
+}
+
+export function* deleteSchemaS3S(){
+    while (true) {
+        const {id} = yield take (S3SConstants.DELETE_REQUEST);
+        const token = localStorage.token;
+        if(token){
+            let request = {"_id": id};
+            let payload = jwt.decode(token);
+            yield put (userActions.setUserInSession(payload.idUser));
+            request["usuario"]=payload.idUser;
+            try{
+                const {status, data} = yield axios.delete(ur + `/deleteRecordS3S`, { data : {request} , headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    } , validateStatus: () => true});
+                if(status === 200){
+                    console.log("Response",  );
+                    yield put(S2Actions.deleteRecordDo(id));
+                    yield put(alertActions.success(data.messageFront));
                 }else{
                     //error in response
                     yield put(alertActions.error("El Registro NO fue eliminado"));

@@ -22,6 +22,7 @@ import {clearErrorsValidation} from "../store/mutations"
 import {ConnectedConsultarBitacora} from "./Bitacora/ConsultarBitacora";
 import {bitacoraActions} from "../_actions/bitacora.action";
 import {ListBitacora} from "./Bitacora/ListBitacora";
+import {S3SActions} from "../_actions/s3s.action";
 import {ResetPasswordV} from "./Login/ResetPassword";
 
 const theme = createMuiTheme({
@@ -100,6 +101,17 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
+                       path= "/captura/S3S"
+                       render={() => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch((alertActions.clear()));
+                               return <ConnectedMenuV propiedades = {{renderView : "createRegS3S"}} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
                        path= "/consulta/S2"
                        render={() => {
                            if (localStorage.token) {
@@ -126,6 +138,18 @@ export const Main = ()=> (
                                return <ConnectedMenuV propiedades = {{renderView : "editRegS2"}} match = {match} />
                            }else{
                                return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/consulta/S3S"
+                       render={() => {
+                           if (localStorage.token) {
+                               storeValidate.dispatch(S3SActions.requestListS3S({}));
+                               storeValidate.dispatch((alertActions.clear()));
+                               return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)
+                           } else {
+                               return <Redirect to="/login"/>;
                            }
                        }}
                 />

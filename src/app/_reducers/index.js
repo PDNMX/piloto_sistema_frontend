@@ -9,7 +9,8 @@ import {providerSelect } from './providerTemporal.reducer';
 import {userSelect } from './userTemporal.reducer';
 import {userInSession} from './userInSession.reducer';
 import {catalogs} from './catalog.reducer';
-import {S2} from './S2Schema.reducer'
+import {S2} from './S2Schema.reducer';
+import {S3S} from './S3SSchema.reducer';
 import {bitacora} from './bitacoraTemporal.reducer';
 const rootReducer = combineReducers({
     users,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     providerSelect,
     catalogs,
     S2,
+    S3S,
     userInSession,
     userSelect,
     bitacora

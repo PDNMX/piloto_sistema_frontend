@@ -150,6 +150,7 @@ export const LoadFileV = () => {
                                 id: 'system-native-required',
                             }} label="Sistema" className={style.marginLeft}  required={true} onChange={e => setValueSystem(e.target.value) }>
                                 <MenuItem value={'S2'}>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</MenuItem>
+                                <MenuItem value={'S3S'}>Sistema de los Servidores Públicos Sancionados</MenuItem>
                             </Select>
                             {/*<select inputProps={{
                                 id: 'system-native-required',

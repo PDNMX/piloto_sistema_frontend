@@ -9,8 +9,9 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar, Divider, Tooltip
+    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar, Divider, Tooltip, Toolbar
 } from "@material-ui/core";
+import Checkbox from '@material-ui/core/Checkbox';
 import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
@@ -78,10 +79,10 @@ export const ListS2Schema = () => {
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
     const [nombreUsuario, setNombreUsuario] =  React.useState("");
+    const [selectedCheckBox, setSelectedCheckBox ] = React.useState([]);
     const [query, setQuery] =  React.useState({});
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS2>({});
-    const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -133,6 +134,67 @@ export const ListS2Schema = () => {
         }
         handleClose();
     }
+
+    let EnhancedTableToolbar = () => {
+        return (
+            <Toolbar className={classes.tool}>
+                <div className={classes.title}>
+                    {selectedCheckBox.length > 0 &&
+                        <Typography color="inherit" variant="subtitle1">
+                            {selectedCheckBox.length} registros seleccionados
+                        </Typography>
+                    }
+                </div>
+                <div className={classes.spacer} />
+                <div className={classes.actions}>
+                    {selectedCheckBox.length > 0 &&
+                        <Tooltip title="Delete">
+                            <Button style={{ color: 'white', padding: '0px' }}
+                                    onClick= {()=> {handleClickOpen(selectedCheckBox, "nomre")}} >
+                                <DeleteOutlineOutlinedIcon/>
+                            </Button>
+                        </Tooltip>
+                  }
+                </div>
+            </Toolbar>
+        );
+    };
+
+    const handleCheckboxAll= (event) => {
+        let array= [];
+        if (event.target.checked) {
+            for(let schema of S2List){
+                // @ts-ignore
+                array.push(schema._id);
+            }
+        }
+        setSelectedCheckBox(array);
+        console.log("array "+array);
+    }
+
+    const handleCheckboxClick = (event, id) => {
+        event.stopPropagation();
+        console.log("checkbox select");
+        // @ts-ignore
+        const selectedIndex = selectedCheckBox.indexOf(id);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selectedCheckBox, id);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selectedCheckBox.slice(1));
+        } else if (selectedIndex === selectedCheckBox.length - 1) {
+            newSelected = newSelected.concat(selectedCheckBox.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selectedCheckBox.slice(0, selectedIndex),
+                selectedCheckBox.slice(selectedIndex + 1)
+            );
+        }
+
+        setSelectedCheckBox(newSelected);
+        console.log(newSelected);
+    };
 
 
     function diacriticSensitiveRegex(string = '') {
@@ -211,6 +273,28 @@ export const ListS2Schema = () => {
 
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
+            root: {
+                "&$checked": {
+                    color: '#ffe01b',
+                }
+            },
+            checked: {},
+            indeterminate:{
+                color: '#666666'
+            },
+            tool : {
+                color: 'white',
+                backgroundColor: '#7f7e7e'
+            },
+            spacer: {
+                flex: "1 1 100%"
+            },
+            actions: {
+                color: theme.palette.text.secondary
+            },
+            title: {
+                flex: "0 0 auto"
+            },
             fontblack:{
                 color: '#666666'
             },
@@ -267,6 +351,8 @@ export const ListS2Schema = () => {
 
     const classes = useStyles();
 
+    // @ts-ignore
+    // @ts-ignore
     return (
 
         <div >
@@ -275,7 +361,6 @@ export const ListS2Schema = () => {
                     {alerta.message}
                 </Alert>
             </Snackbar>
-
 
             <Modal
                 open={openModalUserInfo}
@@ -638,14 +723,13 @@ export const ListS2Schema = () => {
                                                  type="submit"
                                                  disabled={submitting}> BUSCAR </Button>
                                     </Grid>
-
-
                                 </div>
                                 }
                             </form>
                         )}
                     />
                 </Grid>
+                <Grid item md={12} sm={12}>{selectedCheckBox.length > 0 && <EnhancedTableToolbar></EnhancedTableToolbar>} </Grid>
 
                 <Grid className= {`${classes.gridpadding} ${classes.gridpaddingBottom} `} container justify={"flex-start"}>
                     <Typography  variant="h6" className={classes.fontblack}>
@@ -653,9 +737,22 @@ export const ListS2Schema = () => {
                     </Typography>
                 </Grid>
                 <TableContainer  component={Paper}>
-                    <Table aria-label="custom pagination table">
+                    <Table  aria-label="custom pagination table">
                         <TableHead >
                             <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        classes={{
+                                            root: classes.root,
+                                            checked: classes.checked,
+                                            indeterminate: classes.indeterminate
+                                        }}
+                                        indeterminate={selectedCheckBox.length > 0 && selectedCheckBox.length < S2List.length}
+                                        checked={selectedCheckBox.length === S2List.length}
+                                        onClick={event =>
+                                            handleCheckboxAll(event)}
+                                    />
+                                </TableCell>
                                 <StyledTableCell align="center" >Ejercicio fiscal</StyledTableCell>
                                 <StyledTableCell align="center" >Nombres</StyledTableCell>
                                 <StyledTableCell align="center">Primer apellido</StyledTableCell>
@@ -668,6 +765,20 @@ export const ListS2Schema = () => {
                         <TableBody key="usuarios">
                             {S2List.map((schema)  => (
                                 <TableRow key={schema._id}>
+                                    <TableCell className="selectCheckbox" padding="checkbox">
+                                        <Checkbox  key={"check"+ schema._id}
+                                                   onClick={event =>
+                                                handleCheckboxClick(event, schema._id)}
+                                            className="selectCheckbox"
+                                                   classes={{
+                                                       root: classes.root,
+                                                       checked: classes.checked
+                                                   }}
+                                            // @ts-ignore
+                                            checked={selectedCheckBox.indexOf(schema._id) > -1 }
+
+                                        />
+                                    </TableCell>
                                     <StyledTableCell style={{ width: 140 }}  align="center">
                                         {schema.ejercicioFiscal}
                                     </StyledTableCell>

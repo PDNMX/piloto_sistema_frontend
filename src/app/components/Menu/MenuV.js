@@ -62,6 +62,8 @@ import {ListS2Schema} from "../CargaDatos/listSchemaS2";
 import {ConnectedConsultarBitacora} from "../Bitacora/ConsultarBitacora";
 import {ListBitacora} from "../Bitacora/ListBitacora";
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import {ListS3SSchema} from "../CargaDatos/listSchemaS3S";
+import {ConnectedCreateRegS3S} from "../CargaDatos/createRegS3S";
 
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
@@ -528,8 +530,10 @@ const useStyles = makeStyles((theme) => ({
                   {vistaRender === "editprovider" && <ConnectedCreateProvider match = {match} /> }
                   {vistaRender === "providers" && <ListProvider/> }
                   {vistaRender === "createReg" && <ConnectedCreateReg/> }
+                  {vistaRender === "createRegS3S" && <ConnectedCreateRegS3S/> }
                   {vistaRender === "editRegS2" && <ConnectedCreateReg match = {match}/> }
                   {vistaRender === "S2Schema" && <ListS2Schema/> }
+                  {vistaRender === "S3SSchema" && <ListS3SSchema/> }
 
                   {vistaRender === "consultarbitacora" && <ConnectedConsultarBitacora/>}
                   {vistaRender === "reportebitacora" && <ListBitacora/> }
