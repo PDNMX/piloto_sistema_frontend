@@ -828,7 +828,12 @@ export function* ResetPassword(){
         try{
             status = yield axios.post(ur + `/resetpassword`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
             //localStorage.setItem("token", token.data.access_token);
-            history.push('/restaurarpassword');
+            if(credentialUser.sistema===true){
+                history.push('/usuarios');
+            }else{
+                history.push('/restaurarpassword');
+            }
+
 
             console.log(status.data.message);
             if(status.data.Status === 200){
