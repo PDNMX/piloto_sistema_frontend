@@ -98,7 +98,9 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
     setCheckedBitacora((prev) => false);
     setCheckedDatos((prev) => false);
     setcheckedDatos2((prev) => false);
+    setcheckedDatosS3S((prev) => false);
     setcheckedAdminDatos2((prev) => false);
+    setcheckedAdminDatosS3S((prev) => false);
 
   }
 
@@ -112,7 +114,9 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedBitacora((prev) => false);
         setsubMenuBitacora(false);
         setcheckedDatos2((prev) => false);
+        setcheckedDatosS3S((prev) => false);
         setcheckedAdminDatos2((prev) => false);
+        setcheckedAdminDatosS3S((prev) => false);
     }
 
   const menuBitacora=(e)=>{
@@ -125,7 +129,9 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
       setCheckedDatos((prev) => false);
       setCheckedProveedor((prev) => false);
       setcheckedDatos2((prev) => false);
+      setcheckedDatosS3S((prev) => false);
       setcheckedAdminDatos2((prev) => false);
+      setcheckedAdminDatosS3S((prev) => false);
   }
 
     const menuDatos2=(e)=>{
@@ -138,7 +144,10 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedDatos(true);
         setCheckedProveedor((prev) => false);
         setcheckedDatos2((prev) => !prev);
+        setcheckedDatosS3S((prev) => !prev);
         setcheckedAdminDatos2((prev) => false);
+        setcheckedAdminDatosS3S((prev) => false);
+
     }
 
     const menuAdminDatos2=(e)=>{
@@ -151,7 +160,9 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedDatos(true);
         setCheckedProveedor((prev) => false);
         setcheckedDatos2((prev) => false);
+        setcheckedDatosS3S((prev) => false);
         setcheckedAdminDatos2((prev) => !prev);
+        setcheckedAdminDatosS3S((prev) => !prev);
     }
 
   const compCrearProovedor=(e)=>{
@@ -304,7 +315,9 @@ const useStyles = makeStyles((theme) => ({
     const [checkedDatos, setCheckedDatos] = useState(false);
     const [checkedProveedor, setCheckedProveedor] = useState(false);
     const [checkedDatos2, setcheckedDatos2] = useState(false);
+    const [checkedDatosS3S, setcheckedDatosS3S] = useState(false);
     const [checkedAdminDatos2, setcheckedAdminDatos2] = useState(false);
+    const [checkedAdminDatosS3S, setcheckedAdminDatosS3S] = useState(false);
 
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -396,6 +409,18 @@ const useStyles = makeStyles((theme) => ({
                             </Tooltip>
                         </div>
                     </Collapse>
+                    <Collapse in={checkedAdminDatosS3S}>
+                        <div>
+                            <Tooltip title="S3S" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3S")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S3S" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
                   <Tooltip title="Cargar datos" placement="right">
                     <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
                       <ListItemIcon>
@@ -424,6 +449,18 @@ const useStyles = makeStyles((theme) => ({
                                 </Tooltip>
                             </div>
                         </Collapse>
+                    <Collapse in={checkedDatosS3S}>
+                        <div>
+                            <Tooltip title="S3S" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3S")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S3S" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
                 </div>
               </Collapse>
           : ""

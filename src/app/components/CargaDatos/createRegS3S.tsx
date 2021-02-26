@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DateTimePicker} from 'mui-rff';
 import {Grid, Button, Divider} from "@material-ui/core";
 import * as Yup from 'yup';
 import {S2Actions } from "../../_actions/s2.action";
@@ -19,6 +19,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import {alertActions} from "../../_actions/alert.actions";
 import { OnChange } from 'react-final-form-listeners'
+import DateFnsUtils from "@date-io/date-fns";
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
     return <MyForm initialValues={registry} catalogos={catalogos}  alerta={alert} id={id}/>;
@@ -74,7 +75,7 @@ interface FormDataEsquemaS3S {
 interface MyFormProps {
     initialValues: FormDataEsquemaS3S;
     alerta: { status: boolean , message :""};
-    catalogos:{genero: [], ramo: [], puesto: [], tipoArea: [], nivelResponsabilidad:[], tipoProcedimiento:[] };
+    catalogos:{genero: [], tipoFalta: [], tipoSancion: [], moneda: [] };
     id: string;
 }
 
@@ -100,25 +101,25 @@ function MyForm(props: MyFormProps ) {
         SPSprimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Primer apellido de Servidor público es requerido").trim(),
         SPSsegundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SPSgenero : Yup.object(),
-
-        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Nombres es requerido").trim(),
-        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Primer apellido es requerido").trim(),
-        segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).trim(),
-
-        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten cadenas vacías, máximo 25 caracteres' ).trim()
-            .when('puestoNivel',  (puestoNivel) => {
-                if(!puestoNivel)
-                    return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim().required("Al menos un campo de la sección Puesto, es requerido ")
-            }),
-        puestoNivel :Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).trim(),
-        tipoArea: Yup.array(),
-        nivelResponsabilidad : Yup.array(),
-        tipoProcedimiento :Yup.array().min(1).required("Se requiere seleccionar mínimo una opción del campo Tipo de procedimiento"),
-        sinombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim() ,
-        siPrimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim() ,
-        siSegundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim() ,
-        siPuestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres ' ).trim(),
-        siPuestoNivel: Yup.string().matches(new RegExp("^[a-zA-Z0-9 ]{1,25}$"),'No se permiten números, ni cadenas vacías, máximo 25 caracteres' ).trim()
+        SPSpuesto:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Puesto de Servidor público es requerido").trim(),
+        SPSnivel:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se cadenas vacías máximo 25 caracteres').trim(),
+        autoridadSancionadora:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        tipoFalta: Yup.object(),
+        tpfdescripcion: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
+        tipoSancion: Yup.array().min(1).required("Se requiere seleccionar mínimo una opción del campo Tipo sanción"),
+        tsdescripcion:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
+        causaMotivoHechos:  Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').required("El campo Causa o motivo de la sanción es requerido").trim(),
+        resolucionURL: Yup.string()
+            .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                'Introduce una direccion de internet valida'
+            ),
+        resolucionFecha:  Yup.string().required("El campo Fecha de resolución es requerido"),
+        multaMonto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').required("El campo Monto es requerido"),
+        multaMoneda: Yup.object().required("El campo Moneda es requerido"),
+        inhabilitacionPlazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]*$'),'No se permiten cadenas vacías').trim(),
+        inhabilitacionFechaInicial:  Yup.string().required("El campo Fecha inicial de la sección  es requerido"),
+        inhabilitacionFechaFinal:  Yup.string().required("El campo Fecha final de la sección  es requerido"),
+        observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
     });
 
     const validate = makeValidate(schema);
@@ -190,7 +191,6 @@ function MyForm(props: MyFormProps ) {
 
     return (
 
-
         <div>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
@@ -218,62 +218,14 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="nombres"  />
+                                    <TextField label="Expediente" name="expediente"  />
                                 </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Primer apellido" name="primerApellido"  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Segundo apellido" name="segundoApellido" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "genero" label="Género" data={catalogos.genero} ></Select>
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
-                                </Grid>
-                                {catalogos.ramo &&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "ramo" label="Ramo" data={catalogos.ramo} ></Select>
-                                </Grid>}
-                                {catalogos.tipoArea &&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "tipoArea" label="Tipo de área" data={catalogos.tipoArea} multiple={true} ></Select>
-                                </Grid>}
-                                {catalogos.tipoArea &&
-                                <OnChange name="tipoArea">
-                                    {(value, previous) => {
-                                        for (let item of value) {
-                                            if (item == "") {
-                                                // @ts-ignore
-                                                values.tipoArea = [];
-                                            }
-                                        }
-                                    }}
-                                </OnChange>
-                                }
 
-                                {catalogos.nivelResponsabilidad &&
                                 <Grid item xs={12} md={3}>
-                                    <Select  name = "nivelResponsabilidad" label="Nivel de responsabilidad" data={catalogos.nivelResponsabilidad} multiple={true} ></Select>
-                                </Grid>}
+                                    <TextField label="Autoridad sancionadora"  name="autoridadSancionadora"  />
+                                </Grid>
 
-                                {catalogos.nivelResponsabilidad &&
-                                <OnChange name="nivelResponsabilidad">
-                                    {(value, previous) => {
-                                        for (let item of value) {
-                                            if (item == "") {
-                                                // @ts-ignore
-                                                values.nivelResponsabilidad = [];
-                                            }
-                                        }
-                                    }}
-                                </OnChange>
-                                }
-                                {catalogos.tipoProcedimiento &&
-                                <Grid item xs={12} md={6}>
-                                    <Select  name = "tipoProcedimiento" label="Tipo de procedimiento" data={catalogos.tipoProcedimiento} multiple={true} ></Select>
-                                </Grid>}
+                                /* Institucion dependencia ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Institución Dependencia
@@ -289,42 +241,139 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Clave" name="idclave" />
                                 </Grid>
+
+
+                                /* Servidor Publico ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Puesto
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre" name="puestoNombre" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Nivel" name="puestoNivel" />
-                                </Grid>
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Superior Inmediato
+                                        Servidor público sancionado
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
 
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="sinombres" />
+                                    <TextField label="Nombres" name="SPSnombres"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Primer apellido" name="siPrimerApellido"  />
+                                    <TextField label="Primer apellido" name="SPSprimerApellido"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Segundo apellido" name="siSegundoApellido" />
+                                    <TextField label="Segundo apellido" name="SPSsegundoApellido" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
+                                    <Select  name = "SPSgenero" label="Género" data={catalogos.genero} ></Select>
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Puesto nombre" name="siPuestoNombre"  />
+                                    <TextField label="Puesto"  name="SPSpuesto"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Puesto nivel" name="siPuestoNivel"  />
+                                    <TextField label="Nivel"  name="SPSnivel"  />
                                 </Grid>
+                                /*-------Tipo falta---------*/
+
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                       Tipo falta
+                                    </Typography>
+                                    <Divider className={cla.boton} />
+                                </Grid>
+
+                                {catalogos.tipoFalta &&
+                                <Grid item xs={12} md={3}>
+                                    <Select name="tipoFalta" label="Tipo de falta" data={catalogos.tipoFalta}></Select>
+                                </Grid>
+                                }
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Descripción"  name="tpfdescripcion"  />
+                                </Grid>
+
+                                /*-----Tipo sancion -------*/
+
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                        Tipo sanción
+                                    </Typography>
+                                    <Divider className={cla.boton} />
+                                </Grid>
+
+                                {catalogos.tipoSancion &&
+                                <Grid item xs={12} md={3}>
+                                    <Select  name = "tipoSancion" label="Tipo de sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
+                                </Grid>}
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Descripción"  name="tsdescripcion"  />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Causa"  name="causaMotivoHechos"  />
+                                </Grid>
+
+                                /*-----------Resolucion--------------*/
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                        Resolución
+                                    </Typography>
+                                    <Divider className={cla.boton} />
+                                </Grid>
+
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="URL"  name="resolucionURL"  />
+                                </Grid>
+
+                                <Grid item xs={12} md={3}>
+                                    <DateTimePicker
+                                        format={"yyyy-MM-dd'T'HH:mm:ss"}
+                                        label="Fecha de resolución"
+                                        name="resolucionFecha"
+                                        dateFunsUtils={DateFnsUtils} />
+                                </Grid>
+
+
+                                /*-----------Multa--------------*/
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                        Multa
+                                    </Typography>
+                                    <Divider className={cla.boton} />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Monto"  name="multaMonto"  />
+                                </Grid>
+
+                                {catalogos.moneda &&
+                                <Grid item xs={12} md={3}>
+                                    <Select name="multaMoneda" label="Moneda" data={catalogos.moneda}></Select>
+                                </Grid>
+                                }
+
+                                /*-----------Inhabilitacion--------------*/
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                        Inhabilitacion
+                                    </Typography>
+                                    <Divider className={cla.boton} />
+                                </Grid>
+
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Plazo"  name="inhabilitacionPlazo"  />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <DateTimePicker
+                                        format={"yyyy-MM-dd'T'HH:mm:ss"}
+                                        label="Fecha Inicial"
+                                        name="inhabilitacionFechaInicial"
+                                        dateFunsUtils={DateFnsUtils} />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <DateTimePicker
+                                        format={"yyyy-MM-dd'T'HH:mm:ss"}
+                                        label="Fecha Final"
+                                        name="inhabilitacionFechaFinal"
+                                        dateFunsUtils={DateFnsUtils} />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Observaciones"  name="observaciones"  />
+                                </Grid>
+
                             </Grid>
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"
@@ -379,7 +428,7 @@ function mapStateToProps(state,ownProps){
     let catalogos = state.catalogs;
     if( ownProps.match != undefined ){
         let id = ownProps.match.params.id;
-        let registry = state.S2.find(reg=>reg._id === id);
+        let registry = state.S3S.find(reg=>reg._id === id);
         return {
             id,
             registry,

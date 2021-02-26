@@ -14,6 +14,12 @@ export function catalogs(state = {genero: [], ramo: [], puesto: [] }, action) {
             return {...state, nivelResponsabilidad : action.niveles}
         case catalogConstants.TIPO_PROCEDIMIENTO_SET:
             return {...state , tipoProcedimiento : action.procedimientos}
+        case catalogConstants.TIPO_FALTA_SET:
+            return {...state , tipoFalta : action.falta}
+        case catalogConstants.TIPO_SANCION_SET:
+            return {...state , tipoSancion : action.sancion}
+        case catalogConstants.MONEDA_SET:
+            return {...state , moneda : action.moneda}
         default:
             return state
     }

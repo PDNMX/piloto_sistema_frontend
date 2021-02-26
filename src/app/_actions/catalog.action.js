@@ -12,10 +12,64 @@ export const catalogActions = {
     requestNivelResponsabilidadCatalogo,
     setNivelResponsabilidadSucces,
     requestTipoProcedimientoCatalogo,
-    setTipoProcedimientoSucces
+    setTipoProcedimientoSucces,
+    requestTipoFaltaCatalogo,
+    setTipoFaltaSucces,
+    requestTipoSancionCatalogo,
+    setTipoSancionSucces,
+    requestMonedaCatalogo,
+    setMonedaSucces
 
 };
+/*-------------------S3S catalogos-*/
 
+function  requestTipoFaltaCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_FALTA_REQUEST,
+        docType
+    }
+}
+
+function setTipoFaltaSucces(falta){
+    return {
+        type : catalogConstants.TIPO_FALTA_SET,
+        falta
+    }
+}
+
+function  requestTipoSancionCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_SANCION_REQUEST,
+        docType
+    }
+}
+
+function setTipoSancionSucces(sancion){
+    return {
+        type : catalogConstants.TIPO_SANCION_SET,
+        sancion
+    }
+}
+
+
+function  requestMonedaCatalogo (docType){
+    return {
+        type : catalogConstants.MONEDA_REQUEST,
+        docType
+    }
+}
+
+function setMonedaSucces(moneda){
+    return {
+        type : catalogConstants.MONEDA_SET,
+        moneda
+    }
+}
+
+
+
+
+/* ------------------S2---------------*/
 
 function  requestTipoProcedimientoCatalogo (docType){
     return {

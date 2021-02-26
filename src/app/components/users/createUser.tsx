@@ -66,7 +66,6 @@ function MyForm(props: MyFormProps ) {
             dispatch(requestCreationUser(values));
         }
     }
-
     const schema = Yup.object().shape({
         nombre: Yup.string().matches(new RegExp("^['A-zÀ-ú ]*$"),'no se permiten números, ni cadenas vacías' ).required("El campo nombre es requerido").trim(),
         apellidoUno: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required("El campo Primer apellido es requerido").trim(),

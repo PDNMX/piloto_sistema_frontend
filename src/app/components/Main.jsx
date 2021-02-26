@@ -104,6 +104,11 @@ export const Main = ()=> (
                        path= "/captura/S3S"
                        render={() => {
                            if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                               storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
                                storeValidate.dispatch((alertActions.clear()));
                                return <ConnectedMenuV propiedades = {{renderView : "createRegS3S"}} />
                            }else{
