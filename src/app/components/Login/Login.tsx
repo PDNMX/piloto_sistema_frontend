@@ -230,7 +230,7 @@ return (
                     <Grid item xs={12} md={12} container direction="row" justify="center" alignItems="center">
                       <div onMouseEnter={handleColor} onMouseLeave={handleColorLeave} style={colorOver}
                           onClick={ () => redirectToRoute("/restaurarpassword")}>
-                          Reestablecer contraseña
+                          Restablecer contraseña
                       </div>
                     </Grid>
                   </Grid>
