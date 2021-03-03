@@ -150,12 +150,8 @@ export const Main = ()=> (
                 <Route exact
                        path= "/consulta/S3S"
                        render={() => {
-<<<<<<< Updated upstream
-                           if (localStorage.token) {
-                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
-=======
                            if (localStorage.token && localStorage.rol =="2") {
->>>>>>> Stashed changes
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                storeValidate.dispatch(S3SActions.requestListS3S({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)
