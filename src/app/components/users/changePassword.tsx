@@ -1,0 +1,206 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Form } from 'react-final-form';
+import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
+import {MenuItem, Grid, Button, TableCell, Switch, IconButton, Tooltip, Snackbar} from "@material-ui/core";
+import * as Yup from 'yup';
+import { useDispatch, useSelector } from "react-redux";
+import {requestChangePassword, requestCreationUser, requestEditUser} from "../../store/mutations";
+import { css } from "@emotion/core";
+import ClipLoader from "react-spinners/ClipLoader";
+import Typography from "@material-ui/core/Typography";
+import { connect } from 'react-redux';
+import {userActions} from "../../_actions/user.action";
+import {alertActions} from "../../_actions/alert.actions";
+import {Link} from 'react-router-dom';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import {makeStyles} from "@material-ui/core/styles";
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import {history} from "../../store/history";
+import ListItem from "@material-ui/core/ListItem";
+import { OnChange } from 'react-final-form-listeners'
+import {Alert} from "@material-ui/lab";
+
+const ChangePassword = ({id, user,alert}) => {
+    return <MyForm initialValues={user}  id={id} alerta={alert}/>;
+}
+
+interface FormDataUser {
+    constrasena?:string;
+}
+
+interface MyFormProps {
+    initialValues: FormDataUser;
+    id: string;
+    alerta: { status: boolean };
+}
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
+
+function MyForm(props: MyFormProps ) {
+    let { initialValues , id   } = props;
+
+    const {alerta} = useSelector(state => ({
+        alerta : state.alert,
+    }));
+
+    const dispatch = useDispatch();
+
+    // yes, this can even be async!
+    async function onSubmit(values: FormDataUser) {
+        alerta.status =false;
+        if(id != undefined){
+            dispatch(requestEditUser({...values, _id : id}));
+        }else{
+            dispatch(requestChangePassword(values));
+        }
+    }
+
+    const schema = Yup.object().shape({
+        constrasena: Yup.string().matches(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*()_+,.\\\\\\/;\':"-]).{8,}$'),'Inserta al menos 8 caracteres, al menos un número, al menos un caracter especial ' ).required("El campo Contraseña es requerido").trim(),
+        passwordConfirmation: Yup.string().required("Confirmar contraseña es un campo requerido").when('constrasena', (password, field) =>
+            password ? field.required("Confirmar contraseña es un campo requerido").oneOf([Yup.ref('constrasena')],"Este campo tiene que coincidir con el campo contraseña") : field
+        ),
+    });
+
+    const validate = makeValidate(schema);
+    const required = makeRequired(schema);
+
+    const handleCloseSnackbar = () => {
+        dispatch(alertActions.clear());
+    };
+
+
+
+    const styles = makeStyles({
+        boton:{
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
+        marginright:{
+            marginRight: '30px',
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
+        gridpadding: {
+            padding: '30px',
+        },
+        primary: {
+            main: "#89d4f2",
+            light: "#bdffff",
+            dark: "#34b3eb"
+        },
+        secondary: {
+            main: "#ffe01b",
+            light: "#ffff5c",
+            dark: "#c8af00"
+        },
+        fontblack:{
+            color: '#666666'
+        }
+    });
+
+
+    const redirectToRoute = (path) =>{
+        history.push(path);
+    }
+
+    const cla = styles();
+
+    const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
+        variant:"contained",
+        color:"primary",
+        type:"submit"
+    }
+
+
+
+    return (
+
+
+        <div>
+            <Grid item xs={12}>
+                <Typography variant={"h6"} paragraph className={cla.fontblack} align={"center"}>
+                    <b>Cambiar contraseña</b>
+                </Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+                <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={5000} onClose={handleCloseSnackbar}>
+                    <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
+                        {alerta.message}
+                    </Alert>
+                </Snackbar>
+            </Grid>
+            <Form
+                onSubmit={onSubmit}
+                initialValues={initialValues}
+                validate={validate}
+                render={({ handleSubmit,values, submitting   }) => (
+                    <form  onSubmit={handleSubmit} noValidate>
+                        {alerta.status === undefined &&
+                        <div>
+                            <Grid className= {cla.gridpadding} spacing={3} container >
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Contraseña" name="constrasena"  type="password" required={true} />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Confirmar contraseña" name="passwordConfirmation"  type="password" required={true} />
+                                </Grid>
+                            </Grid>
+                            <Grid  spacing={3} justify="flex-end"
+                                   alignItems="flex-end"
+                                   container
+                                   item
+                                   xs={12}
+                                   md={12}>
+                                <Tooltip title="Cancelar" placement="left">
+                                    <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.marginright}
+                                             type="submit">
+                                        Cancelar
+                                    </Button>
+                                </Tooltip>
+
+                                <Tooltip title="Guardar" placement="right">
+                                    <Button  className={cla.boton}  variant="contained"
+                                             type="submit"
+                                             disabled={submitting}> Guardar
+                                    </Button>
+                                </Tooltip>
+                            </Grid>
+                        </div>
+                        }
+                    </form>
+                )}
+            />
+        </div>
+    );
+}
+
+function mapStateToProps(state,ownProps){
+    let alert = state.alert;
+    if( ownProps.match != undefined ){
+        let id = ownProps.match.params.id;
+        let user = state.users.find(user=>user._id === id);
+        let idUser = state.setUserInSession;
+        return {
+            id,
+            user,
+            alert,
+            idUser
+        }
+    }else{
+        return {alert};
+    }
+}
+
+
+function mapDispatchToProps(dispatch, ownProps){
+    return {};
+}
+
+export const ConnectedChangePassword = connect(mapStateToProps,mapDispatchToProps)(ChangePassword);

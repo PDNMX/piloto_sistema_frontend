@@ -75,10 +75,6 @@ function MyForm(props: MyFormProps ) {
         telefono:  Yup.string().matches(new RegExp('^[0-9]{10}$'), 'Inserta un número de teléfono válido, 10 caracteres').required("El campo Número de teléfono es requerido").trim(),
         extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , máximo 10 caracteres').trim(),
         usuario: Yup.string().matches(new RegExp('^[a-zA-Z0-9]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required("El campo Nombre de usuario es requerido").trim(),
-        constrasena: Yup.string().matches(new RegExp('^(?=.*[0-9])(?=.*[!@#$%^&*()_+,.\\\\\\/;\':"-]).{8,}$'),'Inserta al menos 8 caracteres, al menos un número, al menos un caracter especial ' ).required("El campo Contraseña es requerido").trim(),
-        passwordConfirmation: Yup.string().required("Confirmar contraseña es un campo requerido").when('constrasena', (password, field) =>
-            password ? field.required("Confirmar contraseña es un campo requerido").oneOf([Yup.ref('constrasena')],"Este campo tiene que coincidir con el campo contraseña") : field
-        ),
         sistemas: Yup.array().min(1).required("El campo Sistemas aplicables es requerido"),
         proveedorDatos: Yup.string().required("El campo Proveedor de datos es requerido")
     });
@@ -182,12 +178,6 @@ function MyForm(props: MyFormProps ) {
                         <Grid item xs={12} md={3}>
                             <TextField label="Nombre de usuario" name="usuario" required={true} />
                         </Grid>
-                        <Grid item xs={12} md={3}>
-                            <TextField label="Contraseña" name="constrasena"  type="password" required={true} />
-                        </Grid>
-                            <Grid item xs={12} md={3}>
-                                <TextField label="Confirmar contraseña" name="passwordConfirmation"  type="password" required={true} />
-                            </Grid>
                             {id != null &&
                             <Grid item xs={12} md={3}>
                                 <Switches label="Estatus" name="estatus" required={true} data={estatus}/>

@@ -1,5 +1,6 @@
 import { userConstants } from '../_constants/user.constants';
 import {providerConstants} from "../_constants/provider.constants";
+import {bitacoraConstants} from "../_constants/bitacora.constants";
 export const userActions = {
     requestPerPage,
     setPerPageSucces,
@@ -11,7 +12,10 @@ export const userActions = {
     setUserInSession,
     removeSessionLogIn,
     requestAllUsers,
-    setUsersAll
+    setUsersAll,
+    setUserPassword,
+    requestVigenciaPass,
+    setVigenciaPass
 };
 
 function requestAllUsers(){
@@ -80,4 +84,21 @@ function setPerPageSucces(users) {
 
 function setUsersAll (users){
     return {type : userConstants.USERS_GETALL_SET, users}
+}
+
+function setUserPassword(password){
+    return{
+        type : userConstants.USER_PASSWORD_SET,
+        password
+    }
+}
+
+function requestVigenciaPass(vigencia){
+    return {
+        type :  userConstants.REQUEST_VIGENCIA_PASS,
+    }
+}
+
+function setVigenciaPass (vigencia){
+    return {type : userConstants.REQUEST_VIGENCIA_PASS_SET, vigencia}
 }

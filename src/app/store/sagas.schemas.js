@@ -10,7 +10,7 @@ import {userConstants} from "../_constants/user.constants";
 import {userActions} from "../_actions/user.action";
 import {providerConstants} from "../_constants/provider.constants";
 import {providerActions} from "../_actions/provider.action";
-import {REQUEST_TOKEN_AUTH, requestTokenAuth, REQUEST_RESET_PASSWORD} from "./mutations";
+import {REQUEST_TOKEN_AUTH, requestTokenAuth, REQUEST_RESET_PASSWORD, USER_VIGENCIACONTRASENA_SET} from "./mutations";
 import {catalogConstants} from "../_constants/catalogs.constants";
 import {catalogActions} from "../_actions/catalog.action";
 import {S2Constants} from "../_constants/s2.constants";
@@ -268,7 +268,19 @@ export function* loginUser(){
         try{
             const token = yield axios.post(urOauth2 + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
             localStorage.setItem("token", token.data.access_token);
-            history.push('/usuarios');
+
+            const tokens = localStorage.token;
+            let payload = jwt.decode(tokens);
+
+            yield put (userActions.setVigenciaPass(payload.contrasenaNueva));
+
+            if(payload.contrasenaNueva===true){
+                history.push('/usuario/cambiarcontrasena');
+                yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
+            }else{
+                history.push('/usuarios');
+            }
+
         }catch (err) {
             if(err.response){
                 yield put(alertActions.error(err.response.data.message));
@@ -283,8 +295,8 @@ export function* verifyTokenGetUser(){
     while(true){
         const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
         let payload = jwt.decode(token);
-        yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
+        yield put (userActions.setUserInSession(payload.idUser));
+
     }
 }
 
@@ -303,6 +315,11 @@ export function* creationUser(){
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
         console.log(payload.idUser);
+
+        if(payload.contrasenaNueva===true){
+            history.push('/usuario/cambiarcontrasena');
+            yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
+        }
         usuarioJson["user"]=payload.idUser;
         const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
@@ -1002,8 +1019,6 @@ export function* ResetPassword(){
                 history.push('/restaurarpassword');
             }
 
-
-            console.log(status.data.message);
             if(status.data.Status === 200){
                 yield put(alertActions.success(status.data.message));
             }else{
@@ -1011,7 +1026,38 @@ export function* ResetPassword(){
                 yield put(alertActions.error(status.data.message));
             }
         }catch (err) {
+            yield put(alertActions.error("El Registro modificado"));
+        }
+    }
+}
 
+export function* changePassword(){
+    while (true) {
+        const {usuarioJson} = yield take (mutations.REQUEST_CHANGEPASSWORD_USER);
+        const token = localStorage.token;
+        let payload = jwt.decode(token);
+        let status;
+        yield put (userActions.setUserInSession(payload.idUser))
+        console.log(payload.idUser);
+        usuarioJson["user"]=payload.idUser;
+
+
+        try{
+            status = yield axios.post(ur + `/changepassword`,usuarioJson, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } , validateStatus: () => true});
+
+            if(status.data.Status === 200){
+                yield put(alertActions.success(status.data.message));
+
+            }else{
+                //error in response
+                yield put(alertActions.error(status.data.message));
+            }
+        }catch (err) {
+            yield put(alertActions.error("El Registro no fue modificado"));
         }
     }
 }

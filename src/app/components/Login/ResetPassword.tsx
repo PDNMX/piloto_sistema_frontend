@@ -17,6 +17,7 @@ import * as Yup from 'yup';
 import {Snackbar} from "@material-ui/core";
 import {Alert} from "@material-ui/lab";
 import {alertActions} from "../../_actions/alert.actions";
+import {history} from "../../store/history";
 
 export const ResetPasswordV = ({}) => {
     return <MyForm initialValues={{correo: ""}} />;
@@ -127,7 +128,8 @@ function MyForm(props: MyFormProps ) {
         },
         boton:{
             backgroundColor:'#ffe01b',
-            color: '#666666'
+            color: '#666666',
+            marginTop: '10px'
         },
     }));
 
@@ -140,6 +142,10 @@ function MyForm(props: MyFormProps ) {
     const handleCloseSnackbar = () => {
         dispatch(alertActions.clear());
     };
+
+    const redirectToRoute = (path) =>{
+        history.push(path);
+    }
 
     const {alert} = useSelector(state => ({
         alert : state.alert
@@ -176,7 +182,7 @@ function MyForm(props: MyFormProps ) {
             <Grid container spacing={0} className={classes.container1} justify='center'>
                 <Grid item xs={12} md={6} className={classes.item2} container direction="row" justify="center" alignItems="center">
                     <Typography variant="h4" paragraph className={classes.fontblack} style={{fontWeight: 600}}>
-                        Reestablecer Contraseña
+                        Restablecer Contraseña
                     </Typography>
                 </Grid>
             </Grid>
@@ -202,11 +208,17 @@ function MyForm(props: MyFormProps ) {
                                         <TextField label="Correo electrónico" name="correo" required={true} />
                                     </Grid>
                                     <Grid item xs={12} md={12} container direction="row" justify="center" alignItems="center">
-                                        <Tooltip title="Reestablecer contraseña" placement="right">
+                                        <Tooltip title="Restablecer contraseña" placement="right">
                                         <Button
                                             className= {classes.boton}  variant="contained"
                                             type="submit"
-                                            disabled={submitting}> Reestablecer contraseña </Button>
+                                            disabled={submitting}> Restablecer contraseña </Button>
+                                        </Tooltip>
+                                        <Tooltip title="Ingresar" placement="right">
+                                        <Button onClick={ () => redirectToRoute("/login")}
+                                                className= {classes.boton}  variant="contained"
+                                                type="submit"
+                                                disabled={submitting}>Ingresar </Button>
                                         </Tooltip>
                                     </Grid>
                                 </Grid>

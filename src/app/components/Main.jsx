@@ -268,6 +268,19 @@ export const Main = ()=> (
                            }
                        }}
                 />
+                <Route exact
+                       path= "/usuario/cambiarcontrasena"
+                       render={() => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(providerActions.requestAllProviders());
+                               storeValidate.dispatch((alertActions.clear()));
+                               return <ConnectedMenuV propiedades = {{renderView : "cambiarcontrasena"}} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
             </div>
         </Provider>
         </div>

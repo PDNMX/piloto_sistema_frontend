@@ -64,9 +64,13 @@ import {ListBitacora} from "../Bitacora/ListBitacora";
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import {ListS3SSchema} from "../CargaDatos/listSchemaS3S";
 import {ConnectedCreateRegS3S} from "../CargaDatos/createRegS3S";
-
+import {ConnectedChangePassword} from "../users/changePassword";
+import {useSelector} from 'react-redux';
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
+    const {vigencia} = useSelector(state => ({
+        vigencia:state.vigencia
+    }));
 
     const location = useLocation();
 
@@ -170,7 +174,12 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
   }
 
   const redirectToRoute = (path) =>{
-      history.push(path);
+      if(vigencia===true){
+          history.push("/usuario/cambiarcontrasena");
+      }else{
+          history.push(path);
+      }
+
   }
 
 
@@ -190,6 +199,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
   const cerrarSesion  = () => {
         closeSession();
   }
+
 
     function Copyright() {
       return (
@@ -357,8 +367,7 @@ const useStyles = makeStyles((theme) => ({
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Perfil</MenuItem>
-                <MenuItem onClick={handleClose}>Avanzadas</MenuItem>
+                <MenuItem onClick={ () => redirectToRoute("/usuario/cambiarcontrasena")} >Cambiar contraseña</MenuItem>
                 <MenuItem onClick={ ()=>cerrarSesion()}>Cerrar sesión</MenuItem>
               </Menu>
             </div>
@@ -574,6 +583,7 @@ const useStyles = makeStyles((theme) => ({
 
                   {vistaRender === "consultarbitacora" && <ConnectedConsultarBitacora/>}
                   {vistaRender === "reportebitacora" && <ListBitacora/> }
+                  {vistaRender === "cambiarcontrasena" && <ConnectedChangePassword/> }
               </Paper>
             </Grid>
             {/* Grid 2 
