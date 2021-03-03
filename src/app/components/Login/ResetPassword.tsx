@@ -207,19 +207,24 @@ function MyForm(props: MyFormProps ) {
                                     <Grid item xs={12} md={12}>
                                         <TextField label="Correo electrónico" name="correo" required={true} />
                                     </Grid>
-                                    <Grid item xs={12} md={12} container direction="row" justify="center" alignItems="center">
+                                    <Grid item xs={12} md={6} container direction="row" justify="center" alignItems="center">
                                         <Tooltip title="Restablecer contraseña" placement="right">
                                         <Button
                                             className= {classes.boton}  variant="contained"
                                             type="submit"
-                                            disabled={submitting}> Restablecer contraseña </Button>
+                                            disabled={submitting}> Restablecer contraseña
+                                        </Button>
                                         </Tooltip>
-                                        <Tooltip title="Ingresar" placement="right">
+
+                                    </Grid>
+                                    <Grid item xs={12} md={6} container direction="row" justify="center" alignItems="center">
+                                        <Tooltip title="Cancelar" placement="right">
                                         <Button onClick={ () => redirectToRoute("/login")}
                                                 className= {classes.boton}  variant="contained"
                                                 type="submit"
-                                                disabled={submitting}>Ingresar </Button>
-                                        </Tooltip>
+                                                disabled={submitting}>Cancelar
+                                        </Button>
+                                    </Tooltip>
                                     </Grid>
                                 </Grid>
                             </form>

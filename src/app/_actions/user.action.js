@@ -15,7 +15,9 @@ export const userActions = {
     setUsersAll,
     setUserPassword,
     requestVigenciaPass,
-    setVigenciaPass
+    setVigenciaPass,
+    requestRol,
+    setRol
 };
 
 function requestAllUsers(){
@@ -101,4 +103,14 @@ function requestVigenciaPass(vigencia){
 
 function setVigenciaPass (vigencia){
     return {type : userConstants.REQUEST_VIGENCIA_PASS_SET, vigencia}
+}
+
+function requestRol(vigencia){
+    return {
+        type :  userConstants.REQUEST_ROL,
+    }
+}
+
+function setRol (rol){
+    return {type : userConstants.REQUEST_ROL_SET, rol}
 }

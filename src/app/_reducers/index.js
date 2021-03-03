@@ -13,6 +13,7 @@ import {S2} from './S2Schema.reducer';
 import {S3S} from './S3SSchema.reducer';
 import {bitacora} from './bitacoraTemporal.reducer';
 import {vigencia} from './vigenciaPassword.reducer';
+import {rol} from './rolUser.reducer';
 const rootReducer = combineReducers({
     users,
     alert,
@@ -27,7 +28,8 @@ const rootReducer = combineReducers({
     userInSession,
     userSelect,
     bitacora,
-    vigencia
+    vigencia,
+    rol
 });
 
 export default rootReducer;
