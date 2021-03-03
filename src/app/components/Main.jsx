@@ -109,6 +109,7 @@ export const Main = ()=> (
                                storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                               storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
                                storeValidate.dispatch((alertActions.clear()));
                                return <ConnectedMenuV propiedades = {{renderView : "createRegS3S"}} />
                            }else{
@@ -150,6 +151,7 @@ export const Main = ()=> (
                        path= "/consulta/S3S"
                        render={() => {
                            if (localStorage.token) {
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                storeValidate.dispatch(S3SActions.requestListS3S({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)

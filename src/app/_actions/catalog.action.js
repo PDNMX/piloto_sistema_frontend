@@ -18,7 +18,9 @@ export const catalogActions = {
     requestTipoSancionCatalogo,
     setTipoSancionSucces,
     requestMonedaCatalogo,
-    setMonedaSucces
+    setMonedaSucces,
+    requesTipoDocumentoCatalogo,
+    setTipoDocumentoSucces
 
 };
 /*-------------------S3S catalogos-*/
@@ -63,6 +65,20 @@ function setMonedaSucces(moneda){
     return {
         type : catalogConstants.MONEDA_SET,
         moneda
+    }
+}
+
+function  requesTipoDocumentoCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_DOCUMENTO_REQUEST,
+        docType
+    }
+}
+
+function setTipoDocumentoSucces(tipoDoc){
+    return {
+        type : catalogConstants.TIPO_DOCUMENTO_SET,
+        tipoDoc
     }
 }
 

@@ -24,7 +24,7 @@ import {
     MenuItem
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
-import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
 import Dialog from '@material-ui/core/Dialog';
@@ -43,6 +43,8 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import {Form} from "react-final-form";
 import * as Yup from 'yup';
+import DateFnsUtils from "@date-io/date-fns";
+import {formatISO} from "date-fns";
 
 interface FormDataEsquemaS3S {
     fechaCaptura?: String,
@@ -92,10 +94,11 @@ interface FormDataEsquemaS3S {
 }
 
 export const ListS3SSchema = () => {
-    const {S3SList,alerta,paginationSuper} = useSelector(state => ({
+    const {S3SList,alerta,paginationSuper,catalogos} = useSelector(state => ({
         S3SList : state.S3S,
         alerta : state.alert,
-        paginationSuper: state.pagination
+        paginationSuper: state.pagination,
+        catalogos: state.catalogs
     }));
 
     const dispatch = useDispatch();
@@ -244,12 +247,12 @@ export const ListS3SSchema = () => {
     }
 
     const schema = Yup.object().shape({
-        ejercicioFiscal: Yup.string().matches(new RegExp('^[0-9]{4}$'),'Debe tener 4 dígitos'),
-        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
-        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
-        segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
-        idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
-        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim()
+        expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
+        idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
+        SPSnombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        SPSprimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        SPSsegundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        inhabilitacionFechaFinal:  Yup.string(),
     });
 
     const validate = makeValidate(schema);
@@ -259,10 +262,23 @@ export const ListS3SSchema = () => {
     async function onSubmit(values: FormDataEsquemaS3S) {
         let newQuery = {};
         for (let [key, value] of Object.entries(values)) {
-            if(key === "puestoNombre" && value !== null && value !== ''){
-                newQuery["puesto.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            if(key === "expediente" && value !== null && value !== ''){
+                newQuery["expediente"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }else if(key === "idnombre" && value !== null && value !== ''){
                 newQuery["institucionDependencia.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            }else if(key === "SPSnombres" && value !== null && value !== ''){
+                newQuery["servidorPublicoSancionado.nombres"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            }else if(key === "SPSprimerApellido" && value !== null && value !== ''){
+                newQuery["servidorPublicoSancionado.primerApellido"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            }else if(key === "SPSsegundoApellido" && value !== null && value !== ''){
+                newQuery["servidorPublicoSancionado.segundoApellido"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            }else if(key === "tipoSancion" && value !== null && value !== ''){
+                let objTipoSancion= JSON.parse(value);
+                newQuery["tipoSancion.clave"]= { $in : [objTipoSancion.clave]};
+            }else if(key === "inhabilitacionFechaFinal" && value !== null && value !== ''){
+                let fecha = Date.parse(value);
+                console.log(formatISO(fecha, { representation: 'date' }));
+                newQuery["inhabilitacion.fechaFinal"] = formatISO(fecha, { representation: 'date' });
             }else if ( value !== null && value !== ''){
                 newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }
@@ -438,22 +454,30 @@ export const ListS3SSchema = () => {
 
                                     <Grid className= {classes.gridpadding} spacing={3} container >
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Nombres" name="nombres"  />
+                                            <TextField label="Expediente" name="expediente"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Primer apellido" name="primerApellido"  />
+                                            <TextField label="Dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Segundo apellido" name="segundoApellido" />
+                                            <TextField label="Nombre(s)" name="SPSnombres"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Institución dependencia" name="idnombre" />
+                                            <TextField label="Primer apellido" name="SPSprimerApellido"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Puesto" name="puestoNombre" />
+                                            <TextField label="Segundo apellido" name="SPSsegundoApellido" />
                                         </Grid>
+                                        {catalogos.tipoSancion &&
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
+                                            <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} ></Select>
+                                        </Grid>}
+                                        <Grid item xs={12} md={3}>
+                                            <DatePicker
+                                                format={"yyyy-MM-dd"}
+                                                label="Inhabilitación fecha final"
+                                                name="inhabilitacionFechaFinal"
+                                                dateFunsUtils={DateFnsUtils} />
                                         </Grid>
                                     </Grid>
                                     <Grid container justify={"flex-end"}>

@@ -1,9 +1,8 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DateTimePicker} from 'mui-rff';
-import {Grid, Button, Divider} from "@material-ui/core";
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
+import {Grid, Button, Divider, MenuItem, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
-import {S2Actions } from "../../_actions/s2.action";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
@@ -20,62 +19,48 @@ import DialogActions from "@material-ui/core/DialogActions";
 import {alertActions} from "../../_actions/alert.actions";
 import { OnChange } from 'react-final-form-listeners'
 import DateFnsUtils from "@date-io/date-fns";
+import arrayMutators from 'final-form-arrays'
+import { FieldArray } from 'react-final-form-arrays'
+import {S3SActions} from "../../_actions/s3s.action";
+
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
-    return <MyForm initialValues={registry} catalogos={catalogos}  alerta={alert} id={id}/>;
+        return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancionArray: [null]}} catalogos={catalogos}  alerta={alert} id={id}/>;
 }
 
 interface FormDataEsquemaS3S {
     fechaCaptura?: String,
     expediente?: String,
-    institucionDependencia?: {
-        nombre: String,
-        clave: String,
-        siglas: String
-    },
-    servidorPublicoSancionado?:{
-        nombres: String,
-        primerApellido: String,
-        segundoApellido: String,
-        genero: {
-            clave: String,
-            valor: String
-        },
-        puesto: String,
-        nivel: String
-    },
-    autoridadSancionadora?: String,
-    tipoFalta?: {
-        clave: String,
-        valor: String,
-        descripcion: String
-    },
-    tipoSancion?: [{clave :String , valor: String , descripcion: String}],
-    causaMotivoHechos?: String,
-    resolucion?:{
-        url:String,
-        fechaResolucion: String
-    },
-    multa?:{
-        monto: Number,
-        moneda: {
-            clave:String,
-            valor:String
-        }
-    },
-    inhabilitacion?:{
-        plazo: String,
-        fechaInicial:String,
-        fechaFinal:String
-    },
-    documentos?: [{id: String, tipo:String, titulo:String , descripcion :String , url: String, fecha:String}],
-    observaciones?:String
+    idnombre?:String,
+    idsiglas?:String,
+    idclave?:String,
+    SPSnombres?:String,
+    SPSprimerApellido?:String,
+    SPSsegundoApellido?:String,
+    SPSgenero?: {} ,
+    SPSpuesto?:String,
+    SPSnivel?:String,
+    autoridadSancionadora?:String,
+    tipoFalta? : {},
+    tpfdescripcion?:String,
+    tipoSancionArray?: [{}] ,
+    tsdescripcion?:String,
+    causaMotivoHechos?:String,
+    resolucionURL?:String,
+    resolucionFecha?:String,
+    multaMonto?:String,
+    multaMoneda?: { },
+    inhabilitacionPlazo?:String,
+    inhabilitacionFechaInicial?:String,
+    inhabilitacionFechaFinal?:String,
+    observaciones?:String,
+    documents?:[{docId: String, titulo:String, descripcion: String, url :String , fecha: String , tipoDoc: {}}]
 }
 
 interface MyFormProps {
     initialValues: FormDataEsquemaS3S;
     alerta: { status: boolean , message :""};
-    catalogos:{genero: [], tipoFalta: [], tipoSancion: [], moneda: [] };
+    catalogos:{genero: [], tipoFalta: [], tipoSancion: [], moneda: [] , tipoDoc: []};
     id: string;
 }
 
@@ -92,7 +77,8 @@ function MyForm(props: MyFormProps ) {
     const [open, setOpen] = React.useState(false);
 
 
-    const schema = Yup.object().shape({
+    let schemaMix = Yup.mixed();
+    let schema = Yup.object().shape({
         expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
         idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Nombres de la sección Institución Dependencia es requerido").trim(),
         idsiglas: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres ').trim(),
@@ -102,11 +88,16 @@ function MyForm(props: MyFormProps ) {
         SPSsegundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SPSgenero : Yup.object(),
         SPSpuesto:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Puesto de Servidor público es requerido").trim(),
-        SPSnivel:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se cadenas vacías máximo 25 caracteres').trim(),
+        SPSnivel:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se cadenas vacías, máximo 25 caracteres').trim(),
         autoridadSancionadora:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        tipoFalta: Yup.object(),
+        tipoFalta: Yup.object().required("El campo Tipo de falta es requerido"),
         tpfdescripcion: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
-        tipoSancion: Yup.array().min(1).required("Se requiere seleccionar mínimo una opción del campo Tipo sanción"),
+        tipoSancionArray: Yup.array().of(
+            Yup.object().shape({
+                tipoSancion: Yup.object().required("El campo Tipo de sanción es requerido"),
+                tsdescripcion: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim()
+            })
+        ).required("Se requiere seleccionar mínimo una opción del campo Tipo sanción"),
         tsdescripcion:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
         causaMotivoHechos:  Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').required("El campo Causa o motivo de la sanción es requerido").trim(),
         resolucionURL: Yup.string()
@@ -120,6 +111,20 @@ function MyForm(props: MyFormProps ) {
         inhabilitacionFechaInicial:  Yup.string().required("El campo Fecha inicial de la sección  es requerido"),
         inhabilitacionFechaFinal:  Yup.string().required("El campo Fecha final de la sección  es requerido"),
         observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
+        documents: Yup.array().of(
+            Yup.object().shape({
+                docId: Yup.string(),
+                titulo: Yup.string().required('El campo Título de la sección Documentos es requerido ').max(50, 'Máximo 50 caracteres'),
+                descripcion: Yup.string().required('El campo Descripción de la sección Documentos es requerido ').max(200, 'Máximo 200 caracteres'),
+                url: Yup.string()
+                    .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                        'Introduce una direccion de internet valida'
+                    )
+                    .required('El campo URL de la sección Documentos es requerido'),
+                fecha: Yup.string().required("El campo Fecha de la sección Documentos es requerido"),
+                tipoDoc: Yup.object()
+            })
+        )
     });
 
     const validate = makeValidate(schema);
@@ -127,6 +132,8 @@ function MyForm(props: MyFormProps ) {
 
 
     const styles = makeStyles({
+
+        hideGrid:{display: 'none'},
         titleCategory:{
             color: '#666666'
         },
@@ -170,6 +177,7 @@ function MyForm(props: MyFormProps ) {
         dispatch(alertActions.clear());
     }
 
+
     const cla = styles();
 
     const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
@@ -181,20 +189,22 @@ function MyForm(props: MyFormProps ) {
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS3S) {
         if(id != undefined){
-            dispatch(S2Actions.requestEditDo({...values, _id : id}));
+            dispatch(S3SActions.requestEditDo({...values, _id : id}));
         }else{
-            dispatch(S2Actions.requestCreationS2(values));
+            dispatch(S3SActions.requestCreationS3S(values));
         }
         setOpen(true);
-
     }
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     return (
 
         <div>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación
+                    Sistema de los Servidores Públicos Sancionados
                 </Typography>
             </Grid>
             <Grid  container justify={"center"}>
@@ -206,7 +216,12 @@ function MyForm(props: MyFormProps ) {
                 onSubmit={onSubmit}
                 initialValues={initialValues}
                 validate={validate}
-                render={({ handleSubmit,values, submitting   }) => (
+                mutators={{
+                    ...arrayMutators
+                }}
+                render={({ handleSubmit, form: {
+                        mutators: { push, pop }
+                    }, values, submitting   }) => (
                     <form  onSubmit={handleSubmit} noValidate>
                         {alert.status === undefined &&
                         <div>
@@ -220,10 +235,14 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Expediente" name="expediente"  />
                                 </Grid>
-
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Autoridad sancionadora"  name="autoridadSancionadora"  />
                                 </Grid>
+
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Causa"  name="causaMotivoHechos"  />
+                                </Grid>
+
 
                                 /* Institucion dependencia ----------------------*/
                                 <Grid item xs={12} md={12}>
@@ -252,7 +271,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="SPSnombres"  />
+                                    <TextField label="Nombre(s)" name="SPSnombres"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Primer apellido" name="SPSprimerApellido"  />
@@ -296,16 +315,44 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
 
-                                {catalogos.tipoSancion &&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "tipoSancion" label="Tipo de sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
-                                </Grid>}
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Descripción"  name="tsdescripcion"  />
+                                <Grid item xs={12} md={12}>
+                                    <Button  type="button"   onClick={() => push('tipoSancionArray', undefined)} variant="contained"  className={cla.marginright}>
+                                        Agregar Tipo de sanción
+                                    </Button>
                                 </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Causa"  name="causaMotivoHechos"  />
-                                </Grid>
+
+                                <FieldArray name="tipoSancionArray">
+                                    {({ fields }) =>
+                                        fields.map((name, index) => (
+                                            <Grid item xs={12} md={3} key={name}>
+                                                <Grid container >
+                                                    <Grid item xs={8} md={11} alignContent={"flex-start"}>
+                                                        <Typography className={cla.titleCategory} variant="body1" gutterBottom>
+                                                            Tipo de Sanción . #{index + 1}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={3} md={1} alignContent={"flex-end"}>
+                                                        <Tooltip title="Remover sanción" placement="left">
+                                                         <span
+                                                             onClick={() => fields.remove(index)}
+                                                             style={{ cursor: 'pointer' }}
+                                                         >
+                                                          ❌
+                                                        </span>
+                                                        </Tooltip>
+                                                    </Grid>
+                                                </Grid>
+                                                {catalogos.tipoSancion &&
+                                                <Grid item xs={12} md={3}>
+                                                    <Select  name={`tipoSancionArray.${index}.tipoSancion`} label="Tipo de sanción" data={catalogos.tipoSancion} ></Select>
+                                                </Grid>}
+                                                <Grid item xs={12} md={3}>
+                                                    <TextField label="Descripción" name={`tipoSancionArray.${index}.tsdescripcion`} />
+                                                </Grid>
+                                            </Grid>
+                                        ))
+                                    }
+                                </FieldArray>
 
                                 /*-----------Resolucion--------------*/
                                 <Grid item xs={12} md={12}>
@@ -320,8 +367,8 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
                                 <Grid item xs={12} md={3}>
-                                    <DateTimePicker
-                                        format={"yyyy-MM-dd'T'HH:mm:ss"}
+                                    <DatePicker
+                                        format={"yyyy-MM-dd"}
                                         label="Fecha de resolución"
                                         name="resolucionFecha"
                                         dateFunsUtils={DateFnsUtils} />
@@ -357,15 +404,15 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Plazo"  name="inhabilitacionPlazo"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <DateTimePicker
-                                        format={"yyyy-MM-dd'T'HH:mm:ss"}
+                                    <DatePicker
+                                        format={"yyyy-MM-dd"}
                                         label="Fecha Inicial"
                                         name="inhabilitacionFechaInicial"
                                         dateFunsUtils={DateFnsUtils} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <DateTimePicker
-                                        format={"yyyy-MM-dd'T'HH:mm:ss"}
+                                    <DatePicker
+                                        format={"yyyy-MM-dd"}
                                         label="Fecha Final"
                                         name="inhabilitacionFechaFinal"
                                         dateFunsUtils={DateFnsUtils} />
@@ -374,7 +421,73 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Observaciones"  name="observaciones"  />
                                 </Grid>
 
+                                /*-----------DOCUMENTOS--------------*/
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                       Documentos
+                                    </Typography>
+                                    <Divider className={cla.boton} />
+                                </Grid>
+
+                                <Grid item xs={12} md={12}>
+                                <Button  type="button"   onClick={() => push('documents', undefined)} variant="contained"  className={cla.marginright}>
+                                    Agregar campo
+                                </Button>
+                                </Grid>
+
+                                    <FieldArray name="documents">
+                                    {({ fields }) =>
+                                        fields.map((name, index) => (
+                                            <Grid item xs={12} md={3} key={name}>
+                                                <Grid container >
+                                                    <Grid item xs={8} md={11} alignContent={"flex-start"}>
+                                                        <Typography className={cla.titleCategory} variant="body1" gutterBottom>
+                                                            Documento . #{index + 1}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={3} md={1} alignContent={"flex-end"}>
+                                                        <Tooltip title="Remover documento" placement="left">
+                                                         <span
+                                                             onClick={() => fields.remove(index)}
+                                                             style={{ cursor: 'pointer' }}
+                                                         >
+                                                          ❌
+                                                        </span>
+                                                        </Tooltip>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid className={cla.hideGrid} key={`${name}.GridId`} item xs={12} md={12}>
+                                                    <TextField label="Id" name={`documents.${index}.docId`} value={index} disabled={true} />
+                                                </Grid>
+                                                <Grid key={`${name}.GridTitulo`} item xs={12} md={12}>
+                                                    <TextField label="Título"  name={`documents.${index}.titulo`} />
+                                                </Grid>
+                                                {catalogos.tipoDoc &&
+                                                <Grid item xs={12} md={12}>
+                                                    <Select name={`documents.${index}.tipoDoc`} label="Tipo de documento" data={catalogos.tipoDoc}></Select>
+                                                </Grid>
+                                                }
+                                                <Grid key={`${name}.GridDes`} item xs={12} md={12}>
+                                                    <TextField label="Descripción" name={`documents.${index}.descripcion`} />
+                                                </Grid>
+                                                <Grid  key={`${name}.GridUrl`} item xs={12} md={12}>
+                                                    <TextField label="URL"   name={`documents.${index}.url`}  />
+                                                </Grid>
+                                                <Grid  key={`${name}.GridFecha`} item xs={12} md={12}>
+                                                    <DatePicker
+                                                        format={"yyyy-MM-dd"}
+                                                        label="Fecha"
+                                                        name={`documents.${index}.fecha`}
+                                                        dateFunsUtils={DateFnsUtils} />
+                                                </Grid>
+                                            </Grid>
+                                        ))
+                                    }
+                                </FieldArray>
+
                             </Grid>
+
+                            <pre>{JSON.stringify(values)}</pre>
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"
                                    container
@@ -382,8 +495,7 @@ function MyForm(props: MyFormProps ) {
                                    xs={12}
                                    md={12}>
 
-                                <Button  onClick={ () => redirectToRoute("/consulta/S2")} variant="contained"  className={cla.marginright}
-                                         type="submit">
+                                <Button  onClick={ () => redirectToRoute("/consulta/S3S")} variant="contained"  className={cla.marginright}>
                                     Cancelar
                                 </Button>
                                 <Button  className={cla.boton}  variant="contained"
@@ -392,8 +504,6 @@ function MyForm(props: MyFormProps ) {
                             </Grid>
                         </div>
                         }
-
-
 
                         <Dialog
                             disableBackdropClick
@@ -411,7 +521,7 @@ function MyForm(props: MyFormProps ) {
                                 </DialogContent>
                             </DialogContent>
                             <DialogActions>
-                                <Button disabled={!alert.status} onClick={ () => redirectToRoute("/consulta/S2")} color="primary" autoFocus>
+                                <Button disabled={!alert.status} onClick={ () => redirectToRoute("/consulta/S3S")} color="primary" autoFocus>
                                     Aceptar
                                 </Button>
                             </DialogActions>

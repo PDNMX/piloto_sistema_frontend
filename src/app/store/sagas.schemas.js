@@ -22,6 +22,7 @@ import {S3SActions} from "../_actions/s3s.action";
 const qs = require('querystring')
 const jwt = require('jsonwebtoken');
 const _ = require('underscore');
+import { formatISO } from 'date-fns'
 
 
 const host = process.env.URLAPI;
@@ -547,7 +548,174 @@ export function* getCatalogMoneda(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
+
         yield put (catalogActions.setMonedaSucces(respuestaArray.data.results));
+    }
+}
+
+
+export function* getCatalogTipoDocumento(){
+    while(true){
+        const {docType} = yield take (catalogConstants.TIPO_DOCUMENTO_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
+        yield put (catalogActions.setTipoDocumentoSucces(respuestaArray.data.results));
+    }
+}
+
+
+
+export function* creationS3SSchema(){
+    while (true) {
+        const {values} = yield take (S3SConstants.REQUEST_CREATION_S3S);
+        const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser));
+        let usuario=payload.idUser;
+
+        let docSend={};
+        if (values.expediente) {
+            docSend["expediente"] = values.expediente;
+        }
+
+        //-----------------INSTITUCION DEPENDENCIA
+        let ObjInstitucionDepe = {};
+        if (values.idnombre) {
+            ObjInstitucionDepe = {...ObjInstitucionDepe, nombre: values.idnombre}
+        }
+        if (values.idclave) {
+            ObjInstitucionDepe = {...ObjInstitucionDepe, clave: values.idclave}
+        }
+        if (values.idsiglas) {
+            ObjInstitucionDepe = {...ObjInstitucionDepe, siglas: values.idsiglas}
+        }
+        docSend["institucionDependencia"] = ObjInstitucionDepe;
+
+        //----------------SERVIDOR PUBLICO SANCIONADO
+
+        let ObjServidorSancionado = {};
+        if (values.SPSnombres) {
+            ObjServidorSancionado = {...ObjServidorSancionado, nombres: values.SPSnombres}
+        }
+        if (values.SPSprimerApellido) {
+            ObjServidorSancionado = {...ObjServidorSancionado, primerApellido: values.SPSprimerApellido}
+        }
+        if (values.SPSsegundoApellido) {
+            ObjServidorSancionado = {...ObjServidorSancionado, segundoApellido: values.SPSsegundoApellido}
+        }
+        if (values.SPSgenero) {
+            let genero = JSON.parse(values.SPSgenero);
+            ObjServidorSancionado = {...ObjServidorSancionado, genero: {clave: genero.clave, valor: genero.valor}}
+        }
+        if (values.SPSpuesto) {
+            ObjServidorSancionado = {...ObjServidorSancionado, puesto: values.SPSpuesto}
+        }
+        if (values.SPSnivel) {
+            ObjServidorSancionado = {...ObjServidorSancionado, nivel: values.SPSnivel}
+        }
+
+        docSend["servidorPublicoSancionado"] = ObjServidorSancionado;
+
+        //-----------------
+
+        if (values.autoridadSancionadora) {
+            docSend["autoridadSancionadora"] = values.autoridadSancionadora;
+        }
+
+        //----------------- TIPO FALTA
+
+        let ofalta={};
+        if (values.tipoFalta) {
+            let falta = JSON.parse(values.tipoFalta);
+            let ofalta = {clave: falta.clave, valor: falta.valor};
+            if (values.tpfdescripcion) {
+                ofalta = {...ofalta, descripcion: values.tpfdescripcion}
+            }
+        }
+        docSend["tipoFalta"] = ofalta;
+
+
+        if (values.causaMotivoHechos) {
+            docSend["causaMotivoHechos"] = values.causaMotivoHechos;
+        }
+
+        //-----------------RESOLUCION
+        let ObjResolucion = {};
+        if (values.resolucionURL) {
+            ObjResolucion = {...ObjResolucion, url: values.resolucionURL}
+        }
+        if (values.resolucionFecha) {
+            let fecha = Date.parse(values.resolucionFecha);
+            fecha = formatISO(fecha, { representation: 'date' });
+            ObjResolucion = {...ObjResolucion, fechaResolucion: fecha}
+        }
+        docSend["resolucion"] = ObjResolucion;
+
+        //-----------------MULTA
+        let ObjMulta = {};
+        if (values.multaMonto) {
+            ObjMulta = {...ObjMulta, monto: parseFloat(values.multaMonto)}
+        }
+        if (values.multaMoneda) {
+            let multaMoneda = JSON.parse(values.multaMoneda);
+            ObjMulta = {...ObjMulta, moneda: {clave: multaMoneda.clave, valor: multaMoneda.valor}}
+        }
+        docSend["multa"] = ObjMulta;
+
+        //-------------------INHABILITACION
+        let ObjInhabilita = {};
+        if (values.inhabilitacionPlazo) {
+            ObjInhabilita = {...ObjInhabilita, plazo: values.inhabilitacionPlazo}
+        }
+        if (values.inhabilitacionFechaInicial) {
+            let fecha = Date.parse(values.inhabilitacionFechaInicial);
+            fecha = formatISO(fecha, { representation: 'date' });
+            ObjInhabilita = {...ObjInhabilita, fechaInicial: fecha}
+        }
+        if (values.inhabilitacionFechaFinal) {
+            let fecha = Date.parse(values.inhabilitacionFechaFinal);
+            fecha = formatISO(fecha, { representation: 'date' });
+            ObjInhabilita = {...ObjInhabilita, fechaFinal: fecha}
+        }
+
+        docSend["inhabilitacion"] = ObjInhabilita;
+
+        //-------------------
+        if (values.observaciones) {
+            docSend["observaciones"] = values.observaciones;
+        }
+        //-------------------DOCUMENTOS
+
+        if (values.documents) {
+            if (Array.isArray(values.documents)) {
+                for (let i of values.documents) {
+                    i.tipoDoc = JSON.parse(i.tipoDoc).clave;
+                    let fecha = Date.parse(i.fecha);
+                    i.fecha = formatISO(fecha, { representation: 'date' });
+                }
+            }
+        }
+        docSend["documentos"] = values.documents;
+
+        const {status} = yield axios.post(ur + `/insertS3SSchema`,{...docSend, usuario:usuario}, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            } , validateStatus: () => true});
+        if(status === 200){
+            //all OK
+            yield put(alertActions.success("Registro actualizado con exito "));
+        }else{
+            yield put(alertActions.error("Error al crear"));
+            //error in response
+        }
+
     }
 }
 

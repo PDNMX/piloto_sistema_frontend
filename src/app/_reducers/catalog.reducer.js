@@ -1,6 +1,6 @@
 import { catalogConstants } from "../_constants/catalogs.constants";
 
-export function catalogs(state = {genero: [], ramo: [], puesto: [] }, action) {
+export function catalogs(state = {genero: [], ramo: [], puesto: [] ,tipoSancion : [], moneda : [] , }, action) {
     switch (action.type) {
         case catalogConstants.GENERO_SET:
             return {...state , genero : action.generos};
@@ -20,6 +20,8 @@ export function catalogs(state = {genero: [], ramo: [], puesto: [] }, action) {
             return {...state , tipoSancion : action.sancion}
         case catalogConstants.MONEDA_SET:
             return {...state , moneda : action.moneda}
+        case catalogConstants.TIPO_DOCUMENTO_SET:
+            return {...state , tipoDoc : action.tipoDoc}
         default:
             return state
     }
