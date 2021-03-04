@@ -269,17 +269,29 @@ export function* loginUser(){
             const token = yield axios.post(urOauth2 + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
             localStorage.setItem("token", token.data.access_token);
 
-            const tokens = localStorage.token;
-            let payload = jwt.decode(tokens);
+            const toke =token.data.access_token;
 
-            yield put (userActions.setVigenciaPass(payload.contrasenaNueva));
+            const status = yield axios.post(ur + `/validationpassword`,credentialUser, {headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${toke}`
+                } , validateStatus: () => true});
 
-            if(payload.contrasenaNueva===true){
+            localStorage.setItem("cambiarcontrasena", status.data.contrasenaNueva);
+
+            yield put (userActions.setVigenciaPass(status.data.contrasenaNueva));
+            yield put (userActions.setRol(status.data.rol));
+            localStorage.setItem("rol",status.data.rol);
+
+            if(status.data.contrasenaNueva===true){
                 history.push('/usuario/cambiarcontrasena');
                 yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
+            }else
+                if(status.data.rol=="2"){
+                    history.push('/cargamasiva');
             }else{
-                history.push('/usuarios');
-            }
+                    history.push('/usuarios');
+                }
 
         }catch (err) {
             if(err.response){
@@ -304,6 +316,8 @@ export function* closeSession(){
     while (true){
         yield take (userConstants.USER_SESSION_REMOVE);
         localStorage.removeItem("token");
+        localStorage.removeItem("cambiarcontrasena");
+        localStorage.removeItem("rol");
         history.push('/login');
     }
 }

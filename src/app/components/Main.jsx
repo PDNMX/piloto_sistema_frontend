@@ -72,7 +72,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/cargamasiva"
                        render={() => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="2"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch((alertActions.clear()));
                                storeValidate.dispatch(clearErrorsValidation());
@@ -85,7 +85,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/captura/S2"
                        render={() => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="2"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
@@ -103,7 +103,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/captura/S3S"
                        render={() => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="2"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
@@ -120,7 +120,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/consulta/S2"
                        render={() => {
-                           if (localStorage.token) {
+                           if (localStorage.token && localStorage.rol =="2") {
                                storeValidate.dispatch(S2Actions.requestListS2({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
@@ -132,7 +132,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/editar/S2/:id"
                        render={({match}) => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="2"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
@@ -150,7 +150,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/consulta/S3S"
                        render={() => {
-                           if (localStorage.token) {
+                           if (localStorage.token && localStorage.rol =="2") {
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                storeValidate.dispatch(S3SActions.requestListS3S({}));
                                storeValidate.dispatch((alertActions.clear()));
@@ -163,7 +163,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/usuario/crear"
                        render={() => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            storeValidate.dispatch(providerActions.requestAllProviders());
                            storeValidate.dispatch((alertActions.clear()));
@@ -176,7 +176,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/usuario/editar/:id"
                        render={({match}) => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                 storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                 storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
                                 storeValidate.dispatch(providerActions.requestAllProviders());
@@ -191,7 +191,7 @@ export const Main = ()=> (
                        path= "/usuarios"
                        render={() => {
                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                           if (localStorage.token) {
+                           if (localStorage.token && localStorage.rol =="1") {
                                storeValidate.dispatch(providerActions.requestAllProviders());
                                storeValidate.dispatch(userActions.requestPerPage({page: 1, pageSize: 10}));
                                storeValidate.dispatch((alertActions.clear()));
@@ -205,7 +205,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/proveedor/crear"
                        render={() =>{
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            return (<ConnectedMenuV propiedades = {{renderView : "createprovider"}} /> )
                            }else{
@@ -217,7 +217,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/proveedor/editar/:id"
                        render={({match}) => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            storeValidate.dispatch(providerActions.fillProviderUpdate(match.params.id));
                            storeValidate.dispatch((alertActions.clear()));
@@ -231,7 +231,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/proveedores"
                        render={() => {
-                           if ( localStorage.token) {
+                           if ( localStorage.token && localStorage.rol =="1") {
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
                                return (<ConnectedMenuV propiedades={{renderView: "providers"}}/>)
@@ -243,7 +243,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/bitacora"
                        render={() =>{
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(userActions.requestAllUsers());
                                storeValidate.dispatch(providerActions.requestAllProviders());
@@ -258,7 +258,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/reportebitacora"
                        render={() => {
-                           if ( localStorage.token) {
+                           if ( localStorage.token && localStorage.rol =="1") {
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(bitacoraActions.requestAllBitacora());
                                storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));

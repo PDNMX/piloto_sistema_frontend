@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/_reducers/userPassword.reducer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/_reducers/vigenciaPassword.reducer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/components/users/changePassword.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_actions/user.action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_actions/user.action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_constants/user.constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_constants/user.constants.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_reducers/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_reducers/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/Login/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Login/Login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/Login/ResetPassword.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Login/ResetPassword.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/components/Main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/Menu/MenuV.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Menu/MenuV.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/users/createUser.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/users/createUser.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/store/mutations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/mutations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +40,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../piloto_sistema_backend" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -134,6 +122,10 @@
       <workItem from="1614544534269" duration="3099000" />
       <workItem from="1614611749540" duration="49000" />
       <workItem from="1614613814909" duration="19494000" />
+      <workItem from="1614638790863" duration="1868000" />
+      <workItem from="1614699371930" duration="18549000" />
+      <workItem from="1614786233164" duration="13977000" />
+      <workItem from="1614803658360" duration="501000" />
     </task>
     <task id="LOCAL-00001" summary="gui users update">
       <created>1608605064025</created>

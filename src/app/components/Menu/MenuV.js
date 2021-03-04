@@ -173,9 +173,13 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
     setcrearProovedor(true);
   }
 
+    console.log(localStorage.getItem("rol"));
+    const rol=localStorage.getItem("rol");
+
   const redirectToRoute = (path) =>{
-      if(vigencia===true){
-          history.push("/usuario/cambiarcontrasena");
+      const cambiarcontrasena= localStorage.getItem("cambiarcontrasena");
+      if(vigencia===true || cambiarcontrasena===true){
+         history.push("/usuario/cambiarcontrasena");
       }else{
           history.push(path);
       }
@@ -388,12 +392,14 @@ const useStyles = makeStyles((theme) => ({
         <Divider />
         <List className={classes.fontblack}>
           <div>
+              { rol==2 || rol=="" ?
           <ListItem button onClick={e=>menuDatos(e)}>
               <ListItemIcon>
                   <FolderSpecialIcon />
               </ListItemIcon>
               <ListItemText  primary="Administración datos" />
           </ListItem>
+                  : "" }
 
             { submenuAdmonDatos ?
               <Collapse in={checkedDatos}>
@@ -474,13 +480,14 @@ const useStyles = makeStyles((theme) => ({
               </Collapse>
           : ""
         }
+        { rol==1 ?
             <ListItem button onClick={e=>menuUser(e)}>
               <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>
               <ListItemText  primary="Usuarios" />
               </ListItem>
-
+        : "" }
               { submenuUsuario ?
               <Collapse in={checkedUser}>
                 <div>
@@ -504,13 +511,14 @@ const useStyles = makeStyles((theme) => ({
               </Collapse>
           : ""
         }
+        { rol==1 ?
             <ListItem button onClick={e=>menuProveedor(e)}>
               <ListItemIcon>
                 <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary="Proveedores" />
             </ListItem>
-
+        : "" }
             { crearProovedor ?
               <Collapse in={checkedProveedor}>
                 <div>
@@ -535,13 +543,14 @@ const useStyles = makeStyles((theme) => ({
           : ""
         }
 
+        { rol==1 ?
         <ListItem button onClick={e=>menuBitacora(e)}>
               <ListItemIcon>
                   <BookmarksIcon />
               </ListItemIcon>
               <ListItemText primary="Bitácora" />
           </ListItem>
-
+            : "" }
               { submenuBitacora ?
                   <Collapse in={checkedBitacora}>
                       <div>
