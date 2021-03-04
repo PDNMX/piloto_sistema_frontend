@@ -650,13 +650,24 @@ export function* creationS3SSchema(){
         let ofalta={};
         if (values.tipoFalta) {
             let falta = JSON.parse(values.tipoFalta);
-            let ofalta = {clave: falta.clave, valor: falta.valor};
+            ofalta = {clave: falta.clave, valor: falta.valor};
+            console.log("prev tipo falta "+ JSON.stringify(ofalta));
+            console.log(values.tpfdescripcion);
             if (values.tpfdescripcion) {
-                ofalta = {...ofalta, descripcion: values.tpfdescripcion}
+                ofalta["descripcion"] = values.tpfdescripcion;
             }
         }
         docSend["tipoFalta"] = ofalta;
 
+        console.log("tipo falta"+ JSON.stringify(docSend.tipoFalta));
+        let arrayObjTipoSancion= [] ;
+        if(values.tipoSancionArray){
+            for(let sancion of values.tipoSancionArray){
+                let tipoSancion = JSON.parse(sancion.tipoSancion);
+                arrayObjTipoSancion.push({...tipoSancion, descripcion : sancion.tsdescripcion ? sancion.tsdescripcion : "" });
+            }
+        }
+        docSend["tipoSancion"]= arrayObjTipoSancion;
 
         if (values.causaMotivoHechos) {
             docSend["causaMotivoHechos"] = values.causaMotivoHechos;
@@ -712,7 +723,8 @@ export function* creationS3SSchema(){
         if (values.documents) {
             if (Array.isArray(values.documents)) {
                 for (let i of values.documents) {
-                    i.tipoDoc = JSON.parse(i.tipoDoc).clave;
+                    i.id= i.id.toString();
+                    i.tipo = JSON.parse(i.tipo).clave;
                     let fecha = Date.parse(i.fecha);
                     i.fecha = formatISO(fecha, { representation: 'date' });
                 }
@@ -720,6 +732,7 @@ export function* creationS3SSchema(){
         }
         docSend["documentos"] = values.documents;
 
+        console.log("DOC SEND "+ JSON.stringify(docSend));
         const {status} = yield axios.post(ur + `/insertS3SSchema`,{...docSend, usuario:usuario}, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -727,7 +740,7 @@ export function* creationS3SSchema(){
             } , validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Registro actualizado con exito "));
+            yield put(alertActions.success("Registro creado con éxito"));
         }else{
             yield put(alertActions.error("Error al crear"));
             //error in response
@@ -786,7 +799,7 @@ export function* creationS2Schema(){
             } , validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Registro creado con exito "));
+            yield put(alertActions.success("Registro creado con éxito "));
         }else{
             yield put(alertActions.error("Error al crear"));
             //error in response

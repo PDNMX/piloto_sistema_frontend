@@ -25,7 +25,7 @@ import {S3SActions} from "../../_actions/s3s.action";
 
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
-        return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancionArray: [null]}} catalogos={catalogos}  alerta={alert} id={id}/>;
+        return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancionArray: [undefined]}} catalogos={catalogos}  alerta={alert} id={id}/>;
 }
 
 interface FormDataEsquemaS3S {
@@ -54,7 +54,7 @@ interface FormDataEsquemaS3S {
     inhabilitacionFechaInicial?:String,
     inhabilitacionFechaFinal?:String,
     observaciones?:String,
-    documents?:[{docId: String, titulo:String, descripcion: String, url :String , fecha: String , tipoDoc: {}}]
+    documents?:[{id: String, titulo:String, descripcion: String, url :String , fecha: String , tipo: {}}]
 }
 
 interface MyFormProps {
@@ -113,7 +113,7 @@ function MyForm(props: MyFormProps ) {
         observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documents: Yup.array().of(
             Yup.object().shape({
-                docId: Yup.string(),
+                id: Yup.string(),
                 titulo: Yup.string().required('El campo Título de la sección Documentos es requerido ').max(50, 'Máximo 50 caracteres'),
                 descripcion: Yup.string().required('El campo Descripción de la sección Documentos es requerido ').max(200, 'Máximo 200 caracteres'),
                 url: Yup.string()
@@ -122,7 +122,7 @@ function MyForm(props: MyFormProps ) {
                     )
                     .required('El campo URL de la sección Documentos es requerido'),
                 fecha: Yup.string().required("El campo Fecha de la sección Documentos es requerido"),
-                tipoDoc: Yup.object()
+                tipo: Yup.object()
             })
         )
     });
@@ -343,10 +343,10 @@ function MyForm(props: MyFormProps ) {
                                                     </Grid>
                                                 </Grid>
                                                 {catalogos.tipoSancion &&
-                                                <Grid item xs={12} md={3}>
+                                                <Grid item xs={12} md={12}>
                                                     <Select  name={`tipoSancionArray.${index}.tipoSancion`} label="Tipo de sanción" data={catalogos.tipoSancion} ></Select>
                                                 </Grid>}
-                                                <Grid item xs={12} md={3}>
+                                                <Grid item xs={12} md={12}>
                                                     <TextField label="Descripción" name={`tipoSancionArray.${index}.tsdescripcion`} />
                                                 </Grid>
                                             </Grid>
@@ -457,14 +457,14 @@ function MyForm(props: MyFormProps ) {
                                                     </Grid>
                                                 </Grid>
                                                 <Grid className={cla.hideGrid} key={`${name}.GridId`} item xs={12} md={12}>
-                                                    <TextField label="Id" name={`documents.${index}.docId`} value={index} disabled={true} />
+                                                    <TextField label="Id" name={`documents.${index}.id`} fieldProps= {{initialValue : index}}  />
                                                 </Grid>
                                                 <Grid key={`${name}.GridTitulo`} item xs={12} md={12}>
                                                     <TextField label="Título"  name={`documents.${index}.titulo`} />
                                                 </Grid>
                                                 {catalogos.tipoDoc &&
                                                 <Grid item xs={12} md={12}>
-                                                    <Select name={`documents.${index}.tipoDoc`} label="Tipo de documento" data={catalogos.tipoDoc}></Select>
+                                                    <Select name={`documents.${index}.tipo`} label="Tipo de documento" data={catalogos.tipoDoc}></Select>
                                                 </Grid>
                                                 }
                                                 <Grid key={`${name}.GridDes`} item xs={12} md={12}>
