@@ -23,6 +23,7 @@ import {ConnectedConsultarBitacora} from "./Bitacora/ConsultarBitacora";
 import {bitacoraActions} from "../_actions/bitacora.action";
 import {ListBitacora} from "./Bitacora/ListBitacora";
 import {S3SActions} from "../_actions/s3s.action";
+import {S3PActions} from "../_actions/s3p.action";
 import {ResetPasswordV} from "./Login/ResetPassword";
 
 const theme = createMuiTheme({
@@ -173,6 +174,19 @@ export const Main = ()=> (
                                storeValidate.dispatch(S3SActions.requestListS3S({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)
+                           } else {
+                               return <Redirect to="/login"/>;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/consulta/S3P"
+                       render={() => {
+                           if (localStorage.token && localStorage.rol =="2") {
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(S3PActions.requestListS3P({}));
+                               storeValidate.dispatch((alertActions.clear()));
+                               return (<ConnectedMenuV propiedades={{renderView: "S3PSchema"}}/>)
                            } else {
                                return <Redirect to="/login"/>;
                            }
