@@ -546,17 +546,24 @@ export const ListS3SSchema = () => {
                                     <StyledTableCell style={{ width: 140 }}  align="center">
                                         {schema.expediente}
                                     </StyledTableCell>
+                                    {schema.institucionDependencia &&
                                     <StyledTableCell style={{ width: 160 }}  align="center">
                                         {schema.institucionDependencia.nombre}
                                     </StyledTableCell>
+                                    }
+                                    {schema.servidorPublicoSancionado &&
                                     <StyledTableCell style={{ width: 160 }} align="center">
                                         {schema.servidorPublicoSancionado.nombres+ " "+ schema.servidorPublicoSancionado.primerApellido+ " "+ schema.servidorPublicoSancionado.segundoApellido}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                    {schema.tipoSancion?.map((sancion) => (
-                                        <div>{sancion.valor+ " "}</div>
+                                    }
+
+                                    {schema.tipoSancion &&  <StyledTableCell style={{ width: 160 }} align="center">
+                                        {schema.tipoSancion?.map((sancion) => (
+                                            <div>{sancion.valor+ " "}</div>
                                         ))}
                                     </StyledTableCell>
+                                    }
+
 
                                     <StyledTableCell style={{ width: 230 }} align="center">
                                         <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>

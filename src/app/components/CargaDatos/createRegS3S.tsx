@@ -103,25 +103,25 @@ function MyForm(props: MyFormProps ) {
         resolucionURL: Yup.string()
             .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                 'Introduce una direccion de internet valida'
-            ),
-        resolucionFecha:  Yup.string().required("El campo Fecha de resolución es requerido"),
-        multaMonto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').required("El campo Monto es requerido"),
+            ).trim(),
+        resolucionFecha:  Yup.string().required("El campo Fecha de resolución es requerido").trim(),
+        multaMonto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').required("El campo Monto es requerido").trim(),
         multaMoneda: Yup.object().required("El campo Moneda es requerido"),
         inhabilitacionPlazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]*$'),'No se permiten cadenas vacías').trim(),
-        inhabilitacionFechaInicial:  Yup.string().required("El campo Fecha inicial de la sección  es requerido"),
-        inhabilitacionFechaFinal:  Yup.string().required("El campo Fecha final de la sección  es requerido"),
+        inhabilitacionFechaInicial:  Yup.string().required("El campo Fecha inicial de la sección  es requerido").trim(),
+        inhabilitacionFechaFinal:  Yup.string().required("El campo Fecha final de la sección  es requerido").trim(),
         observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documents: Yup.array().of(
             Yup.object().shape({
-                id: Yup.string(),
-                titulo: Yup.string().required('El campo Título de la sección Documentos es requerido ').max(50, 'Máximo 50 caracteres'),
-                descripcion: Yup.string().required('El campo Descripción de la sección Documentos es requerido ').max(200, 'Máximo 200 caracteres'),
+                id: Yup.string().trim(),
+                titulo: Yup.string().required('El campo Título de la sección Documentos es requerido ').max(50, 'Máximo 50 caracteres').trim(),
+                descripcion: Yup.string().required('El campo Descripción de la sección Documentos es requerido ').max(200, 'Máximo 200 caracteres').trim(),
                 url: Yup.string()
                     .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                         'Introduce una direccion de internet valida'
                     )
-                    .required('El campo URL de la sección Documentos es requerido'),
-                fecha: Yup.string().required("El campo Fecha de la sección Documentos es requerido"),
+                    .required('El campo URL de la sección Documentos es requerido').trim(),
+                fecha: Yup.string().required("El campo Fecha de la sección Documentos es requerido").trim(),
                 tipo: Yup.object()
             })
         )
@@ -189,7 +189,7 @@ function MyForm(props: MyFormProps ) {
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS3S) {
         if(id != undefined){
-            dispatch(S3SActions.requestEditDo({...values, _id : id}));
+            dispatch(S3SActions.requestCreationS3S({...values, _id : id}));
         }else{
             dispatch(S3SActions.requestCreationS3S(values));
         }
@@ -487,7 +487,6 @@ function MyForm(props: MyFormProps ) {
 
                             </Grid>
 
-                            <pre>{JSON.stringify(values)}</pre>
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"
                                    container

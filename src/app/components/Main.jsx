@@ -148,10 +148,28 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
+                       path= "/editar/S3S/:id"
+                       render={({match}) => {
+                           if ( localStorage.token && localStorage.rol =="2"){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                               storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                               storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                               storeValidate.dispatch(S3SActions.fillRegEdit(match.params.id));
+                               return <ConnectedMenuV propiedades = {{renderView : "editRegS3S"}} match = {match} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
                        path= "/consulta/S3S"
                        render={() => {
                            if (localStorage.token && localStorage.rol =="2") {
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               S3SActions.setListS3S([]);
                                storeValidate.dispatch(S3SActions.requestListS3S({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)

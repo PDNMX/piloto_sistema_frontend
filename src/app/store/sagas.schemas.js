@@ -638,6 +638,7 @@ export function* creationS3SSchema(){
             ObjServidorSancionado = {...ObjServidorSancionado, primerApellido: values.SPSprimerApellido}
         }
         if (values.SPSsegundoApellido) {
+            console.log(values.SPSsegundoApellido);
             ObjServidorSancionado = {...ObjServidorSancionado, segundoApellido: values.SPSsegundoApellido}
         }
         if (values.SPSgenero) {
@@ -665,8 +666,6 @@ export function* creationS3SSchema(){
         if (values.tipoFalta) {
             let falta = JSON.parse(values.tipoFalta);
             ofalta = {clave: falta.clave, valor: falta.valor};
-            console.log("prev tipo falta "+ JSON.stringify(ofalta));
-            console.log(values.tpfdescripcion);
             if (values.tpfdescripcion) {
                 ofalta["descripcion"] = values.tpfdescripcion;
             }
@@ -747,23 +746,38 @@ export function* creationS3SSchema(){
         docSend["documentos"] = values.documents;
 
         console.log("DOC SEND "+ JSON.stringify(docSend));
-        const {status} = yield axios.post(ur + `/insertS3SSchema`,{...docSend, usuario:usuario}, {headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'Authorization': `Bearer ${token}`
-            } , validateStatus: () => true});
-        if(status === 200){
-            //all OK
-            yield put(alertActions.success("Registro creado con éxito"));
+        if(values._id){
+            docSend["_id"] = values._id;
+            const {status} = yield axios.post(ur + `/updateS3SSchema`,{...docSend, usuario:usuario}, {headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${token}`
+                } , validateStatus: () => true});
+            if(status === 200){
+                //all OK
+                yield put(alertActions.success("Registro actualizado con éxito"));
+            }else{
+                yield put(alertActions.error("Error al crear"));
+                //error in response
+            }
         }else{
-            yield put(alertActions.error("Error al crear"));
-            //error in response
+            const {status} = yield axios.post(ur + `/insertS3SSchema`,{...docSend, usuario:usuario}, {headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${token}`
+                } , validateStatus: () => true});
+            if(status === 200){
+                //all OK
+                yield put(alertActions.success("Registro creado con éxito"));
+            }else{
+                yield put(alertActions.error("Error al crear"));
+                //error in response
+            }
         }
+
 
     }
 }
-
-
 
 export function* creationS2Schema(){
     while (true) {
@@ -771,8 +785,6 @@ export function* creationS2Schema(){
         let docSend = {};
         const token = localStorage.token;
 
-        docSend["id"]= "FAKEID";
-        docSend["fechaCaptura"]= moment().format();
         docSend["ejercicioFiscal"]= values.ejercicioFiscal;
          if(values.ramo){
              let ramoObj = JSON.parse(values.ramo);
@@ -827,12 +839,10 @@ export function* updateS2Schema(){
     while (true) {
         const {values} = yield take (S2Constants.UPDATE_REG_S2);
         const token = localStorage.token;
-        let S2Item = storeValidate.getState().S2.find(reg=>reg._id === values._id);
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser));
         let usuario=payload.idUser;
-
-              const {status} = yield axios.post(ur + `/updateS2Schema`,{...values, fechaCaptura: S2Item.fechaCaptura,usuario:usuario}, {headers: {
+              const {status} = yield axios.post(ur + `/updateS2Schema`,{...values,usuario:usuario}, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -847,6 +857,7 @@ export function* updateS2Schema(){
 
     }
 }
+
 
 
 function getArrayFormatTipoProcedimiento(array){
@@ -893,6 +904,87 @@ export function* getListSchemaS3S(){
 }
 
 
+export function* fillUpdateRegS3S(){
+    while(true){
+        const {id} = yield take (S3SConstants.FILL_REG_S3S_EDIT);
+        const token = localStorage.token;
+        let query = {"query" : {"_id" : id}};
+
+        const respuestaArray = yield axios.post(ur + `/listSchemaS3S`,query,{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        let registro = respuestaArray.data.results[0];
+        let newRow={};
+
+        for (let [key, row] of Object.entries(registro)) {
+            if (key === "expediente") {
+                newRow[key] = row;
+            }else if(key === "institucionDependencia"){
+                if(row.nombre){ newRow["idnombre"] = row.nombre;}
+                if(row.clave){ newRow["idclave"] = row.clave;}
+                if(row.siglas){ newRow["idsiglas"] = row.siglas;}
+            }else if(key === "servidorPublicoSancionado") {
+                if(row.nombres){ newRow["SPSnombres"] = row.nombres;}
+                if(row.primerApellido){ newRow["SPSprimerApellido"] = row.primerApellido;}
+                if(row.segundoApellido){ newRow["SPSsegundoApellido"] = row.segundoApellido;}
+                if(row.genero){ newRow["SPSgenero"] = JSON.stringify({clave:row.genero.clave.toString() ,valor : row.genero.valor});}
+                if(row.puesto){ newRow["SPSpuesto"] = row.puesto;}
+                if(row.nivel){ newRow["SPSnivel"] = row.nivel;}
+            }else if(key === "autoridadSancionadora"){
+                newRow[key] = row;
+            }else if(key === "tipoFalta"){
+                if(row.descripcion){ newRow["tpfdescripcion"] = row.descripcion;}
+                if(row.clave && row.valor){newRow["tipoFalta"] = JSON.stringify({clave:row.clave ,valor : row.valor});}
+            }else if(key === "tipoSancion"){
+                let arraySanciones= [];
+                for(let objTipoSancion of row){
+                    let obj={};
+                    if(objTipoSancion.clave && objTipoSancion.valor){
+                        obj["tipoSancion"] = JSON.stringify({clave:objTipoSancion.clave ,valor : objTipoSancion.valor});
+                    }
+                    if(objTipoSancion.descripcion){obj["tsdescripcion"] = objTipoSancion.descripcion;}
+                    arraySanciones.push(obj);
+                }
+                newRow["tipoSancionArray"]= arraySanciones;
+            }else if(key === "causaMotivoHechos"){
+                newRow[key] = row;
+            }else if(key === "resolucion"){
+                if(row.url){ newRow["resolucionURL"] = row.url;}
+                if(row.fechaResolucion){ newRow["resolucionFecha"] = row.fechaResolucion;}
+            }else if(key === "multa"){
+                if(row.moneda){ newRow["multaMoneda"] = JSON.stringify({clave:row.moneda.clave.toString() ,valor : row.moneda.valor});}
+                if(row.monto){ newRow["multaMonto"] = row.monto;}
+            }else if(key === "inhabilitacion"){
+                if(row.plazo){ newRow["inhabilitacionPlazo"] = row.plazo;}
+                if(row.fechaInicial){ newRow["inhabilitacionFechaInicial"] = row.fechaInicial;}
+                if(row.fechaFinal){ newRow["inhabilitacionFechaFinal"] = row.fechaFinal;}
+            }else if(key === "observaciones"){
+                newRow[key] = row;
+            }else if(key === "documentos"){
+                    let arrayDocumentos= [];
+                    for(let objDocumentos of row){
+                        let obj={};
+                        if(objDocumentos.id){ obj["id"] = objDocumentos.id;}
+                        if(objDocumentos.titulo){ obj["titulo"] = objDocumentos.titulo;}
+                        if(objDocumentos.descripcion){ obj["descripcion"] = objDocumentos.descripcion;}
+                        if(objDocumentos.url){ obj["url"] = objDocumentos.url;}
+                        if(objDocumentos.fecha){ obj["fecha"] = objDocumentos.fecha;}
+                        if(objDocumentos.tipo){ obj["tipo"] = JSON.stringify({clave:objDocumentos.tipo ,valor : objDocumentos.tipo});}
+                        console.log("ARRAYY DOCUMENTOS "+ JSON.stringify(obj));
+                        arrayDocumentos.push(obj);
+                    }
+
+                    newRow["documents"]= arrayDocumentos;
+            }else {
+                newRow[key] = row ;
+            }
+            }
+        yield put (S3SActions.setListS3S([newRow]));
+    }
+}
 
 export function* fillUpdateRegS2(){
     while(true){
