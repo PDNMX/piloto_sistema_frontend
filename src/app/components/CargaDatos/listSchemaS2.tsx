@@ -12,7 +12,7 @@ import {
     makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar, Divider, Tooltip, Toolbar
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
-import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
 import Dialog from '@material-ui/core/Dialog';
@@ -31,6 +31,9 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import {Form} from "react-final-form";
 import * as Yup from 'yup';
+import deLocale from "date-fns/locale/es";
+import DateFnsUtils from "@date-io/date-fns";
+import {formatISO} from "date-fns";
 
 interface FormDataEsquemaS2 {
     fechaCaptura?: string,
@@ -218,6 +221,7 @@ export const ListS2Schema = () => {
         segundoApellido?: string,
         idnombre?: string,
         puestoNombre?: string,
+        fechaCaptura?:string
     }
 
     const schema = Yup.object().shape({
@@ -226,7 +230,8 @@ export const ListS2Schema = () => {
         primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
         segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
         idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
-        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim()
+        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
+        fechaCaptura: Yup.string(),
     });
 
     const validate = makeValidate(schema);
@@ -240,8 +245,10 @@ export const ListS2Schema = () => {
                 newQuery["puesto.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }else if(key === "idnombre" && value !== null && value !== ''){
                 newQuery["institucionDependencia.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if ( value !== null && value !== ''){
-                newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            }else if(key === "fechaCaptura" && value !== null && value !== ''){
+                let fecha = Date.parse(value);
+                console.log(formatISO(fecha, { representation: 'date' }));
+                newQuery["fechaCaptura"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
             }
         }
         setQuery(newQuery);
@@ -714,6 +721,14 @@ export const ListS2Schema = () => {
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <DatePicker
+                                                locale={deLocale}
+                                                format={"yyyy-MM-dd"}
+                                                label="Última actualización"
+                                                name="fechaCaptura"
+                                                dateFunsUtils={DateFnsUtils} />
                                         </Grid>
                                     </Grid>
                                     <Grid container justify={"flex-end"}>

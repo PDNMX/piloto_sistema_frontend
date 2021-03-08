@@ -45,6 +45,8 @@ import {Form} from "react-final-form";
 import * as Yup from 'yup';
 import DateFnsUtils from "@date-io/date-fns";
 import {formatISO} from "date-fns";
+import deLocale from "date-fns/locale/es";
+import {ConnectedCreateRegS3S} from "./createRegS3S";
 
 interface FormDataEsquemaS3S {
     fechaCaptura?: String,
@@ -109,10 +111,11 @@ export const ListS3SSchema = () => {
     const [query, setQuery] =  React.useState({});
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS3S>({});
+    const [match, setMatch] =   React.useState({params: {id: ""}});
 
-    const handleOpenModalUserInfo = (user) => {
+    const handleOpenModalUserInfo = (id) => {
+        setMatch({params:{id: id}})
         setOpenModalUserInfo(true);
-        setSelectedRegistro(user);
     };
 
     const handleCloseModalUserInfo = () => {
@@ -244,6 +247,8 @@ export const ListS3SSchema = () => {
         segundoApellido?: string,
         idnombre?: string,
         puestoNombre?: string,
+        fechaCaptura?:string
+
     }
 
     const schema = Yup.object().shape({
@@ -253,6 +258,7 @@ export const ListS3SSchema = () => {
         SPSprimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SPSsegundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         inhabilitacionFechaFinal:  Yup.string(),
+        fechaCaptura: Yup.string(),
     });
 
     const validate = makeValidate(schema);
@@ -279,8 +285,10 @@ export const ListS3SSchema = () => {
                 let fecha = Date.parse(value);
                 console.log(formatISO(fecha, { representation: 'date' }));
                 newQuery["inhabilitacion.fechaFinal"] = formatISO(fecha, { representation: 'date' });
-            }else if ( value !== null && value !== ''){
-                newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            }else if(key === "fechaCaptura" && value !== null && value !== ''){
+                let fecha = Date.parse(value);
+                console.log(formatISO(fecha, { representation: 'date' }));
+                newQuery["fechaCaptura"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
             }
         }
         setQuery(newQuery);
@@ -407,7 +415,11 @@ export const ListS3SSchema = () => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-              <Grid></Grid>
+                <Grid container>
+                    <Grid item md={12}>
+                        <ConnectedCreateRegS3S match = {match}/>
+                    </Grid>
+                </Grid>
             </Modal>
 
             <Dialog
@@ -457,7 +469,7 @@ export const ListS3SSchema = () => {
                                             <TextField label="Expediente" name="expediente"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Dependencia" name="idnombre" />
+                                            <TextField label="Institución / Dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Nombre(s)" name="SPSnombres"  />
@@ -474,6 +486,15 @@ export const ListS3SSchema = () => {
                                         </Grid>}
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
+                                                locale={deLocale}
+                                                format={"yyyy-MM-dd"}
+                                                label="Última actualización"
+                                                name="fechaCaptura"
+                                                dateFunsUtils={DateFnsUtils} />
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <DatePicker
+                                                locale={deLocale}
                                                 format={"yyyy-MM-dd"}
                                                 label="Inhabilitación fecha final"
                                                 name="inhabilitacionFechaFinal"
@@ -566,7 +587,7 @@ export const ListS3SSchema = () => {
 
 
                                     <StyledTableCell style={{ width: 230 }} align="center">
-                                        <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
+                                        <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema._id)}>
                                             <Tooltip title="Más información" placement="left">
                                                 <IconButton aria-label="expand row" size="small" >
                                                     <KeyboardArrowDownIcon />

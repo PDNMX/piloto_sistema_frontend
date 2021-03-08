@@ -22,6 +22,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
 import {S3SActions} from "../../_actions/s3s.action";
+import deLocale from "date-fns/locale/es";
 
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
@@ -368,6 +369,7 @@ function MyForm(props: MyFormProps ) {
 
                                 <Grid item xs={12} md={3}>
                                     <DatePicker
+                                        locale={deLocale}
                                         format={"yyyy-MM-dd"}
                                         label="Fecha de resolución"
                                         name="resolucionFecha"
@@ -405,6 +407,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <DatePicker
+                                        locale={deLocale}
                                         format={"yyyy-MM-dd"}
                                         label="Fecha Inicial"
                                         name="inhabilitacionFechaInicial"
@@ -412,6 +415,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <DatePicker
+                                        locale={deLocale}
                                         format={"yyyy-MM-dd"}
                                         label="Fecha Final"
                                         name="inhabilitacionFechaFinal"
@@ -431,7 +435,7 @@ function MyForm(props: MyFormProps ) {
 
                                 <Grid item xs={12} md={12}>
                                 <Button  type="button"   onClick={() => push('documents', undefined)} variant="contained"  className={cla.marginright}>
-                                    Agregar campo
+                                    Agregar Documento
                                 </Button>
                                 </Grid>
 
@@ -475,6 +479,7 @@ function MyForm(props: MyFormProps ) {
                                                 </Grid>
                                                 <Grid  key={`${name}.GridFecha`} item xs={12} md={12}>
                                                     <DatePicker
+                                                        locale={deLocale}
                                                         format={"yyyy-MM-dd"}
                                                         label="Fecha"
                                                         name={`documents.${index}.fecha`}
