@@ -63,6 +63,7 @@ import {ConnectedConsultarBitacora} from "../Bitacora/ConsultarBitacora";
 import {ListBitacora} from "../Bitacora/ListBitacora";
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import {ListS3SSchema} from "../CargaDatos/listSchemaS3S";
+import {ListS3PSchema} from "../CargaDatos/listSchemaS3P";
 import {ConnectedCreateRegS3S} from "../CargaDatos/createRegS3S";
 import {ConnectedChangePassword} from "../users/changePassword";
 import {useSelector} from 'react-redux';
@@ -105,6 +106,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
     setcheckedDatosS3S((prev) => false);
     setcheckedAdminDatos2((prev) => false);
     setcheckedAdminDatosS3S((prev) => false);
+    setcheckedAdminDatosS3P((prev) => false);
 
   }
 
@@ -121,6 +123,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setcheckedDatosS3S((prev) => false);
         setcheckedAdminDatos2((prev) => false);
         setcheckedAdminDatosS3S((prev) => false);
+        setcheckedAdminDatosS3P((prev) => false);
     }
 
   const menuBitacora=(e)=>{
@@ -136,6 +139,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
       setcheckedDatosS3S((prev) => false);
       setcheckedAdminDatos2((prev) => false);
       setcheckedAdminDatosS3S((prev) => false);
+      setcheckedAdminDatosS3P((prev) => false);
   }
 
     const menuDatos2=(e)=>{
@@ -151,6 +155,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setcheckedDatosS3S((prev) => !prev);
         setcheckedAdminDatos2((prev) => false);
         setcheckedAdminDatosS3S((prev) => false);
+        setcheckedAdminDatosS3P((prev) => false);
 
     }
 
@@ -167,13 +172,14 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setcheckedDatosS3S((prev) => false);
         setcheckedAdminDatos2((prev) => !prev);
         setcheckedAdminDatosS3S((prev) => !prev);
+        setcheckedAdminDatosS3P((prev) => !prev);
     }
 
   const compCrearProovedor=(e)=>{
     setcrearProovedor(true);
   }
 
-    console.log(localStorage.getItem("rol"));
+
     const rol=localStorage.getItem("rol");
 
   const redirectToRoute = (path) =>{
@@ -332,6 +338,7 @@ const useStyles = makeStyles((theme) => ({
     const [checkedDatosS3S, setcheckedDatosS3S] = useState(false);
     const [checkedAdminDatos2, setcheckedAdminDatos2] = useState(false);
     const [checkedAdminDatosS3S, setcheckedAdminDatosS3S] = useState(false);
+    const [checkedAdminDatosS3P, setcheckedAdminDatosS3P] = useState(false);
 
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -432,6 +439,18 @@ const useStyles = makeStyles((theme) => ({
                                         <ArrowRightIcon fontSize="small" />
                                     </ListItemIcon>
                                     <ListItemText primary="S3S" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
+                    <Collapse in={checkedAdminDatosS3P}>
+                        <div>
+                            <Tooltip title="S3S" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3P")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S3P" />
                                 </ListItem>
                             </Tooltip>
                         </div>
@@ -590,6 +609,7 @@ const useStyles = makeStyles((theme) => ({
                   {vistaRender === "editRegS3S" && <ConnectedCreateRegS3S match = {match}/> }
                   {vistaRender === "S2Schema" && <ListS2Schema/> }
                   {vistaRender === "S3SSchema" && <ListS3SSchema/> }
+                  {vistaRender === "S3PSchema" && <ListS3PSchema/> }
 
                   {vistaRender === "consultarbitacora" && <ConnectedConsultarBitacora/>}
                   {vistaRender === "reportebitacora" && <ListBitacora/> }

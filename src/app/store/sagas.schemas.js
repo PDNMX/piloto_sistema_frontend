@@ -19,6 +19,8 @@ import {S2Actions} from "../_actions/s2.action";
 import {bitacoraActions} from "../_actions/bitacora.action";
 import {S3SConstants} from "../_constants/s3s.constants";
 import {S3SActions} from "../_actions/s3s.action";
+import {S3PConstants} from "../_constants/s3p.constants";
+import {S3PActions} from "../_actions/s3p.action";
 const qs = require('querystring')
 const jwt = require('jsonwebtoken');
 const _ = require('underscore');
@@ -903,6 +905,23 @@ export function* getListSchemaS3S(){
     }
 }
 
+export function* getListSchemaS3P(){
+    while(true){
+        const {filters} = yield take (S3PConstants.REQUEST_LIST_S3P);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/listSchemaS3P`,filters,{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (S3PActions.setListS3P(respuestaArray.data.results));
+        console.log(respuestaArray.data.pagination);
+        yield put (S3PActions.setpaginationS3P(respuestaArray.data.pagination));
+
+    }
+}
 
 export function* fillUpdateRegS3S(){
     while(true){
@@ -1078,6 +1097,38 @@ export function* deleteSchemaS3S(){
             request["usuario"]=payload.idUser;
             try{
                 const {status, data} = yield axios.delete(ur + `/deleteRecordS3S`, { data : {request} , headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    } , validateStatus: () => true});
+                if(status === 200){
+                    console.log("Response",  );
+                    yield put(S2Actions.deleteRecordDo(id));
+                    yield put(alertActions.success(data.messageFront));
+                }else{
+                    //error in response
+                    yield put(alertActions.error("El Registro NO fue eliminado"));
+                }
+            }catch (e) {
+                yield put(alertActions.error("El Registro NO fue eliminado"));
+            }
+        }
+
+
+    }
+}
+
+export function* deleteSchemaS3P(){
+    while (true) {
+        const {id} = yield take (S3PConstants.DELETE_REQUEST);
+        const token = localStorage.token;
+        if(token){
+            let request = {"_id": id};
+            let payload = jwt.decode(token);
+            yield put (userActions.setUserInSession(payload.idUser));
+            request["usuario"]=payload.idUser;
+            try{
+                const {status, data} = yield axios.delete(ur + `/deleteRecordS3P`, { data : {request} , headers: {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`

@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/app/_actions/s3p.action.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/_constants/s3p.constants.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/_reducers/S3PSchema.reducer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3P.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/_reducers/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_reducers/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/_reducers/pagination.reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_reducers/pagination.reducer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/components/Main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/Menu/MenuV.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Menu/MenuV.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +133,8 @@
       <workItem from="1614638790863" duration="1868000" />
       <workItem from="1614699371930" duration="18549000" />
       <workItem from="1614786233164" duration="13977000" />
-      <workItem from="1614803658360" duration="501000" />
+      <workItem from="1614803658360" duration="2110000" />
+      <workItem from="1614873979173" duration="25139000" />
     </task>
     <task id="LOCAL-00001" summary="gui users update">
       <created>1608605064025</created>

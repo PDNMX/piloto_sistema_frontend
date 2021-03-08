@@ -11,6 +11,7 @@ import {userInSession} from './userInSession.reducer';
 import {catalogs} from './catalog.reducer';
 import {S2} from './S2Schema.reducer';
 import {S3S} from './S3SSchema.reducer';
+import {S3P} from './S3PSchema.reducer';
 import {bitacora} from './bitacoraTemporal.reducer';
 import {vigencia} from './vigenciaPassword.reducer';
 import {rol} from './rolUser.reducer';
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     catalogs,
     S2,
     S3S,
+    S3P,
     userInSession,
     userSelect,
     bitacora,
