@@ -279,8 +279,14 @@ export const ListS3SSchema = () => {
             }else if(key === "SPSsegundoApellido" && value !== null && value !== ''){
                 newQuery["servidorPublicoSancionado.segundoApellido"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }else if(key === "tipoSancion" && value !== null && value !== ''){
-                let objTipoSancion= JSON.parse(value);
-                newQuery["tipoSancion.clave"]= { $in : [objTipoSancion.clave]};
+                console.log(value);
+                let arrayObjTipoSancion= value;
+                let acumulado= []
+                for(let obSancion of arrayObjTipoSancion){
+                    // @ts-ignore
+                    acumulado.push( JSON.parse(obSancion).clave);
+                }
+                newQuery["tipoSancion.clave"]= { $in :acumulado };
             }else if(key === "inhabilitacionFechaFinal" && value !== null && value !== ''){
                 let fecha = Date.parse(value);
                 console.log(formatISO(fecha, { representation: 'date' }));
@@ -482,7 +488,7 @@ export const ListS3SSchema = () => {
                                         </Grid>
                                         {catalogos.tipoSancion &&
                                         <Grid item xs={12} md={3}>
-                                            <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} ></Select>
+                                            <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
                                         </Grid>}
                                         <Grid item xs={12} md={3}>
                                             <DatePicker

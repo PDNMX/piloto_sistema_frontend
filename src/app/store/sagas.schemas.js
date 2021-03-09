@@ -44,53 +44,43 @@ export function* validationErrors(){
             let payload = jwt.decode(token);
             yield put (userActions.setUserInSession(payload.idUser));
             var usuario=payload.idUser;
+                let SCHEMA;
+            try {
+                SCHEMA = JSON.parse(schema);
+            }catch (e) {
+                yield put(alertActions.error("Error encontrado en sintaxis del archivo Json "+ e));
+            }
 
-            if(systemId === "S2"){
-                try{
-                    let SCHEMA = JSON.parse(schema);
-                    let respuestaArray;
+            try{
+                let respuestaArray;
+                let urlValidation;
 
-                    respuestaArray = yield axios.post(ur + `/validateSchemaS2`,SCHEMA, { headers: {
-                            'Content-Type': 'application/json',
-                            Accept: 'application/json',
-                            'Authorization': `Bearer ${token}`,
-                            'usuario':usuario
-                        }});
-
-                    if(respuestaArray.data.Status === 500){
-                        console.log(respuestaArray.data.response);
-                        yield put(mutations.setErrorsValidation(respuestaArray.data.response));
-                        yield put(alertActions.error("No se realizó el registro ya que se encontraron errores en la validación, favor de verificar"));
-                    }else{
-                        let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
-                        yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
-                    }
-                }catch (e) {
-                    yield put(alertActions.error("Error encontrado en sintaxis del archivo Json "+ e));
+                if(systemId === "S2"){
+                    urlValidation= `/validateSchemaS2`;
+                }else if(systemId === "S3S"){
+                    urlValidation= `/validateSchemaS3S`;
+                }else if(systemId === "S3P"){
+                    urlValidation= `/validateSchemaS3P`;
                 }
-            }else if(systemId === "S3S"){
-                try{
-                    let SCHEMA = JSON.parse(schema);
-                    let respuestaArray;
 
-                    respuestaArray = yield axios.post(ur + `/validateSchemaS3S`,SCHEMA, { headers: {
-                            'Content-Type': 'application/json',
-                            Accept: 'application/json',
-                            'Authorization': `Bearer ${token}`,
-                            'usuario':usuario
-                        }});
+                respuestaArray = yield axios.post(ur + urlValidation ,SCHEMA, { headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                        'usuario':usuario
+                    }});
 
-                    if(respuestaArray.data.Status === 500){
-                        console.log(respuestaArray.data.response);
-                        yield put(mutations.setErrorsValidation(respuestaArray.data.response));
-                        yield put(alertActions.error("No se realizó el registro ya que se encontraron errores en la validación, favor de verificar"));
-                    }else{
-                        let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
-                        yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
-                    }
-                }catch (e) {
-                    yield put(alertActions.error("Error encontrado en sintaxis del archivo Json "+ e));
+                if(respuestaArray.data.Status === 500){
+                    console.log(respuestaArray.data.response);
+                    yield put(mutations.setErrorsValidation(respuestaArray.data.response));
+                    yield put(alertActions.error("No se realizó el registro ya que se encontraron errores en la validación, favor de verificar"));
+                }else{
+                    let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
+                    yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
                 }
+
+            }catch (e) {
+                yield put(alertActions.error("Error encontrado en la petición hacia el servidor "+ e));
             }
         }else{
             console.log("error in token");
@@ -566,7 +556,7 @@ export function* getCatalogTipoSancion(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setTipoSancionSucces(respuestaArray.data.results));
     }
 }
@@ -974,7 +964,7 @@ export function* fillUpdateRegS3S(){
                 if(row.url){ newRow["resolucionURL"] = row.url;}
                 if(row.fechaResolucion){ newRow["resolucionFecha"] = row.fechaResolucion;}
             }else if(key === "multa"){
-                if(row.moneda){ newRow["multaMoneda"] = JSON.stringify({clave:row.moneda.clave.toString() ,valor : row.moneda.valor});}
+                if(row.moneda){ newRow["multaMoneda"] = JSON.stringify({clave:row.moneda.clave.toString().toUpperCase() ,valor : row.moneda.valor.toUpperCase()});}
                 if(row.monto){ newRow["multaMonto"] = row.monto;}
             }else if(key === "inhabilitacion"){
                 if(row.plazo){ newRow["inhabilitacionPlazo"] = row.plazo;}
