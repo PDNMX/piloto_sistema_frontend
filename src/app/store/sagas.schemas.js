@@ -592,6 +592,20 @@ export function* getCatalogTipoDocumento(){
     }
 }
 
+export function* getCatalogTipoPersona(){
+    while(true){
+        const {docType} = yield take (catalogConstants.TIPO_PERSONA_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
+        yield put (catalogActions.setTipoPersonaSucces(respuestaArray.data.results));
+    }
+}
 
 
 export function* creationS3SSchema(){

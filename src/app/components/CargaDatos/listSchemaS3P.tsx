@@ -45,6 +45,7 @@ import {Form} from "react-final-form";
 import * as Yup from 'yup';
 import DateFnsUtils from "@date-io/date-fns";
 import {formatISO} from "date-fns";
+import {Moment} from "moment";
 
 interface FormDataEsquemaS3P {
     particularSancionado?:{
@@ -133,6 +134,11 @@ interface FormDataEsquemaS3P {
         sentido: String,
         url: String,
         fechaNotificacion: String
+    },
+    inhabilitacion?:{
+        plazo: String,
+        fechaInicial:String,
+        fechaFinal:String
     },
     documentos?: [{id: String, tipo:String, titulo:String , descripcion :String , url: String, fecha:String}],
     observaciones?: String
@@ -313,19 +319,23 @@ export const ListS3PSchema = () => {
             }else if(key === "idnombre" && value !== null && value !== ''){
                 newQuery["institucionDependencia.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }else if(key === "SP3nombres" && value !== null && value !== ''){
-                newQuery["responsableSancion.nombres"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if(key === "SP3primerApellido" && value !== null && value !== ''){
-                newQuery["responsableSancion.primerApellido"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if(key === "SP3segundoApellido" && value !== null && value !== ''){
-                newQuery["responsableSancion.segundoApellido"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+                newQuery["particularSancionado.nombreRazonSocial"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            }else if(key === "tipoPersona" && value !== null && value !== ''){
+                let objTipoPersona= JSON.parse(value);
+                newQuery["particularSancionado.tipoPersona"]= { $in : [objTipoPersona.clave]};
             }else if(key === "tipoSancion" && value !== null && value !== ''){
                 let objTipoSancion= JSON.parse(value);
                 newQuery["tipoSancion.clave"]= { $in : [objTipoSancion.clave]};
+            }else if(key === "fechaFinal" && value !== null && value !== ''){
+                let fecha = Date.parse(value);
+                console.log(formatISO(fecha, { representation: 'date' }));
+                newQuery["inhabilitacion.fechaFinal"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
             }else if(key === "fechaCaptura" && value !== null && value !== ''){
                 let fecha = Date.parse(value);
                 console.log(formatISO(fecha, { representation: 'date' }));
-                newQuery["fechaCaptura"] = formatISO(fecha, { representation: 'date' });
-            }else if ( value !== null && value !== ''){
+                newQuery["fechaCaptura"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
+            }else
+                if ( value !== null && value !== ''){
                 newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }
         }
@@ -508,23 +518,28 @@ export const ListS3PSchema = () => {
                                             <TextField label="Dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Nombre(s)" name="SP3nombres"  />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <TextField label="Primer apellido" name="SP3primerApellido"  />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <TextField label="Segundo apellido" name="SP3segundoApellido" />
+                                            <TextField label="Nombre/Razón social" name="SP3nombres"  />
                                         </Grid>
                                         {catalogos.tipoSancion &&
                                         <Grid item xs={12} md={3}>
-                                            <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} ></Select>
+                                            <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
+                                        </Grid>}
+                                        {catalogos.tipoPersona &&
+                                        <Grid item xs={12} md={3}>
+                                            <Select  name={`tipoPersona`} label="Tipo persona" data={catalogos.tipoPersona} ></Select>
                                         </Grid>}
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
                                                 format={"yyyy-MM-dd"}
-                                                label="Fecha de captura"
+                                                label="Última actualización"
                                                 name="fechaCaptura"
+                                                dateFunsUtils={DateFnsUtils} />
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <DatePicker
+                                                format={"yyyy-MM-dd"}
+                                                label="Fecha de inhabilitación"
+                                                name="fechaFinal"
                                                 dateFunsUtils={DateFnsUtils} />
                                         </Grid>
                                     </Grid>
@@ -568,8 +583,9 @@ export const ListS3PSchema = () => {
                                     />
                                 </TableCell>
                                 <StyledTableCell align="center" >Expediente</StyledTableCell>
-                                <StyledTableCell align="center">Institución</StyledTableCell>
-                                <StyledTableCell align="center" >Servidor público</StyledTableCell>
+                                <StyledTableCell align="center">Institución/Dependencia</StyledTableCell>
+                                <StyledTableCell align="center" >Nombre/Razón Social</StyledTableCell>
+                                <StyledTableCell align="center">Tipo persona</StyledTableCell>
                                 <StyledTableCell align="center">Tipo sanción</StyledTableCell>
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
                             </TableRow>
@@ -598,7 +614,10 @@ export const ListS3PSchema = () => {
                                         {schema.institucionDependencia.nombre}
                                     </StyledTableCell>
                                     <StyledTableCell style={{ width: 160 }} align="center">
-                                        {schema.responsableSancion.nombres+ ' '+schema.responsableSancion.primerApellido+ ' '+ schema.responsableSancion.segundoApellido}
+                                        {schema.particularSancionado.nombreRazonSocial}
+                                    </StyledTableCell>
+                                    <StyledTableCell style={{ width: 160 }} align="center">
+                                        {(schema.particularSancionado.tipoPersona=="F") ? "Física" : "Moral"}
                                     </StyledTableCell>
                                     <StyledTableCell style={{ width: 160 }} align="center">
                                         {schema.tipoSancion?.map((sancion) => (

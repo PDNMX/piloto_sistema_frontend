@@ -20,7 +20,9 @@ export const catalogActions = {
     requestMonedaCatalogo,
     setMonedaSucces,
     requesTipoDocumentoCatalogo,
-    setTipoDocumentoSucces
+    setTipoDocumentoSucces,
+    requestTipoPersonaCatalogo,
+    setTipoPersonaSucces,
 
 };
 /*-------------------S3S catalogos-*/
@@ -164,5 +166,20 @@ function setTipoAreaSucces(areas){
     return {
         type : catalogConstants.TIPO_AREA_SET,
         areas
+    }
+}
+
+/*----------s3p-----------*/
+function  requestTipoPersonaCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_PERSONA_REQUEST,
+        docType
+    }
+}
+
+function setTipoPersonaSucces(persona){
+    return {
+        type : catalogConstants.TIPO_PERSONA_SET,
+        persona
     }
 }

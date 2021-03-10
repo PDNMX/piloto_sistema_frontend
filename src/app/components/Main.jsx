@@ -184,6 +184,7 @@ export const Main = ()=> (
                        render={() => {
                            if (localStorage.token && localStorage.rol =="2") {
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requestTipoPersonaCatalogo("tipoPersona"));
                                storeValidate.dispatch(S3PActions.requestListS3P({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S3PSchema"}}/>)

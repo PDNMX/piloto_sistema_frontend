@@ -22,6 +22,8 @@ export function catalogs(state = {genero: [], ramo: [], puesto: [] ,tipoSancion 
             return {...state , moneda : action.moneda}
         case catalogConstants.TIPO_DOCUMENTO_SET:
             return {...state , tipoDoc : action.tipoDoc}
+        case catalogConstants.TIPO_PERSONA_SET:
+            return {...state , tipoPersona : action.persona}
         default:
             return state
     }
