@@ -105,6 +105,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
     setCheckedDatos((prev) => false);
     setcheckedDatos2((prev) => false);
     setcheckedDatosS3S((prev) => false);
+    setcheckedDatosS3P((prev) => false);
     setcheckedAdminDatos2((prev) => false);
     setcheckedAdminDatosS3S((prev) => false);
     setcheckedAdminDatosS3P((prev) => false);
@@ -122,6 +123,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setsubMenuBitacora(false);
         setcheckedDatos2((prev) => false);
         setcheckedDatosS3S((prev) => false);
+        setcheckedDatosS3P((prev) => false);
         setcheckedAdminDatos2((prev) => false);
         setcheckedAdminDatosS3S((prev) => false);
         setcheckedAdminDatosS3P((prev) => false);
@@ -138,6 +140,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
       setCheckedProveedor((prev) => false);
       setcheckedDatos2((prev) => false);
       setcheckedDatosS3S((prev) => false);
+      setcheckedDatosS3P((prev) => false);
       setcheckedAdminDatos2((prev) => false);
       setcheckedAdminDatosS3S((prev) => false);
       setcheckedAdminDatosS3P((prev) => false);
@@ -154,6 +157,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedProveedor((prev) => false);
         setcheckedDatos2((prev) => !prev);
         setcheckedDatosS3S((prev) => !prev);
+        setcheckedDatosS3P((prev) =>  !prev);
         setcheckedAdminDatos2((prev) => false);
         setcheckedAdminDatosS3S((prev) => false);
         setcheckedAdminDatosS3P((prev) => false);
@@ -171,6 +175,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedProveedor((prev) => false);
         setcheckedDatos2((prev) => false);
         setcheckedDatosS3S((prev) => false);
+        setcheckedDatosS3P((prev) => false);
         setcheckedAdminDatos2((prev) => !prev);
         setcheckedAdminDatosS3S((prev) => !prev);
         setcheckedAdminDatosS3P((prev) => !prev);
@@ -337,6 +342,7 @@ const useStyles = makeStyles((theme) => ({
     const [checkedProveedor, setCheckedProveedor] = useState(false);
     const [checkedDatos2, setcheckedDatos2] = useState(false);
     const [checkedDatosS3S, setcheckedDatosS3S] = useState(false);
+    const [checkedDatosS3P, setcheckedDatosS3P] = useState(false);
     const [checkedAdminDatos2, setcheckedAdminDatos2] = useState(false);
     const [checkedAdminDatosS3S, setcheckedAdminDatosS3S] = useState(false);
     const [checkedAdminDatosS3P, setcheckedAdminDatosS3P] = useState(false);
@@ -492,6 +498,18 @@ const useStyles = makeStyles((theme) => ({
                                         <ArrowRightIcon fontSize="small" />
                                     </ListItemIcon>
                                     <ListItemText primary="S3S" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
+                    <Collapse in={checkedDatosS3P}>
+                        <div>
+                            <Tooltip title="S3P" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3P")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S3P" />
                                 </ListItem>
                             </Tooltip>
                         </div>
