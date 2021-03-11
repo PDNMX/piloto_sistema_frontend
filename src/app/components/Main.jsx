@@ -119,6 +119,26 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
+                       path= "/captura/S3P"
+                       render={() => {
+                           if ( localStorage.token && localStorage.rol =="2"){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch((alertActions.clear()));
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
+                               storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                               storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
+                               storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
+                               //storeValidate.dispatch(catalogActions.requestMunicipioCatalogo("municipio"));
+                               storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
+                               storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                               return <ConnectedMenuV propiedades = {{renderView : "createRegS3P"}} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
                        path= "/consulta/S2"
                        render={() => {
                            if (localStorage.token && localStorage.rol =="2") {
@@ -184,7 +204,7 @@ export const Main = ()=> (
                        render={() => {
                            if (localStorage.token && localStorage.rol =="2") {
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
-                               storeValidate.dispatch(catalogActions.requestTipoPersonaCatalogo("tipoPersona"));
+                               storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
                                storeValidate.dispatch(S3PActions.requestListS3P({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S3PSchema"}}/>)

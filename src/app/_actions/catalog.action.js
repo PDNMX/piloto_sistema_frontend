@@ -21,10 +21,90 @@ export const catalogActions = {
     setMonedaSucces,
     requesTipoDocumentoCatalogo,
     setTipoDocumentoSucces,
-    requestTipoPersonaCatalogo,
+    requesTipoPersonaCatalogo,
     setTipoPersonaSucces,
-
+    requestPaisCatalogo,
+    setPaisSucces,
+    requestEstadoCatalogo,
+    setEstadoSucces,
+    requestMunicipioCatalogo,
+    setMunicipioSucces,
+    requestVialidadCatalogo,
+    setVialidadSucces,
 };
+/*----------------S3P catalogos*****/
+
+function  requesTipoPersonaCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_PERSONA_REQUEST,
+        docType
+    }
+}
+
+function setTipoPersonaSucces(persona){
+    return {
+        type : catalogConstants.TIPO_PERSONA_SET,
+        persona
+    }
+}
+
+function  requestPaisCatalogo (docType){
+    return {
+        type : catalogConstants.PAIS_REQUEST,
+        docType
+    }
+}
+
+function setPaisSucces(pais){
+    return {
+        type : catalogConstants.PAIS_SET,
+        pais
+    }
+}
+
+function  requestEstadoCatalogo (docType){
+    return {
+        type : catalogConstants.ESTADO_REQUEST,
+        docType
+    }
+}
+
+function setEstadoSucces(estado){
+    return {
+        type : catalogConstants.ESTADO_SET,
+        estado
+    }
+}
+
+
+function  requestMunicipioCatalogo (docType){
+    return {
+        type : catalogConstants.MUNICIPIO_REQUEST,
+        docType
+    }
+}
+
+function setMunicipioSucces(municipio){
+    return {
+        type : catalogConstants.MUNICIPIO_SET,
+        municipio
+    }
+}
+
+function  requestVialidadCatalogo (docType){
+    return {
+        type : catalogConstants.VIALIDAD_REQUEST,
+        docType
+    }
+}
+
+function setVialidadSucces(vialidad){
+    return {
+        type : catalogConstants.VIALIDAD_SET,
+        vialidad
+    }
+}
+
 /*-------------------S3S catalogos-*/
 
 function  requestTipoFaltaCatalogo (docType){
@@ -166,20 +246,5 @@ function setTipoAreaSucces(areas){
     return {
         type : catalogConstants.TIPO_AREA_SET,
         areas
-    }
-}
-
-/*----------s3p-----------*/
-function  requestTipoPersonaCatalogo (docType){
-    return {
-        type : catalogConstants.TIPO_PERSONA_REQUEST,
-        docType
-    }
-}
-
-function setTipoPersonaSucces(persona){
-    return {
-        type : catalogConstants.TIPO_PERSONA_SET,
-        persona
     }
 }

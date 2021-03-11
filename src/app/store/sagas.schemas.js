@@ -576,7 +576,63 @@ export function* getCatalogMoneda(){
     }
 }
 
+export function* getCatalogPais(){
+    while(true){
+        const {docType} = yield take (catalogConstants.PAIS_REQUEST);
+        const token = localStorage.token;
 
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (catalogActions.setPaisSucces(respuestaArray.data.results));
+    }
+}
+
+export function* getCatalogEstado(){
+    while(true){
+        const {docType} = yield take (catalogConstants.ESTADO_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (catalogActions.setEstadoSucces(respuestaArray.data.results));
+    }
+}
+export function* getCatalogMunicipio(){
+    while(true){
+        const {docType} = yield take (catalogConstants.MUNICIPIO_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (catalogActions.setMunicipioSucces(respuestaArray.data.results));
+    }
+}
+export function* getCatalogVialidad(){
+    while(true){
+        const {docType} = yield take (catalogConstants.VIALIDAD_REQUEST);
+        const token = localStorage.token;
+
+        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        yield put (catalogActions.setVialidadSucces(respuestaArray.data.results));
+    }
+}
 export function* getCatalogTipoDocumento(){
     while(true){
         const {docType} = yield take (catalogConstants.TIPO_DOCUMENTO_REQUEST);
@@ -607,6 +663,130 @@ export function* getCatalogTipoPersona(){
     }
 }
 
+export function* creationS3PSchema(){
+    while (true) {
+        const {values} = yield take(S3PConstants.REQUEST_CREATION_S3P);
+        const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put(userActions.setUserInSession(payload.idUser));
+        let usuario = payload.idUser;
+
+        let arrayObjTipoSancion = [];
+        if (values.tipoSancion) {
+            for (let sancion of values.tipoSancion) {
+                let tipoSancion = JSON.parse(sancion.tipoSancion);
+                arrayObjTipoSancion.push({...tipoSancion, descripcion: sancion.descripcion ? sancion.descripcion : ""});
+            }
+        }
+        values.tipoSancion = arrayObjTipoSancion;
+
+        if (values.multa.moneda) {
+            values.multa.moneda = JSON.parse(values.multa.moneda);
+        }
+        if (values.multa.monto) {
+            values.multa.monto = parseFloat(values.multa.monto);
+        }
+
+
+        if (values.documentos) {
+            if (Array.isArray(values.documentos)) {
+                for (let i of values.documentos) {
+                    i.id = i.id.toString();
+                    i.tipo = JSON.parse(i.tipo).clave;
+                    let fecha = Date.parse(i.fecha);
+                    i.fecha = formatISO(fecha, {representation: 'date'});
+                }
+            }
+        }
+        if (values.resolucion) {
+            if (values.resolucion.fechaResolucion) {
+                let fecha = Date.parse(values.resolucion.fechaResolucion);
+                values.resolucion.fechaResolucion = formatISO(fecha, {representation: 'date'})
+            }
+        }
+
+        if (values.inhabilitacion) {
+            if (values.inhabilitacion.fechaInicial) {
+                let fecha = Date.parse(values.inhabilitacion.fechaInicial);
+                values.inhabilitacion.fechaInicial = formatISO(fecha, {representation: 'date'})
+            }
+            if (values.inhabilitacion.fechaFinal) {
+                let fecha = Date.parse(values.inhabilitacion.fechaFinal);
+                values.inhabilitacion.fechaFinal = formatISO(fecha, {representation: 'date'})
+            }
+        }
+
+        if (values.particularSancionado) {
+            if (values.particularSancionado.tipoPersona) {
+                let tipoPersona = JSON.parse(values.particularSancionado.tipoPersona);
+                values.particularSancionado.tipoPersona = tipoPersona.clave;
+            }
+            if (values.particularSancionado.domicilioMexico) {
+                if (values.particularSancionado.domicilioMexico.pais) {
+                    let paisDomMex = JSON.parse(values.particularSancionado.domicilioMexico.pais);
+                    values.particularSancionado.domicilioMexico.pais = paisDomMex;
+                }
+                if (values.particularSancionado.domicilioMexico.entidadFederativa) {
+                    let estadoDomMex = JSON.parse(values.particularSancionado.domicilioMexico.entidadFederativa);
+                    values.particularSancionado.domicilioMexico.entidadFederativa = estadoDomMex;
+                }
+                if (values.particularSancionado.domicilioMexico.municipio) {
+                    let municipioDomMex = JSON.parse(values.particularSancionado.domicilioMexico.municipio);
+                    values.particularSancionado.domicilioMexico.municipio = municipioDomMex;
+                }
+                if (values.particularSancionado.domicilioMexico.localidad) {
+                    let localidadDomMex = JSON.parse(values.particularSancionado.domicilioMexico.localidad);
+                    values.particularSancionado.domicilioMexico.localidad = localidadDomMex;
+                }
+                if (values.particularSancionado.domicilioMexico.vialidad) {
+                    let vialidadDomMex = JSON.parse(values.particularSancionado.domicilioMexico.vialidad);
+                    values.particularSancionado.domicilioMexico.vialidad = {
+                        clave: vialidadDomMex.valor,
+                        valor: values.particularSancionado.domicilioMexico.descripcionVialidad ? values.particularSancionado.domicilioMexico.descripcionVialidad : ""
+                    };
+                    if (values.particularSancionado.domicilioMexico.descripcionVialidad) {
+                        delete values.particularSancionado.domicilioMexico.descripcionVialidad;
+                    }
+                }
+            }
+        }
+
+        console.log(JSON.stringify(values));
+
+        if (values._id) {
+            docSend["_id"] = values._id;
+            const {status} = yield axios.post(ur + `/updateS3SSchema`, {...docSend, usuario: usuario}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, validateStatus: () => true
+            });
+            if (status === 200) {
+                //all OK
+                yield put(alertActions.success("Registro actualizado con éxito"));
+            } else {
+                yield put(alertActions.error("Error al crear"));
+                //error in response
+            }
+        } else {
+            const {status} = yield axios.post(ur + `/insertS3PSchema`, {...values, usuario: usuario}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, validateStatus: () => true
+            });
+            if (status === 200) {
+                //all OK
+                yield put(alertActions.success("Registro creado con éxito"));
+            } else {
+                yield put(alertActions.error("Error al crear"));
+                //error in response
+            }
+        }
+    }
+}
 
 export function* creationS3SSchema(){
     while (true) {
@@ -784,7 +964,6 @@ export function* creationS3SSchema(){
 
     }
 }
-
 export function* creationS2Schema(){
     while (true) {
         const {values} = yield take (S2Constants.REQUEST_CREATION_S2);

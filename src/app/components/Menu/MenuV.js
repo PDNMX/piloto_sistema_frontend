@@ -67,6 +67,7 @@ import {ListS3PSchema} from "../CargaDatos/listSchemaS3P";
 import {ConnectedCreateRegS3S} from "../CargaDatos/createRegS3S";
 import {ConnectedChangePassword} from "../users/changePassword";
 import {useSelector} from 'react-redux';
+import {ConnectedCreateRegS3P} from "../CargaDatos/createRegS3P";
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
     const {vigencia} = useSelector(state => ({
@@ -605,11 +606,14 @@ const useStyles = makeStyles((theme) => ({
                   {vistaRender === "providers" && <ListProvider/> }
                   {vistaRender === "createReg" && <ConnectedCreateReg/> }
                   {vistaRender === "createRegS3S" && <ConnectedCreateRegS3S/> }
+                  {vistaRender === "createRegS3P" && <ConnectedCreateRegS3P/> }
+
                   {vistaRender === "editRegS2" && <ConnectedCreateReg match = {match}/> }
                   {vistaRender === "editRegS3S" && <ConnectedCreateRegS3S match = {match}/> }
                   {vistaRender === "S2Schema" && <ListS2Schema/> }
                   {vistaRender === "S3SSchema" && <ListS3SSchema/> }
                   {vistaRender === "S3PSchema" && <ListS3PSchema/> }
+
 
                   {vistaRender === "consultarbitacora" && <ConnectedConsultarBitacora/>}
                   {vistaRender === "reportebitacora" && <ListBitacora/> }
