@@ -46,6 +46,8 @@ import * as Yup from 'yup';
 import DateFnsUtils from "@date-io/date-fns";
 import {formatISO} from "date-fns";
 import {Moment} from "moment";
+import deLocale from "date-fns/locale/es";
+import {ConnectedCreateRegS3P} from "./createRegS3P";
 
 interface FormDataEsquemaS3P {
     particularSancionado?:{
@@ -145,11 +147,12 @@ interface FormDataEsquemaS3P {
 }
 
 export const ListS3PSchema = () => {
-    const {S3PList,alerta,paginationSuper,catalogos} = useSelector(state => ({
+    const {S3PList,alerta,paginationSuper,catalogos, permisos} = useSelector(state => ({
         S3PList : state.S3P,
         alerta : state.alert,
         paginationSuper: state.pagination,
-        catalogos: state.catalogs
+        catalogos: state.catalogs,
+        permisos: state.permisos
     }));
 
     const dispatch = useDispatch();
@@ -160,10 +163,11 @@ export const ListS3PSchema = () => {
     const [query, setQuery] =  React.useState({});
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS3P>({});
+    const [match, setMatch] =   React.useState({params: {id: ""}});
 
-    const handleOpenModalUserInfo = (user) => {
+    const handleOpenModalUserInfo = (id) => {
         setOpenModalUserInfo(true);
-        setSelectedRegistro(user);
+        setMatch({params:{id: id}});
     };
 
     const handleCloseModalUserInfo = () => {
@@ -324,8 +328,14 @@ export const ListS3PSchema = () => {
                 let objTipoPersona= JSON.parse(value);
                 newQuery["particularSancionado.tipoPersona"]= { $in : [objTipoPersona.clave]};
             }else if(key === "tipoSancion" && value !== null && value !== ''){
-                let objTipoSancion= JSON.parse(value);
-                newQuery["tipoSancion.clave"]= { $in : [objTipoSancion.clave]};
+                console.log(value);
+                let arrayObjTipoSancion= value;
+                let acumulado= []
+                for(let obSancion of arrayObjTipoSancion){
+                    // @ts-ignore
+                    acumulado.push( JSON.parse(obSancion).clave);
+                }
+                newQuery["tipoSancion.clave"]= { $in :acumulado };
             }else if(key === "fechaFinal" && value !== null && value !== ''){
                 let fecha = Date.parse(value);
                 console.log(formatISO(fecha, { representation: 'date' }));
@@ -465,7 +475,11 @@ export const ListS3PSchema = () => {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <Grid></Grid>
+                <Grid container>
+                    <Grid item md={12}>
+                        <ConnectedCreateRegS3P match = {match}/>
+                    </Grid>
+                </Grid>
             </Modal>
 
             <Dialog
@@ -530,6 +544,7 @@ export const ListS3PSchema = () => {
                                         </Grid>}
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
+                                                locale={deLocale}
                                                 format={"yyyy-MM-dd"}
                                                 label="Última actualización"
                                                 name="fechaCaptura"
@@ -537,6 +552,7 @@ export const ListS3PSchema = () => {
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
+                                                locale={deLocale}
                                                 format={"yyyy-MM-dd"}
                                                 label="Fecha de inhabilitación"
                                                 name="fechaFinal"

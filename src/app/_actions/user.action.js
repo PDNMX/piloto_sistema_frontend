@@ -17,7 +17,9 @@ export const userActions = {
     requestVigenciaPass,
     setVigenciaPass,
     requestRol,
-    setRol
+    setRol,
+    requestPermisosSistema,
+    setPermisosSistema
 };
 
 function requestAllUsers(){
@@ -113,4 +115,14 @@ function requestRol(vigencia){
 
 function setRol (rol){
     return {type : userConstants.REQUEST_ROL_SET, rol}
+}
+
+function requestPermisosSistema(){
+    return {
+        type :  userConstants.REQUEST_PERMISOS_SISTEMA,
+    }
+}
+
+function setPermisosSistema (permisos){
+    return {type : userConstants.REQUEST_PERMISOS_SISTEMA_SET, permisos}
 }

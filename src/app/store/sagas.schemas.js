@@ -10,7 +10,7 @@ import {userConstants} from "../_constants/user.constants";
 import {userActions} from "../_actions/user.action";
 import {providerConstants} from "../_constants/provider.constants";
 import {providerActions} from "../_actions/provider.action";
-import {REQUEST_TOKEN_AUTH, requestTokenAuth, REQUEST_RESET_PASSWORD, USER_VIGENCIACONTRASENA_SET} from "./mutations";
+import {REQUEST_TOKEN_AUTH, requestTokenAuth, REQUEST_RESET_PASSWORD, USER_VIGENCIACONTRASENA_SET,REQUEST_PERMISOS_SISTEMA_SET} from "./mutations";
 import {catalogConstants} from "../_constants/catalogs.constants";
 import {catalogActions} from "../_actions/catalog.action";
 import {S2Constants} from "../_constants/s2.constants";
@@ -261,9 +261,12 @@ export function* loginUser(){
             const token = yield axios.post(urOauth2 + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
             localStorage.setItem("token", token.data.access_token);
 
-            const toke =token.data.access_token;
+            const toke = localStorage.token;
+            let payload = jwt.decode(toke);
+            const usuario={id_usuario: payload.idUser};
+            usuario["id_usuario"]=payload.idUser;
 
-            const status = yield axios.post(ur + `/validationpassword`,credentialUser, {headers: {
+            const status = yield axios.post(ur + `/validationpassword`,usuario, {headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
                     'Authorization': `Bearer ${toke}`
@@ -273,7 +276,9 @@ export function* loginUser(){
 
             yield put (userActions.setVigenciaPass(status.data.contrasenaNueva));
             yield put (userActions.setRol(status.data.rol));
+            yield put (userActions.setPermisosSistema(status.data.sistemas));
             localStorage.setItem("rol",status.data.rol);
+            localStorage.setItem("sistemas",status.data.sistemas);
 
             if(status.data.contrasenaNueva===true){
                 history.push('/usuario/cambiarcontrasena');
@@ -295,6 +300,52 @@ export function* loginUser(){
     }
 }
 
+export function* permisosSistemas(){
+    while(true){
+        yield take (userConstants.REQUEST_PERMISOS_SISTEMA);
+        const toke = localStorage.token;
+        let payload = jwt.decode(toke);
+
+        const usuario={id_usuario: payload.idUser};
+        usuario["id_usuario"]=payload.idUser;
+
+        const status = yield axios.post(ur + `/validationpassword`,usuario, {headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${toke}`
+            } , validateStatus: () => true});
+
+        localStorage.setItem("cambiarcontrasena", status.data.contrasenaNueva);
+
+        yield put (userActions.setVigenciaPass(status.data.contrasenaNueva));
+        yield put (userActions.setRol(status.data.rol));
+        yield put (userActions.setPermisosSistema(status.data.sistemas));
+        //console.log(status.data.sistemas);
+        localStorage.setItem("rol",status.data.rol);
+        localStorage.setItem("sistemas",[status.data.sistemas]);
+        localStorage.setItem("S2",false);
+        localStorage.setItem("S3S",false);
+        localStorage.setItem("S3P",false);
+        let permisos=[];
+        permisos=status.data.sistemas;
+        let permiso=false;
+
+        permisos.map((item)=>{
+            if(item=="S2"){
+                localStorage.setItem("S2",true);
+            }else if(item=="S3S"){
+                localStorage.setItem("S3S",true);
+            }else if(item=="S3P"){
+                localStorage.setItem("S3P",true);
+            }
+        });
+
+        console.log("s2->",localStorage.S2+ "s3s-->"+localStorage.S3S,"  S3P-->"+localStorage.S3P);
+
+    }
+}
+
+
 export function* verifyTokenGetUser(){
     while(true){
         const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
@@ -310,6 +361,7 @@ export function* closeSession(){
         localStorage.removeItem("token");
         localStorage.removeItem("cambiarcontrasena");
         localStorage.removeItem("rol");
+        localStorage.clear();
         history.push('/login');
     }
 }

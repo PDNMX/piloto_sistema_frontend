@@ -15,6 +15,7 @@ import {S3P} from './S3PSchema.reducer';
 import {bitacora} from './bitacoraTemporal.reducer';
 import {vigencia} from './vigenciaPassword.reducer';
 import {rol} from './rolUser.reducer';
+import {permisos} from "./permisosSistemasUser.reducer";
 const rootReducer = combineReducers({
     users,
     alert,
@@ -31,7 +32,8 @@ const rootReducer = combineReducers({
     userSelect,
     bitacora,
     vigencia,
-    rol
+    rol,
+    permisos
 });
 
 export default rootReducer;

@@ -70,8 +70,9 @@ import {useSelector} from 'react-redux';
 import {ConnectedCreateRegS3P} from "../CargaDatos/createRegS3P";
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
-    const {vigencia} = useSelector(state => ({
-        vigencia:state.vigencia
+    const {vigencia, permisos} = useSelector(state => ({
+        vigencia:state.vigencia,
+        permisos:state.permisos
     }));
 
     const location = useLocation();
@@ -426,7 +427,9 @@ const useStyles = makeStyles((theme) => ({
                       <ListItemText primary="Administrador datos" />
                     </ListItem>
                   </Tooltip>
-                    <Collapse in={checkedAdminDatos2}>
+                    {permisos.map(item => (
+                        item==="S2" ?
+                            <Collapse in={checkedAdminDatos2}>
                         <div>
                             <Tooltip title="S2" placement="right">
                                 <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")}>
@@ -438,6 +441,10 @@ const useStyles = makeStyles((theme) => ({
                             </Tooltip>
                         </div>
                     </Collapse>
+                            : ""
+                    ))}
+                    {permisos.map(item => (
+                        item==="S3S" ?
                     <Collapse in={checkedAdminDatosS3S}>
                         <div>
                             <Tooltip title="S3S" placement="right">
@@ -450,6 +457,10 @@ const useStyles = makeStyles((theme) => ({
                             </Tooltip>
                         </div>
                     </Collapse>
+                            : ""
+                    ))}
+                    {permisos.map(item => (
+                        item==="S3P" ?
                     <Collapse in={checkedAdminDatosS3P}>
                         <div>
                             <Tooltip title="S3S" placement="right">
@@ -462,6 +473,8 @@ const useStyles = makeStyles((theme) => ({
                             </Tooltip>
                         </div>
                     </Collapse>
+                            : ""
+                    ))}
                   <Tooltip title="Cargar datos" placement="right">
                     <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
                       <ListItemIcon>
@@ -478,6 +491,8 @@ const useStyles = makeStyles((theme) => ({
                       <ListItemText primary="Capturar datos" />
                     </ListItem>
                   </Tooltip>
+                    {permisos.map(item => (
+                        item==="S2" ?
                         <Collapse in={checkedDatos2}>
                             <div>
                                 <Tooltip title="S2" placement="right">
@@ -490,6 +505,10 @@ const useStyles = makeStyles((theme) => ({
                                 </Tooltip>
                             </div>
                         </Collapse>
+                    : ""
+                    ))}
+                    {permisos.map(item => (
+                        item==="S3S" ?
                     <Collapse in={checkedDatosS3S}>
                         <div>
                             <Tooltip title="S3S" placement="right">
@@ -502,6 +521,10 @@ const useStyles = makeStyles((theme) => ({
                             </Tooltip>
                         </div>
                     </Collapse>
+                    : ""
+                    ))}
+                    {permisos.map(item => (
+                        item==="S3P" ?
                     <Collapse in={checkedDatosS3P}>
                         <div>
                             <Tooltip title="S3P" placement="right">
@@ -514,6 +537,8 @@ const useStyles = makeStyles((theme) => ({
                             </Tooltip>
                         </div>
                     </Collapse>
+                    : ""
+                    ))}
                 </div>
               </Collapse>
           : ""
