@@ -345,6 +345,7 @@ export const ListS2Schema = () => {
             paper: {
                 'text-align': 'center',
                 margin: 0,
+                marginTop: '-10px',
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
@@ -353,6 +354,9 @@ export const ListS2Schema = () => {
                 boxShadow: theme.shadows[5],
                 padding: theme.spacing(2, 4, 3),
             },
+            modal:{
+                overflowY: 'auto'
+            }
         }),
     );
 
@@ -374,6 +378,7 @@ export const ListS2Schema = () => {
                 onClose={handleCloseModalUserInfo}
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
+                className={classes.modal}
             >
                 <Grid container item md={8} className={classes.paper}>
                     <Grid container>
