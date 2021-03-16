@@ -75,6 +75,7 @@ export const Main = ()=> (
                        render={() => {
                            if ( localStorage.token && localStorage.rol =="2"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch((alertActions.clear()));
                                storeValidate.dispatch(clearErrorsValidation());
                                return <ConnectedMenuV propiedades = {{renderView : "cargamasiva"}} />
@@ -86,8 +87,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/captura/S2"
                        render={() => {
-                           if ( localStorage.token && localStorage.rol =="2"){
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
                                storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
@@ -104,8 +106,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/captura/S3S"
                        render={() => {
-                           if ( localStorage.token && localStorage.rol =="2"){
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
@@ -121,8 +124,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/captura/S3P"
                        render={() => {
-                           if ( localStorage.token && localStorage.rol =="2"){
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch((alertActions.clear()));
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
@@ -140,7 +144,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/consulta/S2"
                        render={() => {
-                           if (localStorage.token && localStorage.rol =="2") {
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(S2Actions.requestListS2({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
@@ -152,8 +158,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/editar/S2/:id"
                        render={({match}) => {
-                           if ( localStorage.token && localStorage.rol =="2"){
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
                                storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
@@ -170,8 +177,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/editar/S3S/:id"
                        render={({match}) => {
-                           if ( localStorage.token && localStorage.rol =="2"){
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
@@ -207,7 +215,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/consulta/S3S"
                        render={() => {
-                           if (localStorage.token && localStorage.rol =="2") {
+                           if (localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true") {
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                S3SActions.setListS3S([]);
                                storeValidate.dispatch(S3SActions.requestListS3S({}));
@@ -221,7 +231,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/consulta/S3P"
                        render={() => {
-                           if (localStorage.token && localStorage.rol =="2") {
+                           if (localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true") {
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
                                storeValidate.dispatch(S3PActions.requestListS3P({}));

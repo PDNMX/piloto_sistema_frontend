@@ -3,12 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_actions/catalog.action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_actions/catalog.action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_constants/catalogs.constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_constants/catalogs.constants.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/_reducers/catalog.reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_reducers/catalog.reducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS2.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS2.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3P.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3P.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/Main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/Main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/store/sagas.schemas.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3S.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3S.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,6 +133,7 @@
       <workItem from="1614873979173" duration="26339000" />
       <workItem from="1615220345375" duration="29998000" />
       <workItem from="1615340404412" duration="5062000" />
+      <workItem from="1615742195323" duration="3852000" />
     </task>
     <task id="LOCAL-00001" summary="gui users update">
       <created>1608605064025</created>

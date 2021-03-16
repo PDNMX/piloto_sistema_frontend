@@ -27,6 +27,9 @@ export const REQUEST_RESET_PASSWORD = 'REQUEST_RESET_PASSWORD';
 export const REQUEST_CHANGEPASSWORD_USER = 'REQUEST_CHANGEPASSWORD_USER';
 export const REQUEST_VIGENCIA_PASS= 'REQUEST_VIGENCIA_PASS';
 export const REQUEST_VIGENCIA_PASS_SET= 'REQUEST_VIGENCIA_PASS_SET';
+export const REQUEST_PERMISOS_SISTEMA='REQUEST_PERMISOS_SISTEMA';
+export const REQUEST_PERMISOS_SISTEMA_SET='REQUEST_PERMISOS_SISTEMA_SET';
+
 
 export const clearErrorsValidation = () => ({
     type : CLEAR_ERRORS_VALIDATION
@@ -122,4 +125,9 @@ export const requestChangePassword = (usuarioJson) => ({
 export const requestVigenciaPass= (vigencia) => ({
     type: REQUEST_VIGENCIA_PASS,
     vigencia
+});
+
+export const requestPermisosSistema= (permisos) => ({
+    type: REQUEST_PERMISOS_SISTEMA,
+    permisos
 });
