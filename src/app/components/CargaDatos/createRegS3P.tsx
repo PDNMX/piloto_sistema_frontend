@@ -310,7 +310,7 @@ function MyForm(props: MyFormProps ) {
 
     async function requestMunicipio(value) {
         const token = localStorage.token;
-        const respuestaArray = await axios.post('http://localhost:3004' + `/getCatalogsMunicipiosPorEstado`, {idEstado: value}, {
+        const respuestaArray = await axios.post('http://104.155.132.219:3004' + `/getCatalogsMunicipiosPorEstado`, {idEstado: value}, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -327,7 +327,7 @@ function MyForm(props: MyFormProps ) {
 
     async function requestLocalidadByMunicipio(value) {
         const token = localStorage.token;
-        const respuestaArray = await axios.post('http://localhost:3004' + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value}, {
+        const respuestaArray = await axios.post('http://104.155.132.219:3004' + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value}, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
