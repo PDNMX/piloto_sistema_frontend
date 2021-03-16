@@ -129,7 +129,6 @@ export const Main = ()=> (
                                storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
                                storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
                                storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
-                               //storeValidate.dispatch(catalogActions.requestMunicipioCatalogo("municipio"));
                                storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
                                storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
                                return <ConnectedMenuV propiedades = {{renderView : "createRegS3P"}} />
@@ -180,6 +179,26 @@ export const Main = ()=> (
                                storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
                                storeValidate.dispatch(S3SActions.fillRegEdit(match.params.id));
                                return <ConnectedMenuV propiedades = {{renderView : "editRegS3S"}} match = {match} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/editar/S3P/:id"
+                       render={({match}) => {
+                           if ( localStorage.token && localStorage.rol =="2"){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch((alertActions.clear()));
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
+                               storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                               storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
+                               storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
+                               storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
+                               storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                               storeValidate.dispatch(S3PActions.fillRegEdit(match.params.id));
+                               return <ConnectedMenuV propiedades = {{renderView : "editRegS3P"}} match = {match} />
                            }else{
                                return <Redirect to="/login"/> ;
                            }

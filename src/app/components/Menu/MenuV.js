@@ -628,6 +628,8 @@ const useStyles = makeStyles((theme) => ({
 
                   {vistaRender === "editRegS2" && <ConnectedCreateReg match = {match}/> }
                   {vistaRender === "editRegS3S" && <ConnectedCreateRegS3S match = {match}/> }
+                  {vistaRender === "editRegS3P" && <ConnectedCreateRegS3P match = {match}/> }
+
                   {vistaRender === "S2Schema" && <ListS2Schema/> }
                   {vistaRender === "S3SSchema" && <ListS3SSchema/> }
                   {vistaRender === "S3PSchema" && <ListS3PSchema/> }

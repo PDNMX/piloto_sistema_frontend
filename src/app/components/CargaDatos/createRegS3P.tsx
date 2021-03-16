@@ -23,12 +23,13 @@ import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
 import {S3PActions} from "../../_actions/s3p.action";
 import deLocale from "date-fns/locale/es";
+import {catalogActions} from "../../_actions/catalog.action";
+import axios from "axios";
 
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
     return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancion: [undefined]}} catalogos={catalogos}  alerta={alert} id={id}/>;
 }
-
 
 interface FormDataEsquemaS3P {
     particularSancionado?:{
@@ -130,7 +131,7 @@ interface FormDataEsquemaS3P {
 interface MyFormProps {
     initialValues: FormDataEsquemaS3P;
     alerta: { status: boolean , message :""};
-    catalogos:{tipoPersona: [], paises:[], estados:[], municipios:[], vialidades: [],   tipoSancion: [], moneda: [] , tipoDoc: []};
+    catalogos:{tipoPersona: [], paises:[], estados:[], municipios:[], localidades:[],  vialidades: [],   tipoSancion: [], moneda: [] , tipoDoc: []};
     id: string;
 }
 
@@ -145,8 +146,6 @@ function MyForm(props: MyFormProps ) {
     const alert = alerta;
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
-
-
 
     let schema = Yup.object().shape({
         expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
@@ -221,7 +220,7 @@ function MyForm(props: MyFormProps ) {
                 .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                     'Introduce una direccion de internet valida'
                 ).trim(),
-            fechaResolucion : Yup.string().trim(),
+            fechaNotificacion : Yup.string().trim(),
         }),
         multa:Yup.object().shape({
             monto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').required("El campo Monto es requerido").trim(),
@@ -308,6 +307,38 @@ function MyForm(props: MyFormProps ) {
         type:"submit"
     }
 
+    async function requestMunicipio(value) {
+        const token = localStorage.token;
+        const respuestaArray = await axios.post('http://localhost:3004' + `/getCatalogsMunicipiosPorEstado`, {idEstado: value}, {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if(Array.isArray(respuestaArray.data.results)){
+            catalogos.municipios = respuestaArray.data.results;
+        }
+
+    }
+
+
+    async function requestLocalidadByMunicipio(value) {
+        const token = localStorage.token;
+        const respuestaArray = await axios.post('http://localhost:3004' + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value}, {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if(Array.isArray(respuestaArray.data.results)){
+            catalogos.localidades = respuestaArray.data.results;
+        }
+
+    }
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS3P) {
         if(id != undefined){
@@ -347,7 +378,7 @@ function MyForm(props: MyFormProps ) {
                     <form  onSubmit={handleSubmit} noValidate>
                         {alert.status === undefined &&
                         <div>
-                            <Grid className= {cla.gridpadding} spacing={3} container >
+                            <Grid key={"GridContainerFormCreateRegS3P"} className= {cla.gridpadding} spacing={3} container >
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Datos del generales
@@ -421,15 +452,14 @@ function MyForm(props: MyFormProps ) {
                                 </FieldArray>
 
 
-                                /* Institucion dependencia ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Institución Dependencia
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre" name="institucionDependencia.nombre" />
+                                <Grid key={"institucionDependencia.grid.nombre"} item xs={12} md={3}>
+                                    <TextField key={"institucionDependencia.nombre"} label="Nombre" name="institucionDependencia.nombre" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Siglas" name="institucionDependencia.siglas"  />
@@ -437,7 +467,6 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Clave" name="institucionDependencia.clave" />
                                 </Grid>
-                                /* PARTICULAR SANCIONADO ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Particular sancionado
@@ -463,7 +492,6 @@ function MyForm(props: MyFormProps ) {
                                 <TextField label="Teléfono" name="particularSancionado.telefono" />
                                 </Grid>
 
-                                /* DOMICILIO MEXICO ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Domicilio méxico
@@ -476,13 +504,36 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
                                 }
                                 {catalogos.estados &&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "particularSancionado.domicilioMexico.entidadFederativa" label="Estado" data={catalogos.estados} ></Select>
+                                <Grid key={"grid.particularSancionado.domicilioMexico.entidadFederativa"} item xs={12} md={3}>
+                                    <Select key={"particularSancionado.domicilioMexico.entidadFederativa"} name = "particularSancionado.domicilioMexico.entidadFederativa" label="Estado" data={catalogos.estados} ></Select>
                                 </Grid>
                                 }
+                                {catalogos.estados &&
+                                <OnChange name="particularSancionado.domicilioMexico.entidadFederativa">
+                                    {(value, previous) => {
+                                        if(value){
+                                            requestMunicipio(value);
+                                        }
+                                    }}
+                                </OnChange>
+                                }
                                 {catalogos.municipios&&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "particularSancionado.domicilioMexico.municipio" label="Municipio" data={catalogos.municipios} ></Select>
+                                <Grid key={"grid.particularSancionado.domicilioMexico.municipio"} item xs={12} md={3}>
+                                    <Select key={"particularSancionado.domicilioMexico.municipio.grid"}  name = "particularSancionado.domicilioMexico.municipio" label="Municipio" data={catalogos.municipios} ></Select>
+                                </Grid>
+                                }
+                                {catalogos.municipios &&
+                                <OnChange name="particularSancionado.domicilioMexico.municipio">
+                                    {(value, previous) => {
+                                        if(value){
+                                            requestLocalidadByMunicipio(value);
+                                        }
+                                    }}
+                                </OnChange>
+                                }
+                                {catalogos.localidades&&
+                                <Grid key={"grid.particularSancionado.domicilioMexico.localidad"} item xs={12} md={3}>
+                                    <Select key={"particularSancionado.domicilioMexico.localidad.grid"}  name = "particularSancionado.domicilioMexico.localidad" label="Localidad" data={catalogos.localidades} ></Select>
                                 </Grid>
                                 }
                                 <Grid item xs={12} md={3}>
@@ -501,8 +552,6 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Número interior" name="particularSancionado.domicilioMexico.numeroInterior" />
                                 </Grid>
 
-
-                                /* DOMICILIO EXTRANGERO ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Domicilio extrangero
@@ -531,7 +580,6 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Código postal" name="particularSancionado.domicilioExranjero.codigoPostal" />
                                 </Grid>
 
-                                /* DIRECTOR GENERAL ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                        DIRECTOR GENERAL
@@ -551,7 +599,6 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="CURP" name="particularSancionado.directorGeneral.curp" />
                                 </Grid>
 
-                                /* DIRECTOR GENERAL ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Apoderado legal
@@ -571,7 +618,6 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="CURP" name="particularSancionado.apoderadoLegal.curp" />
                                 </Grid>
 
-                                /* RESPONSABLE SANCION ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Responsable sanción
@@ -587,7 +633,7 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Segundo apellido" name="responsableSancion.segundoApellido" />
                                 </Grid>
-                                /* RESOLUCION ----------------------*/
+
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                        Resolución
@@ -605,11 +651,10 @@ function MyForm(props: MyFormProps ) {
                                         locale={deLocale}
                                         format={"yyyy-MM-dd"}
                                         label="Fecha de resolución"
-                                        name="resolucion.fechaResolucion"
+                                        name="resolucion.fechaNotificacion"
                                         dateFunsUtils={DateFnsUtils} />
                                 </Grid>
 
-                                /*-----------Multa--------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Multa
@@ -626,7 +671,6 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
                                 }
 
-                                /*-----------Inhabilitacion--------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Inhabilitacion
@@ -657,7 +701,6 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Observaciones"  name="observaciones"  />
                                 </Grid>
 
-                                /*-----------DOCUMENTOS--------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Documentos
@@ -721,8 +764,6 @@ function MyForm(props: MyFormProps ) {
                                         ))
                                     }
                                 </FieldArray>
-
-                                <pre>{JSON.stringify(values)}</pre>
                             </Grid>
 
                             <Grid  spacing={3} justify="flex-end"

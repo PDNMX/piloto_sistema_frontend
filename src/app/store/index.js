@@ -10,7 +10,8 @@ const sagaMiddleware = createSagaMiddleware();
 export const storeValidate = createStore(
     rootReducer,
     applyMiddleware(
-        createLogger(),sagaMiddleware
+       // createLogger(),sagaMiddleware
+        sagaMiddleware
     )
 );
 

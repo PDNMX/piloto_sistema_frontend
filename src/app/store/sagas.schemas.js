@@ -607,10 +607,9 @@ export function* getCatalogEstado(){
 }
 export function* getCatalogMunicipio(){
     while(true){
-        const {docType} = yield take (catalogConstants.MUNICIPIO_REQUEST);
+        const {idEstado} = yield take (catalogConstants.MUNICIPIO_REQUEST);
         const token = localStorage.token;
-
-        const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: docType},{ headers: {
+        const respuestaArray = yield axios.post(ur + `/getCatalogsMunicipiosPorEstado`,{idEstado: idEstado},{ headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -699,12 +698,11 @@ export function* creationS3PSchema(){
             }
         }
         if (values.resolucion) {
-            if (values.resolucion.fechaResolucion) {
-                let fecha = Date.parse(values.resolucion.fechaResolucion);
-                values.resolucion.fechaResolucion = formatISO(fecha, {representation: 'date'})
+            if (values.resolucion.fechaNotificacion) {
+                let fecha = Date.parse(values.resolucion.fechaNotificacion);
+                values.resolucion.fechaNotificacion = formatISO(fecha, {representation: 'date'})
             }
         }
-
         if (values.inhabilitacion) {
             if (values.inhabilitacion.fechaInicial) {
                 let fecha = Date.parse(values.inhabilitacion.fechaInicial);
@@ -753,9 +751,10 @@ export function* creationS3PSchema(){
 
         console.log(JSON.stringify(values));
 
+        delete values.__v;
         if (values._id) {
-            docSend["_id"] = values._id;
-            const {status} = yield axios.post(ur + `/updateS3SSchema`, {...docSend, usuario: usuario}, {
+            values["_id"] = values._id;
+            const {status} = yield axios.post(ur + `/updateS3PSchema`, {...values, usuario: usuario}, {
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
@@ -1103,6 +1102,91 @@ export function* getListSchemaS3P(){
         console.log(respuestaArray.data.pagination);
         yield put (S3PActions.setpaginationS3P(respuestaArray.data.pagination));
 
+    }
+}
+
+
+
+export function* fillUpdateRegS3P() {
+    while (true) {
+        const {id} = yield take(S3PConstants.FILL_REG_S3P_EDIT);
+        const token = localStorage.token;
+        let query = {"query": {"_id": id}};
+
+        const respuestaArray = yield axios.post(ur + `/listSchemaS3P`, query, {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        let registro = respuestaArray.data.results[0];
+
+        for (let [key, row] of Object.entries(registro)) {
+
+            if (key === "particularSancionado") {
+                if (row.tipoPersona) {
+
+                    let tipoPersona = row.tipoPersona;
+
+                    const respuestaArray = yield axios.post(ur + `/getCatalogs`,{docType: "tipoPersona"},{ headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }});
+
+                    for(let persona of respuestaArray.data.results){
+                        if(persona.clave === tipoPersona){
+                            row.tipoPersona =  JSON.stringify({clave:persona.clave ,valor : persona.valor})
+                        }
+                    }
+                }
+                if(row.domicilioMexico){
+                    if(row.domicilioMexico.pais){
+                        row.domicilioMexico.pais= JSON.stringify(row.domicilioMexico.pais);
+                    }
+                    if(row.domicilioMexico.entidadFederativa){
+                        row.domicilioMexico.entidadFederativa = JSON.stringify(row.domicilioMexico.entidadFederativa);
+                    }
+                    if(row.domicilioMexico.municipio){
+                        row.domicilioMexico.municipio= JSON.stringify(row.domicilioMexico.municipio);
+                    }
+                    if(row.domicilioMexico.localidad){
+                        row.domicilioMexico.localidad= JSON.stringify(row.domicilioMexico.localidad);
+                    }
+                    if(row.domicilioMexico.vialidad){
+                        row.domicilioMexico.descripcionVialidad= row.domicilioMexico.vialidad.valor;
+                        row.domicilioMexico.vialidad= JSON.stringify({clave: row.domicilioMexico.vialidad.clave, valor: row.domicilioMexico.vialidad.clave});
+                    }
+                }
+            } else if (key === "multa") {
+                if(row.moneda){
+                    row.moneda = JSON.stringify(row.moneda);
+                }
+            } else if (key === "documentos") {
+                if (Array.isArray(row)) {
+                    for (let i of row) {
+                        i.tipo = JSON.stringify({clave: i.tipo, valor: i.tipo});
+                        console.log("TIPOOOO----"+ i.tipo);
+                    }
+                }
+            }else if(key === "tipoSancion"){
+                let arraySanciones= [];
+                for(let objTipoSancion of row){
+                    console.log("---------------------------------------"+JSON.stringify(row));
+                    let obj={};
+                    if(objTipoSancion.clave && objTipoSancion.valor){
+                        obj["tipoSancion"] = JSON.stringify({clave:objTipoSancion.clave ,valor : objTipoSancion.valor});
+                    }
+                    if(objTipoSancion.descripcion){obj["descripcion"] = objTipoSancion.descripcion;}
+
+                    arraySanciones.push(obj);
+                }
+                registro.tipoSancion = arraySanciones;
+            }
+        }
+        yield put (S3PActions.setListS3P([registro]));
     }
 }
 

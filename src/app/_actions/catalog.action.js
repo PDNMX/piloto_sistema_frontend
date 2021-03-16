@@ -27,7 +27,7 @@ export const catalogActions = {
     setPaisSucces,
     requestEstadoCatalogo,
     setEstadoSucces,
-    requestMunicipioCatalogo,
+    requestMunicipioByEstadoCatalogo,
     setMunicipioSucces,
     requestVialidadCatalogo,
     setVialidadSucces,
@@ -77,10 +77,10 @@ function setEstadoSucces(estado){
 }
 
 
-function  requestMunicipioCatalogo (docType){
+function  requestMunicipioByEstadoCatalogo (idEstado){
     return {
         type : catalogConstants.MUNICIPIO_REQUEST,
-        docType
+        idEstado
     }
 }
 
