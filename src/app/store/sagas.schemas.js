@@ -1150,14 +1150,86 @@ export function* getListSchemaS3P(){
                 'Authorization': `Bearer ${token}`
             }});
 
-        yield put (S3PActions.setListS3P(respuestaArray.data.results));
-        console.log(respuestaArray.data.pagination);
+        const respuestaArrayTipoPersona = yield axios.post(ur + `/getCatalogs`, {docType: "tipoPersona"}, {
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        let arrayFormatS3P = [] ;
+        for(let elementS3P of respuestaArray.data.results){
+            arrayFormatS3P.push(yield formatS3PField(elementS3P,respuestaArrayTipoPersona));
+        }
+        yield put (S3PActions.setListS3P(arrayFormatS3P));
         yield put (S3PActions.setpaginationS3P(respuestaArray.data.pagination));
 
     }
 }
 
+async function formatS3PField(registro, respuestaArrayTipoPersona) {
+    let token = localStorage.token;
+    for (let [key, row] of Object.entries(registro)) {
+        if (key === "particularSancionado") {
+            if (row.tipoPersona) {
+                let tipoPersona = row.tipoPersona;
 
+                for (let persona of respuestaArrayTipoPersona.data.results) {
+                    if (persona.clave === tipoPersona) {
+                        row.tipoPersona = JSON.stringify({clave: persona.clave, valor: persona.valor})
+                    }
+                }
+            }
+            if (row.domicilioMexico) {
+                if (row.domicilioMexico.pais) {
+                    row.domicilioMexico.pais = JSON.stringify(row.domicilioMexico.pais);
+                }
+                if (row.domicilioMexico.entidadFederativa) {
+                    row.domicilioMexico.entidadFederativa = JSON.stringify(row.domicilioMexico.entidadFederativa);
+                }
+                if (row.domicilioMexico.municipio) {
+                    row.domicilioMexico.municipio = JSON.stringify(row.domicilioMexico.municipio);
+                }
+                if (row.domicilioMexico.localidad) {
+                    row.domicilioMexico.localidad = JSON.stringify(row.domicilioMexico.localidad);
+                }
+                if (row.domicilioMexico.vialidad) {
+                    row.domicilioMexico.descripcionVialidad = row.domicilioMexico.vialidad.valor;
+                    row.domicilioMexico.vialidad = JSON.stringify({
+                        clave: row.domicilioMexico.vialidad.clave,
+                        valor: row.domicilioMexico.vialidad.clave
+                    });
+                }
+            }
+        } else if (key === "multa") {
+            if (row.moneda) {
+                row.moneda = JSON.stringify(row.moneda);
+            }
+        } else if (key === "documentos") {
+            if (Array.isArray(row)) {
+                for (let i of row) {
+                    i.tipo = JSON.stringify({clave: i.tipo, valor: i.tipo});
+                }
+            }
+        } else if (key === "tipoSancion") {
+            let arraySanciones = [];
+            for (let objTipoSancion of row) {
+                let obj = {};
+                if (objTipoSancion.clave && objTipoSancion.valor) {
+                    obj["tipoSancion"] = JSON.stringify({clave: objTipoSancion.clave, valor: objTipoSancion.valor});
+                }
+                if (objTipoSancion.descripcion) {
+                    obj["descripcion"] = objTipoSancion.descripcion;
+                }
+
+                arraySanciones.push(obj);
+            }
+            registro.tipoSancion = arraySanciones;
+        }
+    }
+    return registro;
+}
 
 export function* fillUpdateRegS3P() {
     while (true) {

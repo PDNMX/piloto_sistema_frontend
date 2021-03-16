@@ -206,6 +206,7 @@ export const Main = ()=> (
                                storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
                                storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
                                storeValidate.dispatch(S3PActions.fillRegEdit(match.params.id));
+                               match.params.flagOnlyRead = false;
                                return <ConnectedMenuV propiedades = {{renderView : "editRegS3P"}} match = {match} />
                            }else{
                                return <Redirect to="/login"/> ;
@@ -236,6 +237,11 @@ export const Main = ()=> (
                                storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
+                               storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                               storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
+                               storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
+                               storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+
                                storeValidate.dispatch(S3PActions.requestListS3P({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S3PSchema"}}/>)

@@ -27,8 +27,8 @@ import {catalogActions} from "../../_actions/catalog.action";
 import axios from "axios";
 
 
-const CreateReg = ({id ,alert, catalogos, registry}) => {
-    return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancion: [undefined]}} catalogos={catalogos}  alerta={alert} id={id}/>;
+const CreateReg = ({id ,alert, catalogos, registry, flagOnlyRead}) => {
+    return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancion: [undefined]}} catalogos={catalogos}  alerta={alert} id={id} flagOnlyRead={flagOnlyRead}/>;
 }
 
 interface FormDataEsquemaS3P {
@@ -133,6 +133,7 @@ interface MyFormProps {
     alerta: { status: boolean , message :""};
     catalogos:{tipoPersona: [], paises:[], estados:[], municipios:[], localidades:[],  vialidades: [],   tipoSancion: [], moneda: [] , tipoDoc: []};
     id: string;
+    flagOnlyRead: boolean;
 }
 
 const override = css`
@@ -142,7 +143,7 @@ const override = css`
 `;
 
 function MyForm(props: MyFormProps ) {
-    let { initialValues ,  alerta, catalogos, id } = props;
+    let { initialValues ,  alerta, catalogos, id, flagOnlyRead } = props;
     const alert = alerta;
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
@@ -377,7 +378,7 @@ function MyForm(props: MyFormProps ) {
                 }, values, submitting   }) => (
                     <form  onSubmit={handleSubmit} noValidate>
                         {alert.status === undefined &&
-                        <div>
+                        <fieldset style = {{border: "0px"}} disabled={flagOnlyRead}> <div>
                             <Grid key={"GridContainerFormCreateRegS3P"} className= {cla.gridpadding} spacing={3} container >
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
@@ -780,7 +781,7 @@ function MyForm(props: MyFormProps ) {
                                          type="submit"
                                          disabled={submitting}> Guardar </Button>
                             </Grid>
-                        </div>
+                        </div>  </fieldset>
                         }
 
                         <Dialog
@@ -816,12 +817,14 @@ function mapStateToProps(state,ownProps){
     let catalogos = state.catalogs;
     if( ownProps.match != undefined ){
         let id = ownProps.match.params.id;
+        let flagOnlyRead= ownProps.match.params.flagOnlyRead;
         let registry = state.S3P.find(reg=>reg._id === id);
         return {
             id,
             registry,
             alert,
-            catalogos
+            catalogos,
+            flagOnlyRead
         }
     }else{
         return {alert, catalogos};
