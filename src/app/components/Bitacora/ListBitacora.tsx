@@ -161,7 +161,7 @@ export const ListBitacora = () => {
                                         {rowbitacora.numeroRegistros}
                                     </TableCell>
                                     <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                        {rowbitacora.usuario}
+                                        {rowbitacora.nombre}
                                     </TableCell>
                                 </TableRow>
                             ))}
