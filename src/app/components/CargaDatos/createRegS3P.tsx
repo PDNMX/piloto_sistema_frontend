@@ -234,18 +234,18 @@ function MyForm(props: MyFormProps ) {
         }),
         observaciones:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documentos: Yup.array().of(
-                Yup.object().shape({
-                    id: Yup.string().trim(),
-                    titulo: Yup.string().required('El campo Título de la sección Documentos es requerido ').max(50, 'Máximo 50 caracteres').trim(),
-                    descripcion: Yup.string().required('El campo Descripción de la sección Documentos es requerido ').max(200, 'Máximo 200 caracteres').trim(),
-                    url: Yup.string()
-                        .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-                            'Introduce una direccion de internet valida'
-                        )
-                        .required('El campo URL de la sección Documentos es requerido').trim(),
-                    fecha: Yup.string().required("El campo Fecha de la sección Documentos es requerido").trim(),
-                    tipo: Yup.object()
-                })
+            Yup.object().shape({
+                id: Yup.string().trim(),
+                titulo: Yup.string().required('El campo Título de la sección Documentos es requerido ').max(50, 'Máximo 50 caracteres').trim(),
+                descripcion: Yup.string().required('El campo Descripción de la sección Documentos es requerido ').max(200, 'Máximo 200 caracteres').trim(),
+                url: Yup.string()
+                    .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                        'Introduce una direccion de internet valida'
+                    )
+                    .required('El campo URL de la sección Documentos es requerido').trim(),
+                fecha: Yup.string().required("El campo Fecha de la sección Documentos es requerido").trim(),
+                tipo: Yup.object()
+            })
         )
     });
 
@@ -490,7 +490,7 @@ function MyForm(props: MyFormProps ) {
                                 }
 
                                 <Grid item xs={12} md={3}>
-                                <TextField label="Teléfono" name="particularSancionado.telefono" />
+                                    <TextField label="Teléfono" name="particularSancionado.telefono" />
                                 </Grid>
 
                                 <Grid item xs={12} md={12}>
@@ -583,7 +583,7 @@ function MyForm(props: MyFormProps ) {
 
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                       DIRECTOR GENERAL
+                                        DIRECTOR GENERAL
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
@@ -637,7 +637,7 @@ function MyForm(props: MyFormProps ) {
 
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                       Resolución
+                                        Resolución
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>

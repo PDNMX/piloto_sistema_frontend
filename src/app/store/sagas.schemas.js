@@ -1,3 +1,4 @@
+
 import { take, put, select } from 'redux-saga/effects';
 import uuid from 'uuid';
 import axios from 'axios';
@@ -44,7 +45,7 @@ export function* validationErrors(){
             let payload = jwt.decode(token);
             yield put (userActions.setUserInSession(payload.idUser));
             var usuario=payload.idUser;
-                let SCHEMA;
+            let SCHEMA;
             try {
                 SCHEMA = JSON.parse(schema);
             }catch (e) {
@@ -116,7 +117,7 @@ export function* requestProviderPerPage(){
                 'Authorization': `Bearer ${token}`
             }});
         yield put(providerActions.setPerPageSucces(respuestaArray.data.results));
-        
+
     }
 }
 
@@ -161,12 +162,12 @@ export function* fillAllProviders(){
         yield put (userActions.setUserInSession(payload.idUser));
         let query = { "usuario":payload.idUser};
 
-            const respuestaArray = yield axios.post(ur + `/getProvidersFull`,query,{ headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }});
-            yield put(providerActions.setProvidersAll(respuestaArray.data.results));
+        const respuestaArray = yield axios.post(ur + `/getProvidersFull`,query,{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+        yield put(providerActions.setProvidersAll(respuestaArray.data.results));
     }
 }
 
@@ -284,11 +285,11 @@ export function* loginUser(){
                 history.push('/usuario/cambiarcontrasena');
                 yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
             }else
-                if(status.data.rol=="2"){
-                    history.push('/cargamasiva');
+            if(status.data.rol=="2"){
+                history.push('/cargamasiva');
             }else{
-                    history.push('/usuarios');
-                }
+                history.push('/usuarios');
+            }
 
         }catch (err) {
             if(err.response){
@@ -575,7 +576,7 @@ export function* getCatalogTipoProcedimiento(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-       // respuestaArray.data.results.push({label: "NINGUNO", value:""});
+        // respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setTipoProcedimientoSucces(respuestaArray.data.results));
     }
 }
@@ -1022,10 +1023,10 @@ export function* creationS2Schema(){
         const token = localStorage.token;
 
         docSend["ejercicioFiscal"]= values.ejercicioFiscal;
-         if(values.ramo){
-             let ramoObj = JSON.parse(values.ramo);
-             docSend["ramo"]= {clave:  parseInt(ramoObj.clave) , valor: ramoObj.valor };
-         }
+        if(values.ramo){
+            let ramoObj = JSON.parse(values.ramo);
+            docSend["ramo"]= {clave:  parseInt(ramoObj.clave) , valor: ramoObj.valor };
+        }
         docSend["nombres"]= values.nombres;
         docSend["primerApellido"] =values.primerApellido;
         docSend["segundoApellido"]= values.segundoApellido;
@@ -1034,19 +1035,19 @@ export function* creationS2Schema(){
         }
         docSend["institucionDependencia"] = {nombre : values.idnombre , clave: values.idclave, siglas: values.idsiglas};
         docSend["puesto"]= {nombre: values.puestoNombre, nivel: values.puestoNivel};
-       if(values.tipoArea){
-           docSend["tipoArea"]=JSON.parse("["+values.tipoArea+"]");
-       }
-       if(values.tipoProcedimiento){
-           let ObjTipoProcedimiento= JSON.parse("["+values.tipoProcedimiento+"]");
-           docSend["tipoProcedimiento"]= getArrayFormatTipoProcedimiento(ObjTipoProcedimiento);
-       }
-       if(values.nivelResponsabilidad){
-           docSend["nivelResponsabilidad"] = JSON.parse("[" + values.nivelResponsabilidad + "]");
-       }
+        if(values.tipoArea){
+            docSend["tipoArea"]=JSON.parse("["+values.tipoArea+"]");
+        }
+        if(values.tipoProcedimiento){
+            let ObjTipoProcedimiento= JSON.parse("["+values.tipoProcedimiento+"]");
+            docSend["tipoProcedimiento"]= getArrayFormatTipoProcedimiento(ObjTipoProcedimiento);
+        }
+        if(values.nivelResponsabilidad){
+            docSend["nivelResponsabilidad"] = JSON.parse("[" + values.nivelResponsabilidad + "]");
+        }
 
         docSend["superiorInmediato"]= {nombres: values.sinombres, primerApellido: values.siPrimerApellido, segundoApellido : values.siSegundoApellido,
-        puesto: {nombre:values.siPuestoNombre, nivel: values.siPuestoNivel}};
+            puesto: {nombre:values.siPuestoNombre, nivel: values.siPuestoNivel}};
 
         console.log(docSend);
         let payload = jwt.decode(token);
@@ -1078,7 +1079,7 @@ export function* updateS2Schema(){
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser));
         let usuario=payload.idUser;
-              const {status} = yield axios.post(ur + `/updateS2Schema`,{...values,usuario:usuario}, {headers: {
+        const {status} = yield axios.post(ur + `/updateS2Schema`,{...values,usuario:usuario}, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -1150,7 +1151,7 @@ export function* getListSchemaS3P(){
                 'Authorization': `Bearer ${token}`
             }});
 
-        const respuestaArrayTipoPersona = yield axios.post(ur + `/getCatalogs`, {docType: "tipoPersona"}, {
+       /* const respuestaArrayTipoPersona = yield axios.post(ur + `/getCatalogs`, {docType: "tipoPersona"}, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -1162,7 +1163,10 @@ export function* getListSchemaS3P(){
         for(let elementS3P of respuestaArray.data.results){
             arrayFormatS3P.push(yield formatS3PField(elementS3P,respuestaArrayTipoPersona));
         }
-        yield put (S3PActions.setListS3P(arrayFormatS3P));
+                yield put (S3PActions.setListS3P(arrayFormatS3P));
+                */
+
+        yield put (S3PActions.setListS3P(respuestaArray.data.results));
         yield put (S3PActions.setpaginationS3P(respuestaArray.data.pagination));
 
     }
@@ -1374,24 +1378,24 @@ export function* fillUpdateRegS3S(){
             }else if(key === "observaciones"){
                 newRow[key] = row;
             }else if(key === "documentos"){
-                    let arrayDocumentos= [];
-                    for(let objDocumentos of row){
-                        let obj={};
-                        if(objDocumentos.id){ obj["id"] = objDocumentos.id;}
-                        if(objDocumentos.titulo){ obj["titulo"] = objDocumentos.titulo;}
-                        if(objDocumentos.descripcion){ obj["descripcion"] = objDocumentos.descripcion;}
-                        if(objDocumentos.url){ obj["url"] = objDocumentos.url;}
-                        if(objDocumentos.fecha){ obj["fecha"] = objDocumentos.fecha;}
-                        if(objDocumentos.tipo){ obj["tipo"] = JSON.stringify({clave:objDocumentos.tipo ,valor : objDocumentos.tipo});}
-                        console.log("ARRAYY DOCUMENTOS "+ JSON.stringify(obj));
-                        arrayDocumentos.push(obj);
-                    }
+                let arrayDocumentos= [];
+                for(let objDocumentos of row){
+                    let obj={};
+                    if(objDocumentos.id){ obj["id"] = objDocumentos.id;}
+                    if(objDocumentos.titulo){ obj["titulo"] = objDocumentos.titulo;}
+                    if(objDocumentos.descripcion){ obj["descripcion"] = objDocumentos.descripcion;}
+                    if(objDocumentos.url){ obj["url"] = objDocumentos.url;}
+                    if(objDocumentos.fecha){ obj["fecha"] = objDocumentos.fecha;}
+                    if(objDocumentos.tipo){ obj["tipo"] = JSON.stringify({clave:objDocumentos.tipo ,valor : objDocumentos.tipo});}
+                    console.log("ARRAYY DOCUMENTOS "+ JSON.stringify(obj));
+                    arrayDocumentos.push(obj);
+                }
 
-                    newRow["documents"]= arrayDocumentos;
+                newRow["documents"]= arrayDocumentos;
             }else {
                 newRow[key] = row ;
             }
-            }
+        }
         yield put (S3SActions.setListS3S([newRow]));
     }
 }
@@ -1414,7 +1418,7 @@ export function* fillUpdateRegS2(){
         for (let [key, row] of Object.entries(registro)) {
 
             if(key ===  "genero" || key === "ramo"){
-                   newRow[key]=  JSON.stringify({clave:row.clave.toString() ,valor : row.valor});
+                newRow[key]=  JSON.stringify({clave:row.clave.toString() ,valor : row.valor});
             }else if(key === "tipoArea" || key === "nivelResponsabilidad" || key === "tipoProcedimiento") {
                 let newArray=[];
                 for(let item of row){
@@ -1554,9 +1558,9 @@ export function* consultBitacora(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             } ,validateStatus: () => true});
-            yield put(bitacoraActions.setBitacoraAll(respuestaArray.data.results));
-            yield put(alertActions.success("Consulta realizada con éxito"));
-            yield put(alertActions.clear());
+        yield put(bitacoraActions.setBitacoraAll(respuestaArray.data.results));
+        yield put(alertActions.success("Consulta realizada con éxito"));
+        yield put(alertActions.clear());
 
     }
 }
@@ -1605,10 +1609,10 @@ export function* changePassword(){
 
         try{
             status = yield axios.post(ur + `/changepassword`,usuarioJson, {headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'Authorization': `Bearer ${token}`
-            } , validateStatus: () => true});
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${token}`
+                } , validateStatus: () => true});
 
             if(status.data.Status === 200){
                 yield put(alertActions.success(status.data.message));

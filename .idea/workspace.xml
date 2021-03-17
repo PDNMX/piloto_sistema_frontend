@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS2.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS2.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3P.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3P.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3S.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/CargaDatos/listSchemaS3S.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="c660b4ed-0812-4648-9cef-20b6faa795f3" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -119,21 +112,6 @@
       <workItem from="1613414208291" duration="952000" />
       <workItem from="1613521018917" duration="1657000" />
       <workItem from="1613522896713" duration="317000" />
-      <workItem from="1613586888244" duration="23000000" />
-      <workItem from="1614010028570" duration="5311000" />
-      <workItem from="1614119616746" duration="14693000" />
-      <workItem from="1614279156520" duration="44615000" />
-      <workItem from="1614544534269" duration="3099000" />
-      <workItem from="1614611749540" duration="49000" />
-      <workItem from="1614613814909" duration="19494000" />
-      <workItem from="1614638790863" duration="1868000" />
-      <workItem from="1614699371930" duration="18549000" />
-      <workItem from="1614786233164" duration="13977000" />
-      <workItem from="1614803658360" duration="2110000" />
-      <workItem from="1614873979173" duration="26339000" />
-      <workItem from="1615220345375" duration="29998000" />
-      <workItem from="1615340404412" duration="5062000" />
-      <workItem from="1615742195323" duration="3852000" />
     </task>
     <task id="LOCAL-00001" summary="gui users update">
       <created>1608605064025</created>
