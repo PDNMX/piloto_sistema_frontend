@@ -161,8 +161,6 @@ function MyForm(props: MyFormProps ) {
     }
 
     return (
-
-
         <div>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>

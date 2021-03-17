@@ -23,6 +23,12 @@ export const REQUEST_EDIT_PROVIDER = 'REQUEST_EDIT_PROVIDER';
 export const REQUEST_TOKEN_AUTH = 'REQUEST_TOKEN_AUTH' ;
 export const REQUEST_CONSULT_BITACORA = 'REQUEST_CONSULT_BITACORA';
 export const CLEAR_ERRORS_VALIDATION = 'CLEAR_ERRORS_VALIDATION';
+export const REQUEST_RESET_PASSWORD = 'REQUEST_RESET_PASSWORD';
+export const REQUEST_CHANGEPASSWORD_USER = 'REQUEST_CHANGEPASSWORD_USER';
+export const REQUEST_VIGENCIA_PASS= 'REQUEST_VIGENCIA_PASS';
+export const REQUEST_VIGENCIA_PASS_SET= 'REQUEST_VIGENCIA_PASS_SET';
+export const REQUEST_PERMISOS_SISTEMA='REQUEST_PERMISOS_SISTEMA';
+export const REQUEST_PERMISOS_SISTEMA_SET='REQUEST_PERMISOS_SISTEMA_SET';
 
 
 export const clearErrorsValidation = () => ({
@@ -104,4 +110,24 @@ export const requestEditProvider = (usuarioJson) => ({
 export const requestConsultBitacora = (usuarioJson) => ({
     type: REQUEST_CONSULT_BITACORA,
     usuarioJson
+});
+
+export const requestResetPassword = (credentialUser) => ({
+    type: REQUEST_RESET_PASSWORD,
+    credentialUser
+});
+
+export const requestChangePassword = (usuarioJson) => ({
+    type: REQUEST_CHANGEPASSWORD_USER,
+    usuarioJson
+});
+
+export const requestVigenciaPass= (vigencia) => ({
+    type: REQUEST_VIGENCIA_PASS,
+    vigencia
+});
+
+export const requestPermisosSistema= (permisos) => ({
+    type: REQUEST_PERMISOS_SISTEMA,
+    permisos
 });

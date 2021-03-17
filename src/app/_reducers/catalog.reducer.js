@@ -1,6 +1,6 @@
 import { catalogConstants } from "../_constants/catalogs.constants";
 
-export function catalogs(state = {genero: [], ramo: [], puesto: [] }, action) {
+export function catalogs(state = {genero: [], ramo: [], puesto: [] ,tipoSancion : [], moneda : [] , tipoDoc: [], tipoPersona: [], paises:[], estados:[] ,vialidades:[] }, action) {
     switch (action.type) {
         case catalogConstants.GENERO_SET:
             return {...state , genero : action.generos};
@@ -14,6 +14,25 @@ export function catalogs(state = {genero: [], ramo: [], puesto: [] }, action) {
             return {...state, nivelResponsabilidad : action.niveles}
         case catalogConstants.TIPO_PROCEDIMIENTO_SET:
             return {...state , tipoProcedimiento : action.procedimientos}
+        case catalogConstants.TIPO_FALTA_SET:
+            return {...state , tipoFalta : action.falta}
+        case catalogConstants.TIPO_SANCION_SET:
+            return {...state , tipoSancion : action.sancion}
+        case catalogConstants.MONEDA_SET:
+            return {...state , moneda : action.moneda}
+        case catalogConstants.TIPO_DOCUMENTO_SET:
+            return {...state , tipoDoc : action.tipoDoc}
+        case catalogConstants.TIPO_PERSONA_SET:
+            return {...state , tipoPersona : action.persona}
+        case catalogConstants.PAIS_SET:
+            return {...state , paises : action.pais}
+        case catalogConstants.ESTADO_SET:
+            return {...state , estados : action.estado}
+        case catalogConstants.MUNICIPIO_SET:
+            return {...state , municipios : action.municipio}
+        case catalogConstants.VIALIDAD_SET:
+            return {...state , vialidades : action.vialidad}
+
         default:
             return state
     }

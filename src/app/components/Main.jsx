@@ -22,6 +22,9 @@ import {clearErrorsValidation} from "../store/mutations"
 import {ConnectedConsultarBitacora} from "./Bitacora/ConsultarBitacora";
 import {bitacoraActions} from "../_actions/bitacora.action";
 import {ListBitacora} from "./Bitacora/ListBitacora";
+import {S3SActions} from "../_actions/s3s.action";
+import {S3PActions} from "../_actions/s3p.action";
+import {ResetPasswordV} from "./Login/ResetPassword";
 
 const theme = createMuiTheme({
     typography: {
@@ -62,12 +65,17 @@ export const Main = ()=> (
                        path= "/login"
                        render={() => (<LoginV/>)}
                 />
+                <Route exact
+                       path= "/restaurarpassword"
+                       render={() => (<ResetPasswordV/>)}
+                />
 
                 <Route exact
                        path= "/cargamasiva"
                        render={() => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="2"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch((alertActions.clear()));
                                storeValidate.dispatch(clearErrorsValidation());
                                return <ConnectedMenuV propiedades = {{renderView : "cargamasiva"}} />
@@ -79,8 +87,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/captura/S2"
                        render={() => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
                                storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
@@ -95,9 +104,50 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
+                       path= "/captura/S3S"
+                       render={() => {
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true"){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
+                               storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                               storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                               storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                               storeValidate.dispatch((alertActions.clear()));
+                               return <ConnectedMenuV propiedades = {{renderView : "createRegS3S"}} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/captura/S3P"
+                       render={() => {
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true"){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
+                               storeValidate.dispatch((alertActions.clear()));
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
+                               storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                               storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
+                               storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
+                               //storeValidate.dispatch(catalogActions.requestMunicipioCatalogo("municipio"));
+                               storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
+                               storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                               return <ConnectedMenuV propiedades = {{renderView : "createRegS3P"}} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
                        path= "/consulta/S2"
                        render={() => {
-                           if (localStorage.token) {
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(S2Actions.requestListS2({}));
                                storeValidate.dispatch((alertActions.clear()));
                                return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
@@ -109,8 +159,9 @@ export const Main = ()=> (
                 <Route exact
                        path= "/editar/S2/:id"
                        render={({match}) => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
                                storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
                                storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
                                storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
@@ -125,9 +176,59 @@ export const Main = ()=> (
                        }}
                 />
                 <Route exact
+                       path= "/editar/S3S/:id"
+                       render={({match}) => {
+                           if ( localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true"){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
+                               storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                               storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                               storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                               storeValidate.dispatch(S3SActions.fillRegEdit(match.params.id));
+                               return <ConnectedMenuV propiedades = {{renderView : "editRegS3S"}} match = {match} />
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/consulta/S3S"
+                       render={() => {
+                           if (localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true") {
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               S3SActions.setListS3S([]);
+                               storeValidate.dispatch(S3SActions.requestListS3S({}));
+                               storeValidate.dispatch((alertActions.clear()));
+                               return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)
+                           } else {
+                               return <Redirect to="/login"/>;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/consulta/S3P"
+                       render={() => {
+                           if (localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true") {
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(userActions.requestPermisosSistema());
+                               storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                               storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
+                               storeValidate.dispatch(S3PActions.requestListS3P({}));
+                               storeValidate.dispatch((alertActions.clear()));
+                               return (<ConnectedMenuV propiedades={{renderView: "S3PSchema"}}/>)
+                           } else {
+                               return <Redirect to="/login"/>;
+                           }
+                       }}
+                />
+                <Route exact
                        path= "/usuario/crear"
                        render={() => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            storeValidate.dispatch(providerActions.requestAllProviders());
                            storeValidate.dispatch((alertActions.clear()));
@@ -140,7 +241,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/usuario/editar/:id"
                        render={({match}) => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                 storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                 storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
                                 storeValidate.dispatch(providerActions.requestAllProviders());
@@ -155,7 +256,7 @@ export const Main = ()=> (
                        path= "/usuarios"
                        render={() => {
                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                           if (localStorage.token) {
+                           if (localStorage.token && localStorage.rol =="1") {
                                storeValidate.dispatch(providerActions.requestAllProviders());
                                storeValidate.dispatch(userActions.requestPerPage({page: 1, pageSize: 10}));
                                storeValidate.dispatch((alertActions.clear()));
@@ -169,7 +270,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/proveedor/crear"
                        render={() =>{
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            return (<ConnectedMenuV propiedades = {{renderView : "createprovider"}} /> )
                            }else{
@@ -181,7 +282,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/proveedor/editar/:id"
                        render={({match}) => {
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                            storeValidate.dispatch(providerActions.fillProviderUpdate(match.params.id));
                            storeValidate.dispatch((alertActions.clear()));
@@ -195,7 +296,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/proveedores"
                        render={() => {
-                           if ( localStorage.token) {
+                           if ( localStorage.token && localStorage.rol =="1") {
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
                                return (<ConnectedMenuV propiedades={{renderView: "providers"}}/>)
@@ -207,7 +308,7 @@ export const Main = ()=> (
                 <Route exact
                        path= "/bitacora"
                        render={() =>{
-                           if ( localStorage.token){
+                           if ( localStorage.token && localStorage.rol =="1"){
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(userActions.requestAllUsers());
                                storeValidate.dispatch(providerActions.requestAllProviders());
@@ -222,11 +323,24 @@ export const Main = ()=> (
                 <Route exact
                        path= "/reportebitacora"
                        render={() => {
-                           if ( localStorage.token) {
+                           if ( localStorage.token && localStorage.rol =="1") {
                                storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                storeValidate.dispatch(bitacoraActions.requestAllBitacora());
                                storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
                                return (<ConnectedMenuV propiedades={{renderView: "reportebitacora"}}/>)
+                           }else{
+                               return <Redirect to="/login"/> ;
+                           }
+                       }}
+                />
+                <Route exact
+                       path= "/usuario/cambiarcontrasena"
+                       render={() => {
+                           if ( localStorage.token){
+                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                               storeValidate.dispatch(providerActions.requestAllProviders());
+                               storeValidate.dispatch((alertActions.clear()));
+                               return <ConnectedMenuV propiedades = {{renderView : "cambiarcontrasena"}} />
                            }else{
                                return <Redirect to="/login"/> ;
                            }

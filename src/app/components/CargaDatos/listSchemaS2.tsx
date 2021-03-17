@@ -9,9 +9,10 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar, Divider, Tooltip
+    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar, Divider, Tooltip, Toolbar
 } from "@material-ui/core";
-import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
+import Checkbox from '@material-ui/core/Checkbox';
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
 import Dialog from '@material-ui/core/Dialog';
@@ -30,6 +31,9 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import {Form} from "react-final-form";
 import * as Yup from 'yup';
+import deLocale from "date-fns/locale/es";
+import DateFnsUtils from "@date-io/date-fns";
+import {formatISO} from "date-fns";
 
 interface FormDataEsquemaS2 {
     fechaCaptura?: string,
@@ -78,10 +82,10 @@ export const ListS2Schema = () => {
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
     const [nombreUsuario, setNombreUsuario] =  React.useState("");
+    const [selectedCheckBox, setSelectedCheckBox ] = React.useState([]);
     const [query, setQuery] =  React.useState({});
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS2>({});
-    const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -134,6 +138,67 @@ export const ListS2Schema = () => {
         handleClose();
     }
 
+    let EnhancedTableToolbar = () => {
+        return (
+            <Toolbar className={classes.tool}>
+                <div className={classes.title}>
+                    {selectedCheckBox.length > 0 &&
+                        <Typography color="inherit" variant="subtitle1">
+                            {selectedCheckBox.length} registros seleccionados
+                        </Typography>
+                    }
+                </div>
+                <div className={classes.spacer} />
+                <div className={classes.actions}>
+                    {selectedCheckBox.length > 0 &&
+                        <Tooltip title="Delete">
+                            <Button style={{ color: 'white', padding: '0px' }}
+                                    onClick= {()=> {handleClickOpen(selectedCheckBox, "nomre")}} >
+                                <DeleteOutlineOutlinedIcon/>
+                            </Button>
+                        </Tooltip>
+                  }
+                </div>
+            </Toolbar>
+        );
+    };
+
+    const handleCheckboxAll= (event) => {
+        let array= [];
+        if (event.target.checked) {
+            for(let schema of S2List){
+                // @ts-ignore
+                array.push(schema._id);
+            }
+        }
+        setSelectedCheckBox(array);
+        console.log("array "+array);
+    }
+
+    const handleCheckboxClick = (event, id) => {
+        event.stopPropagation();
+        console.log("checkbox select");
+        // @ts-ignore
+        const selectedIndex = selectedCheckBox.indexOf(id);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selectedCheckBox, id);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selectedCheckBox.slice(1));
+        } else if (selectedIndex === selectedCheckBox.length - 1) {
+            newSelected = newSelected.concat(selectedCheckBox.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selectedCheckBox.slice(0, selectedIndex),
+                selectedCheckBox.slice(selectedIndex + 1)
+            );
+        }
+
+        setSelectedCheckBox(newSelected);
+        console.log(newSelected);
+    };
+
 
     function diacriticSensitiveRegex(string = '') {
         string = string.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -156,6 +221,7 @@ export const ListS2Schema = () => {
         segundoApellido?: string,
         idnombre?: string,
         puestoNombre?: string,
+        fechaCaptura?:string
     }
 
     const schema = Yup.object().shape({
@@ -164,7 +230,8 @@ export const ListS2Schema = () => {
         primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
         segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
         idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
-        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim()
+        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
+        fechaCaptura: Yup.string(),
     });
 
     const validate = makeValidate(schema);
@@ -178,8 +245,10 @@ export const ListS2Schema = () => {
                 newQuery["puesto.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }else if(key === "idnombre" && value !== null && value !== ''){
                 newQuery["institucionDependencia.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if ( value !== null && value !== ''){
-                newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+            }else if(key === "fechaCaptura" && value !== null && value !== ''){
+                let fecha = Date.parse(value);
+                console.log(formatISO(fecha, { representation: 'date' }));
+                newQuery["fechaCaptura"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
             }
         }
         setQuery(newQuery);
@@ -211,6 +280,28 @@ export const ListS2Schema = () => {
 
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
+            root: {
+                "&$checked": {
+                    color: '#ffe01b',
+                }
+            },
+            checked: {},
+            indeterminate:{
+                color: '#666666'
+            },
+            tool : {
+                color: 'white',
+                backgroundColor: '#7f7e7e'
+            },
+            spacer: {
+                flex: "1 1 100%"
+            },
+            actions: {
+                color: theme.palette.text.secondary
+            },
+            title: {
+                flex: "0 0 auto"
+            },
             fontblack:{
                 color: '#666666'
             },
@@ -254,6 +345,7 @@ export const ListS2Schema = () => {
             paper: {
                 'text-align': 'center',
                 margin: 0,
+                marginTop: '-10px',
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
@@ -262,11 +354,16 @@ export const ListS2Schema = () => {
                 boxShadow: theme.shadows[5],
                 padding: theme.spacing(2, 4, 3),
             },
+            modal:{
+                overflowY: 'auto'
+            }
         }),
     );
 
     const classes = useStyles();
 
+    // @ts-ignore
+    // @ts-ignore
     return (
 
         <div >
@@ -276,12 +373,12 @@ export const ListS2Schema = () => {
                 </Alert>
             </Snackbar>
 
-
             <Modal
                 open={openModalUserInfo}
                 onClose={handleCloseModalUserInfo}
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
+                className={classes.modal}
             >
                 <Grid container item md={8} className={classes.paper}>
                     <Grid container>
@@ -630,6 +727,14 @@ export const ListS2Schema = () => {
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
                                         </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <DatePicker
+                                                locale={deLocale}
+                                                format={"yyyy-MM-dd"}
+                                                label="Última actualización"
+                                                name="fechaCaptura"
+                                                dateFunsUtils={DateFnsUtils} />
+                                        </Grid>
                                     </Grid>
                                     <Grid container justify={"flex-end"}>
                                         <Button style={{margin: "0px 8px 0px 0px"}} className={classes.boton}  variant="contained"
@@ -638,14 +743,13 @@ export const ListS2Schema = () => {
                                                  type="submit"
                                                  disabled={submitting}> BUSCAR </Button>
                                     </Grid>
-
-
                                 </div>
                                 }
                             </form>
                         )}
                     />
                 </Grid>
+                <Grid item md={12} sm={12}>{selectedCheckBox.length > 0 && <EnhancedTableToolbar></EnhancedTableToolbar>} </Grid>
 
                 <Grid className= {`${classes.gridpadding} ${classes.gridpaddingBottom} `} container justify={"flex-start"}>
                     <Typography  variant="h6" className={classes.fontblack}>
@@ -653,9 +757,22 @@ export const ListS2Schema = () => {
                     </Typography>
                 </Grid>
                 <TableContainer  component={Paper}>
-                    <Table aria-label="custom pagination table">
+                    <Table  aria-label="custom pagination table">
                         <TableHead >
                             <TableRow>
+                                <TableCell padding="checkbox">
+                                    <Checkbox
+                                        classes={{
+                                            root: classes.root,
+                                            checked: classes.checked,
+                                            indeterminate: classes.indeterminate
+                                        }}
+                                        indeterminate={selectedCheckBox.length > 0 && selectedCheckBox.length < S2List.length}
+                                        checked={selectedCheckBox.length === S2List.length}
+                                        onClick={event =>
+                                            handleCheckboxAll(event)}
+                                    />
+                                </TableCell>
                                 <StyledTableCell align="center" >Ejercicio fiscal</StyledTableCell>
                                 <StyledTableCell align="center" >Nombres</StyledTableCell>
                                 <StyledTableCell align="center">Primer apellido</StyledTableCell>
@@ -668,6 +785,20 @@ export const ListS2Schema = () => {
                         <TableBody key="usuarios">
                             {S2List.map((schema)  => (
                                 <TableRow key={schema._id}>
+                                    <TableCell className="selectCheckbox" padding="checkbox">
+                                        <Checkbox  key={"check"+ schema._id}
+                                                   onClick={event =>
+                                                handleCheckboxClick(event, schema._id)}
+                                            className="selectCheckbox"
+                                                   classes={{
+                                                       root: classes.root,
+                                                       checked: classes.checked
+                                                   }}
+                                            // @ts-ignore
+                                            checked={selectedCheckBox.indexOf(schema._id) > -1 }
+
+                                        />
+                                    </TableCell>
                                     <StyledTableCell style={{ width: 140 }}  align="center">
                                         {schema.ejercicioFiscal}
                                     </StyledTableCell>

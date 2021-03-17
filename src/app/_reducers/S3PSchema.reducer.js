@@ -1,10 +1,10 @@
-import {S2Constants} from "../_constants/s2.constants";
+import {S3PConstants} from "../_constants/s3p.constants";
 
-export function S2(state = [] ,action){
+export function S3P(state = [] ,action){
     switch (action.type){
-        case S2Constants.SET_LIST_S2 :
+        case S3PConstants.SET_LIST_S3P :
             return  action.list;
-        case S2Constants.DELETE_OPERATION:
+        case S3PConstants.DELETE_OPERATION:
             let array = [];
             if(Array.isArray(action.id)){
                 for(let i =0 ; i < state.length; i++){
@@ -20,7 +20,6 @@ export function S2(state = [] ,action){
                     }
                 }
             }
-
             return state;
     }
     return state;

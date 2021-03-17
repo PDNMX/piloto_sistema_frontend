@@ -34,9 +34,10 @@ export const LoadFileV = () => {
     let fileReader;
     const dispatch = useDispatch();
 
-    const {errors,alert} = useSelector(state => ({
+    const {errors,alert, permisos} = useSelector(state => ({
         errors: state.errors,
-        alert: state.alert
+        alert: state.alert,
+        permisos: state.permisos
     }));
 
     const [open, setOpen] = React.useState(false);
@@ -149,7 +150,11 @@ export const LoadFileV = () => {
                             <Select inputProps={{
                                 id: 'system-native-required',
                             }} label="Sistema" className={style.marginLeft}  required={true} onChange={e => setValueSystem(e.target.value) }>
-                                <MenuItem value={'S2'}>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</MenuItem>
+                                {permisos.map(item => (
+                                    item==="S2" ? <MenuItem value={'S2'}>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</MenuItem> :
+                                        item==="S3S" ? <MenuItem value={'S3S'}>Sistema de los Servidores Públicos Sancionados</MenuItem> :
+                                            item==="S3P" ? <MenuItem value={'S3P'}>Sistema de los Particulares Sancionados</MenuItem> : ""
+                                ))}
                             </Select>
                             {/*<select inputProps={{
                                 id: 'system-native-required',

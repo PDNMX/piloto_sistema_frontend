@@ -12,10 +12,162 @@ export const catalogActions = {
     requestNivelResponsabilidadCatalogo,
     setNivelResponsabilidadSucces,
     requestTipoProcedimientoCatalogo,
-    setTipoProcedimientoSucces
-
+    setTipoProcedimientoSucces,
+    requestTipoFaltaCatalogo,
+    setTipoFaltaSucces,
+    requestTipoSancionCatalogo,
+    setTipoSancionSucces,
+    requestMonedaCatalogo,
+    setMonedaSucces,
+    requesTipoDocumentoCatalogo,
+    setTipoDocumentoSucces,
+    requesTipoPersonaCatalogo,
+    setTipoPersonaSucces,
+    requestPaisCatalogo,
+    setPaisSucces,
+    requestEstadoCatalogo,
+    setEstadoSucces,
+    requestMunicipioCatalogo,
+    setMunicipioSucces,
+    requestVialidadCatalogo,
+    setVialidadSucces,
 };
+/*----------------S3P catalogos*****/
 
+function  requesTipoPersonaCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_PERSONA_REQUEST,
+        docType
+    }
+}
+
+function setTipoPersonaSucces(persona){
+    return {
+        type : catalogConstants.TIPO_PERSONA_SET,
+        persona
+    }
+}
+
+function  requestPaisCatalogo (docType){
+    return {
+        type : catalogConstants.PAIS_REQUEST,
+        docType
+    }
+}
+
+function setPaisSucces(pais){
+    return {
+        type : catalogConstants.PAIS_SET,
+        pais
+    }
+}
+
+function  requestEstadoCatalogo (docType){
+    return {
+        type : catalogConstants.ESTADO_REQUEST,
+        docType
+    }
+}
+
+function setEstadoSucces(estado){
+    return {
+        type : catalogConstants.ESTADO_SET,
+        estado
+    }
+}
+
+
+function  requestMunicipioCatalogo (docType){
+    return {
+        type : catalogConstants.MUNICIPIO_REQUEST,
+        docType
+    }
+}
+
+function setMunicipioSucces(municipio){
+    return {
+        type : catalogConstants.MUNICIPIO_SET,
+        municipio
+    }
+}
+
+function  requestVialidadCatalogo (docType){
+    return {
+        type : catalogConstants.VIALIDAD_REQUEST,
+        docType
+    }
+}
+
+function setVialidadSucces(vialidad){
+    return {
+        type : catalogConstants.VIALIDAD_SET,
+        vialidad
+    }
+}
+
+/*-------------------S3S catalogos-*/
+
+function  requestTipoFaltaCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_FALTA_REQUEST,
+        docType
+    }
+}
+
+function setTipoFaltaSucces(falta){
+    return {
+        type : catalogConstants.TIPO_FALTA_SET,
+        falta
+    }
+}
+
+function  requestTipoSancionCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_SANCION_REQUEST,
+        docType
+    }
+}
+
+function setTipoSancionSucces(sancion){
+    return {
+        type : catalogConstants.TIPO_SANCION_SET,
+        sancion
+    }
+}
+
+
+function  requestMonedaCatalogo (docType){
+    return {
+        type : catalogConstants.MONEDA_REQUEST,
+        docType
+    }
+}
+
+function setMonedaSucces(moneda){
+    return {
+        type : catalogConstants.MONEDA_SET,
+        moneda
+    }
+}
+
+function  requesTipoDocumentoCatalogo (docType){
+    return {
+        type : catalogConstants.TIPO_DOCUMENTO_REQUEST,
+        docType
+    }
+}
+
+function setTipoDocumentoSucces(tipoDoc){
+    return {
+        type : catalogConstants.TIPO_DOCUMENTO_SET,
+        tipoDoc
+    }
+}
+
+
+
+
+/* ------------------S2---------------*/
 
 function  requestTipoProcedimientoCatalogo (docType){
     return {

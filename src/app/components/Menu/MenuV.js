@@ -62,9 +62,18 @@ import {ListS2Schema} from "../CargaDatos/listSchemaS2";
 import {ConnectedConsultarBitacora} from "../Bitacora/ConsultarBitacora";
 import {ListBitacora} from "../Bitacora/ListBitacora";
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-
+import {ListS3SSchema} from "../CargaDatos/listSchemaS3S";
+import {ListS3PSchema} from "../CargaDatos/listSchemaS3P";
+import {ConnectedCreateRegS3S} from "../CargaDatos/createRegS3S";
+import {ConnectedChangePassword} from "../users/changePassword";
+import {useSelector} from 'react-redux';
+import {ConnectedCreateRegS3P} from "../CargaDatos/createRegS3P";
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
+    const {vigencia, permisos} = useSelector(state => ({
+        vigencia:state.vigencia,
+        permisos:state.permisos
+    }));
 
     const location = useLocation();
 
@@ -96,7 +105,11 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
     setCheckedBitacora((prev) => false);
     setCheckedDatos((prev) => false);
     setcheckedDatos2((prev) => false);
+    setcheckedDatosS3S((prev) => false);
+    setcheckedDatosS3P((prev) => false);
     setcheckedAdminDatos2((prev) => false);
+    setcheckedAdminDatosS3S((prev) => false);
+    setcheckedAdminDatosS3P((prev) => false);
 
   }
 
@@ -110,7 +123,11 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedBitacora((prev) => false);
         setsubMenuBitacora(false);
         setcheckedDatos2((prev) => false);
+        setcheckedDatosS3S((prev) => false);
+        setcheckedDatosS3P((prev) => false);
         setcheckedAdminDatos2((prev) => false);
+        setcheckedAdminDatosS3S((prev) => false);
+        setcheckedAdminDatosS3P((prev) => false);
     }
 
   const menuBitacora=(e)=>{
@@ -123,7 +140,11 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
       setCheckedDatos((prev) => false);
       setCheckedProveedor((prev) => false);
       setcheckedDatos2((prev) => false);
+      setcheckedDatosS3S((prev) => false);
+      setcheckedDatosS3P((prev) => false);
       setcheckedAdminDatos2((prev) => false);
+      setcheckedAdminDatosS3S((prev) => false);
+      setcheckedAdminDatosS3P((prev) => false);
   }
 
     const menuDatos2=(e)=>{
@@ -136,7 +157,12 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedDatos(true);
         setCheckedProveedor((prev) => false);
         setcheckedDatos2((prev) => !prev);
+        setcheckedDatosS3S((prev) => !prev);
+        setcheckedDatosS3P((prev) =>  !prev);
         setcheckedAdminDatos2((prev) => false);
+        setcheckedAdminDatosS3S((prev) => false);
+        setcheckedAdminDatosS3P((prev) => false);
+
     }
 
     const menuAdminDatos2=(e)=>{
@@ -149,15 +175,28 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setCheckedDatos(true);
         setCheckedProveedor((prev) => false);
         setcheckedDatos2((prev) => false);
+        setcheckedDatosS3S((prev) => false);
+        setcheckedDatosS3P((prev) => false);
         setcheckedAdminDatos2((prev) => !prev);
+        setcheckedAdminDatosS3S((prev) => !prev);
+        setcheckedAdminDatosS3P((prev) => !prev);
     }
 
   const compCrearProovedor=(e)=>{
     setcrearProovedor(true);
   }
 
+
+    const rol=localStorage.getItem("rol");
+
   const redirectToRoute = (path) =>{
-      history.push(path);
+      const cambiarcontrasena= localStorage.getItem("cambiarcontrasena");
+      if(vigencia===true || cambiarcontrasena===true){
+         history.push("/usuario/cambiarcontrasena");
+      }else{
+          history.push(path);
+      }
+
   }
 
 
@@ -177,6 +216,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
   const cerrarSesion  = () => {
         closeSession();
   }
+
 
     function Copyright() {
       return (
@@ -302,7 +342,11 @@ const useStyles = makeStyles((theme) => ({
     const [checkedDatos, setCheckedDatos] = useState(false);
     const [checkedProveedor, setCheckedProveedor] = useState(false);
     const [checkedDatos2, setcheckedDatos2] = useState(false);
+    const [checkedDatosS3S, setcheckedDatosS3S] = useState(false);
+    const [checkedDatosS3P, setcheckedDatosS3P] = useState(false);
     const [checkedAdminDatos2, setcheckedAdminDatos2] = useState(false);
+    const [checkedAdminDatosS3S, setcheckedAdminDatosS3S] = useState(false);
+    const [checkedAdminDatosS3P, setcheckedAdminDatosS3P] = useState(false);
 
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -342,8 +386,7 @@ const useStyles = makeStyles((theme) => ({
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Perfil</MenuItem>
-                <MenuItem onClick={handleClose}>Avanzadas</MenuItem>
+                <MenuItem onClick={ () => redirectToRoute("/usuario/cambiarcontrasena")} >Cambiar contraseña</MenuItem>
                 <MenuItem onClick={ ()=>cerrarSesion()}>Cerrar sesión</MenuItem>
               </Menu>
             </div>
@@ -364,12 +407,14 @@ const useStyles = makeStyles((theme) => ({
         <Divider />
         <List className={classes.fontblack}>
           <div>
+              { rol==2 || rol=="" ?
           <ListItem button onClick={e=>menuDatos(e)}>
               <ListItemIcon>
                   <FolderSpecialIcon />
               </ListItemIcon>
               <ListItemText  primary="Administración datos" />
           </ListItem>
+                  : "" }
 
             { submenuAdmonDatos ?
               <Collapse in={checkedDatos}>
@@ -382,7 +427,9 @@ const useStyles = makeStyles((theme) => ({
                       <ListItemText primary="Administrador datos" />
                     </ListItem>
                   </Tooltip>
-                    <Collapse in={checkedAdminDatos2}>
+                    {permisos.map(item => (
+                        item==="S2" ?
+                            <Collapse in={checkedAdminDatos2}>
                         <div>
                             <Tooltip title="S2" placement="right">
                                 <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")}>
@@ -394,6 +441,40 @@ const useStyles = makeStyles((theme) => ({
                             </Tooltip>
                         </div>
                     </Collapse>
+                            : ""
+                    ))}
+                    {permisos.map(item => (
+                        item==="S3S" ?
+                    <Collapse in={checkedAdminDatosS3S}>
+                        <div>
+                            <Tooltip title="S3S" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3S")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S3S" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
+                            : ""
+                    ))}
+                    {permisos.map(item => (
+                        item==="S3P" ?
+                    <Collapse in={checkedAdminDatosS3P}>
+                        <div>
+                            <Tooltip title="S3S" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3P")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S3P" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
+                            : ""
+                    ))}
                   <Tooltip title="Cargar datos" placement="right">
                     <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
                       <ListItemIcon>
@@ -410,6 +491,8 @@ const useStyles = makeStyles((theme) => ({
                       <ListItemText primary="Capturar datos" />
                     </ListItem>
                   </Tooltip>
+                    {permisos.map(item => (
+                        item==="S2" ?
                         <Collapse in={checkedDatos2}>
                             <div>
                                 <Tooltip title="S2" placement="right">
@@ -422,17 +505,52 @@ const useStyles = makeStyles((theme) => ({
                                 </Tooltip>
                             </div>
                         </Collapse>
+                    : ""
+                    ))}
+                    {permisos.map(item => (
+                        item==="S3S" ?
+                    <Collapse in={checkedDatosS3S}>
+                        <div>
+                            <Tooltip title="S3S" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3S")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S3S" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
+                    : ""
+                    ))}
+                    {permisos.map(item => (
+                        item==="S3P" ?
+                    <Collapse in={checkedDatosS3P}>
+                        <div>
+                            <Tooltip title="S3P" placement="right">
+                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3P")}>
+                                    <ListItemIcon>
+                                        <ArrowRightIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText primary="S3P" />
+                                </ListItem>
+                            </Tooltip>
+                        </div>
+                    </Collapse>
+                    : ""
+                    ))}
                 </div>
               </Collapse>
           : ""
         }
+        { rol==1 ?
             <ListItem button onClick={e=>menuUser(e)}>
               <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>
               <ListItemText  primary="Usuarios" />
               </ListItem>
-
+        : "" }
               { submenuUsuario ?
               <Collapse in={checkedUser}>
                 <div>
@@ -456,13 +574,14 @@ const useStyles = makeStyles((theme) => ({
               </Collapse>
           : ""
         }
+        { rol==1 ?
             <ListItem button onClick={e=>menuProveedor(e)}>
               <ListItemIcon>
                 <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary="Proveedores" />
             </ListItem>
-
+        : "" }
             { crearProovedor ?
               <Collapse in={checkedProveedor}>
                 <div>
@@ -487,13 +606,14 @@ const useStyles = makeStyles((theme) => ({
           : ""
         }
 
+        { rol==1 ?
         <ListItem button onClick={e=>menuBitacora(e)}>
               <ListItemIcon>
                   <BookmarksIcon />
               </ListItemIcon>
               <ListItemText primary="Bitácora" />
           </ListItem>
-
+            : "" }
               { submenuBitacora ?
                   <Collapse in={checkedBitacora}>
                       <div>
@@ -528,11 +648,19 @@ const useStyles = makeStyles((theme) => ({
                   {vistaRender === "editprovider" && <ConnectedCreateProvider match = {match} /> }
                   {vistaRender === "providers" && <ListProvider/> }
                   {vistaRender === "createReg" && <ConnectedCreateReg/> }
+                  {vistaRender === "createRegS3S" && <ConnectedCreateRegS3S/> }
+                  {vistaRender === "createRegS3P" && <ConnectedCreateRegS3P/> }
+
                   {vistaRender === "editRegS2" && <ConnectedCreateReg match = {match}/> }
+                  {vistaRender === "editRegS3S" && <ConnectedCreateRegS3S match = {match}/> }
                   {vistaRender === "S2Schema" && <ListS2Schema/> }
+                  {vistaRender === "S3SSchema" && <ListS3SSchema/> }
+                  {vistaRender === "S3PSchema" && <ListS3PSchema/> }
+
 
                   {vistaRender === "consultarbitacora" && <ConnectedConsultarBitacora/>}
                   {vistaRender === "reportebitacora" && <ListBitacora/> }
+                  {vistaRender === "cambiarcontrasena" && <ConnectedChangePassword/> }
               </Paper>
             </Grid>
             {/* Grid 2 

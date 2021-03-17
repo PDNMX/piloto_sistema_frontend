@@ -14,9 +14,11 @@ import {TextField , makeRequired, makeValidate} from "mui-rff";
 
 
 import * as Yup from 'yup';
-import {Snackbar} from "@material-ui/core";
+import {Snackbar, Tooltip} from "@material-ui/core";
 import {Alert} from "@material-ui/lab";
 import {alertActions} from "../../_actions/alert.actions";
+import {Redirect} from "react-router";
+import {history} from "../../store/history";
 
 export const LoginV = ({}) => {
   return <MyForm initialValues={{username: "", password: ""}} />;
@@ -125,7 +127,11 @@ const style = makeStyles((theme) => ({
       '&.Mui-focused fieldset': {
         borderColor: '#34b3eb',
       },}
-  }
+  },
+  boton:{
+    backgroundColor:'#ffe01b',
+    color: '#666666'
+  },
 }));
 
   const {alerta} = useSelector(state => ({
@@ -154,6 +160,20 @@ const style = makeStyles((theme) => ({
   async function onSubmit(values: FormDataLoginUser) {
     alert.status =false;
     dispatch(requestTokenAuth(values));
+  }
+
+  const redirectToRoute = (path) =>{
+    history.push(path);
+  }
+
+  const [colorOver, setColorOver] =  React.useState({color: "#666666"});
+
+  const handleColor = () => {
+  setColorOver({color:"#3f51b5"});
+  };
+
+  const handleColorLeave =() =>{
+    setColorOver({color:"#666666"})
   }
 
 const classes = style();
@@ -201,10 +221,17 @@ return (
                       <TextField label="Contraseña" name="password"  type="password" required={true} />
                     </Grid>
                     <Grid item xs={12} md={12} container direction="row" justify="center" alignItems="center">
-                      <Button className= {classes.primary}  style={{minWidth: '130px', minHeight: '30px'}} variant="contained"
-                              color="primary"
+                      <Tooltip title="Entrar" placement="right">
+                      <Button className= {classes.boton}  variant="contained"
                               type="submit"
                               disabled={submitting}> Entrar </Button>
+                      </Tooltip>
+                    </Grid>
+                    <Grid item xs={12} md={12} container direction="row" justify="center" alignItems="center">
+                      <div onMouseEnter={handleColor} onMouseLeave={handleColorLeave} style={colorOver}
+                          onClick={ () => redirectToRoute("/restaurarpassword")}>
+                          Restablecer contraseña
+                      </div>
                     </Grid>
                   </Grid>
                 </form>
