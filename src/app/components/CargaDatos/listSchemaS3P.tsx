@@ -61,7 +61,7 @@ interface FormDataEsquemaS3P {
                 valor: String,
                 clave: String
             },
-            muncipio:{
+            municipio:{
                 valor: String,
                 clave: String
             },
@@ -583,10 +583,10 @@ export const ListS3PSchema = () => {
                             </Grid>
                             <Grid className={classes.gridpadding} item md={2} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Muncipio valor
+                                    Municipio valor
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.domicilioMexico?.muncipio?.valor}
+                                    {selectedRegistro.particularSancionado?.domicilioMexico?.municipio?.valor}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={2} sm={12}>
@@ -594,7 +594,7 @@ export const ListS3PSchema = () => {
                                     Municipio clave
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.domicilioMexico?.muncipio?.clave}
+                                    {selectedRegistro.particularSancionado?.domicilioMexico?.municipio?.clave}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={2} sm={12}>
