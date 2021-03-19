@@ -21,6 +21,7 @@ import ListItem from "@material-ui/core/ListItem";
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker,TimePicker,DateTimePicker } from 'mui-rff';
+import deLocale from "date-fns/locale/es";
 
 const ConsultarBitacora = ({id, user,alert, providers, users }) => {
     return <MyForm initialValues={user}  id={id} alerta={alert} providers={providers} users={users}  />;
@@ -123,7 +124,7 @@ function MyForm(props: MyFormProps ) {
     }
 
     return (
-        <div>
+        <div >
             <Grid item xs={12}>
                 <Typography variant={"h6"} paragraph className={cla.fontblack} align={"center"}>
                     <b>Consultar bitácora</b>
@@ -137,9 +138,10 @@ function MyForm(props: MyFormProps ) {
                     <form  onSubmit={handleSubmit} noValidate>
                         {alert.status === undefined &&
                         <div>
-                            <Grid className= {cla.gridpadding} spacing={3} container >
+                            <Grid className= {cla.gridpadding} spacing={3} container>
                                 <Grid item xs={12} md={3}>
                                     <DateTimePicker
+                                        locale={deLocale}
                                         format={"yyyy-MM-dd'T'HH:mm:ss"}
                                         label="Fecha Inicial *"
                                         name="fechaInicial"
@@ -147,6 +149,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <DateTimePicker
+                                        locale={deLocale}
                                         format={"yyyy-MM-dd'T'HH:mm:ss"}
                                         label="Fecha Final *"
                                         name="fechaFinal"

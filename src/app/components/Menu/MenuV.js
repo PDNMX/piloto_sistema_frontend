@@ -130,22 +130,23 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setcheckedAdminDatosS3P((prev) => false);
     }
 
-  const menuBitacora=(e)=>{
-      setsubmenuAdmonDatos(false);
-      setsubMenuBitacora(true);
-      setsubMenuUsuario(false);
-      setcrearProovedor(false);
-      setCheckedBitacora((prev) => !prev);
-      setCheckedUser((prev) => false);
-      setCheckedDatos((prev) => false);
-      setCheckedProveedor((prev) => false);
-      setcheckedDatos2((prev) => false);
-      setcheckedDatosS3S((prev) => false);
-      setcheckedDatosS3P((prev) => false);
-      setcheckedAdminDatos2((prev) => false);
-      setcheckedAdminDatosS3S((prev) => false);
-      setcheckedAdminDatosS3P((prev) => false);
-  }
+    const menuBitacora=(e)=>{
+        setsubmenuAdmonDatos(false);
+        setsubMenuBitacora(true);
+        setsubMenuUsuario(false);
+        setcrearProovedor(false);
+        setCheckedBitacora((prev) => !prev);
+        setCheckedUser((prev) => false);
+        setCheckedDatos((prev) => false);
+        setCheckedProveedor((prev) => false);
+        setcheckedDatos2((prev) => false);
+        setcheckedDatosS3S((prev) => false);
+        setcheckedDatosS3P((prev) => false);
+        setcheckedAdminDatos2((prev) => false);
+        setcheckedAdminDatosS3S((prev) => false);
+        setcheckedAdminDatosS3P((prev) => false);
+        history.push("/bitacora");
+    }
 
     const menuDatos2=(e)=>{
         setsubmenuAdmonDatos(true);
@@ -360,312 +361,299 @@ const useStyles = makeStyles((theme) => ({
     return (
 
         <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Sistema de Carga de datos S2 y S3
-          </Typography>
-            <div>
-              <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                <BallotIcon className={classes.colorico} fontSize="large" />
-              </Button>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={ () => redirectToRoute("/usuario/cambiarcontrasena")} >Cambiar contraseña</MenuItem>
-                <MenuItem onClick={ ()=>cerrarSesion()}>Cerrar sesión</MenuItem>
-              </Menu>
-            </div>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List className={classes.fontblack}>
-          <div>
-              { rol==2 || rol=="" ?
-          <ListItem button onClick={e=>menuDatos(e)}>
-              <ListItemIcon>
-                  <FolderSpecialIcon />
-              </ListItemIcon>
-              <ListItemText  primary="Administración datos" />
-          </ListItem>
-                  : "" }
-
-            { submenuAdmonDatos ?
-              <Collapse in={checkedDatos}>
-                <div>
-                  <Tooltip title="Administrador datos" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={e=>menuAdminDatos2(e)}>
-                      <ListItemIcon>
-                        <ArrowForwardIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Administrador datos" />
-                    </ListItem>
-                  </Tooltip>
-                    {permisos.map(item => (
-                        item==="S2" ?
-                            <Collapse in={checkedAdminDatos2}>
-                        <div>
-                            <Tooltip title="S2" placement="right">
-                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")}>
-                                    <ListItemIcon>
-                                        <ArrowRightIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    <ListItemText primary="S2" />
-                                </ListItem>
-                            </Tooltip>
-                        </div>
-                    </Collapse>
-                            : ""
-                    ))}
-                    {permisos.map(item => (
-                        item==="S3S" ?
-                    <Collapse in={checkedAdminDatosS3S}>
-                        <div>
-                            <Tooltip title="S3S" placement="right">
-                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3S")}>
-                                    <ListItemIcon>
-                                        <ArrowRightIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    <ListItemText primary="S3S" />
-                                </ListItem>
-                            </Tooltip>
-                        </div>
-                    </Collapse>
-                            : ""
-                    ))}
-                    {permisos.map(item => (
-                        item==="S3P" ?
-                    <Collapse in={checkedAdminDatosS3P}>
-                        <div>
-                            <Tooltip title="S3S" placement="right">
-                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3P")}>
-                                    <ListItemIcon>
-                                        <ArrowRightIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    <ListItemText primary="S3P" />
-                                </ListItem>
-                            </Tooltip>
-                        </div>
-                    </Collapse>
-                            : ""
-                    ))}
-                  <Tooltip title="Cargar datos" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
-                      <ListItemIcon>
-                        <ArrowForwardIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Cargar datos" />
-                    </ListItem>
-                  </Tooltip>
-                  <Tooltip title="Capturar datos" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={e=>menuDatos2(e)}>
-                      <ListItemIcon>
-                        <ArrowForwardIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Capturar datos" />
-                    </ListItem>
-                  </Tooltip>
-                    {permisos.map(item => (
-                        item==="S2" ?
-                        <Collapse in={checkedDatos2}>
-                            <div>
-                                <Tooltip title="S2" placement="right">
-                                    <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S2")}>
-                                        <ListItemIcon>
-                                            <ArrowRightIcon fontSize="small" />
-                                        </ListItemIcon>
-                                        <ListItemText primary="S2" />
-                                    </ListItem>
-                                </Tooltip>
-                            </div>
-                        </Collapse>
-                    : ""
-                    ))}
-                    {permisos.map(item => (
-                        item==="S3S" ?
-                    <Collapse in={checkedDatosS3S}>
-                        <div>
-                            <Tooltip title="S3S" placement="right">
-                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3S")}>
-                                    <ListItemIcon>
-                                        <ArrowRightIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    <ListItemText primary="S3S" />
-                                </ListItem>
-                            </Tooltip>
-                        </div>
-                    </Collapse>
-                    : ""
-                    ))}
-                    {permisos.map(item => (
-                        item==="S3P" ?
-                    <Collapse in={checkedDatosS3P}>
-                        <div>
-                            <Tooltip title="S3P" placement="right">
-                                <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3P")}>
-                                    <ListItemIcon>
-                                        <ArrowRightIcon fontSize="small" />
-                                    </ListItemIcon>
-                                    <ListItemText primary="S3P" />
-                                </ListItem>
-                            </Tooltip>
-                        </div>
-                    </Collapse>
-                    : ""
-                    ))}
+            <CssBaseline />
+            <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+                <Toolbar className={classes.toolbar}>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                        Sistema de Carga de datos S2 y S3
+                    </Typography>
+                    <div>
+                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                            <BallotIcon className={classes.colorico} fontSize="large" />
+                        </Button>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={ () => redirectToRoute("/usuario/cambiarcontrasena")} >Cambiar contraseña</MenuItem>
+                            <MenuItem onClick={ ()=>cerrarSesion()}>Cerrar sesión</MenuItem>
+                        </Menu>
+                    </div>
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                variant="permanent"
+                classes={{
+                    paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+                }}
+                open={open}
+            >
+                <div className={classes.toolbarIcon}>
+                    <IconButton onClick={handleDrawerClose}>
+                        <ChevronLeftIcon />
+                    </IconButton>
                 </div>
-              </Collapse>
-          : ""
-        }
-        { rol==1 ?
-            <ListItem button onClick={e=>menuUser(e)}>
-              <ListItemIcon>
-                <PeopleIcon />
-            </ListItemIcon>
-              <ListItemText  primary="Usuarios" />
-              </ListItem>
-        : "" }
-              { submenuUsuario ?
-              <Collapse in={checkedUser}>
-                <div>
-                  <Tooltip title="Crear usuario" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuario/crear")}>
-                      <ListItemIcon>
-                        <ArrowForwardIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Crear usuario" />
-                    </ListItem>
-                  </Tooltip>
-                  <Tooltip title="Listado de usuarios" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuarios")}>
-                      <ListItemIcon>
-                        <ArrowForwardIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Listado de usuarios" />
-                    </ListItem>
-                  </Tooltip>
-                </div>
-              </Collapse>
-          : ""
-        }
-        { rol==1 ?
-            <ListItem button onClick={e=>menuProveedor(e)}>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary="Proveedores" />
-            </ListItem>
-        : "" }
-            { crearProovedor ?
-              <Collapse in={checkedProveedor}>
-                <div>
-                  <Tooltip title="Crear proveedor" placement="right">
-                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedor/crear")}>
-                      <ListItemIcon>
-                        <ArrowForwardIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Crear proveedor" />
-                    </ListItem>
-                  </Tooltip>
-                  <Tooltip title="Lista Proveedores" placement="right">
-                  <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedores")}>
-                    <ListItemIcon>
-                      <ArrowForwardIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Lista Proveedores" />
-                  </ListItem>
-                  </Tooltip>
-                </div>
-              </Collapse>
-          : ""
-        }
+                <Divider />
+                <List className={classes.fontblack}>
+                    <div>
+                        { rol==2 || rol=="" ?
+                            <ListItem button onClick={e=>menuDatos(e)}>
+                                <ListItemIcon>
+                                    <FolderSpecialIcon />
+                                </ListItemIcon>
+                                <ListItemText  primary="Administración datos" />
+                            </ListItem>
+                            : "" }
 
-        { rol==1 ?
-        <ListItem button onClick={e=>menuBitacora(e)}>
-              <ListItemIcon>
-                  <BookmarksIcon />
-              </ListItemIcon>
-              <ListItemText primary="Bitácora" />
-          </ListItem>
-            : "" }
-              { submenuBitacora ?
-                  <Collapse in={checkedBitacora}>
-                      <div>
-                          <Tooltip title="Crear reporte" placement="right">
-                              <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/bitacora")}>
-                                  <ListItemIcon>
-                                      <ArrowForwardIcon fontSize="small" />
-                                  </ListItemIcon>
-                                  <ListItemText primary="Crear reporte" />
-                              </ListItem>
-                          </Tooltip>
-                      </div>
-                  </Collapse>
-                  : ""
-              }
-          </div>
-        </List>
-        <Divider />
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Grid 1 */}
-            <Grid item xs={12} md={12} lg={12}>
-              <Paper className={classes.paperPadding} >
-                  {vistaRender === "cargamasiva" && <LoadFileV/>  }
-                  {vistaRender === "createuser" && <ConnectedCreateUser/>}
-                  {vistaRender === "edituser" && <ConnectedCreateUser match = {match} />}
-                  {vistaRender === "users" && <ListUser/> }
-                  {vistaRender === "createprovider" && <ConnectedCreateProvider/> }
-                  {vistaRender === "editprovider" && <ConnectedCreateProvider match = {match} /> }
-                  {vistaRender === "providers" && <ListProvider/> }
-                  {vistaRender === "createReg" && <ConnectedCreateReg/> }
-                  {vistaRender === "createRegS3S" && <ConnectedCreateRegS3S/> }
-                  {vistaRender === "createRegS3P" && <ConnectedCreateRegS3P/> }
+                        { submenuAdmonDatos ?
+                            <Collapse in={checkedDatos}>
+                                <div>
+                                    <Tooltip title="Administrador datos" placement="right">
+                                        <ListItem button className={classes.submenuicono} onClick={e=>menuAdminDatos2(e)}>
+                                            <ListItemIcon>
+                                                <ArrowForwardIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Administrador datos" />
+                                        </ListItem>
+                                    </Tooltip>
+                                    {permisos.map(item => (
+                                        item==="S2" ?
+                                            <Collapse in={checkedAdminDatos2}>
+                                                <div>
+                                                    <Tooltip title="S2" placement="right">
+                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")}>
+                                                            <ListItemIcon>
+                                                                <ArrowRightIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="S2" />
+                                                        </ListItem>
+                                                    </Tooltip>
+                                                </div>
+                                            </Collapse>
+                                            : ""
+                                    ))}
+                                    {permisos.map(item => (
+                                        item==="S3S" ?
+                                            <Collapse in={checkedAdminDatosS3S}>
+                                                <div>
+                                                    <Tooltip title="S3S" placement="right">
+                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3S")}>
+                                                            <ListItemIcon>
+                                                                <ArrowRightIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="S3S" />
+                                                        </ListItem>
+                                                    </Tooltip>
+                                                </div>
+                                            </Collapse>
+                                            : ""
+                                    ))}
+                                    {permisos.map(item => (
+                                        item==="S3P" ?
+                                            <Collapse in={checkedAdminDatosS3P}>
+                                                <div>
+                                                    <Tooltip title="S3S" placement="right">
+                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3P")}>
+                                                            <ListItemIcon>
+                                                                <ArrowRightIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="S3P" />
+                                                        </ListItem>
+                                                    </Tooltip>
+                                                </div>
+                                            </Collapse>
+                                            : ""
+                                    ))}
+                                    <Tooltip title="Cargar datos" placement="right">
+                                        <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
+                                            <ListItemIcon>
+                                                <ArrowForwardIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Cargar datos" />
+                                        </ListItem>
+                                    </Tooltip>
+                                    <Tooltip title="Capturar datos" placement="right">
+                                        <ListItem button className={classes.submenuicono} onClick={e=>menuDatos2(e)}>
+                                            <ListItemIcon>
+                                                <ArrowForwardIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Capturar datos" />
+                                        </ListItem>
+                                    </Tooltip>
+                                    {permisos.map(item => (
+                                        item==="S2" ?
+                                            <Collapse in={checkedDatos2}>
+                                                <div>
+                                                    <Tooltip title="S2" placement="right">
+                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S2")}>
+                                                            <ListItemIcon>
+                                                                <ArrowRightIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="S2" />
+                                                        </ListItem>
+                                                    </Tooltip>
+                                                </div>
+                                            </Collapse>
+                                            : ""
+                                    ))}
+                                    {permisos.map(item => (
+                                        item==="S3S" ?
+                                            <Collapse in={checkedDatosS3S}>
+                                                <div>
+                                                    <Tooltip title="S3S" placement="right">
+                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3S")}>
+                                                            <ListItemIcon>
+                                                                <ArrowRightIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="S3S" />
+                                                        </ListItem>
+                                                    </Tooltip>
+                                                </div>
+                                            </Collapse>
+                                            : ""
+                                    ))}
+                                    {permisos.map(item => (
+                                        item==="S3P" ?
+                                            <Collapse in={checkedDatosS3P}>
+                                                <div>
+                                                    <Tooltip title="S3P" placement="right">
+                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3P")}>
+                                                            <ListItemIcon>
+                                                                <ArrowRightIcon fontSize="small" />
+                                                            </ListItemIcon>
+                                                            <ListItemText primary="S3P" />
+                                                        </ListItem>
+                                                    </Tooltip>
+                                                </div>
+                                            </Collapse>
+                                            : ""
+                                    ))}
+                                </div>
+                            </Collapse>
+                            : ""
+                        }
+                        { rol==1 ?
+                            <ListItem button onClick={e=>menuUser(e)}>
+                                <ListItemIcon>
+                                    <PeopleIcon />
+                                </ListItemIcon>
+                                <ListItemText  primary="Usuarios" />
+                            </ListItem>
+                            : "" }
+                        { submenuUsuario ?
+                            <Collapse in={checkedUser}>
+                                <div>
+                                    <Tooltip title="Crear usuario" placement="right">
+                                        <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuario/crear")}>
+                                            <ListItemIcon>
+                                                <ArrowForwardIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Crear usuario" />
+                                        </ListItem>
+                                    </Tooltip>
+                                    <Tooltip title="Listar de usuarios" placement="right">
+                                        <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuarios")}>
+                                            <ListItemIcon>
+                                                <ArrowForwardIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Listar de usuarios" />
+                                        </ListItem>
+                                    </Tooltip>
+                                </div>
+                            </Collapse>
+                            : ""
+                        }
+                        { rol==1 ?
+                            <ListItem button onClick={e=>menuProveedor(e)}>
+                                <ListItemIcon>
+                                    <AssignmentIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Proveedores" />
+                            </ListItem>
+                            : "" }
+                        { crearProovedor ?
+                            <Collapse in={checkedProveedor}>
+                                <div>
+                                    <Tooltip title="Crear proveedor" placement="right">
+                                        <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedor/crear")}>
+                                            <ListItemIcon>
+                                                <ArrowForwardIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Crear proveedor" />
+                                        </ListItem>
+                                    </Tooltip>
+                                    <Tooltip title="Listar Proveedores" placement="right">
+                                        <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedores")}>
+                                            <ListItemIcon>
+                                                <ArrowForwardIcon fontSize="small" />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Listar Proveedores" />
+                                        </ListItem>
+                                    </Tooltip>
+                                </div>
+                            </Collapse>
+                            : ""
+                        }
 
-                  {vistaRender === "editRegS2" && <ConnectedCreateReg match = {match}/> }
-                  {vistaRender === "editRegS3S" && <ConnectedCreateRegS3S match = {match}/> }
-                  {vistaRender === "editRegS3P" && <ConnectedCreateRegS3P match = {match}/> }
+                        { rol==1 ?
+                            <ListItem button onClick={e=>menuBitacora(e)}>
+                                <ListItemIcon>
+                                    <BookmarksIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Bitácora" />
+                            </ListItem>
+                            : "" }
 
-                  {vistaRender === "S2Schema" && <ListS2Schema/> }
-                  {vistaRender === "S3SSchema" && <ListS3SSchema/> }
-                  {vistaRender === "S3PSchema" && <ListS3PSchema/> }
+                    </div>
+                </List>
+                <Divider />
+            </Drawer>
+            <main className={classes.content}>
+                <div className={classes.appBarSpacer} />
+                <Container maxWidth="lg" className={classes.container}>
+                    <Grid container spacing={3}>
+                        {/* Grid 1 */}
+                        <Grid item xs={12} md={12} lg={12}>
+                            <Paper className={classes.paperPadding} >
+                                {vistaRender === "cargamasiva" && <LoadFileV/>  }
+                                {vistaRender === "createuser" && <ConnectedCreateUser/>}
+                                {vistaRender === "edituser" && <ConnectedCreateUser match = {match} />}
+                                {vistaRender === "users" && <ListUser/> }
+                                {vistaRender === "createprovider" && <ConnectedCreateProvider/> }
+                                {vistaRender === "editprovider" && <ConnectedCreateProvider match = {match} /> }
+                                {vistaRender === "providers" && <ListProvider/> }
+                                {vistaRender === "createReg" && <ConnectedCreateReg/> }
+                                {vistaRender === "createRegS3S" && <ConnectedCreateRegS3S/> }
+                                {vistaRender === "createRegS3P" && <ConnectedCreateRegS3P/> }
+
+                                {vistaRender === "editRegS2" && <ConnectedCreateReg match = {match}/> }
+                                {vistaRender === "editRegS3S" && <ConnectedCreateRegS3S match = {match}/> }
+                                {vistaRender === "editRegS3P" && <ConnectedCreateRegS3P match = {match}/> }
+
+                                {vistaRender === "S2Schema" && <ListS2Schema/> }
+                                {vistaRender === "S3SSchema" && <ListS3SSchema/> }
+                                {vistaRender === "S3PSchema" && <ListS3PSchema/> }
 
 
-                  {vistaRender === "consultarbitacora" && <ConnectedConsultarBitacora/>}
-                  {vistaRender === "reportebitacora" && <ListBitacora/> }
-                  {vistaRender === "cambiarcontrasena" && <ConnectedChangePassword/> }
-              </Paper>
-            </Grid>
-            {/* Grid 2 
+                                {vistaRender === "consultarbitacora" && <ConnectedConsultarBitacora/>}
+                                {vistaRender === "reportebitacora" && <ListBitacora/> }
+                                {vistaRender === "cambiarcontrasena" && <ConnectedChangePassword/> }
+                            </Paper>
+                        </Grid>
+                        {/* Grid 2
+
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 

@@ -182,7 +182,7 @@ function MyForm(props: MyFormProps ) {
             <Grid container spacing={0} className={classes.container1} justify='center'>
                 <Grid item xs={12} md={6} className={classes.item2} container direction="row" justify="center" alignItems="center">
                     <Typography variant="h4" paragraph className={classes.fontblack} style={{fontWeight: 600}}>
-                        Restablecer Contraseña
+                        Restablecer contraseña
                     </Typography>
                 </Grid>
             </Grid>
@@ -212,7 +212,7 @@ function MyForm(props: MyFormProps ) {
                                         <Button
                                             className= {classes.boton}  variant="contained"
                                             type="submit"
-                                            disabled={submitting}> Restablecer contraseña
+                                            disabled={submitting}> Restablecer
                                         </Button>
                                         </Tooltip>
 

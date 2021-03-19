@@ -33,6 +33,7 @@ import {userActions} from "../../_actions/user.action";
 import {bitacoraActions} from "../../_actions/bitacora.action";
 import { CSVLink, CSVDownload } from "react-csv";
 
+
 export const ListBitacora = () => {
 
     const {providers,alerta,providerSelect, idUser, bitacora} = useSelector(state => ({
@@ -113,7 +114,7 @@ export const ListBitacora = () => {
         { label: "Fecha", key: "fecha" },
         { label: "Sistema", key: "sistema_label" },
         { label: "Número Registros", key: "numeroRegistros" },
-        { label: "Usuario", key: "usuario" }
+        { label: "Usuario", key: "nombre" }
     ];
 
     const data = bitacora;
