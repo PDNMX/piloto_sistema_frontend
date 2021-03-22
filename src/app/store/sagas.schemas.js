@@ -475,7 +475,7 @@ export function* editProvider(){
             } ,validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Proovedor creado con exito"));
+            yield put(alertActions.success("Proovedor editado con exito"));
         }else{
             //error in response
         }
