@@ -145,6 +145,9 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         setcheckedAdminDatos2((prev) => false);
         setcheckedAdminDatosS3S((prev) => false);
         setcheckedAdminDatosS3P((prev) => false);
+
+        history.push("/bitacora");
+
     }
 
     const menuDatos2=(e)=>{
@@ -562,12 +565,15 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                             <ListItemText primary="Crear usuario" />
                                         </ListItem>
                                     </Tooltip>
-                                    <Tooltip title="Listado de usuarios" placement="right">
+
+                                    <Tooltip title="Listar usuarios" placement="right">
+
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuarios")}>
                                             <ListItemIcon>
                                                 <ArrowForwardIcon fontSize="small" />
                                             </ListItemIcon>
-                                            <ListItemText primary="Listado de usuarios" />
+
+                                            <ListItemText primary="Listar usuarios" />
                                         </ListItem>
                                     </Tooltip>
                                 </div>
@@ -593,12 +599,14 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                             <ListItemText primary="Crear proveedor" />
                                         </ListItem>
                                     </Tooltip>
-                                    <Tooltip title="Lista Proveedores" placement="right">
+
+                                    <Tooltip title="Listar Proveedores" placement="right">
+
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedores")}>
                                             <ListItemIcon>
                                                 <ArrowForwardIcon fontSize="small" />
                                             </ListItemIcon>
-                                            <ListItemText primary="Lista Proveedores" />
+                                            <ListItemText primary="Listar Proveedores" />
                                         </ListItem>
                                     </Tooltip>
                                 </div>
@@ -614,6 +622,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                 <ListItemText primary="Bitácora" />
                             </ListItem>
                             : "" }
+
                         { submenuBitacora ?
                             <Collapse in={checkedBitacora}>
                                 <div>
@@ -629,6 +638,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             </Collapse>
                             : ""
                         }
+
                     </div>
                 </List>
                 <Divider />
@@ -666,6 +676,10 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             </Paper>
                         </Grid>
                         {/* Grid 2
+<<<<<<< HEAD
+=======
+
+>>>>>>> developer
             <Grid item xs={12} md={4} lg={3}>
               <Paper className={fixedHeightPaper}>
                 

@@ -309,11 +309,10 @@ export const ListUser = () => {
                     {users.length > 0  && <Table aria-label="custom pagination table">
                         <TableHead >
                             <TableRow>
-                                <StyledTableCell align="center" >Nombre</StyledTableCell>
-                                <StyledTableCell align="center">Primer apellido</StyledTableCell>
-                                <StyledTableCell align="center">Segundo apellido</StyledTableCell>
+                                <StyledTableCell align="center" >Nombre completo</StyledTableCell>
+                                <StyledTableCell align="center" >Usuario</StyledTableCell>
+                                <StyledTableCell align="center">Correo</StyledTableCell>
                                 <StyledTableCell align="center">Proveedor</StyledTableCell>
-                                <StyledTableCell align="center">Estatus</StyledTableCell>
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
                             </TableRow>
                         </TableHead>
@@ -321,20 +320,18 @@ export const ListUser = () => {
                             {users.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((user)  => (
                                 <TableRow key={user._id}>
                                     <StyledTableCell style={{ width: 160 }}  align="center">
-                                        {user.nombre}
+                                        {user.nombre+" "+user.apellidoUno}
+                                        {user.apellidoDos ? " "+user.apellidoDos : ""}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        {user.apellidoUno}
+                                    <StyledTableCell style={{ width: 160 }}  align="center">
+                                        {user.usuario}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        {user.apellidoDos}
+                                    <StyledTableCell style={{ width: 160 }}  align="center">
+                                        {user.correoElectronico}
                                     </StyledTableCell>
 
                                     {renderSelect(user)}
 
-                                    <StyledTableCell  style={{ width: 100 }} align="center">
-                                        {user.estatus? "Vigente" : "No vigente"}
-                                    </StyledTableCell>
                                     <StyledTableCell style={{ width: 230 }} align="center">
                                         <Button onClick={() => handleOpenModalUserInfo(user)}>
                                             <Tooltip title="Más información" placement="left">
