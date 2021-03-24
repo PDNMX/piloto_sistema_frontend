@@ -106,7 +106,12 @@ function MyForm(props: MyFormProps ) {
 
 
     const redirectToRoute = (path) =>{
-        history.push(path);
+        let rol=localStorage.getItem("rol");
+        if(rol=="1"){
+            history.push("/usuarios");
+        }else{
+            history.push("/cargamasiva");
+        }
     }
 
     const cla = styles();
@@ -152,7 +157,8 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Confirmar contraseña" name="passwordConfirmation"  type="password" required={true} />
                                 </Grid>
                             </Grid>
-                            <Grid  spacing={3} justify="flex-end"
+                            <Grid  style={{marginBottom: "15px"}}
+                                spacing={3} justify="flex-end"
                                    alignItems="flex-end"
                                    container
                                    item
@@ -168,7 +174,7 @@ function MyForm(props: MyFormProps ) {
                                 <Tooltip title="Guardar" placement="right">
                                     <Button  className={cla.boton}  variant="contained"
                                              type="submit"
-                                             disabled={submitting}> Guardar
+                                             disabled={submitting}> Cambiar
                                     </Button>
                                 </Tooltip>
                             </Grid>

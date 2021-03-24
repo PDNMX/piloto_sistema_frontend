@@ -90,7 +90,7 @@ function MyForm(props: MyFormProps ) {
         SPSgenero : Yup.object(),
         SPSpuesto:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Puesto de Servidor público es requerido").trim(),
         SPSnivel:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se cadenas vacías, máximo 25 caracteres').trim(),
-        autoridadSancionadora:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        autoridadSancionadora:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,100}$"),'No se permiten números, ni cadenas vacías máximo 100 caracteres').trim(),
         tipoFalta: Yup.object().required("El campo Tipo de falta es requerido"),
         tpfdescripcion: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
         tipoSancionArray: Yup.array().of(
@@ -229,7 +229,7 @@ function MyForm(props: MyFormProps ) {
                             <Grid className= {cla.gridpadding} spacing={3} container >
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Datos del generales
+                                        Datos generales
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
@@ -241,14 +241,14 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Causa"  name="causaMotivoHechos"  />
+                                    <TextField label="Causa, motivo o hechos"  name="causaMotivoHechos"  multiline={true}/>
                                 </Grid>
 
 
                                 /* Institucion dependencia ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Institución Dependencia
+                                        Institución / Dependencia
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
@@ -329,7 +329,7 @@ function MyForm(props: MyFormProps ) {
                                                 <Grid container >
                                                     <Grid item xs={8} md={11} alignContent={"flex-start"}>
                                                         <Typography className={cla.titleCategory} variant="body1" gutterBottom>
-                                                            Tipo de Sanción . #{index + 1}
+                                                            Tipo de Sanción: #{index + 1}
                                                         </Typography>
                                                     </Grid>
                                                     <Grid item xs={3} md={1} alignContent={"flex-end"}>
@@ -397,7 +397,7 @@ function MyForm(props: MyFormProps ) {
                                 /*-----------Inhabilitacion--------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Inhabilitacion
+                                        Inhabilitación
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
@@ -422,7 +422,7 @@ function MyForm(props: MyFormProps ) {
                                         dateFunsUtils={DateFnsUtils} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Observaciones"  name="observaciones"  />
+                                    <TextField label="Observaciones"  name="observaciones"  multiline={true}/>
                                 </Grid>
 
                                 /*-----------DOCUMENTOS--------------*/

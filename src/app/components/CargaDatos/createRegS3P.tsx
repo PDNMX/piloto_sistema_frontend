@@ -157,7 +157,7 @@ function MyForm(props: MyFormProps ) {
         }),
         particularSancionado :Yup.object().shape({
             nombreRazonSocial:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').required("El campo Nombre razon social de Particular sancionado es requerido").trim(),
-            objetoSocial: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,100}$'),'No se permiten cadenas vacías, máximo 100 caracteres').trim(),
+            objetoSocial: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
             rfc: Yup.string().matches(new RegExp("^['A-z-0-9\/ ]{1,13}$"),'No se permiten puntos ,apóstrofes ni cadenas vacías máximo 13 caracteres').trim(),
             tipoPersona: Yup.object().required('El campo Tipo persona de la sección particular sancionado es requerido'),
             telefono:  Yup.string().matches(new RegExp('^[0-9]{12}$'), 'Inserta un número de teléfono válido, 12 caracteres').trim(),
@@ -382,7 +382,7 @@ function MyForm(props: MyFormProps ) {
                             <Grid key={"GridContainerFormCreateRegS3P"} className= {cla.gridpadding} spacing={3} container >
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Datos del generales
+                                        Datos generales
                                     </Typography>
                                     <Divider className={cla.boton}/>
                                 </Grid>
@@ -399,7 +399,7 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Tipo falta" name="tipoFalta" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Causa" name="causaMotivoHechos" />
+                                    <TextField label="Causa, motivo o hechos" name="causaMotivoHechos" multiline={true} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Acto" name="acto" />
@@ -475,10 +475,10 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Razón social" name="particularSancionado.nombreRazonSocial" />
+                                    <TextField label="Nombre/Razón social" name="particularSancionado.nombreRazonSocial" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Objeto social" name="particularSancionado.objetoSocial" />
+                                    <TextField label="Objeto social" name="particularSancionado.objetoSocial" multiline={true}/>
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="RFC" name="particularSancionado.rfc" />
@@ -555,7 +555,7 @@ function MyForm(props: MyFormProps ) {
 
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Domicilio extrangero
+                                        Domicilio extranjero
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
@@ -588,7 +588,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="particularSancionado.directorGeneral.nombres" />
+                                    <TextField label="Nombre(s)" name="particularSancionado.directorGeneral.nombres" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Primer apellido" name="particularSancionado.directorGeneral.primerApellido" />
@@ -607,7 +607,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="particularSancionado.apoderadoLegal.nombres" />
+                                    <TextField label="Nombre(s)" name="particularSancionado.apoderadoLegal.nombres" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Primer apellido" name="particularSancionado.apoderadoLegal.primerApellido" />
@@ -674,7 +674,7 @@ function MyForm(props: MyFormProps ) {
 
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Inhabilitacion
+                                        Inhabilitación
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
@@ -699,7 +699,7 @@ function MyForm(props: MyFormProps ) {
                                         dateFunsUtils={DateFnsUtils} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Observaciones"  name="observaciones"  />
+                                    <TextField label="Observaciones"  name="observaciones"  multiline={true}/>
                                 </Grid>
 
                                 <Grid item xs={12} md={12}>

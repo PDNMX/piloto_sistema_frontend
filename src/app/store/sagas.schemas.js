@@ -476,7 +476,9 @@ export function* editProvider(){
             } ,validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Proovedor creado con exito"));
+
+            yield put(alertActions.success("Proovedor editado con exito"));
+
         }else{
             //error in response
         }
@@ -710,7 +712,7 @@ export function* getCatalogTipoPersona(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-        respuestaArray.data.results.push({label: "NINGUNO", value:""});
+
         yield put (catalogActions.setTipoPersonaSucces(respuestaArray.data.results));
     }
 }

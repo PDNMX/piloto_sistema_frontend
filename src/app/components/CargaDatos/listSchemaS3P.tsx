@@ -61,7 +61,7 @@ interface FormDataEsquemaS3P {
                 valor: String,
                 clave: String
             },
-            muncipio:{
+            municipio:{
                 valor: String,
                 clave: String
             },
@@ -93,7 +93,19 @@ interface FormDataEsquemaS3P {
         objetoSocial: String,
         rfc: String,
         tipoPersona: String,
-        telefono: String
+        telefono: String,
+        directorGeneral?:{
+            nombres: String,
+            primerApellido: String,
+            segundoApellido: String,
+            curp: String
+        },
+        apoderadoLegal?:{
+            nombres: String,
+            primerApellido: String,
+            segundoApellido: String,
+            curp: String
+        },
     },
     multa?:{
         monto: Number,
@@ -108,18 +120,6 @@ interface FormDataEsquemaS3P {
         nombre: String,
         clave: String,
         siglas: String
-    },
-    directorGeneral?:{
-        nombres: String,
-        primerApellido: String,
-        segundoApellido: String,
-        curp: String
-    },
-    apoderadoLegal?:{
-        nombres: String,
-        primerApellido: String,
-        segundoApellido: String,
-        curp: String
     },
     objetoContrato?:String,
     autoridadSancionadora?: String,
@@ -583,10 +583,10 @@ export const ListS3PSchema = () => {
                             </Grid>
                             <Grid className={classes.gridpadding} item md={2} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Muncipio valor
+                                    Municipio valor
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.domicilioMexico?.muncipio?.valor}
+                                    {selectedRegistro.particularSancionado?.domicilioMexico?.municipio?.valor}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={2} sm={12}>
@@ -594,7 +594,7 @@ export const ListS3PSchema = () => {
                                     Municipio clave
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.domicilioMexico?.muncipio?.clave}
+                                    {selectedRegistro.particularSancionado?.domicilioMexico?.municipio?.clave}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={2} sm={12}>
@@ -894,7 +894,7 @@ export const ListS3PSchema = () => {
                                     Nombre
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.directorGeneral?.nombres}
+                                    {selectedRegistro.particularSancionado?.directorGeneral?.nombres}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -902,7 +902,7 @@ export const ListS3PSchema = () => {
                                     Apellido Paterno
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.directorGeneral?.primerApellido}
+                                    {selectedRegistro.particularSancionado?.directorGeneral?.primerApellido}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -910,7 +910,7 @@ export const ListS3PSchema = () => {
                                     Apellido Materno
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.directorGeneral?.segundoApellido}
+                                    {selectedRegistro.particularSancionado?.directorGeneral?.segundoApellido}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -918,7 +918,7 @@ export const ListS3PSchema = () => {
                                     CURP
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.directorGeneral?.curp}
+                                    {selectedRegistro.particularSancionado?.directorGeneral?.curp}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -934,7 +934,7 @@ export const ListS3PSchema = () => {
                                     Nombre
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.apoderadoLegal?.nombres}
+                                    {selectedRegistro.particularSancionado?.apoderadoLegal?.nombres}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -942,7 +942,7 @@ export const ListS3PSchema = () => {
                                     Apellido Paterno
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.apoderadoLegal?.primerApellido}
+                                    {selectedRegistro.particularSancionado?.apoderadoLegal?.primerApellido}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -950,7 +950,7 @@ export const ListS3PSchema = () => {
                                     Apellido Materno
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.apoderadoLegal?.segundoApellido}
+                                    {selectedRegistro.particularSancionado?.apoderadoLegal?.segundoApellido}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -958,7 +958,7 @@ export const ListS3PSchema = () => {
                                     CURP
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.apoderadoLegal?.curp}
+                                    {selectedRegistro.particularSancionado?.apoderadoLegal?.curp}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -1220,7 +1220,7 @@ export const ListS3PSchema = () => {
                                             <TextField label="Expediente" name="expediente"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Dependencia" name="idnombre" />
+                                            <TextField label="Institución / Dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Nombre/Razón social" name="SP3nombres"  />
@@ -1245,7 +1245,7 @@ export const ListS3PSchema = () => {
                                             <DatePicker
                                                 locale={deLocale}
                                                 format={"yyyy-MM-dd"}
-                                                label="Fecha de inhabilitación"
+                                                label="Inhabilitación fecha final"
                                                 name="fechaFinal"
                                                 dateFunsUtils={DateFnsUtils} />
                                         </Grid>
