@@ -6,8 +6,9 @@ module.exports = {
     node: {
         fs: "empty"
     },
-    entry: path.resolve(__dirname, 'src','app'),
+    entry: path.resolve(__dirname, 'src','app','index.jsx'),
     output: {
+        globalObject: "this",
         path: path.resolve(__dirname,'dist'),
         filename: 'bundle.js',
         publicPath: '/',
@@ -24,7 +25,7 @@ module.exports = {
     module: {
         rules: [{
             test: /\.jsx?/,
-            loader:'babel-loader'
+            loader:'babel-loader',
         },
             {
                 test: /\.(png|jpe?g|gif)$/i,
@@ -43,7 +44,11 @@ module.exports = {
                 test: /\.json$/,
                 use: ['json-loader'],
                 type: 'javascript/auto'
-            }
+            },
+            {
+                test: /\.ts$/,
+                use: 'ts-loader', exclude: /node_modules/
+            },
             ]
     },
     plugins: [

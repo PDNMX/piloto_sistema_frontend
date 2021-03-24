@@ -249,6 +249,8 @@ export const ListS2Schema = () => {
                 let fecha = Date.parse(value);
                 console.log(formatISO(fecha, { representation: 'date' }));
                 newQuery["fechaCaptura"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
+            }else if ( value !== null && value !== ''){
+                newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }
         }
         setQuery(newQuery);
