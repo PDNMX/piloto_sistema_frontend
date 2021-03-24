@@ -725,6 +725,14 @@ export function* creationS3PSchema(){
         yield put(userActions.setUserInSession(payload.idUser));
         let usuario = payload.idUser;
 
+
+        if(values.domicilio === 'mex'){
+            delete values.particularSancionado.domicilioExranjero;
+        }else if(values.domicilio === 'ext'){
+            delete values.particularSancionado.domicilioMexico;
+        }
+
+        delete values.domicilio;
         let arrayObjTipoSancion = [];
         if (values.tipoSancion) {
             for (let sancion of values.tipoSancion) {
@@ -1273,6 +1281,7 @@ export function* fillUpdateRegS3P() {
                     }
                 }
                 if(row.domicilioMexico){
+                    registro.domicilio= 'mex';
                     if(row.domicilioMexico.pais){
                         row.domicilioMexico.pais= JSON.stringify(row.domicilioMexico.pais);
                     }
@@ -1289,6 +1298,9 @@ export function* fillUpdateRegS3P() {
                         row.domicilioMexico.descripcionVialidad= row.domicilioMexico.vialidad.valor;
                         row.domicilioMexico.vialidad= JSON.stringify({clave: row.domicilioMexico.vialidad.clave, valor: row.domicilioMexico.vialidad.clave});
                     }
+                }
+                if(row.domicilioExranjero){
+                    registro.domicilio= 'mex';
                 }
             } else if (key === "multa") {
                 if(row.moneda){
