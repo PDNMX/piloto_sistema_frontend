@@ -1220,7 +1220,7 @@ export const ListS3PSchema = () => {
                                             <TextField label="Expediente" name="expediente"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Dependencia" name="idnombre" />
+                                            <TextField label="Institución / Dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Nombre/Razón social" name="SP3nombres"  />
@@ -1245,7 +1245,7 @@ export const ListS3PSchema = () => {
                                             <DatePicker
                                                 locale={deLocale}
                                                 format={"yyyy-MM-dd"}
-                                                label="Fecha de inhabilitación"
+                                                label="Inhabilitación fecha final"
                                                 name="fechaFinal"
                                                 dateFunsUtils={DateFnsUtils} />
                                         </Grid>
