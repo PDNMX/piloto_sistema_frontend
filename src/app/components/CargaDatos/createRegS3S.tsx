@@ -49,8 +49,13 @@ interface FormDataEsquemaS3S {
     causaMotivoHechos?:String,
     resolucionURL?:String,
     resolucionFecha?:String,
-    multaMonto?:String,
-    multaMoneda?: { },
+    multa?:{
+        monto: Number,
+        moneda: {
+            clave:String,
+            valor:String
+        }
+    },
     inhabilitacionPlazo?:String,
     inhabilitacionFechaInicial?:String,
     inhabilitacionFechaFinal?:String,
@@ -84,6 +89,10 @@ function MyForm(props: MyFormProps ) {
         idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Nombres de la sección Institución Dependencia es requerido").trim(),
         idsiglas: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres ').trim(),
         idclave: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
+        SPrfc: Yup.string().matches(new RegExp("^['A-z-0-9\/ ]{1,13}$"),'No se permiten puntos ,apóstrofes ni cadenas vacías máximo 13 caracteres').trim(),
+        SPcurp: Yup.string().matches(new RegExp("[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])" +
+        "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT" +
+        "|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$"), "Introducir un CURP valido"),
         SPSnombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres ' ).required("El campo Nombres de Servidor público es requerido").trim(),
         SPSprimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Primer apellido de Servidor público es requerido").trim(),
         SPSsegundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
@@ -100,18 +109,28 @@ function MyForm(props: MyFormProps ) {
             })
         ).required("Se requiere seleccionar mínimo una opción del campo Tipo sanción"),
         tsdescripcion:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
-        causaMotivoHechos:  Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').required("El campo Causa o motivo de la sanción es requerido").trim(),
+        causaMotivoHechos:  Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').required("El campo Causa o motivo de la sanción es requerido").trim(),
         resolucionURL: Yup.string()
             .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                 'Introduce una direccion de internet valida'
             ).trim(),
         resolucionFecha:  Yup.string().required("El campo Fecha de resolución es requerido").trim(),
-        multaMonto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').required("El campo Monto es requerido").trim(),
-        multaMoneda: Yup.object().required("El campo Moneda es requerido"),
+        multa:Yup.object().shape({
+            monto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').trim()
+                .when('moneda',  (moneda) => {
+                    if(moneda)
+                        return Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').trim().required("El campo monto es requerido ")
+                }),
+            moneda: Yup.string()
+                .when('monto',  (monto) => {
+                    if(monto)
+                        return Yup.string().trim().required("El campo moneda es requerido ")
+                }),
+        }, ['moneda','monto']),
         inhabilitacionPlazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]*$'),'No se permiten cadenas vacías').trim(),
         inhabilitacionFechaInicial:  Yup.string().required("El campo Fecha inicial de la sección  es requerido").trim(),
         inhabilitacionFechaFinal:  Yup.string().required("El campo Fecha final de la sección  es requerido").trim(),
-        observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
+        observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n\/ ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documents: Yup.array().of(
             Yup.object().shape({
                 id: Yup.string().trim(),
@@ -245,7 +264,6 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
 
-                                /* Institucion dependencia ----------------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Institución / Dependencia
@@ -263,14 +281,19 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
 
-                                /* Servidor Publico ----------------------*/
+
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Servidor público sancionado
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
-
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="RFC" name="SPrfc" />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="CURP" name="SPcurp" />
+                                </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Nombre(s)" name="SPSnombres"  />
                                 </Grid>
@@ -289,7 +312,7 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Nivel"  name="SPSnivel"  />
                                 </Grid>
-                                /*-------Tipo falta---------*/
+
 
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
@@ -307,7 +330,7 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Descripción"  name="tpfdescripcion"  />
                                 </Grid>
 
-                                /*-----Tipo sancion -------*/
+
 
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
@@ -355,7 +378,7 @@ function MyForm(props: MyFormProps ) {
                                     }
                                 </FieldArray>
 
-                                /*-----------Resolucion--------------*/
+
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Resolución
@@ -377,7 +400,6 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
 
-                                /*-----------Multa--------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Multa
@@ -385,16 +407,15 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Monto"  name="multaMonto"  />
+                                    <TextField label="Monto"  name="multa.monto"  />
                                 </Grid>
 
                                 {catalogos.moneda &&
                                 <Grid item xs={12} md={3}>
-                                    <Select name="multaMoneda" label="Moneda" data={catalogos.moneda}></Select>
+                                    <Select name="multa.moneda" label="Moneda" data={catalogos.moneda}></Select>
                                 </Grid>
                                 }
 
-                                /*-----------Inhabilitacion--------------*/
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                         Inhabilitación
@@ -425,7 +446,7 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Observaciones"  name="observaciones"  multiline={true}/>
                                 </Grid>
 
-                                /*-----------DOCUMENTOS--------------*/
+
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                        Documentos
@@ -491,6 +512,7 @@ function MyForm(props: MyFormProps ) {
                                 </FieldArray>
 
                             </Grid>
+                            <pre>{JSON.stringify(values)}</pre>
 
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"

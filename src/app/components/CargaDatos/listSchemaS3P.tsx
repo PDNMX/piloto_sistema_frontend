@@ -303,7 +303,7 @@ export const ListS3PSchema = () => {
     }
 
     const schema = Yup.object().shape({
-        expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
+        expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
         idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
         SP3nombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SP3primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),

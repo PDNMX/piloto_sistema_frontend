@@ -152,6 +152,7 @@ function MyForm(props: MyFormProps ) {
     const [valueDomicilio, setValueDomicilio] = React.useState('');
 
 
+    // @ts-ignore
     let schema = Yup.object().shape({
         expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
         institucionDependencia : Yup.object().shape({
@@ -228,9 +229,17 @@ function MyForm(props: MyFormProps ) {
             fechaNotificacion : Yup.string().trim(),
         }),
         multa:Yup.object().shape({
-            monto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').required("El campo Monto es requerido").trim(),
-            moneda: Yup.object().required("El campo Moneda es requerido"),
-        }),
+            monto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').trim()
+                .when('moneda',  (moneda) => {
+                    if(moneda)
+                        return Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').trim().required("El campo monto es requerido ")
+                }),
+            moneda: Yup.string()
+                .when('monto',  (monto) => {
+                    if(monto)
+                        return Yup.string().trim().required("El campo moneda es requerido ")
+                }),
+        }, ['moneda','monto']),
         inhabilitacion: Yup.object().shape({
             plazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
             fechaInicial:  Yup.string().trim(),

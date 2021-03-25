@@ -879,6 +879,12 @@ export function* creationS3SSchema(){
         //----------------SERVIDOR PUBLICO SANCIONADO
 
         let ObjServidorSancionado = {};
+        if (values.SPrfc) {
+            ObjServidorSancionado = {...ObjServidorSancionado, rfc: values.SPrfc}
+        }
+        if (values.SPcurp) {
+            ObjServidorSancionado = {...ObjServidorSancionado, curp: values.SPcurp}
+        }
         if (values.SPSnombres) {
             ObjServidorSancionado = {...ObjServidorSancionado, nombres: values.SPSnombres}
         }
@@ -948,12 +954,14 @@ export function* creationS3SSchema(){
 
         //-----------------MULTA
         let ObjMulta = {};
-        if (values.multaMonto) {
-            ObjMulta = {...ObjMulta, monto: parseFloat(values.multaMonto)}
-        }
-        if (values.multaMoneda) {
-            let multaMoneda = JSON.parse(values.multaMoneda);
-            ObjMulta = {...ObjMulta, moneda: {clave: multaMoneda.clave, valor: multaMoneda.valor}}
+        if (values.multa) {
+            if(values.multa.monto){
+                ObjMulta = {...ObjMulta, monto: parseFloat(values.multa.monto)}
+            }
+            if(values.multa.moneda){
+                let multaMoneda = JSON.parse(values.multa.moneda);
+                ObjMulta = {...ObjMulta, moneda: {clave: multaMoneda.clave, valor: multaMoneda.valor}}
+            }
         }
         docSend["multa"] = ObjMulta;
 
@@ -1355,6 +1363,8 @@ export function* fillUpdateRegS3S(){
                 if(row.clave){ newRow["idclave"] = row.clave;}
                 if(row.siglas){ newRow["idsiglas"] = row.siglas;}
             }else if(key === "servidorPublicoSancionado") {
+                if(row.rfc){ newRow["SPrfc"] = row.rfc;}
+                if(row.curp){ newRow["SPcurp"] = row.curp;}
                 if(row.nombres){ newRow["SPSnombres"] = row.nombres;}
                 if(row.primerApellido){ newRow["SPSprimerApellido"] = row.primerApellido;}
                 if(row.segundoApellido){ newRow["SPSsegundoApellido"] = row.segundoApellido;}
@@ -1383,8 +1393,10 @@ export function* fillUpdateRegS3S(){
                 if(row.url){ newRow["resolucionURL"] = row.url;}
                 if(row.fechaResolucion){ newRow["resolucionFecha"] = row.fechaResolucion;}
             }else if(key === "multa"){
-                if(row.moneda){ newRow["multaMoneda"] = JSON.stringify({clave:row.moneda.clave.toString().toUpperCase() ,valor : row.moneda.valor.toUpperCase()});}
-                if(row.monto){ newRow["multaMonto"] = row.monto;}
+                let objMulta= {};
+                if(row.moneda){ objMulta["moneda"] = JSON.stringify({clave:row.moneda.clave.toString().toUpperCase() ,valor : row.moneda.valor.toUpperCase()});}
+                if(row.monto){ objMulta["monto"] = row.monto;}
+                newRow["multa"]= objMulta;
             }else if(key === "inhabilitacion"){
                 if(row.plazo){ newRow["inhabilitacionPlazo"] = row.plazo;}
                 if(row.fechaInicial){ newRow["inhabilitacionFechaInicial"] = row.fechaInicial;}
