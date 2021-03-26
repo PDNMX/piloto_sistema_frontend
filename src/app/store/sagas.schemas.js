@@ -387,7 +387,7 @@ export function* creationUser(){
             } , validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Usuario creado con exito"));
+            yield put(alertActions.success("Usuario creado con éxito"));
             history.push('/usuarios');
             yield put(alertActions.clear());
         }else{
@@ -414,7 +414,7 @@ export function* editUser(){
             } , validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Usuario creado con exito"));
+            yield put(alertActions.success("Usuario creado con éxito"));
             history.push('/usuarios');
             yield put(alertActions.clear());
         }else{
@@ -446,7 +446,7 @@ export function* creationProvider(){
             } ,validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Proovedor creado con exito"));
+            yield put(alertActions.success("Proovedor creado con éxito"));
         }else{
             //error in response
         }

@@ -332,7 +332,7 @@ export const ListUser = () => {
 
                                     {renderSelect(user)}
 
-                                    <StyledTableCell style={{ width: 230 }} align="center">
+                                    <StyledTableCell style={{ width: 430 }} align="center">
                                         <Button onClick={() => handleOpenModalUserInfo(user)}>
                                             <Tooltip title="Más información" placement="left">
                                                 <IconButton aria-label="expand row" size="small" >
@@ -390,9 +390,9 @@ export const ListUser = () => {
                     <Tooltip title="Agregar usuario" placement="right">
                         <Button  onClick={ () => redirectToRoute(`/usuario/crear`)} className={classes.marginright}
                                  variant="contained"
-                                 endIcon={<AddBoxIcon>Agregar usuario</AddBoxIcon>}
+                                 endIcon={<AddBoxIcon>Crear usuario</AddBoxIcon>}
                         >
-                            Agregar usuario
+                            Crear usuario
                         </Button>
                     </Tooltip>
 

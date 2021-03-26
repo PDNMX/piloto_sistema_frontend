@@ -395,7 +395,7 @@ export const ListS2Schema = () => {
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                               Nombres
+                               Nombre(s)
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.nombres}
@@ -721,7 +721,7 @@ export const ListS2Schema = () => {
                                             <TextField label="Segundo apellido" name="segundoApellido" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Institución dependencia" name="idnombre" />
+                                            <TextField label="Institución / Dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Puesto" name="puestoNombre" />
@@ -776,9 +776,7 @@ export const ListS2Schema = () => {
                                     />
                                 </TableCell>
                                 <StyledTableCell align="center" >Ejercicio fiscal</StyledTableCell>
-                                <StyledTableCell align="center" >Nombres</StyledTableCell>
-                                <StyledTableCell align="center">Primer apellido</StyledTableCell>
-                                <StyledTableCell align="center">Segundo apellido</StyledTableCell>
+                                <StyledTableCell align="center" >Servidor público</StyledTableCell>
                                 <StyledTableCell align="center">Institución</StyledTableCell>
                                 <StyledTableCell align="center">Puesto</StyledTableCell>
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
@@ -805,13 +803,7 @@ export const ListS2Schema = () => {
                                         {schema.ejercicioFiscal}
                                     </StyledTableCell>
                                     <StyledTableCell style={{ width: 160 }}  align="center">
-                                        {schema.nombres}
-                                    </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        {schema.primerApellido}
-                                    </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        {schema.segundoApellido}
+                                        {schema.nombres+" "+schema.primerApellido+" "+schema.segundoApellido}
                                     </StyledTableCell>
                                     {schema.institucionDependencia &&
                                     <StyledTableCell style={{ width: 160 }} align="center">

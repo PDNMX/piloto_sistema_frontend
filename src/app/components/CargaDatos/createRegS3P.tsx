@@ -206,7 +206,7 @@ function MyForm(props: MyFormProps ) {
         }),
         objetoContrato:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,300}$'),'No se permiten cadenas vacías, máximo 300 caracteres').trim(),
         autoridadSancionadora:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Autoridad sancionadora es requerido").trim(),
-        tipoFalta:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,100}$'),'No se permiten cadenas vacías, máximo 100 caracteres').trim(),
+        tipoFalta:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,100}$'),'No se permiten cadenas vacías, máximo 100 caracteres').required("El campo tipo Falta es requerido").trim(),
         tipoSancion: Yup.array().of(
             Yup.object().shape({
                 tipoSancion: Yup.object().required("El campo Tipo de sanción es requerido"),
@@ -409,13 +409,13 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Objeto contrato" name="objetoContrato" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Autoridad sancionadora" name="autoridadSancionadora" />
+                                    <TextField label="Autoridad sancionadora *" name="autoridadSancionadora" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Tipo falta" name="tipoFalta" />
+                                    <TextField label="Tipo falta *" name="tipoFalta" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Causa, motivo o hechos" name="causaMotivoHechos" multiline={true} />
+                                    <TextField label="Causa, motivo o hechos *" name="causaMotivoHechos" multiline={true} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Acto" name="acto" />
@@ -444,7 +444,7 @@ function MyForm(props: MyFormProps ) {
                                                 <Grid container >
                                                     <Grid item xs={8} md={11} alignContent={"flex-start"}>
                                                         <Typography className={cla.titleCategory} variant="body1" gutterBottom>
-                                                            Tipo de Sanción . #{index + 1}
+                                                            Tipo de Sanción. #{index + 1}
                                                         </Typography>
                                                     </Grid>
                                                     <Grid item xs={3} md={1} alignContent={"flex-end"}>
@@ -460,7 +460,7 @@ function MyForm(props: MyFormProps ) {
                                                 </Grid>
                                                 {catalogos.tipoSancion &&
                                                 <Grid item xs={12} md={12}>
-                                                    <Select  name={`tipoSancion.${index}.tipoSancion`} label="Tipo de sanción" data={catalogos.tipoSancion} ></Select>
+                                                    <Select  name={`tipoSancion.${index}.tipoSancion`} label="Tipo de sanción *" data={catalogos.tipoSancion} ></Select>
                                                 </Grid>}
                                                 <Grid item xs={12} md={12}>
                                                     <TextField label="Descripción" name={`tipoSancion.${index}.descripcion`} />
@@ -473,12 +473,12 @@ function MyForm(props: MyFormProps ) {
 
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Institución Dependencia
+                                        Institución / Dependencia
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid key={"institucionDependencia.grid.nombre"} item xs={12} md={6}>
-                                    <TextField key={"institucionDependencia.nombre"} label="Nombre" name="institucionDependencia.nombre" />
+                                    <TextField key={"institucionDependencia.nombre"} label="Nombre *" name="institucionDependencia.nombre" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Siglas" name="institucionDependencia.siglas"  />
@@ -493,7 +493,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre/Razón social" name="particularSancionado.nombreRazonSocial" />
+                                    <TextField label="Nombre/Razón social *" name="particularSancionado.nombreRazonSocial" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Objeto social" name="particularSancionado.objetoSocial" multiline={true}/>
@@ -503,7 +503,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
                                 {catalogos.tipoPersona &&
                                 <Grid item xs={12} md={3}>
-                                    <Select  name = "particularSancionado.tipoPersona" label="Tipo persona" data={catalogos.tipoPersona} ></Select>
+                                    <Select  name = "particularSancionado.tipoPersona" label="Tipo persona *" data={catalogos.tipoPersona} ></Select>
                                 </Grid>
                                 }
 
@@ -636,7 +636,7 @@ function MyForm(props: MyFormProps ) {
 
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        DIRECTOR GENERAL
+                                        Director general
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
@@ -679,10 +679,10 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="responsableSancion.nombres" />
+                                    <TextField label="Nombre(s) *" name="responsableSancion.nombres" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Primer apellido" name="responsableSancion.primerApellido" />
+                                    <TextField label="Primer apellido *" name="responsableSancion.primerApellido" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Segundo apellido" name="responsableSancion.segundoApellido" />

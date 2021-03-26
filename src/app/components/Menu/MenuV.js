@@ -600,13 +600,13 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                         </ListItem>
                                     </Tooltip>
 
-                                    <Tooltip title="Listar Proveedores" placement="right">
+                                    <Tooltip title="Listar proveedores" placement="right">
 
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedores")}>
                                             <ListItemIcon>
                                                 <ArrowForwardIcon fontSize="small" />
                                             </ListItemIcon>
-                                            <ListItemText primary="Listar Proveedores" />
+                                            <ListItemText primary="Listar proveedores" />
                                         </ListItem>
                                     </Tooltip>
                                 </div>
@@ -622,22 +622,6 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                 <ListItemText primary="Bitácora" />
                             </ListItem>
                             : "" }
-
-                        { submenuBitacora ?
-                            <Collapse in={checkedBitacora}>
-                                <div>
-                                    <Tooltip title="Crear reporte" placement="right">
-                                        <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/bitacora")}>
-                                            <ListItemIcon>
-                                                <ArrowForwardIcon fontSize="small" />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Crear reporte" />
-                                        </ListItem>
-                                    </Tooltip>
-                                </div>
-                            </Collapse>
-                            : ""
-                        }
 
                     </div>
                 </List>

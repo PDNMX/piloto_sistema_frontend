@@ -62,8 +62,8 @@ function MyForm(props: MyFormProps ) {
 
 
     const schema = Yup.object().shape({
-        fechaInicial: Yup.string().required(),
-        fechaFinal: Yup.string().required(),
+        fechaInicial: Yup.string().required("Fecha inicial es obligatoria."),
+        fechaFinal: Yup.string().required("Fecha final es obligatoria."),
     });
 
     const validate = makeValidate(schema);

@@ -176,7 +176,8 @@ function MyForm(props: MyFormProps ) {
                             <TextField label="Extensión" name="extension"  />
                         </Grid>
                         <Grid item xs={12} md={3}>
-                            <TextField label="Nombre de usuario" name="usuario" required={true} />
+                            {id != null ? <TextField label="Nombre de usuario" name="usuario" required={true} InputProps={{readOnly: true}}/>
+                            :  <TextField label="Nombre de usuario" name="usuario" required={true} /> }
                         </Grid>
                             {id != null &&
                             <Grid item xs={12} md={3}>
