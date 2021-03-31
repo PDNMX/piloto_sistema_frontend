@@ -969,6 +969,7 @@ export const ListS3SSchema = () => {
 
 
                                     <StyledTableCell style={{ width: 230 }} align="center">
+                                        <td>
                                         <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
                                             <Tooltip title="Más información" placement="left">
                                                 <IconButton aria-label="expand row" size="small" >
@@ -976,21 +977,23 @@ export const ListS3SSchema = () => {
                                                 </IconButton>
                                             </Tooltip>
                                         </Button>
+                                        </td>
                                         {recordsS3S.map((reg)  => (
                                             reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                                <div>
+                                                <td>
                                         <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S3S/${schema._id}`)} >
                                             <Tooltip title="Editar registro" placement="top">
                                                 <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
                                             </Tooltip>
                                         </Button>
+
                                         <Tooltip title="Eliminar registro" placement="right">
                                             <Button style={{ color: 'gray', padding: '0px' }}
                                                     onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
                                                 <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                         </Tooltip>
-                                                </div>
+                                                </td>
 
 
                                                 : ""
