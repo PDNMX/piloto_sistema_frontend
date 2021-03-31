@@ -100,11 +100,13 @@ interface FormDataEsquemaS3S {
 }
 
 export const ListS3SSchema = () => {
-    const {S3SList,alerta,paginationSuper,catalogos} = useSelector(state => ({
+    const {S3SList,alerta,paginationSuper,catalogos,providerUser, recordsS3S} = useSelector(state => ({
         S3SList : state.S3S,
         alerta : state.alert,
         paginationSuper: state.pagination,
-        catalogos: state.catalogs
+        catalogos: state.catalogs,
+        providerUser: state.providerUser,
+        recordsS3S: state.recordsS3S
     }));
 
     const dispatch = useDispatch();
@@ -974,6 +976,9 @@ export const ListS3SSchema = () => {
                                                 </IconButton>
                                             </Tooltip>
                                         </Button>
+                                        {recordsS3S.map((reg)  => (
+                                            reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
+                                                <div>
                                         <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S3S/${schema._id}`)} >
                                             <Tooltip title="Editar registro" placement="top">
                                                 <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
@@ -985,7 +990,11 @@ export const ListS3SSchema = () => {
                                                 <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                         </Tooltip>
+                                                </div>
 
+
+                                                : ""
+                                        )) }
 
                                     </StyledTableCell>
                                 </TableRow>

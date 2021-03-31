@@ -149,12 +149,14 @@ interface FormDataEsquemaS3P {
 }
 
 export const ListS3PSchema = () => {
-    const {S3PList,alerta,paginationSuper,catalogos, permisos} = useSelector(state => ({
+    const {S3PList,alerta,paginationSuper,catalogos, permisos, providerUser, recordsS3P} = useSelector(state => ({
         S3PList : state.S3P,
         alerta : state.alert,
         paginationSuper: state.pagination,
         catalogos: state.catalogs,
-        permisos: state.permisos
+        permisos: state.permisos,
+        providerUser: state.providerUser,
+        recordsS3P: state.recordsS3P
     }));
 
     const dispatch = useDispatch();
@@ -1356,6 +1358,9 @@ export const ListS3PSchema = () => {
                                                 </IconButton>
                                             </Tooltip>
                                         </Button>
+                                        {recordsS3P.map((reg)  => (
+                                            reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
+                                                <div>
                                         <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S3P/${schema._id}`)} >
                                             <Tooltip title="Editar registro" placement="top">
                                                 <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
@@ -1367,7 +1372,10 @@ export const ListS3PSchema = () => {
                                                 <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                         </Tooltip>
+                                                </div>
 
+                                                : ""
+                                        )) }
 
                                     </StyledTableCell>
                                 </TableRow>

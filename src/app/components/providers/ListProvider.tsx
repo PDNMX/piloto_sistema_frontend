@@ -316,9 +316,9 @@ export const ListProvider = () => {
                     <Button  onClick={ () => redirectToRoute("/proveedor/crear")}
                              variant="contained"
                              className={classes.marginright}
-                             endIcon={<AddBoxIcon>Agregar proveedor</AddBoxIcon>}
+                             endIcon={<AddBoxIcon>Crear proveedor</AddBoxIcon>}
                     >
-                        Agregar proveedor
+                        Crear proveedor
                     </Button>
                 </Tooltip>
             </Grid>

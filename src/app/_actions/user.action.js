@@ -19,7 +19,15 @@ export const userActions = {
     requestRol,
     setRol,
     requestPermisosSistema,
-    setPermisosSistema
+    setPermisosSistema,
+    setProvider,
+    requestProvider,
+    requestRecordsS2,
+    setRecordsS2,
+    requestRecordsS3S,
+    setRecordsS3S,
+    requestRecordsS3P,
+    setRecordsS3P
 };
 
 function requestAllUsers(){
@@ -125,4 +133,44 @@ function requestPermisosSistema(){
 
 function setPermisosSistema (permisos){
     return {type : userConstants.REQUEST_PERMISOS_SISTEMA_SET, permisos}
+}
+
+function setProvider(providerUser){
+    return {type : userConstants.REQUEST_PROVIDER_SET, providerUser}
+}
+
+function requestProvider(){
+    return {
+        type :  userConstants.REQUEST_PROVIDER,
+    }
+}
+
+function setRecordsS2(recordsS2){
+    return {type : userConstants.REQUEST_RECORDS_S2_SET, recordsS2}
+}
+
+function requestRecordsS2(){
+    return {
+        type :  userConstants.REQUEST_RECORDS_S2,
+    }
+}
+
+function setRecordsS3S(recordsS3S){
+    return {type : userConstants.REQUEST_RECORDS_S3S_SET, recordsS3S}
+}
+
+function requestRecordsS3S(){
+    return {
+        type :  userConstants.REQUEST_RECORDS_S3S,
+    }
+}
+
+function setRecordsS3P(recordsS3P){
+    return {type : userConstants.REQUEST_RECORDS_S3P_SET, recordsS3P}
+}
+
+function requestRecordsS3P(){
+    return {
+        type :  userConstants.REQUEST_RECORDS_S3P,
+    }
 }

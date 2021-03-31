@@ -72,12 +72,15 @@ interface FormDataEsquemaS2 {
 }
 
 export const ListS2Schema = () => {
-    const {S2List,alerta,paginationSuper} = useSelector(state => ({
+    const {S2List,alerta,paginationSuper, providerUser, recordsS2} = useSelector(state => ({
         S2List : state.S2,
         alerta : state.alert,
-        paginationSuper: state.pagination
+        paginationSuper: state.pagination,
+        providerUser: state.providerUser,
+        recordsS2: state.recordsS2
     }));
-
+    console.log("REcordsS2");
+    console.log(recordsS2);
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
@@ -196,7 +199,7 @@ export const ListS2Schema = () => {
         }
 
         setSelectedCheckBox(newSelected);
-        console.log(newSelected);
+
     };
 
 
@@ -395,7 +398,7 @@ export const ListS2Schema = () => {
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                               Nombres
+                               Nombre(s)
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.nombres}
@@ -721,7 +724,7 @@ export const ListS2Schema = () => {
                                             <TextField label="Segundo apellido" name="segundoApellido" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Institución dependencia" name="idnombre" />
+                                            <TextField label="Institución / Dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Puesto" name="puestoNombre" />
@@ -776,9 +779,7 @@ export const ListS2Schema = () => {
                                     />
                                 </TableCell>
                                 <StyledTableCell align="center" >Ejercicio fiscal</StyledTableCell>
-                                <StyledTableCell align="center" >Nombres</StyledTableCell>
-                                <StyledTableCell align="center">Primer apellido</StyledTableCell>
-                                <StyledTableCell align="center">Segundo apellido</StyledTableCell>
+                                <StyledTableCell align="center" >Servidor público</StyledTableCell>
                                 <StyledTableCell align="center">Institución</StyledTableCell>
                                 <StyledTableCell align="center">Puesto</StyledTableCell>
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
@@ -805,13 +806,7 @@ export const ListS2Schema = () => {
                                         {schema.ejercicioFiscal}
                                     </StyledTableCell>
                                     <StyledTableCell style={{ width: 160 }}  align="center">
-                                        {schema.nombres}
-                                    </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        {schema.primerApellido}
-                                    </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        {schema.segundoApellido}
+                                        {schema.nombres+" "+schema.primerApellido+" "+schema.segundoApellido}
                                     </StyledTableCell>
                                     {schema.institucionDependencia &&
                                     <StyledTableCell style={{ width: 160 }} align="center">
@@ -824,27 +819,40 @@ export const ListS2Schema = () => {
                                     </StyledTableCell>
                                     }
 
-                                    <StyledTableCell style={{ width: 230 }} align="center">
-                                        <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
+                                    <StyledTableCell style={{ width: 260 }} align="center">
+                                        <div>
                                             <Tooltip title="Más información" placement="left">
-                                                <IconButton aria-label="expand row" size="small" >
-                                                    <KeyboardArrowDownIcon />
-                                                </IconButton>
+                                                <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
+                                                    <IconButton aria-label="expand row" size="small" >
+                                                        <KeyboardArrowDownIcon />
+                                                    </IconButton>
+
+                                                </Button>
                                             </Tooltip>
-                                        </Button>
-                                        <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S2/${schema._id}`)} >
-                                            <Tooltip title="Editar registro" placement="top">
-                                                <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
-                                            </Tooltip>
-                                        </Button>
-                                        <Tooltip title="Eliminar registro" placement="right">
-                                            <Button style={{ color: 'gray', padding: '0px' }}
-                                                    onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
-                                                <DeleteOutlineOutlinedIcon/>
+
+                                        {recordsS2.map((reg)  => (
+                                            reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
+                                                <div>
+                                                <Tooltip title="Editar registro" placement="top">
+                                                    <Button style={{padding: '0px'}}
+                                                            onClick={() => redirectToRoute(`/editar/S2/${schema._id}`)}>
+                                                        <Button style={{color: 'gray'}}><EditOutlinedIcon/></Button>
+
+                                                    </Button>
+                                                </Tooltip>
+                                            <Tooltip title="Eliminar registro" placement="right">
+                                            <Button style={{color: 'gray', padding: '0px'}}
+                                            onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
+                                            <DeleteOutlineOutlinedIcon/>
                                             </Button>
-                                        </Tooltip>
+                                            </Tooltip>
+                                                </div>
 
 
+                                                : ""
+                                            )) }
+
+                                        </div>
                                     </StyledTableCell>
                                 </TableRow>
                             ))}

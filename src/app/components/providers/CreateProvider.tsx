@@ -74,8 +74,8 @@ function MyForm(props: MyFormProps ) {
     ];
 
     const schema = Yup.object().shape({
-        dependencia:  Yup.string().required().matches(new RegExp('^[ñáéíóúáéíóúÁÉÍÓÚa-zA-Z ]*$'), 'Inserta solamente caracteres'),
-        sistemas: Yup.array().min(1).required(),
+        dependencia:  Yup.string().required("Nombre del proveedor es obligatorio.").matches(new RegExp('^[ñáéíóúáéíóúÁÉÍÓÚa-zA-Z ]*$'), 'Inserta solamente caracteres'),
+        sistemas: Yup.array().min(1).required("El campo sistemas aplicables es obligatorio."),
         //estatus: Yup.boolean(),
         fechaAlta: Yup.string(),
     });
