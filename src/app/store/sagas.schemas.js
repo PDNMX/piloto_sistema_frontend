@@ -278,6 +278,8 @@ export function* loginUser(){
             yield put (userActions.setVigenciaPass(status.data.contrasenaNueva));
             yield put (userActions.setRol(status.data.rol));
             yield put (userActions.setPermisosSistema(status.data.sistemas));
+            yield put (userActions.setProvider(status.data.proveedor));
+            console.log("Provider:"+status.data.proveedor);
             localStorage.setItem("rol",status.data.rol);
             localStorage.setItem("sistemas",status.data.sistemas);
 
@@ -321,7 +323,8 @@ export function* permisosSistemas(){
         yield put (userActions.setVigenciaPass(status.data.contrasenaNueva));
         yield put (userActions.setRol(status.data.rol));
         yield put (userActions.setPermisosSistema(status.data.sistemas));
-        //console.log(status.data.sistemas);
+        yield put (userActions.setProvider(status.data.proveedor));
+        console.log("Desde login Proveedor:"+status.data.proveedor);
         localStorage.setItem("rol",status.data.rol);
         localStorage.setItem("sistemas",[status.data.sistemas]);
         localStorage.setItem("S2",false);
@@ -341,8 +344,6 @@ export function* permisosSistemas(){
             }
         });
 
-        console.log("s2->",localStorage.S2+ "s3s-->"+localStorage.S3S,"  S3P-->"+localStorage.S3P);
-
     }
 }
 
@@ -352,7 +353,6 @@ export function* verifyTokenGetUser(){
         const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser));
-
     }
 }
 
@@ -1650,5 +1650,51 @@ export function* changePassword(){
         }catch (err) {
             yield put(alertActions.error("El Registro no fue modificado"));
         }
+    }
+}
+
+export function* getRecordsS2(){
+    while(true){
+        yield take (userActions.requestRecordsS2);
+        const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
+        console.log("TOkeni"+token);
+
+        const respuestaArray = yield axios.post(ur + `/getrecordsbysystem`,{sistema: "S2"},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+        yield put (userActions.setRecordsS2(respuestaArray.data.results));
+        console.log(respuestaArray.data.results);
+    }
+}
+
+export function* getRecordsS3S(){
+    while(true){
+        yield take (userActions.requestRecordsS3S);
+        const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
+
+        const respuestaArray = yield axios.post(ur + `/getrecordsbysystem`,{sistema: "S3S"},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            },validateStatus: () => true});
+        yield put (userActions.setRecordsS3S(respuestaArray.data.results));
+        console.log(respuestaArray.data.results);
+    }
+}
+
+export function* getRecordsS3P(){
+    while(true){
+        yield take (userActions.requestRecordsS3P);
+        const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
+
+        const respuestaArray = yield axios.post(ur + `/getrecordsbysystem`,{sistema: "S3P"},{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            },validateStatus: () => true});
+        yield put (userActions.setRecordsS3P(respuestaArray.data.results));
+        console.log(respuestaArray.data.results);
     }
 }

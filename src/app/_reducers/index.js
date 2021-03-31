@@ -16,6 +16,11 @@ import {bitacora} from './bitacoraTemporal.reducer';
 import {vigencia} from './vigenciaPassword.reducer';
 import {rol} from './rolUser.reducer';
 import {permisos} from "./permisosSistemasUser.reducer";
+import {providerUser} from "./providerUser.reducer";
+import {recordsS2} from "./recordsS2.reducer";
+import {recordsS3S} from "./recordsS3S.reducer";
+import {recordsS3P} from "./recordsS3P.reducer";
+
 const rootReducer = combineReducers({
     users,
     alert,
@@ -33,7 +38,11 @@ const rootReducer = combineReducers({
     bitacora,
     vigencia,
     rol,
-    permisos
+    permisos,
+    providerUser,
+    recordsS2,
+    recordsS3S,
+    recordsS3P
 });
 
 export default rootReducer;

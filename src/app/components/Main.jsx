@@ -146,9 +146,13 @@ export const Main = ()=> (
                            path= "/consulta/S2"
                            render={() => {
                                if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
+                                   storeValidate.dispatch(userActions.requestRecordsS2());
                                    storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                   storeValidate.dispatch(userActions.requestRecordsS2());
                                    storeValidate.dispatch(userActions.requestPermisosSistema());
+                                   //storeValidate.dispatch(userActions.requestProvider());
                                    storeValidate.dispatch(S2Actions.requestListS2({}));
+
                                    storeValidate.dispatch((alertActions.clear()));
                                    return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
                                } else {
@@ -218,11 +222,13 @@ export const Main = ()=> (
                            path= "/consulta/S3S"
                            render={() => {
                                if (localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true") {
+                                   storeValidate.dispatch(userActions.requestRecordsS3S());
                                    storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                    storeValidate.dispatch(userActions.requestPermisosSistema());
                                    storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                    S3SActions.setListS3S([]);
                                    storeValidate.dispatch(S3SActions.requestListS3S({}));
+
                                    storeValidate.dispatch((alertActions.clear()));
                                    return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)
                                } else {
@@ -234,6 +240,7 @@ export const Main = ()=> (
                            path= "/consulta/S3P"
                            render={() => {
                                if (localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true") {
+                                   storeValidate.dispatch(userActions.requestRecordsS3P());
                                    storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                    storeValidate.dispatch(userActions.requestPermisosSistema());
                                    storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));

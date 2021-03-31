@@ -72,12 +72,15 @@ interface FormDataEsquemaS2 {
 }
 
 export const ListS2Schema = () => {
-    const {S2List,alerta,paginationSuper} = useSelector(state => ({
+    const {S2List,alerta,paginationSuper, providerUser, recordsS2} = useSelector(state => ({
         S2List : state.S2,
         alerta : state.alert,
-        paginationSuper: state.pagination
+        paginationSuper: state.pagination,
+        providerUser: state.providerUser,
+        recordsS2: state.recordsS2
     }));
-
+    console.log("REcordsS2");
+    console.log(recordsS2);
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
@@ -196,7 +199,7 @@ export const ListS2Schema = () => {
         }
 
         setSelectedCheckBox(newSelected);
-        console.log(newSelected);
+
     };
 
 
@@ -816,27 +819,40 @@ export const ListS2Schema = () => {
                                     </StyledTableCell>
                                     }
 
-                                    <StyledTableCell style={{ width: 230 }} align="center">
-                                        <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
+                                    <StyledTableCell style={{ width: 260 }} align="center">
+                                        <div>
                                             <Tooltip title="Más información" placement="left">
-                                                <IconButton aria-label="expand row" size="small" >
-                                                    <KeyboardArrowDownIcon />
-                                                </IconButton>
+                                                <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
+                                                    <IconButton aria-label="expand row" size="small" >
+                                                        <KeyboardArrowDownIcon />
+                                                    </IconButton>
+
+                                                </Button>
                                             </Tooltip>
-                                        </Button>
-                                        <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S2/${schema._id}`)} >
-                                            <Tooltip title="Editar registro" placement="top">
-                                                <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
-                                            </Tooltip>
-                                        </Button>
-                                        <Tooltip title="Eliminar registro" placement="right">
-                                            <Button style={{ color: 'gray', padding: '0px' }}
-                                                    onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
-                                                <DeleteOutlineOutlinedIcon/>
+
+                                        {recordsS2.map((reg)  => (
+                                            reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
+                                                <div>
+                                                <Tooltip title="Editar registro" placement="top">
+                                                    <Button style={{padding: '0px'}}
+                                                            onClick={() => redirectToRoute(`/editar/S2/${schema._id}`)}>
+                                                        <Button style={{color: 'gray'}}><EditOutlinedIcon/></Button>
+
+                                                    </Button>
+                                                </Tooltip>
+                                            <Tooltip title="Eliminar registro" placement="right">
+                                            <Button style={{color: 'gray', padding: '0px'}}
+                                            onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
+                                            <DeleteOutlineOutlinedIcon/>
                                             </Button>
-                                        </Tooltip>
+                                            </Tooltip>
+                                                </div>
 
 
+                                                : ""
+                                            )) }
+
+                                        </div>
                                     </StyledTableCell>
                                 </TableRow>
                             ))}
