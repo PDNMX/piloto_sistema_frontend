@@ -119,7 +119,7 @@ export const ListS2Schema = () => {
         if(paginationSuper.page * newSize > paginationSuper.totalRows){
             dispatch(S2Actions.requestListS2({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
         }else{
-            dispatch(S2Actions.requestListS2({query: query, page:  paginationSuper.page , pageSize: parseInt(event.target.value, 10) }));
+            dispatch(S2Actions.requestListS2({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
         }
     };
 
@@ -852,7 +852,7 @@ export const ListS2Schema = () => {
                         <TableFooter>
                             <TableRow>
                                 { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows }]}
                                     colSpan={6}
                                     count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}

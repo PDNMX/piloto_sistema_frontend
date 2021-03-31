@@ -49,6 +49,7 @@ import {Moment} from "moment";
 import deLocale from "date-fns/locale/es";
 import {ConnectedCreateRegS3P} from "./createRegS3P";
 import NumberFormat from "react-number-format";
+import { OnChange } from 'react-final-form-listeners'
 
 interface FormDataEsquemaS3P {
     particularSancionado?:{
@@ -198,7 +199,7 @@ export const ListS3PSchema = () => {
         if(paginationSuper.page * newSize > paginationSuper.totalRows){
             dispatch(S3PActions.requestListS3P({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
         }else{
-            dispatch(S3PActions.requestListS3P({query: query, page:  paginationSuper.page , pageSize: parseInt(event.target.value, 10) }));
+            dispatch(S3PActions.requestListS3P({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
         }
     };
 
@@ -328,15 +329,17 @@ export const ListS3PSchema = () => {
             }else if(key === "tipoPersona" && value !== null && value !== ''){
                 let objTipoPersona= JSON.parse(value);
                 newQuery["particularSancionado.tipoPersona"]= { $in : [objTipoPersona.clave]};
-            }else if(key === "tipoSancion" && value !== null && value !== ''){
-                console.log(value);
-                let arrayObjTipoSancion= value;
-                let acumulado= []
-                for(let obSancion of arrayObjTipoSancion){
-                    // @ts-ignore
-                    acumulado.push( JSON.parse(obSancion).clave);
+            }else if(key === "tipoSancion" ){
+                if(value.length > 0){
+                    console.log(value);
+                    let arrayObjTipoSancion= value;
+                    let acumulado= []
+                    for(let obSancion of arrayObjTipoSancion){
+                        // @ts-ignore
+                        acumulado.push( JSON.parse(obSancion).clave);
+                    }
+                    newQuery["tipoSancion.clave"]= { $in :acumulado };
                 }
-                newQuery["tipoSancion.clave"]= { $in :acumulado };
             }else if(key === "fechaFinal" && value !== null && value !== ''){
                 let fecha = Date.parse(value);
                 console.log(formatISO(fecha, { representation: 'date' }));
@@ -1229,6 +1232,18 @@ export const ListS3PSchema = () => {
                                         <Grid item xs={12} md={3}>
                                             <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
                                         </Grid>}
+                                        {catalogos.tipoSancion &&
+                                        <OnChange name="tipoSancion">
+                                            {(value, previous) => {
+                                                for (let item of value) {
+                                                    if (item == "") {
+                                                        // @ts-ignore
+                                                        values.tipoSancion = [];
+                                                    }
+                                                }
+                                            }}
+                                        </OnChange>
+                                        }
                                         {catalogos.tipoPersona &&
                                         <Grid item xs={12} md={3}>
                                             <Select  name={`tipoPersona`} label="Tipo persona" data={catalogos.tipoPersona} ></Select>
@@ -1261,6 +1276,7 @@ export const ListS3PSchema = () => {
 
                                 </div>
                                 }
+
                             </form>
                         )}
                     />
@@ -1360,7 +1376,7 @@ export const ListS3PSchema = () => {
                         <TableFooter>
                             <TableRow>
                                 { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows }]}
                                     colSpan={5}
                                     count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}

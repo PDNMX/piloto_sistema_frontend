@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Form } from 'react-final-form';
 import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
@@ -23,7 +24,7 @@ import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
 import {S3SActions} from "../../_actions/s3s.action";
 import deLocale from "date-fns/locale/es";
-
+import { get, isEmpty } from 'lodash';
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
         return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancionArray: [undefined]}} catalogos={catalogos}  alerta={alert} id={id}/>;
@@ -44,7 +45,7 @@ interface FormDataEsquemaS3S {
     autoridadSancionadora?:String,
     tipoFalta? : {},
     tpfdescripcion?:String,
-    tipoSancionArray?: [{}] ,
+    tipoSancionArray?: [{ tipoSancion? : string, tsdescripcion?: string}] ,
     tsdescripcion?:String,
     causaMotivoHechos?:String,
     resolucionURL?:String,
@@ -77,13 +78,16 @@ const override = css`
 `;
 
 function MyForm(props: MyFormProps ) {
+
     let { initialValues ,  alerta, catalogos, id } = props;
     const alert = alerta;
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
-
+    const [tipoSancion, setTipoSancion]= React.useState([]);
 
     let schemaMix = Yup.mixed();
+
+
     let schema = Yup.object().shape({
         expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
         idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Nombres de la sección Institución Dependencia es requerido").trim(),
@@ -104,10 +108,10 @@ function MyForm(props: MyFormProps ) {
         tpfdescripcion: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
         tipoSancionArray: Yup.array().of(
             Yup.object().shape({
-                tipoSancion: Yup.object().required("El campo Tipo de sanción es requerido"),
+                tipoSancion: Yup.string().required("El campo Tipo de sanción es requerido"),
                 tsdescripcion: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim()
             })
-        ).required("Se requiere seleccionar mínimo una opción del campo Tipo sanción"),
+        ),
         tsdescripcion:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
         causaMotivoHechos:  Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').required("El campo Causa o motivo de la sanción es requerido").trim(),
         resolucionURL: Yup.string()
@@ -197,7 +201,29 @@ function MyForm(props: MyFormProps ) {
         dispatch(alertActions.clear());
     }
 
+    const verifyTipoSancion= (values, push) => {
+        if(values.tipoSancionArray.length < catalogos.tipoSancion.length-1 ){
+            push('tipoSancionArray', undefined);
+        }
+    }
 
+    const removeElementTipoSancion = (fields,index,values) => {
+        fields.remove(index)
+        if(values.tipoSancionArray[index]){
+
+        }
+
+        console.log(values.tipoSancionArray[index].tipoSancion);
+        let value = JSON.parse(values.tipoSancionArray[index].tipoSancion).clave;
+        let array =tipoSancion ;
+        // @ts-ignore
+        var index = tipoSancion.indexOf(value)
+        if (index !== -1) {
+            array.splice(index, 1);
+            setTipoSancion(array);
+            console.log(array);
+        }
+    }
     const cla = styles();
 
     const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
@@ -340,7 +366,9 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
                                 <Grid item xs={12} md={12}>
-                                    <Button  type="button"   onClick={() => push('tipoSancionArray', undefined)} variant="contained"  className={cla.marginright}>
+                                    <Button  type="button"   onClick={() =>{
+                                        verifyTipoSancion(values, push);
+                                       }} variant="contained"  className={cla.marginright}>
                                         Agregar Tipo de sanción
                                     </Button>
                                 </Grid>
@@ -358,7 +386,7 @@ function MyForm(props: MyFormProps ) {
                                                     <Grid item xs={3} md={1} alignContent={"flex-end"}>
                                                         <Tooltip title="Remover sanción" placement="left">
                                                          <span
-                                                             onClick={() => fields.remove(index)}
+                                                             onClick={() => removeElementTipoSancion (fields, index, values ) }
                                                              style={{ cursor: 'pointer' }}
                                                          >
                                                           ❌
@@ -389,7 +417,6 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <TextField label="URL"  name="resolucionURL"  />
                                 </Grid>
-
                                 <Grid item xs={12} md={3}>
                                     <DatePicker
                                         locale={deLocale}
@@ -513,7 +540,6 @@ function MyForm(props: MyFormProps ) {
 
                             </Grid>
                             <pre>{JSON.stringify(values)}</pre>
-
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"
                                    container

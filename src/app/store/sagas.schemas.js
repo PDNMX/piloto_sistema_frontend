@@ -741,15 +741,14 @@ export function* creationS3PSchema(){
             }
         }
         values.tipoSancion = arrayObjTipoSancion;
-
-        if (values.multa.moneda) {
-            values.multa.moneda = JSON.parse(values.multa.moneda);
+        if(values.multa){
+            if (values.multa.moneda) {
+                values.multa.moneda = JSON.parse(values.multa.moneda);
+            }
+            if (values.multa.monto) {
+                values.multa.monto = parseFloat(values.multa.monto);
+            }
         }
-        if (values.multa.monto) {
-            values.multa.monto = parseFloat(values.multa.monto);
-        }
-
-
         if (values.documentos) {
             if (Array.isArray(values.documentos)) {
                 for (let i of values.documentos) {
@@ -962,8 +961,8 @@ export function* creationS3SSchema(){
                 let multaMoneda = JSON.parse(values.multa.moneda);
                 ObjMulta = {...ObjMulta, moneda: {clave: multaMoneda.clave, valor: multaMoneda.valor}}
             }
+            docSend["multa"] = ObjMulta;
         }
-        docSend["multa"] = ObjMulta;
 
         //-------------------INHABILITACION
         let ObjInhabilita = {};

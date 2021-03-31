@@ -48,6 +48,7 @@ import {formatISO} from "date-fns";
 import deLocale from "date-fns/locale/es";
 import {ConnectedCreateRegS3S} from "./createRegS3S";
 import NumberFormat from 'react-number-format';
+import { OnChange } from 'react-final-form-listeners'
 
 interface FormDataEsquemaS3S {
     fechaCaptura?: String,
@@ -149,7 +150,7 @@ export const ListS3SSchema = () => {
         if(paginationSuper.page * newSize > paginationSuper.totalRows){
             dispatch(S3SActions.requestListS3S({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
         }else{
-            dispatch(S3SActions.requestListS3S({query: query, page:  paginationSuper.page , pageSize: parseInt(event.target.value, 10) }));
+            dispatch(S3SActions.requestListS3S({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
         }
     };
 
@@ -282,15 +283,17 @@ export const ListS3SSchema = () => {
                 newQuery["servidorPublicoSancionado.primerApellido"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
             }else if(key === "SPSsegundoApellido" && value !== null && value !== ''){
                 newQuery["servidorPublicoSancionado.segundoApellido"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if(key === "tipoSancion" && value !== null && value !== ''){
-                console.log(value);
-                let arrayObjTipoSancion= value;
-                let acumulado= []
-                for(let obSancion of arrayObjTipoSancion){
-                    // @ts-ignore
-                    acumulado.push( JSON.parse(obSancion).clave);
+            }else if(key === "tipoSancion" ){
+                if(value.length > 0){
+                    console.log(value);
+                    let arrayObjTipoSancion= value;
+                    let acumulado= []
+                    for(let obSancion of arrayObjTipoSancion){
+                        // @ts-ignore
+                        acumulado.push( JSON.parse(obSancion).clave);
+                    }
+                    newQuery["tipoSancion.clave"]= { $in :acumulado };
                 }
-                newQuery["tipoSancion.clave"]= { $in :acumulado };
             }else if(key === "inhabilitacionFechaFinal" && value !== null && value !== ''){
                 let fecha = Date.parse(value);
                 console.log(formatISO(fecha, { representation: 'date' }));
@@ -849,6 +852,18 @@ export const ListS3SSchema = () => {
                                         <Grid item xs={12} md={3}>
                                             <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
                                         </Grid>}
+                                        {catalogos.tipoSancion &&
+                                        <OnChange name="tipoSancion">
+                                            {(value, previous) => {
+                                                for (let item of value) {
+                                                    if (item == "") {
+                                                        // @ts-ignore
+                                                        values.tipoSancion = [];
+                                                    }
+                                                }
+                                            }}
+                                        </OnChange>
+                                        }
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
                                                 locale={deLocale}
@@ -979,7 +994,7 @@ export const ListS3SSchema = () => {
                         <TableFooter>
                             <TableRow>
                                 { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows }]}
                                     colSpan={5}
                                     count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}

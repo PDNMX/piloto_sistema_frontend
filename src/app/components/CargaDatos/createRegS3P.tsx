@@ -245,7 +245,7 @@ function MyForm(props: MyFormProps ) {
             fechaInicial:  Yup.string().trim(),
             fechaFinal: Yup.string().trim()
         }),
-        domicilio: Yup.string().required('El tipo de domicilio es requerido'),
+        domicilio: Yup.string(),
         observaciones:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documentos: Yup.array().of(
             Yup.object().shape({
@@ -324,7 +324,7 @@ function MyForm(props: MyFormProps ) {
 
     async function requestMunicipio(value) {
         const token = localStorage.token;
-        const respuestaArray = await axios.post('http://104.155.132.219:3004' + `/getCatalogsMunicipiosPorEstado`, {idEstado: value}, {
+        const respuestaArray = await axios.post('https://testpdns2.ga' + `/getCatalogsMunicipiosPorEstado`, {idEstado: value}, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -341,7 +341,7 @@ function MyForm(props: MyFormProps ) {
 
     async function requestLocalidadByMunicipio(value) {
         const token = localStorage.token;
-        const respuestaArray = await axios.post('http://104.155.132.219:3004' + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value}, {
+        const respuestaArray = await axios.post('https://testpdns2.ga' + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value}, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -518,7 +518,8 @@ function MyForm(props: MyFormProps ) {
                                     required={true}
                                     data={[
                                         {label: 'México', value: 'mex'},
-                                        {label: 'Extranjero', value: 'ext'}
+                                        {label: 'Extranjero', value: 'ext'},
+                                        {label: 'Ninguno', value: ''}
                                     ]}
                                 />
                                 </Grid>
