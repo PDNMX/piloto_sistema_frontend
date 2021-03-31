@@ -1334,7 +1334,8 @@ export const ListS3PSchema = () => {
                                         ))}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ width: 230 }} align="center">
+                                    <StyledTableCell style={{ width: 260 }} align="center">
+                                        <td>
                                         <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
                                             <Tooltip title="Más información" placement="left">
                                                 <IconButton aria-label="expand row" size="small" >
@@ -1342,9 +1343,10 @@ export const ListS3PSchema = () => {
                                                 </IconButton>
                                             </Tooltip>
                                         </Button>
+                                        </td>
                                         {recordsS3P.map((reg)  => (
                                             reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                                <div>
+                                                <td>
                                         <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S3P/${schema._id}`)} >
                                             <Tooltip title="Editar registro" placement="top">
                                                 <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
@@ -1356,7 +1358,7 @@ export const ListS3PSchema = () => {
                                                 <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                         </Tooltip>
-                                                </div>
+                                                </td>
 
                                                 : ""
                                         )) }

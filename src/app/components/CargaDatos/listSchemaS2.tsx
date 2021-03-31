@@ -820,7 +820,7 @@ export const ListS2Schema = () => {
                                     }
 
                                     <StyledTableCell style={{ width: 260 }} align="center">
-                                        <div>
+                                        <td>
                                             <Tooltip title="Más información" placement="left">
                                                 <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
                                                     <IconButton aria-label="expand row" size="small" >
@@ -829,10 +829,10 @@ export const ListS2Schema = () => {
 
                                                 </Button>
                                             </Tooltip>
-
+                                        </td>
                                         {recordsS2.map((reg)  => (
                                             reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                                <div>
+                                                <td>
                                                 <Tooltip title="Editar registro" placement="top">
                                                     <Button style={{padding: '0px'}}
                                                             onClick={() => redirectToRoute(`/editar/S2/${schema._id}`)}>
@@ -846,13 +846,11 @@ export const ListS2Schema = () => {
                                             <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                             </Tooltip>
-                                                </div>
+                                                </td>
 
 
                                                 : ""
                                             )) }
-
-                                        </div>
                                     </StyledTableCell>
                                 </TableRow>
                             ))}
