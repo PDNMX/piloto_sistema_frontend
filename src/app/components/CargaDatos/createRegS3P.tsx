@@ -26,7 +26,9 @@ import deLocale from "date-fns/locale/es";
 import {catalogActions} from "../../_actions/catalog.action";
 import axios from "axios";
 
-
+const host = process.env.URLAPI;
+// @ts-ignore
+const ur= host+process.env.PORTAPI;
 
 const CreateReg = ({id ,alert, catalogos, registry, flagOnlyRead}) => {
     return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancion: [undefined]}} catalogos={catalogos}  alerta={alert} id={id} flagOnlyRead={flagOnlyRead}/>;
@@ -216,10 +218,18 @@ function MyForm(props: MyFormProps ) {
         causaMotivoHechos:  Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').required("El campo Causa o motivo de la sanción es requerido").trim(),
         acto:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
         responsableSancion:Yup.object().shape({
-            nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo nombres de la sección Responsable sanción es requerido").trim(),
-            primerApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Primer apellido de la sección Responsable sanción es requerido").trim(),
+            nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim()
+                .when('primerApellido',  (primerApellido) => {
+                if(primerApellido)
+                    return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo nombres de la sección Responsable sanción es requerido").trim()
+            }),
+            primerApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim()
+            .when('nombres',  (nombres) => {
+                    if (nombres)
+                        return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Primer apellido de la sección Responsable sanción es requerido").trim()
+            }),
             segundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        }),
+        }, ['nombres','primerApellido']),
         resolucion:Yup.object().shape({
             sentido:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
             url:Yup.string()
@@ -324,7 +334,7 @@ function MyForm(props: MyFormProps ) {
 
     async function requestMunicipio(value) {
         const token = localStorage.token;
-        const respuestaArray = await axios.post('https://testpdns2.ga' + `/getCatalogsMunicipiosPorEstado`, {idEstado: value}, {
+        const respuestaArray = await axios.post(ur + `/getCatalogsMunicipiosPorEstado`, {idEstado: value}, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -341,7 +351,7 @@ function MyForm(props: MyFormProps ) {
 
     async function requestLocalidadByMunicipio(value) {
         const token = localStorage.token;
-        const respuestaArray = await axios.post('https://testpdns2.ga' + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value}, {
+        const respuestaArray = await axios.post(ur + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value}, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',

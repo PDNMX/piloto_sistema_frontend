@@ -616,7 +616,7 @@ export const ListS2Schema = () => {
                     <Grid container>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Nombres
+                                Nombre(s)
                             </Typography>
                             {selectedRegistro.superiorInmediato?.nombres &&
                             <Typography className={classes.body2} align="left" variant="body2">
@@ -715,7 +715,7 @@ export const ListS2Schema = () => {
 
                                     <Grid className= {classes.gridpadding} spacing={3} container >
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Nombres" name="nombres"  />
+                                            <TextField label="Nombre(s)" name="nombres"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Primer apellido" name="primerApellido"  />

@@ -118,7 +118,11 @@ function MyForm(props: MyFormProps ) {
             .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                 'Introduce una direccion de internet valida'
             ).trim(),
-        resolucionFecha:  Yup.string().required("El campo Fecha de resolución es requerido").trim(),
+        resolucionFecha:  Yup.string().trim()
+            .when('resolucionURL',  (resolucionURL) => {
+                if(resolucionURL)
+                    return  Yup.string().required("El campo Fecha de resolución es requerido").trim()
+            }),
         multa:Yup.object().shape({
             monto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').trim()
                 .when('moneda',  (moneda) => {
@@ -132,8 +136,8 @@ function MyForm(props: MyFormProps ) {
                 }),
         }, ['moneda','monto']),
         inhabilitacionPlazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]*$'),'No se permiten cadenas vacías').trim(),
-        inhabilitacionFechaInicial:  Yup.string().required("El campo Fecha inicial de la sección  es requerido").trim(),
-        inhabilitacionFechaFinal:  Yup.string().required("El campo Fecha final de la sección  es requerido").trim(),
+        inhabilitacionFechaInicial:  Yup.string().trim(),
+        inhabilitacionFechaFinal:  Yup.string().trim(),
         observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n\/ ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documents: Yup.array().of(
             Yup.object().shape({
@@ -380,7 +384,7 @@ function MyForm(props: MyFormProps ) {
                                                 <Grid container >
                                                     <Grid item xs={8} md={11} alignContent={"flex-start"}>
                                                         <Typography className={cla.titleCategory} variant="body1" gutterBottom>
-                                                            Tipo de Sanción: #{index + 1}
+                                                            Tipo de sanción: #{index + 1}
                                                         </Typography>
                                                     </Grid>
                                                     <Grid item xs={3} md={1} alignContent={"flex-end"}>
@@ -539,7 +543,7 @@ function MyForm(props: MyFormProps ) {
                                 </FieldArray>
 
                             </Grid>
-                            <pre>{JSON.stringify(values)}</pre>
+
                             <Grid  spacing={3} justify="flex-end"
                                    alignItems="flex-end"
                                    container

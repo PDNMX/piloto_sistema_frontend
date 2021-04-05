@@ -949,7 +949,9 @@ export function* creationS3SSchema(){
             fecha = formatISO(fecha, { representation: 'date' });
             ObjResolucion = {...ObjResolucion, fechaResolucion: fecha}
         }
-        docSend["resolucion"] = ObjResolucion;
+        if(!_.isEmpty(ObjResolucion)){
+            docSend["resolucion"] = ObjResolucion;
+        }
 
         //-----------------MULTA
         let ObjMulta = {};
@@ -980,7 +982,8 @@ export function* creationS3SSchema(){
             ObjInhabilita = {...ObjInhabilita, fechaFinal: fecha}
         }
 
-        docSend["inhabilitacion"] = ObjInhabilita;
+
+            docSend["inhabilitacion"] = ObjInhabilita;
 
         //-------------------
         if (values.observaciones) {
