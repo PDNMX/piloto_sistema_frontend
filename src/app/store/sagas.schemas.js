@@ -39,7 +39,7 @@ export function* validationErrors(){
     while (true) {
         const {schema,systemId} = yield take (mutations.REQUEST_VALIDATION_ERRORS);
         const token = localStorage.token;
-        console.log("token"+token);
+
         console.log("system"+systemId);
         if(token){
             let payload = jwt.decode(token);
@@ -273,25 +273,32 @@ export function* loginUser(){
                     'Authorization': `Bearer ${toke}`
                 } , validateStatus: () => true});
 
-            localStorage.setItem("cambiarcontrasena", status.data.contrasenaNueva);
-
-            yield put (userActions.setVigenciaPass(status.data.contrasenaNueva));
-            yield put (userActions.setRol(status.data.rol));
-            yield put (userActions.setPermisosSistema(status.data.sistemas));
-            yield put (userActions.setProvider(status.data.proveedor));
-            console.log("Provider:"+status.data.proveedor);
-            localStorage.setItem("rol",status.data.rol);
-            localStorage.setItem("sistemas",status.data.sistemas);
-
-            if(status.data.contrasenaNueva===true){
-                history.push('/usuario/cambiarcontrasena');
-                yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
-            }else
-            if(status.data.rol=="2"){
-                history.push('/cargamasiva');
+            if(status.data.estatus===false){
+                history.push('/login');
+                yield put(alertActions.error("Usuario desactivado.¡Debes contactar al administrador!."));
             }else{
-                history.push('/usuarios');
+                localStorage.setItem("cambiarcontrasena", status.data.contrasenaNueva);
+
+                yield put (userActions.setVigenciaPass(status.data.contrasenaNueva));
+                yield put (userActions.setRol(status.data.rol));
+                yield put (userActions.setPermisosSistema(status.data.sistemas));
+                yield put (userActions.setProvider(status.data.proveedor));
+
+                localStorage.setItem("rol",status.data.rol);
+                localStorage.setItem("sistemas",status.data.sistemas);
+
+                if(status.data.contrasenaNueva===true){
+                    history.push('/usuario/cambiarcontrasena');
+                    yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
+                }else
+                if(status.data.rol=="2"){
+                    history.push('/cargamasiva');
+                }else{
+                    history.push('/usuarios');
+                }
             }
+
+
 
         }catch (err) {
             if(err.response){
@@ -324,7 +331,7 @@ export function* permisosSistemas(){
         yield put (userActions.setRol(status.data.rol));
         yield put (userActions.setPermisosSistema(status.data.sistemas));
         yield put (userActions.setProvider(status.data.proveedor));
-        console.log("Desde login Proveedor:"+status.data.proveedor);
+
         localStorage.setItem("rol",status.data.rol);
         localStorage.setItem("sistemas",[status.data.sistemas]);
         localStorage.setItem("S2",false);
@@ -380,16 +387,23 @@ export function* creationUser(){
             yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
         }
         usuarioJson["user"]=payload.idUser;
-        const {status} = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
+        const status = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             } , validateStatus: () => true});
-        if(status === 200){
-            //all OK
-            yield put(alertActions.success("Usuario creado con éxito"));
-            history.push('/usuarios');
+
+        if(status.data.Status===500){
             yield put(alertActions.clear());
+            history.push('/usuario/crear');
+            yield put(alertActions.error("El usuario que intentas ingresar ya existe."));
+        }else if(status.status === 200){
+            //all OK
+            yield put(alertActions.clear());
+            history.push('/usuarios');
+            yield put(alertActions.success("Usuario creado con éxito"));
+
+
         }else{
             //error in response
         }
@@ -1656,7 +1670,6 @@ export function* getRecordsS2(){
     while(true){
         yield take (userActions.requestRecordsS2);
         const {token} = yield take (userConstants.USER_REQUEST_SESSION_SET);
-        console.log("TOkeni"+token);
 
         const respuestaArray = yield axios.post(ur + `/getrecordsbysystem`,{sistema: "S2"},{ headers: {
                 'Content-Type': 'application/json',
@@ -1664,7 +1677,7 @@ export function* getRecordsS2(){
                 'Authorization': `Bearer ${token}`
             }});
         yield put (userActions.setRecordsS2(respuestaArray.data.results));
-        console.log(respuestaArray.data.results);
+
     }
 }
 
@@ -1679,7 +1692,7 @@ export function* getRecordsS3S(){
                 'Authorization': `Bearer ${token}`
             },validateStatus: () => true});
         yield put (userActions.setRecordsS3S(respuestaArray.data.results));
-        console.log(respuestaArray.data.results);
+
     }
 }
 
@@ -1694,6 +1707,5 @@ export function* getRecordsS3P(){
                 'Authorization': `Bearer ${token}`
             },validateStatus: () => true});
         yield put (userActions.setRecordsS3P(respuestaArray.data.results));
-        console.log(respuestaArray.data.results);
     }
 }

@@ -79,8 +79,7 @@ export const ListS2Schema = () => {
         providerUser: state.providerUser,
         recordsS2: state.recordsS2
     }));
-    console.log("REcordsS2");
-    console.log(recordsS2);
+
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
@@ -282,6 +281,8 @@ export const ListS2Schema = () => {
         page: PropTypes.number.isRequired,
         rowsPerPage: PropTypes.number.isRequired
     };
+
+    var cont=0;
 
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
@@ -616,7 +617,7 @@ export const ListS2Schema = () => {
                     <Grid container>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Nombres
+                                Nombre(s)
                             </Typography>
                             {selectedRegistro.superiorInmediato?.nombres &&
                             <Typography className={classes.body2} align="left" variant="body2">
@@ -715,7 +716,7 @@ export const ListS2Schema = () => {
 
                                     <Grid className= {classes.gridpadding} spacing={3} container >
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Nombres" name="nombres"  />
+                                            <TextField label="Nombre(s)" name="nombres"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Primer apellido" name="primerApellido"  />
@@ -785,10 +786,13 @@ export const ListS2Schema = () => {
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
                             </TableRow>
                         </TableHead>
+                        {S2List.map((schema)  => (
+
                         <TableBody key="usuarios">
-                            {S2List.map((schema)  => (
-                                <TableRow key={schema._id}>
-                                    <TableCell className="selectCheckbox" padding="checkbox">
+                            {recordsS2.map((reg)  => (
+                                reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
+                                <TableRow key={schema._id} {...cont++}>
+                                    <TableCell className="selectCheckbox" padding="checkbox" >
                                         <Checkbox  key={"check"+ schema._id}
                                                    onClick={event =>
                                                 handleCheckboxClick(event, schema._id)}
@@ -820,7 +824,6 @@ export const ListS2Schema = () => {
                                     }
 
                                     <StyledTableCell style={{ width: 260 }} align="center">
-                                        <td>
                                             <Tooltip title="Más información" placement="left">
                                                 <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
                                                     <IconButton aria-label="expand row" size="small" >
@@ -829,38 +832,32 @@ export const ListS2Schema = () => {
 
                                                 </Button>
                                             </Tooltip>
-                                        </td>
-                                        {recordsS2.map((reg)  => (
-                                            reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                                <td>
-                                                <Tooltip title="Editar registro" placement="top">
+                                            <Tooltip title="Editar registro" placement="top">
                                                     <Button style={{padding: '0px'}}
                                                             onClick={() => redirectToRoute(`/editar/S2/${schema._id}`)}>
                                                         <Button style={{color: 'gray'}}><EditOutlinedIcon/></Button>
 
                                                     </Button>
-                                                </Tooltip>
+                                            </Tooltip>
                                             <Tooltip title="Eliminar registro" placement="right">
                                             <Button style={{color: 'gray', padding: '0px'}}
                                             onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
                                             <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                             </Tooltip>
-                                                </td>
-
-
-                                                : ""
-                                            )) }
                                     </StyledTableCell>
-                                </TableRow>
-                            ))}
+                                    </TableRow>
+                                    : <TableRow></TableRow>
+                            )) }
                         </TableBody>
+                        ))}
+
                         <TableFooter>
                             <TableRow>
                                 { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows-(paginationSuper.totalRows-cont) }]}
                                     colSpan={6}
-                                    count={paginationSuper.totalRows}
+                                    count={paginationSuper.totalRows-(paginationSuper.totalRows-cont)}
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page-1}
                                     SelectProps={{
