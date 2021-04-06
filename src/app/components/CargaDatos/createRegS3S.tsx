@@ -301,7 +301,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre" name="idnombre" />
+                                    <TextField label="Nombre(s)" name="idnombre" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Siglas" name="idsiglas"  />

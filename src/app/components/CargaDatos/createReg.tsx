@@ -188,7 +188,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="nombres"  />
+                                    <TextField label="Nombre(s)" name="nombres"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Primer apellido" name="primerApellido"  />
@@ -251,7 +251,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre" name="idnombre" />
+                                    <TextField label="Nombre(s)" name="idnombre" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Siglas" name="idsiglas"  />
@@ -266,7 +266,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre" name="puestoNombre" />
+                                    <TextField label="Nombre(s)" name="puestoNombre" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Nivel" name="puestoNivel" />
@@ -279,7 +279,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="sinombres" />
+                                    <TextField label="Nombre(s)" name="sinombres" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Primer apellido" name="siPrimerApellido"  />
