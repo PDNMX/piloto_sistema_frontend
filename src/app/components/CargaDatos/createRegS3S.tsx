@@ -589,6 +589,7 @@ function MyForm(props: MyFormProps ) {
     );
 }
 
+
 function mapStateToProps(state,ownProps){
     let alert = state.alert;
     let catalogos = state.catalogs;
