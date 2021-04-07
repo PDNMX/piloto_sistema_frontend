@@ -1047,6 +1047,8 @@ export function* creationS2Schema(){
             let ramoObj = JSON.parse(values.ramo);
             docSend["ramo"]= {clave:  parseInt(ramoObj.clave) , valor: ramoObj.valor };
         }
+        if(values.rfc){ docSend["rfc"]= values.rfc}
+        if(values.curp){ docSend["curp"]= values.curp}
         docSend["nombres"]= values.nombres;
         docSend["primerApellido"] =values.primerApellido;
         docSend["segundoApellido"]= values.segundoApellido;

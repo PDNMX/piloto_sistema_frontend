@@ -31,7 +31,8 @@ const host = process.env.URLAPI;
 const ur= host+process.env.PORTAPI;
 
 const CreateReg = ({id ,alert, catalogos, registry, flagOnlyRead}) => {
-    return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancion: [undefined]}} catalogos={catalogos}  alerta={alert} id={id} flagOnlyRead={flagOnlyRead}/>;
+    // @ts-ignore
+    return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancion: [undefined], particularSancionado: {domicilioMexico: {pais : '{"clave":"MX","valor":"México"}'}}}}  catalogos={catalogos}  alerta={alert} id={id} flagOnlyRead={flagOnlyRead}/>;
 }
 
 interface FormDataEsquemaS3P {
@@ -165,7 +166,7 @@ function MyForm(props: MyFormProps ) {
         particularSancionado :Yup.object().shape({
             nombreRazonSocial:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').required("El campo Nombre razon social de Particular sancionado es requerido").trim(),
             objetoSocial: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n\/ ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
-            rfc: Yup.string().matches(new RegExp("^['A-z-0-9\/ ]{1,13}$"),'No se permiten puntos ,apóstrofes ni cadenas vacías máximo 13 caracteres').trim(),
+            rfc: Yup.string().matches(new RegExp("[A-ZÑ&]{3,4}[0-9]{6}[A-V1-9][A-Z1-9][0-9A]"),'No se permiten puntos ,apóstrofes ni cadenas vacías máximo 13 caracteres').trim(),
             tipoPersona: Yup.object().required('El campo Tipo persona de la sección particular sancionado es requerido'),
             telefono:  Yup.string().matches(new RegExp('^[0-9]{12}$'), 'Inserta un número de teléfono válido, 12 caracteres').trim(),
             domicilioMexico: Yup.object().shape({
@@ -543,7 +544,7 @@ function MyForm(props: MyFormProps ) {
                                     </Grid>
                                     {catalogos.paises &&
                                     <Grid item xs={12} md={3}>
-                                        <Select name="particularSancionado.domicilioMexico.pais" label="País"
+                                        <Select disabled name="particularSancionado.domicilioMexico.pais" label="País"
                                                 data={catalogos.paises}></Select>
                                     </Grid>
                                     }

@@ -70,6 +70,10 @@ function MyForm(props: MyFormProps ) {
     const schema = Yup.object().shape({
         ejercicioFiscal: Yup.string().matches(new RegExp('^[0-9]{4}$'),'Debe tener 4 dígitos'),
         ramo: Yup.string(),
+        rfc: Yup.string().matches(new RegExp("^['A-z-0-9\/ ]{1,13}$"),'No se permiten puntos ,apóstrofes ni cadenas vacías máximo 13 caracteres').trim(),
+        curp: Yup.string().matches(new RegExp("[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])" +
+            "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT" +
+            "|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$"), "Introducir un CURP valido"),
         nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Nombres es requerido").trim(),
         primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).required("El campo Primer apellido es requerido").trim(),
         segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías ' ).trim(),
@@ -183,15 +187,15 @@ function MyForm(props: MyFormProps ) {
                             <Grid className= {cla.gridpadding} spacing={3} container >
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Datos del generales
+                                        Datos generales
                                     </Typography>
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="nombres"  />
+                                    <TextField required={true} label="Nombre(s)" name="nombres"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Primer apellido" name="primerApellido"  />
+                                    <TextField required={true} label="Primer apellido" name="primerApellido"  />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Segundo apellido" name="segundoApellido" />
@@ -206,6 +210,12 @@ function MyForm(props: MyFormProps ) {
                                 <Grid item xs={12} md={3}>
                                     <Select  name = "ramo" label="Ramo" data={catalogos.ramo} ></Select>
                                 </Grid>}
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="RFC" name="rfc" />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="CURP" name="curp" />
+                                </Grid>
                                 {catalogos.tipoArea &&
                                 <Grid item xs={12} md={3}>
                                     <Select  name = "tipoArea" label="Tipo de área" data={catalogos.tipoArea} multiple={true} ></Select>
@@ -242,7 +252,7 @@ function MyForm(props: MyFormProps ) {
                                 }
                                 {catalogos.tipoProcedimiento &&
                                 <Grid item xs={12} md={6}>
-                                    <Select  name = "tipoProcedimiento" label="Tipo de procedimiento" data={catalogos.tipoProcedimiento} multiple={true} ></Select>
+                                    <Select required={true} name = "tipoProcedimiento" label="Tipo de procedimiento" data={catalogos.tipoProcedimiento} multiple={true} ></Select>
                                 </Grid>}
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
@@ -251,7 +261,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre" name="idnombre" />
+                                    <TextField required={true} label="Nombre" name="idnombre" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Siglas" name="idsiglas"  />
@@ -266,7 +276,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre" name="puestoNombre" />
+                                    <TextField required={true} label="Nombre" name="puestoNombre" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Nivel" name="puestoNivel" />
@@ -279,7 +289,7 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombres" name="sinombres" />
+                                    <TextField label="Nombre(s)" name="sinombres" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Primer apellido" name="siPrimerApellido"  />
