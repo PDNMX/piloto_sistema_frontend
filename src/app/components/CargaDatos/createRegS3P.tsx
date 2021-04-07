@@ -489,7 +489,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid key={"institucionDependencia.grid.nombre"} item xs={12} md={6}>
-                                    <TextField key={"institucionDependencia.nombre"} label="Nombre *" name="institucionDependencia.nombre" />
+                                    <TextField key={"institucionDependencia.nombre"} label="Nombre(s) *" name="institucionDependencia.nombre" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Siglas" name="institucionDependencia.siglas"  />
@@ -504,7 +504,7 @@ function MyForm(props: MyFormProps ) {
                                     <Divider className={cla.boton} />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre/Razón social *" name="particularSancionado.nombreRazonSocial" />
+                                    <TextField label="Nombre(s)/Razón social *" name="particularSancionado.nombreRazonSocial" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField label="Objeto social" name="particularSancionado.objetoSocial" multiline={true}/>

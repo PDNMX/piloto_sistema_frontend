@@ -384,6 +384,8 @@ export const ListS3PSchema = () => {
         rowsPerPage: PropTypes.number.isRequired
     };
 
+    var cont=0;
+
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
             root: {
@@ -1228,7 +1230,7 @@ export const ListS3PSchema = () => {
                                             <TextField label="Institución / Dependencia" name="idnombre" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Nombre/Razón social" name="SP3nombres"  />
+                                            <TextField label="Nombre(s)/Razón social" name="SP3nombres"  />
                                         </Grid>
                                         {catalogos.tipoSancion &&
                                         <Grid item xs={12} md={3}>
@@ -1309,15 +1311,17 @@ export const ListS3PSchema = () => {
                                 </TableCell>
                                 <StyledTableCell align="center" >Expediente</StyledTableCell>
                                 <StyledTableCell align="center">Institución/Dependencia</StyledTableCell>
-                                <StyledTableCell align="center" >Nombre/Razón Social</StyledTableCell>
+                                <StyledTableCell align="center" >Nombre(s)/Razón Social</StyledTableCell>
                                 <StyledTableCell align="center">Tipo persona</StyledTableCell>
                                 <StyledTableCell align="center">Tipo sanción</StyledTableCell>
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
                             </TableRow>
                         </TableHead>
+                        {S3PList.map((schema)  => (
                         <TableBody key="usuarios">
-                            {S3PList.map((schema)  => (
-                                <TableRow key={schema._id}>
+                            {recordsS3P.map((reg)  => (
+                                reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
+                                <TableRow key={schema._id} {...cont++}>
                                     <TableCell className="selectCheckbox" padding="checkbox">
                                         <Checkbox  key={"check"+ schema._id}
                                                    onClick={event =>
@@ -1351,7 +1355,6 @@ export const ListS3PSchema = () => {
                                     </StyledTableCell>
 
                                     <StyledTableCell style={{ width: 260 }} align="center">
-                                        <td>
                                         <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
                                             <Tooltip title="Más información" placement="left">
                                                 <IconButton aria-label="expand row" size="small" >
@@ -1359,10 +1362,6 @@ export const ListS3PSchema = () => {
                                                 </IconButton>
                                             </Tooltip>
                                         </Button>
-                                        </td>
-                                        {recordsS3P.map((reg)  => (
-                                            reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                                <td>
                                         <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S3P/${schema._id}`)} >
                                             <Tooltip title="Editar registro" placement="top">
                                                 <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
@@ -1374,21 +1373,18 @@ export const ListS3PSchema = () => {
                                                 <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                         </Tooltip>
-                                                </td>
-
-                                                : ""
-                                        )) }
-
                                     </StyledTableCell>
                                 </TableRow>
-                            ))}
+                                    : <TableRow></TableRow>
+                            )) }
                         </TableBody>
+                        ))}
                         <TableFooter>
                             <TableRow>
                                 { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows-(paginationSuper.totalRows-cont) }]}
                                     colSpan={5}
-                                    count={paginationSuper.totalRows}
+                                    count={paginationSuper.totalRows-(paginationSuper.totalRows-cont)}
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page-1}
                                     SelectProps={{

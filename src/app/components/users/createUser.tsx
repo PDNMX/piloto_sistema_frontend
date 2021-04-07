@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
 import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
-import {MenuItem, Grid, Button, TableCell, Switch, IconButton, Tooltip} from "@material-ui/core";
+import {MenuItem, Grid, Button, TableCell, Switch, IconButton, Tooltip, Snackbar} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 import {requestCreationUser, requestEditUser} from "../../store/mutations";
@@ -19,6 +19,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import {history} from "../../store/history";
 import ListItem from "@material-ui/core/ListItem";
 import { OnChange } from 'react-final-form-listeners'
+import {Alert} from "@material-ui/lab";
 
 const CreateUser = ({id, user,alert, providers }) => {
     return <MyForm initialValues={user}  id={id} alerta={alert} providers={providers}/>;
@@ -111,6 +112,13 @@ function MyForm(props: MyFormProps ) {
         }
     });
 
+    const {alerta2} = useSelector(state => ({
+        alerta2 : state.alert,
+    }));
+
+    const handleCloseSnackbar = () => {
+        dispatch(alertActions.clear());
+    };
 
     const redirectToRoute = (path) =>{
         history.push(path);
@@ -145,13 +153,19 @@ function MyForm(props: MyFormProps ) {
                     {id != null ? <b>Editar usuario</b> :  <b>Crear usuario</b> }
                 </Typography>
             </Grid>
+            <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta2.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity={alerta2.type}>
+                    {alerta2.message}
+                </Alert>
+            </Snackbar>
+
         <Form
             onSubmit={onSubmit}
             initialValues={initialValues}
             validate={validate}
             render={({ handleSubmit,values, submitting   }) => (
                 <form  onSubmit={handleSubmit} noValidate>
-                    {alert.status === undefined &&
+                    {alerta2.status === undefined &&
                         <div>
                         <Grid className= {cla.gridpadding} spacing={3} container >
                         <Grid item xs={12} md={3}>
@@ -253,6 +267,7 @@ function MyForm(props: MyFormProps ) {
                             color={"#123abc"}
                             loading={alert.status === undefined ? false : !alert.status }
                         />
+
                     </div>
                     <pre>{alert.status}</pre>
                 </form>

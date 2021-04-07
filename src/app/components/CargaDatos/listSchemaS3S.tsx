@@ -334,6 +334,8 @@ export const ListS3SSchema = () => {
         rowsPerPage: PropTypes.number.isRequired
     };
 
+    var cont=0;
+
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
             root: {
@@ -929,9 +931,11 @@ export const ListS3SSchema = () => {
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
                             </TableRow>
                         </TableHead>
+                        {S3SList.map((schema)  => (
                         <TableBody key="usuarios">
-                            {S3SList.map((schema)  => (
-                                <TableRow key={schema._id}>
+                            {recordsS3S.map((reg)  => (
+                                reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
+                                <TableRow key={schema._id} {...cont++}>
                                     <TableCell className="selectCheckbox" padding="checkbox">
                                         <Checkbox  key={"check"+ schema._id}
                                                    onClick={event =>
@@ -969,7 +973,7 @@ export const ListS3SSchema = () => {
 
 
                                     <StyledTableCell style={{ width: 230 }} align="center">
-                                        <td>
+
                                         <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
                                             <Tooltip title="Más información" placement="left">
                                                 <IconButton aria-label="expand row" size="small" >
@@ -977,10 +981,9 @@ export const ListS3SSchema = () => {
                                                 </IconButton>
                                             </Tooltip>
                                         </Button>
-                                        </td>
-                                        {recordsS3S.map((reg)  => (
-                                            reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                                <td>
+
+
+
                                         <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S3S/${schema._id}`)} >
                                             <Tooltip title="Editar registro" placement="top">
                                                 <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
@@ -993,22 +996,19 @@ export const ListS3SSchema = () => {
                                                 <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                         </Tooltip>
-                                                </td>
-
-
-                                                : ""
-                                        )) }
 
                                     </StyledTableCell>
                                 </TableRow>
-                            ))}
+                                    : <TableRow></TableRow>
+                            )) }
                         </TableBody>
+                                ))}
                         <TableFooter>
                             <TableRow>
                                 { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows-(paginationSuper.totalRows-cont) }]}
                                     colSpan={5}
-                                    count={paginationSuper.totalRows}
+                                    count={paginationSuper.totalRows-(paginationSuper.totalRows-cont)}
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page-1}
                                     SelectProps={{
