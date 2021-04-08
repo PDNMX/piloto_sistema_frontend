@@ -20,10 +20,12 @@ import {history} from "../../store/history";
 import ListItem from "@material-ui/core/ListItem";
 import { OnChange } from 'react-final-form-listeners'
 import {Alert} from "@material-ui/lab";
+import {providersEnabled} from "../../_reducers/providerEnabled.reducer";
 
 const CreateUser = ({id, user,alert, providers }) => {
     return <MyForm initialValues={user}  id={id} alerta={alert} providers={providers}/>;
 }
+
 
 interface FormDataUser {
     nombre?:string;
@@ -66,6 +68,7 @@ function MyForm(props: MyFormProps ) {
         }else{
             dispatch(requestCreationUser(values));
         }
+
     }
     const schema = Yup.object().shape({
         nombre: Yup.string().matches(new RegExp("^['A-zÀ-ú ]*$"),'no se permiten números, ni cadenas vacías' ).required("El campo nombre es requerido").trim(),
@@ -141,7 +144,6 @@ function MyForm(props: MyFormProps ) {
         color:"primary",
         type:"submit"
     }
-
 
 
     return (
@@ -279,7 +281,7 @@ function MyForm(props: MyFormProps ) {
 
 function mapStateToProps(state,ownProps){
     let alert = state.alert;
-    let providers = state.providerSelect;
+    let providers = state.providersEnabled;
     if( ownProps.match != undefined ){
         let id = ownProps.match.params.id;
         let user = state.users.find(user=>user._id === id);

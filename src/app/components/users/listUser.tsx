@@ -49,7 +49,7 @@ export const ListUser = () => {
     const [nombreUsuario, setNombreUsuario] =  React.useState("");
     const [pagination, setPagination] =  React.useState({page : 0 , pageSize : 10 });
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
-    const [selectedUser, setSelectedUser] = React.useState({_id : "",cargo: "" , correoElectronico : "",  telefono : "" ,  extension : "" , usuario : "" , sistemas : [] , fechaAlta : "" , vigenciaContrasena :""  });
+    const [selectedUser, setSelectedUser] = React.useState({_id : "",cargo: "" , correoElectronico : "",  telefono : "" ,  extension : "" , usuario : "", estatus:""  , sistemas : [] , fechaAlta : "" , vigenciaContrasena :""});
     const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
     const [openPassword, setOpenPassword] = React.useState(false);
     const [usuarioCorreo, setUsuarioCorreo]= React.useState("");
@@ -221,6 +221,7 @@ export const ListUser = () => {
                                    <StyledTableCell align="center">Teléfono</StyledTableCell>
                                    <StyledTableCell align="center" >Extensión</StyledTableCell>
                                    <StyledTableCell align="center" >Usuario</StyledTableCell>
+                                   <StyledTableCell align="center" >Estatus</StyledTableCell>
                                    <StyledTableCell align="center" >Sistemas</StyledTableCell>
                                    <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
                                    <StyledTableCell align="center" >Vigencia de Contraseña</StyledTableCell>
@@ -242,6 +243,9 @@ export const ListUser = () => {
                                    </StyledTableCell>
                                    <StyledTableCell style={{width: 160}} align="center">
                                        {selectedUser.usuario}
+                                   </StyledTableCell>
+                                   <StyledTableCell style={{width: 160}} align="center">
+                                       {selectedUser.estatus.toString()=="true" ? "Activado" : "Desactivado"}
                                    </StyledTableCell>
                                    <StyledTableCell style={{width: 160}} align="center">
                                        {selectedUser.sistemas.map( value => (

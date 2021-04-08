@@ -5,7 +5,8 @@ export const bitacoraActions = {
     setPerPageSucces,
     setPagination,
     requestAllBitacora,
-    setBitacoraAll
+    setBitacoraAll,
+    setBitacoraClear
 };
 
 function requestAllBitacora(){
@@ -32,3 +33,8 @@ function setPerPageSucces(bitacora) {
 function setBitacoraAll (bitacora){
     return {type : bitacoraConstants.BITACORA_GETALL_SET, bitacora}
 }
+
+function setBitacoraClear (){
+    return {type : bitacoraConstants.BITACORA_CLEAR_SET}
+}
+
