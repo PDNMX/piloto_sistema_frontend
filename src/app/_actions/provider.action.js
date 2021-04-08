@@ -7,12 +7,15 @@ export const providerActions = {
     deleteProvider,
     deleteProviderDo,
     requestAllProviders,
-    setProvidersAll
+    setProvidersAll,
+    requestAllProvidersEnabled,
+    setProvidersAllEnable
 };
 
-function requestAllProviders(){
+function requestAllProviders(var1){
     return {
       type : providerConstants.PROVIDERS_GETALL,
+        var1
     }
 }
 
@@ -56,3 +59,12 @@ function setProvidersAll (providers){
     return {type : providerConstants.PROVIDERS_GETALL_SET, providers}
 }
 
+function requestAllProvidersEnabled(){
+    return {
+        type : providerConstants.PROVIDERS_GETALL_ENABLED,
+    }
+}
+
+function setProvidersAllEnable(providersEnabled){
+    return {type : providerConstants.PROVIDERS_GETALL_ENABLED_SET, providersEnabled}
+}

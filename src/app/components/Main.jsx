@@ -389,7 +389,6 @@ export const Main = ()=> (
                     <Route exact
                            path= "/usuario/crear"
                            render={() => {
-
                                if(localStorage.token){
                                    let base64Url = localStorage.token.split('.')[1];
                                    let payload = JSON.parse(window.atob(base64Url));
@@ -400,7 +399,7 @@ export const Main = ()=> (
                                    }else{
                                        if ( localStorage.token && localStorage.rol =="1"){
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                           storeValidate.dispatch(providerActions.requestAllProviders());
+                                           storeValidate.dispatch(providerActions.requestAllProvidersEnabled());
                                            storeValidate.dispatch((alertActions.clear()));
                                            return <ConnectedMenuV propiedades = {{renderView : "createuser"}} />
                                        }else{
@@ -444,7 +443,6 @@ export const Main = ()=> (
                     <Route exact
                            path= "/usuarios"
                            render={() => {
-
                                if(localStorage.token){
                                    let base64Url = localStorage.token.split('.')[1];
                                    let payload = JSON.parse(window.atob(base64Url));
@@ -457,7 +455,6 @@ export const Main = ()=> (
                                        if (localStorage.token && localStorage.rol =="1") {
                                            storeValidate.dispatch(providerActions.requestAllProviders());
                                            storeValidate.dispatch(userActions.requestPerPage({page: 1, pageSize: 10}));
-                                           storeValidate.dispatch((alertActions.clear()));
                                            return (<ConnectedMenuV propiedades={{renderView: "users"}}/>)
                                        } else {
                                            return <Redirect to="/login"/>;
@@ -473,7 +470,6 @@ export const Main = ()=> (
                     <Route exact
                            path= "/proveedor/crear"
                            render={() =>{
-
                                if(localStorage.token){
                                    let base64Url = localStorage.token.split('.')[1];
                                    let payload = JSON.parse(window.atob(base64Url));
@@ -483,8 +479,8 @@ export const Main = ()=> (
                                        return <Redirect to="/login"/>;
                                    }else{
                                        if ( localStorage.token && localStorage.rol =="1"){
-                                           storeValidate.dispatch((alertActions.clear()));
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch((alertActions.clear()));
                                            return (<ConnectedMenuV propiedades = {{renderView : "createprovider"}} /> )
                                        }else{
                                            return <Redirect to="/login"/> ;
@@ -591,6 +587,7 @@ export const Main = ()=> (
                                    }else{
                                        if ( localStorage.token && localStorage.rol =="1") {
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(bitacoraActions.setBitacoraClear());
                                            storeValidate.dispatch(bitacoraActions.requestAllBitacora());
                                            storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
                                            return (<ConnectedMenuV propiedades={{renderView: "reportebitacora"}}/>)
