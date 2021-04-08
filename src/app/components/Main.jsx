@@ -73,89 +73,155 @@ export const Main = ()=> (
                     <Route exact
                            path= "/cargamasiva"
                            render={() => {
-                               if ( localStorage.token && localStorage.rol =="2"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   storeValidate.dispatch(clearErrorsValidation());
-                                   return <ConnectedMenuV propiedades = {{renderView : "cargamasiva"}} />
+
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="2"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           storeValidate.dispatch(clearErrorsValidation());
+                                           return <ConnectedMenuV propiedades = {{renderView : "cargamasiva"}} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/captura/S2"
                            render={() => {
-                               if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
-                                   storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
-                                   storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
-                                   storeValidate.dispatch(catalogActions.requestTipoAreaCatalogo("tipoArea"));
-                                   storeValidate.dispatch(catalogActions.requestNivelResponsabilidadCatalogo("nivelResponsabilidad"));
-                                   storeValidate.dispatch(catalogActions.requestTipoProcedimientoCatalogo("tipoProcedimiento"));
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return <ConnectedMenuV propiedades = {{renderView : "createReg"}} />
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                                           storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
+                                           storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
+                                           storeValidate.dispatch(catalogActions.requestTipoAreaCatalogo("tipoArea"));
+                                           storeValidate.dispatch(catalogActions.requestNivelResponsabilidadCatalogo("nivelResponsabilidad"));
+                                           storeValidate.dispatch(catalogActions.requestTipoProcedimientoCatalogo("tipoProcedimiento"));
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return <ConnectedMenuV propiedades = {{renderView : "createReg"}} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/captura/S3S"
                            render={() => {
-                               if ( localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
-                                   storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
-                                   storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
-                                   storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
-                                   storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return <ConnectedMenuV propiedades = {{renderView : "createRegS3S"}} />
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                                           storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                                           storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return <ConnectedMenuV propiedades = {{renderView : "createRegS3S"}} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/captura/S3P"
                            render={() => {
-                               if ( localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
-                                   storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
-                                   storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
-                                   storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
-                                   storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
-                                   //storeValidate.dispatch(catalogActions.requestMunicipioCatalogo("municipio"));
-                                   storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
-                                   storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
-                                   return <ConnectedMenuV propiedades = {{renderView : "createRegS3P"}} />
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
+                                           storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                                           storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
+                                           storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
+                                           //storeValidate.dispatch(catalogActions.requestMunicipioCatalogo("municipio"));
+                                           storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
+                                           storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                                           return <ConnectedMenuV propiedades = {{renderView : "createRegS3P"}} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/consulta/S2"
                            render={() => {
-                               if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
-                                   storeValidate.dispatch(userActions.requestRecordsS2());
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestRecordsS2());
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   //storeValidate.dispatch(userActions.requestProvider());
-                                   storeValidate.dispatch(S2Actions.requestListS2({}));
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
+                                           storeValidate.dispatch(userActions.requestRecordsS2());
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestRecordsS2());
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           //storeValidate.dispatch(userActions.requestProvider());
+                                           storeValidate.dispatch(S2Actions.requestListS2({}));
 
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
-                               } else {
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
+                                       } else {
+                                           return <Redirect to="/login"/>;
+                                       }
+                                   }
+                               }else{
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
                                    return <Redirect to="/login"/>;
                                }
                            }}
@@ -163,75 +229,128 @@ export const Main = ()=> (
                     <Route exact
                            path= "/editar/S2/:id"
                            render={({match}) => {
-                               if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
-                                   storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
-                                   storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
-                                   storeValidate.dispatch(catalogActions.requestTipoAreaCatalogo("tipoArea"));
-                                   storeValidate.dispatch(catalogActions.requestNivelResponsabilidadCatalogo("nivelResponsabilidad"));
-                                   storeValidate.dispatch(catalogActions.requestTipoProcedimientoCatalogo("tipoProcedimiento"));
-                                   storeValidate.dispatch(S2Actions.fillRegEdit(match.params.id));
-                                   return <ConnectedMenuV propiedades = {{renderView : "editRegS2"}} match = {match} />
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                                           storeValidate.dispatch(catalogActions.requestRamoCatalogo("ramo"));
+                                           storeValidate.dispatch(catalogActions.requestPuestoCatalogo("puesto"));
+                                           storeValidate.dispatch(catalogActions.requestTipoAreaCatalogo("tipoArea"));
+                                           storeValidate.dispatch(catalogActions.requestNivelResponsabilidadCatalogo("nivelResponsabilidad"));
+                                           storeValidate.dispatch(catalogActions.requestTipoProcedimientoCatalogo("tipoProcedimiento"));
+                                           storeValidate.dispatch(S2Actions.fillRegEdit(match.params.id));
+                                           return <ConnectedMenuV propiedades = {{renderView : "editRegS2"}} match = {match} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/editar/S3P/:id"
                            render={({match}) => {
-                               if ( localStorage.token && localStorage.rol =="2"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
-                                   storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
-                                   storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
-                                   storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
-                                   storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
-                                   storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
-                                   storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
-                                   storeValidate.dispatch(S3PActions.fillRegEdit(match.params.id));
-                                   match.params.flagOnlyRead = false;
-                                   return <ConnectedMenuV propiedades = {{renderView : "editRegS3P"}} match = {match} />
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="2"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
+                                           storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                                           storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
+                                           storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
+                                           storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
+                                           storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                                           storeValidate.dispatch(S3PActions.fillRegEdit(match.params.id));
+                                           match.params.flagOnlyRead = false;
+                                           return <ConnectedMenuV propiedades = {{renderView : "editRegS3P"}} match = {match} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/editar/S3S/:id"
                            render={({match}) => {
-                               if ( localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
-                                   storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
-                                   storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
-                                   storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
-                                   storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
-                                   storeValidate.dispatch(S3SActions.fillRegEdit(match.params.id));
-                                   return <ConnectedMenuV propiedades = {{renderView : "editRegS3S"}} match = {match} />
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
+                                           storeValidate.dispatch(catalogActions.requestTipoFaltaCatalogo("tipoFalta"));
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
+                                           storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
+                                           storeValidate.dispatch(S3SActions.fillRegEdit(match.params.id));
+                                           return <ConnectedMenuV propiedades = {{renderView : "editRegS3S"}} match = {match} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/consulta/S3S"
                            render={() => {
-                               if (localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true") {
-                                   storeValidate.dispatch(userActions.requestRecordsS3S());
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
-                                   S3SActions.setListS3S([]);
-                                   storeValidate.dispatch(S3SActions.requestListS3S({}));
 
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)
-                               } else {
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if (localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true") {
+                                           storeValidate.dispatch(userActions.requestRecordsS3S());
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           S3SActions.setListS3S([]);
+                                           storeValidate.dispatch(S3SActions.requestListS3S({}));
+
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return (<ConnectedMenuV propiedades={{renderView: "S3SSchema"}}/>)
+                                       } else {
+                                           return <Redirect to="/login"/>;
+                                       }
+                                   }
+                               }else{
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
                                    return <Redirect to="/login"/>;
                                }
                            }}
@@ -239,16 +358,30 @@ export const Main = ()=> (
                     <Route exact
                            path= "/consulta/S3P"
                            render={() => {
-                               if (localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true") {
-                                   storeValidate.dispatch(userActions.requestRecordsS3P());
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestPermisosSistema());
-                                   storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
-                                   storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
-                                   storeValidate.dispatch(S3PActions.requestListS3P({}));
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return (<ConnectedMenuV propiedades={{renderView: "S3PSchema"}}/>)
-                               } else {
+
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if (localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true") {
+                                           storeValidate.dispatch(userActions.requestRecordsS3P());
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
+                                           storeValidate.dispatch(S3PActions.requestListS3P({}));
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return (<ConnectedMenuV propiedades={{renderView: "S3PSchema"}}/>)
+                                       } else {
+                                           return <Redirect to="/login"/>;
+                                       }
+                                   }
+                               }else{
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
                                    return <Redirect to="/login"/>;
                                }
                            }}
@@ -256,40 +389,82 @@ export const Main = ()=> (
                     <Route exact
                            path= "/usuario/crear"
                            render={() => {
-                               if ( localStorage.token && localStorage.rol =="1"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(providerActions.requestAllProviders());
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return <ConnectedMenuV propiedades = {{renderView : "createuser"}} />
+
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="1"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(providerActions.requestAllProviders());
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return <ConnectedMenuV propiedades = {{renderView : "createuser"}} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/usuario/editar/:id"
                            render={({match}) => {
-                               if ( localStorage.token && localStorage.rol =="1"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
-                                   storeValidate.dispatch(providerActions.requestAllProviders());
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return (<ConnectedMenuV propiedades = {{renderView : "edituser"}} match = {match} /> )
+
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="1"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
+                                           storeValidate.dispatch(providerActions.requestAllProviders());
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return (<ConnectedMenuV propiedades = {{renderView : "edituser"}} match = {match} /> )
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/usuarios"
                            render={() => {
-                               storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                               if (localStorage.token && localStorage.rol =="1") {
-                                   storeValidate.dispatch(providerActions.requestAllProviders());
-                                   storeValidate.dispatch(userActions.requestPerPage({page: 1, pageSize: 10}));
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return (<ConnectedMenuV propiedades={{renderView: "users"}}/>)
-                               } else {
+
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                       if (localStorage.token && localStorage.rol =="1") {
+                                           storeValidate.dispatch(providerActions.requestAllProviders());
+                                           storeValidate.dispatch(userActions.requestPerPage({page: 1, pageSize: 10}));
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return (<ConnectedMenuV propiedades={{renderView: "users"}}/>)
+                                       } else {
+                                           return <Redirect to="/login"/>;
+                                       }
+                                   }
+                               }else{
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
                                    return <Redirect to="/login"/>;
                                }
                            }}
@@ -298,11 +473,26 @@ export const Main = ()=> (
                     <Route exact
                            path= "/proveedor/crear"
                            render={() =>{
-                               if ( localStorage.token && localStorage.rol =="1"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   return (<ConnectedMenuV propiedades = {{renderView : "createprovider"}} /> )
+
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="1"){
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           return (<ConnectedMenuV propiedades = {{renderView : "createprovider"}} /> )
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
@@ -310,13 +500,26 @@ export const Main = ()=> (
                     <Route exact
                            path= "/proveedor/editar/:id"
                            render={({match}) => {
-                               if ( localStorage.token && localStorage.rol =="1"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(providerActions.fillProviderUpdate(match.params.id));
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return (<ConnectedMenuV propiedades = {{renderView : "editprovider"}} match = {match} /> )
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="1"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(providerActions.fillProviderUpdate(match.params.id));
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return (<ConnectedMenuV propiedades = {{renderView : "editprovider"}} match = {match} /> )
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
@@ -324,53 +527,106 @@ export const Main = ()=> (
                     <Route exact
                            path= "/proveedores"
                            render={() => {
-                               if ( localStorage.token && localStorage.rol =="1") {
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
-                                   return (<ConnectedMenuV propiedades={{renderView: "providers"}}/>)
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="1") {
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return (<ConnectedMenuV propiedades={{renderView: "providers"}}/>)
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/bitacora"
                            render={() =>{
-                               if ( localStorage.token && localStorage.rol =="1"){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(userActions.requestAllUsers());
-                                   storeValidate.dispatch(providerActions.requestAllProviders());
-                                   storeValidate.dispatch(bitacoraActions.requestAllBitacora());
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return (<ConnectedMenuV propiedades = {{renderView : "consultarbitacora"}} /> )
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="1"){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(userActions.requestAllUsers());
+                                           storeValidate.dispatch(providerActions.requestAllProviders());
+                                           storeValidate.dispatch(bitacoraActions.requestAllBitacora());
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return (<ConnectedMenuV propiedades = {{renderView : "consultarbitacora"}} /> )
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/reportebitacora"
                            render={() => {
-                               if ( localStorage.token && localStorage.rol =="1") {
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(bitacoraActions.requestAllBitacora());
-                                   storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
-                                   return (<ConnectedMenuV propiedades={{renderView: "reportebitacora"}}/>)
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token && localStorage.rol =="1") {
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(bitacoraActions.requestAllBitacora());
+                                           storeValidate.dispatch(providerActions.requestPerPage({page: 1, pageSize: 10}));
+                                           return (<ConnectedMenuV propiedades={{renderView: "reportebitacora"}}/>)
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
                     <Route exact
                            path= "/usuario/cambiarcontrasena"
                            render={() => {
-                               if ( localStorage.token){
-                                   storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                   storeValidate.dispatch(providerActions.requestAllProviders());
-                                   storeValidate.dispatch((alertActions.clear()));
-                                   return <ConnectedMenuV propiedades = {{renderView : "cambiarcontrasena"}} />
+                               if(localStorage.token){
+                                   let base64Url = localStorage.token.split('.')[1];
+                                   let payload = JSON.parse(window.atob(base64Url));
+                                   if(payload.exp < (new Date().getTime() + 1) / 1000){
+                                       storeValidate.dispatch(alertActions.error("La sesión ha expirado, favor de iniciar sesión de nuevo"));
+                                       localStorage.clear();
+                                       return <Redirect to="/login"/>;
+                                   }else{
+                                       if ( localStorage.token){
+                                           storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(providerActions.requestAllProviders());
+                                           storeValidate.dispatch((alertActions.clear()));
+                                           return <ConnectedMenuV propiedades = {{renderView : "cambiarcontrasena"}} />
+                                       }else{
+                                           return <Redirect to="/login"/> ;
+                                       }
+                                   }
                                }else{
-                                   return <Redirect to="/login"/> ;
+                                   storeValidate.dispatch(alertActions.error("No se ha iniciado sesión "));
+                                   return <Redirect to="/login"/>;
                                }
                            }}
                     />
