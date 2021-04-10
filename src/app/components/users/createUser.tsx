@@ -200,7 +200,7 @@ function MyForm(props: MyFormProps ) {
                                 <Switches label="Estatus" name="estatus" required={true} data={estatus}/>
                             </Grid>}
                             <Grid item xs={12} md={3}>
-                                <Select  name = "proveedorDatos" label="Proveedor de datos" required={true} data={providers} ></Select>
+                                <Select  name = "proveedorDatos" label="Proveedor de datos" required={true} data={providers} defaultValue={""}></Select>
                                 <OnChange name="proveedorDatos">
                                     {(value, previous) => {
                                         let sistemasDataNew: [] = [];

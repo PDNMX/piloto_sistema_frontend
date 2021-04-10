@@ -427,7 +427,7 @@ export const Main = ()=> (
                                        if ( localStorage.token && localStorage.rol =="1"){
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch(userActions.fillUserUpdate(match.params.id));
-                                           storeValidate.dispatch(providerActions.requestAllProviders());
+                                           storeValidate.dispatch(providerActions.requestAllProvidersEnabled());
                                            storeValidate.dispatch((alertActions.clear()));
                                            return (<ConnectedMenuV propiedades = {{renderView : "edituser"}} match = {match} /> )
                                        }else{

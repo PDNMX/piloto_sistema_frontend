@@ -407,12 +407,12 @@ export function* creationUser(){
         const token = localStorage.token;
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
 
         if(payload.contrasenaNueva===true){
             history.push('/usuario/cambiarcontrasena');
             yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
         }
+
         usuarioJson["user"]=payload.idUser;
         const status = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
@@ -423,7 +423,7 @@ export function* creationUser(){
         if(status.data.Status===500){
             yield put(alertActions.clear());
             history.push('/usuario/crear');
-            yield put(alertActions.error(status.data.message));
+            yield put(alertActions.error("El nombre de usuario y/o correo electrónico ya han sido registrados anteriormente."));
         }else if(status.status === 200){
             //all OK
             yield put(alertActions.clear());
@@ -446,15 +446,15 @@ export function* editUser(){
         const token = localStorage.token;
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
+
         usuarioJson["user"]=payload.idUser;
         const status = yield axios.put(ur + `/edit/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             } , validateStatus: () => true});
+
         if(status.data.Status===500){
-            console.log(status);
             yield put(alertActions.error(status.data.message));
             history.push('/usuarios');
 
