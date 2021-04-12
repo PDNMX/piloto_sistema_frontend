@@ -44,9 +44,8 @@ export const LoadFileV = () => {
     const fileInputRef = React.useRef();
     const [system, setSystem]= React.useState("");
     const [docText, setDocText]= React.useState(false);
-
+    const [contentFileJson, setContentFileJson] = React.useState("");
     let systemChosen;
-    let contentFileJson;
     let rowsError=[];
 
 
@@ -118,7 +117,7 @@ export const LoadFileV = () => {
 
     const handleFileRead = (e) => {
         const content = fileReader.result;
-        contentFileJson= content;
+        setContentFileJson(content);
     };
 
     const handleFileChosen= (file) => {
@@ -185,7 +184,7 @@ export const LoadFileV = () => {
                         <Button
                             variant="contained"
                             disabled={!docText || !(system != "")}
-                            onClick={() =>{dispatch(clearErrorsValidation()); dispatch(alertActions.clear()); setDocText(false); fileInputRef.current.value = "";  setOpen(true); dispatch(requestErrorsValidation(contentFileJson , system)) } } className={style.boton}>
+                            onClick={() =>{console.log(contentFileJson); dispatch(clearErrorsValidation()); dispatch(alertActions.clear()); setDocText(false); fileInputRef.current.value = "";  setOpen(true); dispatch(requestErrorsValidation(contentFileJson , system)) } } className={style.boton}>
                             Guardar
                         </Button>
                     </Grid>
