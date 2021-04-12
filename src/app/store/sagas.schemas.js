@@ -40,8 +40,6 @@ export function* validationErrors(){
     while (true) {
         const {schema,systemId} = yield take (mutations.REQUEST_VALIDATION_ERRORS);
         const token = localStorage.token;
-
-        console.log("system"+systemId);
         if(token){
             let payload = jwt.decode(token);
             yield put (userActions.setUserInSession(payload.idUser));
@@ -1083,6 +1081,7 @@ export function* creationS3SSchema(){
 
     }
 }
+
 export function* creationS2Schema(){
     while (true) {
         const {values} = yield take (S2Constants.REQUEST_CREATION_S2);
@@ -1115,7 +1114,7 @@ export function* creationS2Schema(){
             docSend["nivelResponsabilidad"] = JSON.parse("[" + values.nivelResponsabilidad + "]");
         }
 
-        docSend["superiorInmediato"]= {nombres: values.sinombres, primerApellido: values.siPrimerApellido, segundoApellido : values.siSegundoApellido,
+        docSend["superiorInmediato"]= {rfc : values.siRfc , curp: values.siCurp , nombres: values.sinombres, primerApellido: values.siPrimerApellido, segundoApellido : values.siSegundoApellido,
             puesto: {nombre:values.siPuestoNombre, nivel: values.siPuestoNivel}};
 
         console.log(docSend);
@@ -1136,7 +1135,6 @@ export function* creationS2Schema(){
             yield put(alertActions.error("Error al crear"));
             //error in response
         }
-
     }
 }
 
@@ -1504,6 +1502,8 @@ export function* fillUpdateRegS2(){
                 newRow[key]= newArray;
             }else if (key === "superiorInmediato") {
                 if(row.nombres){ newRow["sinombres"] = row.nombres ;}
+                if(row.rfc){ newRow["siRfc"] = row.rfc;}
+                if(row.curp){ newRow["siCurp"] = row.curp;}
                 if(row.primerApellido){ newRow["siPrimerApellido"] = row.primerApellido;}
                 if(row.segundoApellido){ newRow["siSegundoApellido"] = row.segundoApellido;}
                 if(row.puesto){

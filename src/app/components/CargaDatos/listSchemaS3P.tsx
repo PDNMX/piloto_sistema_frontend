@@ -1224,6 +1224,14 @@ export const ListS3PSchema = () => {
 
                                     <Grid className= {classes.gridpadding} spacing={3} container >
                                         <Grid item xs={12} md={3}>
+                                            <DatePicker
+                                                locale={deLocale}
+                                                format={"yyyy-MM-dd"}
+                                                label="Última actualización"
+                                                name="fechaCaptura"
+                                                dateFunsUtils={DateFnsUtils} />
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
                                             <TextField label="Expediente" name="expediente"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
@@ -1252,14 +1260,6 @@ export const ListS3PSchema = () => {
                                         <Grid item xs={12} md={3}>
                                             <Select  name={`tipoPersona`} label="Tipo persona" data={catalogos.tipoPersona} ></Select>
                                         </Grid>}
-                                        <Grid item xs={12} md={3}>
-                                            <DatePicker
-                                                locale={deLocale}
-                                                format={"yyyy-MM-dd"}
-                                                label="Última actualización"
-                                                name="fechaCaptura"
-                                                dateFunsUtils={DateFnsUtils} />
-                                        </Grid>
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
                                                 locale={deLocale}
@@ -1388,7 +1388,7 @@ export const ListS3PSchema = () => {
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page-1}
                                     SelectProps={{
-                                        inputProps: { 'aria-label': 'rows per page' },
+                                        inputProps: { 'aria-label': 'Registros por página' },
                                         native: true,
                                     }}
                                     onChangePage={handleChangePage}

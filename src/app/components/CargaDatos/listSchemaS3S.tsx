@@ -835,8 +835,15 @@ export const ListS3SSchema = () => {
                                             Búsqueda
                                         </Typography>
                                     </Grid>
-
                                     <Grid className= {classes.gridpadding} spacing={3} container >
+                                        <Grid item xs={12} md={3}>
+                                            <DatePicker
+                                                locale={deLocale}
+                                                format={"yyyy-MM-dd"}
+                                                label="Última actualización"
+                                                name="fechaCaptura"
+                                                dateFunsUtils={DateFnsUtils} />
+                                        </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Expediente" name="expediente"  />
                                         </Grid>
@@ -868,14 +875,6 @@ export const ListS3SSchema = () => {
                                             }}
                                         </OnChange>
                                         }
-                                        <Grid item xs={12} md={3}>
-                                            <DatePicker
-                                                locale={deLocale}
-                                                format={"yyyy-MM-dd"}
-                                                label="Última actualización"
-                                                name="fechaCaptura"
-                                                dateFunsUtils={DateFnsUtils} />
-                                        </Grid>
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
                                                 locale={deLocale}
@@ -1012,7 +1011,7 @@ export const ListS3SSchema = () => {
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page-1}
                                     SelectProps={{
-                                        inputProps: { 'aria-label': 'rows per page' },
+                                        inputProps: { 'aria-label': 'Registros por página' },
                                         native: true,
                                     }}
                                     onChangePage={handleChangePage}

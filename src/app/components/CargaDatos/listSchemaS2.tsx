@@ -42,6 +42,8 @@ interface FormDataEsquemaS2 {
     nombres?: String,
     primerApellido?: String,
     segundoApellido?: String,
+    rfc?: String,
+    curp?: String,
     genero?: {
         clave: String,
         valor: String
@@ -431,6 +433,25 @@ export const ListS2Schema = () => {
                                 {selectedRegistro.ejercicioFiscal}
                             </Typography>
                         </Grid>
+
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                               Rfc
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.rfc}
+                            </Typography>
+                        </Grid>
+
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                Curp
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.curp}
+                            </Typography>
+                        </Grid>
+
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                Género
@@ -649,6 +670,28 @@ export const ListS2Schema = () => {
 
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                Rfc
+                            </Typography>
+                            {selectedRegistro.superiorInmediato?.rfc &&
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato?.rfc}
+                            </Typography>
+                            }
+                        </Grid>
+
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                Curp
+                            </Typography>
+                            {selectedRegistro.superiorInmediato?.curp &&
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato?.curp}
+                            </Typography>
+                            }
+                        </Grid>
+
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                 Puesto nombre
                             </Typography>
                             {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nombre &&
@@ -716,6 +759,14 @@ export const ListS2Schema = () => {
 
                                     <Grid className= {classes.gridpadding} spacing={3} container >
                                         <Grid item xs={12} md={3}>
+                                            <DatePicker
+                                                locale={deLocale}
+                                                format={"yyyy-MM-dd"}
+                                                label="Última actualización"
+                                                name="fechaCaptura"
+                                                dateFunsUtils={DateFnsUtils} />
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
                                             <TextField label="Nombre(s)" name="nombres"  />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
@@ -732,14 +783,6 @@ export const ListS2Schema = () => {
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <DatePicker
-                                                locale={deLocale}
-                                                format={"yyyy-MM-dd"}
-                                                label="Última actualización"
-                                                name="fechaCaptura"
-                                                dateFunsUtils={DateFnsUtils} />
                                         </Grid>
                                     </Grid>
                                     <Grid container justify={"flex-end"}>
@@ -861,7 +904,7 @@ export const ListS2Schema = () => {
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page-1}
                                     SelectProps={{
-                                        inputProps: { 'aria-label': 'rows per page' },
+                                        inputProps: { 'aria-label': 'Registros por página' },
                                         native: true,
                                     }}
                                     onChangePage={handleChangePage}

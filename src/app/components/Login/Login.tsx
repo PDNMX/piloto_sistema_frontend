@@ -149,8 +149,8 @@ const style = makeStyles((theme) => ({
   }));
 
   const schema = Yup.object().shape({
-    username: Yup.string().required().trim(),
-    password: Yup.string().required().trim()
+    username: Yup.string().required("El campo Nombre de usuario es requerido").trim(),
+    password: Yup.string().required("El campo Contraseña es requerido").trim()
   });
 
   const validate = makeValidate(schema);

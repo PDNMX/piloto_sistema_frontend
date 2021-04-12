@@ -176,7 +176,7 @@ export const ListBitacora = () => {
                                     rowsPerPage={pagination.pageSize}
                                     page={pagination.page}
                                     SelectProps={{
-                                        inputProps: { 'aria-label': 'rows per page' },
+                                        inputProps: { 'aria-label': 'Registros por página' },
                                         native: true,
                                     }}
                                     onChangePage={handleChangePage}

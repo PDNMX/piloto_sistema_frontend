@@ -350,9 +350,9 @@ function MyForm(props: MyFormProps ) {
     }
 
 
-    async function requestLocalidadByMunicipio(value) {
+    async function requestLocalidadByMunicipio(value, entidad) {
         const token = localStorage.token;
-        const respuestaArray = await axios.post(ur + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value}, {
+        const respuestaArray = await axios.post(ur + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value, idEntidad: entidad}, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -577,7 +577,8 @@ function MyForm(props: MyFormProps ) {
                                     <OnChange name="particularSancionado.domicilioMexico.municipio">
                                         {(value, previous) => {
                                             if (value) {
-                                                requestLocalidadByMunicipio(value);
+                                                // @ts-ignore
+                                                requestLocalidadByMunicipio(value, values.particularSancionado.domicilioMexico.entidadFederativa);
                                             }
                                         }}
                                     </OnChange>
