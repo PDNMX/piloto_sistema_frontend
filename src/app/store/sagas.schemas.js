@@ -26,6 +26,7 @@ const qs = require('querystring')
 const jwt = require('jsonwebtoken');
 const _ = require('underscore');
 import { formatISO } from 'date-fns'
+import {forEach} from "underscore";
 
 
 const host = process.env.URLAPI;
@@ -171,6 +172,32 @@ export function* fillAllProviders(){
     }
 }
 
+export function* fillAllProvidersEnabled(){
+    while (true){
+        yield take(providerConstants.PROVIDERS_GETALL_ENABLED);
+
+        const token = localStorage.token;
+        let payload = jwt.decode(token);
+        yield put (userActions.setUserInSession(payload.idUser));
+        let query = { "usuario":payload.idUser};
+
+        const respuestaArray = yield axios.post(ur + `/getProvidersFull`,query,{ headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Authorization': `Bearer ${token}`
+            }});
+
+        var arrdata=[];
+        respuestaArray.data.results.forEach(function(row){
+            if(row.estatus==true){
+                arrdata.push({label:row.label,value:row.value, sistemas:row.sistemas});
+            }
+        });
+
+        yield put(providerActions.setProvidersAllEnable(arrdata));
+    }
+}
+
 export function* fillAllUsers(){
     while (true){
         yield take(userConstants.USERS_GETALL);
@@ -209,7 +236,7 @@ export function* deleteUser(){
                     } , validateStatus: () => true});
                 if(status === 200){
                     yield put(userActions.deleteUserDo(id));
-                    yield put(alertActions.success("Se elimino el usuario con exito"));
+                    yield put(alertActions.success("Se elimino el usuario con éxito"));
                 }else{
                     //error in response
                     yield put(alertActions.error("El usuario NO fue eliminado"));
@@ -237,7 +264,7 @@ export function* deleteProvider(){
             },validateStatus: () => true});
         if(status === 200){
             yield put(providerActions.deleteProviderDo(id));
-            yield put(alertActions.success("Proveedor eliminado con exito"));
+            yield put(alertActions.success("Proveedor eliminado con éxito"));
         }else{
             //error in response
         }
@@ -380,12 +407,12 @@ export function* creationUser(){
         const token = localStorage.token;
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
 
         if(payload.contrasenaNueva===true){
             history.push('/usuario/cambiarcontrasena');
             yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
         }
+
         usuarioJson["user"]=payload.idUser;
         const status = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
@@ -396,7 +423,7 @@ export function* creationUser(){
         if(status.data.Status===500){
             yield put(alertActions.clear());
             history.push('/usuario/crear');
-            yield put(alertActions.error("El usuario que intentas ingresar ya existe."));
+            yield put(alertActions.error("El nombre de usuario y/o correo electrónico ya han sido registrados anteriormente."));
         }else if(status.status === 200){
             //all OK
             yield put(alertActions.clear());
@@ -419,18 +446,24 @@ export function* editUser(){
         const token = localStorage.token;
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
-        console.log(payload.idUser);
+
         usuarioJson["user"]=payload.idUser;
-        const {status} = yield axios.put(ur + `/edit/user`,usuarioJson, {headers: {
+        const status = yield axios.put(ur + `/edit/user`,usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             } , validateStatus: () => true});
-        if(status === 200){
-            //all OK
-            yield put(alertActions.success("Usuario creado con éxito"));
+
+        if(status.data.Status===500){
+            yield put(alertActions.error(status.data.message));
             history.push('/usuarios');
-            yield put(alertActions.clear());
+
+        }else if(status.status === 200){
+            //all OK
+
+            yield put(alertActions.success("Usuario editado con éxito"));
+            history.push('/usuarios');
+
         }else{
             //error in response
         }
@@ -460,7 +493,7 @@ export function* creationProvider(){
             } ,validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Proovedor creado con éxito"));
+            yield put(alertActions.success("Proveedor creado con éxito"));
         }else{
             //error in response
         }
@@ -491,7 +524,7 @@ export function* editProvider(){
         if(status === 200){
             //all OK
 
-            yield put(alertActions.success("Proovedor editado con exito"));
+            yield put(alertActions.success("Proveedor editado con éxito"));
 
         }else{
             //error in response
@@ -1122,7 +1155,7 @@ export function* updateS2Schema(){
             } , validateStatus: () => true});
         if(status === 200){
             //all OK
-            yield put(alertActions.success("Registro actualizado con exito "));
+            yield put(alertActions.success("Registro actualizado con éxito "));
         }else{
             yield put(alertActions.error("Error al crear"));
             //error in response

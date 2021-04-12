@@ -20,6 +20,7 @@ import {providerUser} from "./providerUser.reducer";
 import {recordsS2} from "./recordsS2.reducer";
 import {recordsS3S} from "./recordsS3S.reducer";
 import {recordsS3P} from "./recordsS3P.reducer";
+import {providersEnabled} from "./providerEnabled.reducer";
 
 const rootReducer = combineReducers({
     users,
@@ -42,7 +43,8 @@ const rootReducer = combineReducers({
     providerUser,
     recordsS2,
     recordsS3S,
-    recordsS3P
+    recordsS3P,
+    providersEnabled
 });
 
 export default rootReducer;
