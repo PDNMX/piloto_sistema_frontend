@@ -64,7 +64,7 @@ export function* validationErrors(){
                 }else if(systemId === "S3P"){
                     urlValidation= `/validateSchemaS3P`;
                 }
-                SCHEMA["id_usuario"]=usuario;
+
                 respuestaArray = yield axios.post(ur + urlValidation ,SCHEMA, { headers: {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',

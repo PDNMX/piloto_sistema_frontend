@@ -183,7 +183,10 @@ function MyForm(props: MyFormProps ) {
                             <TextField label="Cargo" name="cargo" required={true} />
                         </Grid>
                         <Grid item xs={12} md={3}>
-                            <TextField label="Correo electrónico" name="correoElectronico" required={true} />
+                            {id != null ? <TextField label="Correo electrónico" name="correoElectronico" required={true} InputProps={{readOnly: true}}/> :
+                                <TextField label="Correo electrónico" name="correoElectronico" required={true} />
+                            }
+
                         </Grid>
                         <Grid item xs={12} md={3}>
                             <TextField label="Número de teléfono" name="telefono" required={true} />
