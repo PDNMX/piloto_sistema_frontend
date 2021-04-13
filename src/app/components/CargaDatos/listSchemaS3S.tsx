@@ -1018,9 +1018,9 @@ export const ListS3SSchema = () => {
                         <TableFooter>
                             <TableRow>
                                 { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows-(paginationSuper.totalRows-cont) }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows }]}
                                     colSpan={5}
-                                    count={paginationSuper.totalRows-(paginationSuper.totalRows-cont)}
+                                    count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page-1}
                                     SelectProps={{
