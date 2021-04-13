@@ -753,7 +753,7 @@ export const ListS2Schema = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el Registro "+ nombreUsuario+"?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el registro "+ nombreUsuario+"?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Los cambios no serán reversibles
