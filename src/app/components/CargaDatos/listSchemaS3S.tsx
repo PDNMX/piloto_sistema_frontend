@@ -21,7 +21,7 @@ import {
     Divider,
     Tooltip,
     Toolbar,
-    MenuItem
+    MenuItem, useTheme, DialogProps
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
 import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
@@ -49,6 +49,8 @@ import deLocale from "date-fns/locale/es";
 import {ConnectedCreateRegS3S} from "./createRegS3S";
 import NumberFormat from 'react-number-format';
 import { OnChange } from 'react-final-form-listeners'
+import CloseIcon from "@material-ui/icons/Close";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 interface FormDataEsquemaS3S {
     fechaCaptura?: String,
@@ -118,6 +120,7 @@ export const ListS3SSchema = () => {
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS3S>({});
     const [match, setMatch] =   React.useState({params: {id: ""}});
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -354,6 +357,9 @@ export const ListS3SSchema = () => {
             spacer: {
                 flex: "1 1 100%"
             },
+            titleDialogDetail: {
+                flex: 1,
+            },
             actions: {
                 color: theme.palette.text.secondary
             },
@@ -419,7 +425,8 @@ export const ListS3SSchema = () => {
     );
 
     const classes = useStyles();
-
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     // @ts-ignore
     // @ts-ignore
     return (
@@ -431,14 +438,17 @@ export const ListS3SSchema = () => {
                 </Alert>
             </Snackbar>
 
-            <Modal
-                open={openModalUserInfo}
-                onClose={handleCloseModalUserInfo}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                className={classes.modal}
-            >
-                <Grid container item md={8} className={classes.paper}>
+            <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo} aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
+                <Toolbar>
+                    <Typography variant="h6" className={classes.titleDialogDetail}>
+                        Detalle del registro
+                    </Typography>
+                    <IconButton edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
+                        <CloseIcon />
+                    </IconButton>
+                </Toolbar>
+                <DialogContent dividers>
+                <Grid container item md={12} >
                     <Grid container>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
@@ -792,7 +802,8 @@ export const ListS3SSchema = () => {
                         ))}
                     </Grid>
                 </Grid>
-            </Modal>
+                </DialogContent>
+            </Dialog>
 
             <Dialog
                 open={open}
@@ -800,10 +811,10 @@ export const ListS3SSchema = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el Registro "+ nombreUsuario+"?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el registro "+ nombreUsuario+"?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Los cambios no seran reversibles
+                        Los cambios no serán reversibles
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -959,7 +970,9 @@ export const ListS3SSchema = () => {
                                     }
                                     {schema.servidorPublicoSancionado &&
                                     <StyledTableCell style={{ width: 160 }} align="center">
-                                        {schema.servidorPublicoSancionado.nombres+ " "+ schema.servidorPublicoSancionado.primerApellido+ " "+ schema.servidorPublicoSancionado.segundoApellido}
+                                        {schema.servidorPublicoSancionado.nombres&& schema.servidorPublicoSancionado.nombres + " " }
+                                        {schema.servidorPublicoSancionado.primerApellido&& schema.servidorPublicoSancionado.primerApellido + " " }
+                                        {schema.servidorPublicoSancionado.segundoApellido&& schema.servidorPublicoSancionado.segundoApellido}
                                     </StyledTableCell>
                                     }
 

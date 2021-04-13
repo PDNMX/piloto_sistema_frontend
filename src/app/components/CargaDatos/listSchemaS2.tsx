@@ -9,7 +9,19 @@ import {
     TableCell,
     TablePagination,
     TableFooter,
-    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar, Divider, Tooltip, Toolbar
+    makeStyles,
+    Button,
+    TableHead,
+    ButtonGroup,
+    Grid,
+    IconButton,
+    Modal,
+    Typography,
+    Snackbar,
+    Divider,
+    Tooltip,
+    Toolbar,
+    useTheme, DialogProps
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
 import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
@@ -34,6 +46,8 @@ import * as Yup from 'yup';
 import deLocale from "date-fns/locale/es";
 import DateFnsUtils from "@date-io/date-fns";
 import {formatISO} from "date-fns";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CloseIcon from '@material-ui/icons/Close';
 
 interface FormDataEsquemaS2 {
     fechaCaptura?: string,
@@ -90,6 +104,7 @@ export const ListS2Schema = () => {
     const [query, setQuery] =  React.useState({});
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS2>({});
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -99,6 +114,7 @@ export const ListS2Schema = () => {
     const handleCloseModalUserInfo = () => {
         setOpenModalUserInfo(false);
     };
+
 
     const handleClickOpen = (id ,nameReg) => {
         setOpen(true);
@@ -310,6 +326,9 @@ export const ListS2Schema = () => {
             title: {
                 flex: "0 0 auto"
             },
+            titleDialogDetail: {
+                flex: 1,
+            },
             fontblack:{
                 color: '#666666'
             },
@@ -360,18 +379,25 @@ export const ListS2Schema = () => {
                 transform: 'translate(-50%, -50%)',
                 backgroundColor: theme.palette.background.paper,
                 boxShadow: theme.shadows[5],
-                padding: theme.spacing(2, 4, 3),
+
             },
             modal:{
-                overflowY: 'auto'
+                position:'absolute',
+                top:'10%',
+                left:'10%',
+                padding: theme.spacing(2, 4, 3),
+                overflow:'scroll',
+                height:'100%',
+                display:'block',
+                backgroundColor: theme.palette.background.paper
             }
         }),
     );
 
     const classes = useStyles();
-
-    // @ts-ignore
-    // @ts-ignore
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+        // @ts-ignore
     return (
 
         <div >
@@ -381,101 +407,185 @@ export const ListS2Schema = () => {
                 </Alert>
             </Snackbar>
 
-            <Modal
-                open={openModalUserInfo}
-                onClose={handleCloseModalUserInfo}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                className={classes.modal}
-            >
-                <Grid container item md={8} className={classes.paper}>
-                    <Grid container>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Fecha Captura
-                             </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.fechaCaptura}
-                            </Typography>
 
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                               Nombre(s)
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.nombres}
-                            </Typography>
+            <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo} aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
+                <Toolbar>
+                    <Typography variant="h6" className={classes.titleDialogDetail}>
+                        Detalle del registro
+                    </Typography>
+                    <IconButton edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
+                        <CloseIcon />
+                    </IconButton>
+                </Toolbar>
+                <DialogContent dividers>
+                    <Grid container item md={12} >
+                        <Grid container>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Fecha Captura
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.fechaCaptura}
+                                </Typography>
 
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Primer apellido
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.primerApellido}
-                            </Typography>
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Nombre(s)
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.nombres}
+                                </Typography>
 
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Segundo apellido
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.segundoApellido}
-                            </Typography>
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Ejercicio Fiscal
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.ejercicioFiscal}
-                            </Typography>
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Primer apellido
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.primerApellido}
+                                </Typography>
+
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Segundo apellido
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.segundoApellido}
+                                </Typography>
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Ejercicio Fiscal
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.ejercicioFiscal}
+                                </Typography>
+                            </Grid>
+
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Rfc
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.rfc}
+                                </Typography>
+                            </Grid>
+
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Curp
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.curp}
+                                </Typography>
+                            </Grid>
+
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Género
+                                </Typography>
+                                <Typography className={classes.body2}  align="left" variant="body2">
+                                    {selectedRegistro.genero?.valor}
+                                </Typography>
+                            </Grid>
                         </Grid>
 
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                               Rfc
+                        <Grid container justify={"center"} item md={12}>
+                            <Typography className={classes.titleModal} variant="h6"  align="center">
+                                Tipo de área
                             </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.rfc}
-                            </Typography>
+                            <Divider orientation="horizontal"  className={classes.divider} />
                         </Grid>
+                        {selectedRegistro.tipoArea?.map((area) => (
+                            <Grid container>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        Clave
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {area?.clave}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        Valor
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {area?.valor}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        ))}
 
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Curp
+                        <Grid container justify={"center"} item md={12}>
+                            <Typography  className={classes.titleModal} variant="h6"  align="center">
+                                Tipo de procedimiento
                             </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.curp}
-                            </Typography>
+                            <Divider orientation="horizontal"  className={classes.divider} />
                         </Grid>
+                        {selectedRegistro.tipoProcedimiento?.map((area) => (
+                            <Grid container>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        Clave
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {area?.clave}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        Valor
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {area?.valor}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        ))}
 
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                               Género
+                        <Grid container justify={"center"} item md={12}>
+                            <Typography  className={classes.titleModal} variant="h6"  align="center">
+                                Nivel de responsabilidad
                             </Typography>
-                            <Typography className={classes.body2}  align="left" variant="body2">
-                                {selectedRegistro.genero?.valor}
-                            </Typography>
+                            <Divider orientation="horizontal"  className={classes.divider} />
                         </Grid>
-                    </Grid>
+                        {selectedRegistro.nivelResponsabilidad?.map((area) => (
+                            <Grid container>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        Clave
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {area?.clave}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        Valor
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {area?.valor}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        ))}
 
-                    <Grid container justify={"center"} item md={12}>
-                        <Typography className={classes.titleModal} variant="h6"  align="center">
-                            Tipo de área
-                        </Typography>
-                        <Divider orientation="horizontal"  className={classes.divider} />
-                    </Grid>
-                    {selectedRegistro.tipoArea?.map((area) => (
+                        <Grid container justify={"center"} item md={12}>
+                            <Typography  className={classes.titleModal} variant="h6"  align="center">
+                                Ramo
+                            </Typography>
+                            <Divider orientation="horizontal"  className={classes.divider} />
+                        </Grid>
                         <Grid container>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                     Clave
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {area?.clave}
+                                    {selectedRegistro.ramo?.clave}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -483,237 +593,159 @@ export const ListS2Schema = () => {
                                     Valor
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {area?.valor}
+                                    {selectedRegistro.ramo?.valor}
                                 </Typography>
+
                             </Grid>
                         </Grid>
-                    ))}
 
-                    <Grid container justify={"center"} item md={12}>
-                        <Typography  className={classes.titleModal} variant="h6"  align="center">
-                            Tipo de procedimiento
-                        </Typography>
-                        <Divider orientation="horizontal"  className={classes.divider} />
-                    </Grid>
-                    {selectedRegistro.tipoProcedimiento?.map((area) => (
+                        <Grid container justify={"center"} item md={12}>
+                            <Typography  className={classes.titleModal} variant="h6"  align="center">
+                                Institución dependencia
+                            </Typography>
+                            <Divider orientation="horizontal"  className={classes.divider} />
+                        </Grid>
+                        {selectedRegistro.institucionDependencia &&
                         <Grid container>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Nombre
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.institucionDependencia?.nombre}
+                                </Typography>
+                            </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                     Clave
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {area?.clave}
+                                    {selectedRegistro.institucionDependencia?.clave}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Valor
+                                    Siglas
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {area?.valor}
+                                    {selectedRegistro.institucionDependencia?.siglas}
                                 </Typography>
                             </Grid>
                         </Grid>
-                    ))}
-
-                    <Grid container justify={"center"} item md={12}>
-                        <Typography  className={classes.titleModal} variant="h6"  align="center">
-                            Nivel de responsabilidad
-                        </Typography>
-                        <Divider orientation="horizontal"  className={classes.divider} />
-                    </Grid>
-                    {selectedRegistro.nivelResponsabilidad?.map((area) => (
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Clave
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {area?.clave}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Valor
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {area?.valor}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    ))}
-
-                    <Grid container justify={"center"} item md={12}>
-                        <Typography  className={classes.titleModal} variant="h6"  align="center">
-                            Ramo
-                        </Typography>
-                        <Divider orientation="horizontal"  className={classes.divider} />
-                    </Grid>
-                    <Grid container>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Clave
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.ramo?.clave}
-                            </Typography>
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Valor
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.ramo?.valor}
-                            </Typography>
-
-                        </Grid>
-                    </Grid>
-
-                    <Grid container justify={"center"} item md={12}>
-                        <Typography  className={classes.titleModal} variant="h6"  align="center">
-                            Institución dependencia
-                        </Typography>
-                        <Divider orientation="horizontal"  className={classes.divider} />
-                    </Grid>
-                    {selectedRegistro.institucionDependencia &&
-                    <Grid container>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Nombre
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.institucionDependencia?.nombre}
-                            </Typography>
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Clave
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.institucionDependencia?.clave}
-                            </Typography>
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Siglas
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.institucionDependencia?.siglas}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    }
-
-                    <Grid container justify={"center"} item md={12}>
-                        <Typography  className={classes.titleModal} variant="h6"  align="center">
-                            Puesto
-                        </Typography>
-                        <Divider orientation="horizontal"  className={classes.divider} />
-                    </Grid>
-                    <Grid container>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Nombre
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.puesto?.nombre}
-                            </Typography>
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Nivel
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.puesto?.nivel}
-                            </Typography>
-                        </Grid>
-                    </Grid>
-
-                    <Grid container justify={"center"} item md={12}>
-                        <Typography   className={classes.titleModal} variant="h6"  align="center">
-                            Superior inmediato
-                        </Typography>
-                        <Divider orientation="horizontal"  className={classes.divider} />
-                    </Grid>
-                    <Grid container>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Nombre(s)
-                            </Typography>
-                            {selectedRegistro.superiorInmediato?.nombres &&
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato?.nombres}
-                            </Typography>}
-
-                        </Grid>
-
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Primer Apellido
-                            </Typography>
-                            {selectedRegistro.superiorInmediato?.primerApellido &&
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato?.primerApellido}
-                            </Typography>
-                            }
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Segundo apellido
-                            </Typography>
-                            {selectedRegistro.superiorInmediato?.segundoApellido &&
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato?.segundoApellido}
-                            </Typography>
-                            }
-                        </Grid>
-
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Rfc
-                            </Typography>
-                            {selectedRegistro.superiorInmediato?.rfc &&
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato?.rfc}
-                            </Typography>
-                            }
-                        </Grid>
-
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Curp
-                            </Typography>
-                            {selectedRegistro.superiorInmediato?.curp &&
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato?.curp}
-                            </Typography>
-                            }
-                        </Grid>
-
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Puesto nombre
-                            </Typography>
-                            {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nombre &&
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato?.puesto.nombre}
-                            </Typography>
-                            }
-                        </Grid>
-                         <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                            Puesto nivel
-                            </Typography>
-                        {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nivel &&
-                            <Typography className={classes.body2} align="left" variant="body2">
-                        {selectedRegistro.superiorInmediato?.puesto.nivel}
-                            </Typography>
                         }
+
+                        <Grid container justify={"center"} item md={12}>
+                            <Typography  className={classes.titleModal} variant="h6"  align="center">
+                                Puesto
+                            </Typography>
+                            <Divider orientation="horizontal"  className={classes.divider} />
+                        </Grid>
+                        <Grid container>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Nombre
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.puesto?.nombre}
+                                </Typography>
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Nivel
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.puesto?.nivel}
+                                </Typography>
+                            </Grid>
                         </Grid>
 
+                        <Grid container justify={"center"} item md={12}>
+                            <Typography   className={classes.titleModal} variant="h6"  align="center">
+                                Superior inmediato
+                            </Typography>
+                            <Divider orientation="horizontal"  className={classes.divider} />
+                        </Grid>
+                        <Grid container>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Nombre(s)
+                                </Typography>
+                                {selectedRegistro.superiorInmediato?.nombres &&
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.superiorInmediato?.nombres}
+                                </Typography>}
+
+                            </Grid>
+
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Primer Apellido
+                                </Typography>
+                                {selectedRegistro.superiorInmediato?.primerApellido &&
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.superiorInmediato?.primerApellido}
+                                </Typography>
+                                }
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Segundo apellido
+                                </Typography>
+                                {selectedRegistro.superiorInmediato?.segundoApellido &&
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.superiorInmediato?.segundoApellido}
+                                </Typography>
+                                }
+                            </Grid>
+
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Rfc
+                                </Typography>
+                                {selectedRegistro.superiorInmediato?.rfc &&
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.superiorInmediato?.rfc}
+                                </Typography>
+                                }
+                            </Grid>
+
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Curp
+                                </Typography>
+                                {selectedRegistro.superiorInmediato?.curp &&
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.superiorInmediato?.curp}
+                                </Typography>
+                                }
+                            </Grid>
+
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Puesto nombre
+                                </Typography>
+                                {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nombre &&
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.superiorInmediato?.puesto.nombre}
+                                </Typography>
+                                }
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Puesto nivel
+                                </Typography>
+                                {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nivel &&
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.superiorInmediato?.puesto.nivel}
+                                </Typography>
+                                }
+                            </Grid>
+
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Modal>
+                </DialogContent>
+            </Dialog>
+
 
             <Dialog
                 open={open}
@@ -724,7 +756,7 @@ export const ListS2Schema = () => {
                 <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el Registro "+ nombreUsuario+"?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Los cambios no seran reversibles
+                        Los cambios no serán reversibles
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -853,7 +885,9 @@ export const ListS2Schema = () => {
                                         {schema.ejercicioFiscal}
                                     </StyledTableCell>
                                     <StyledTableCell style={{ width: 160 }}  align="center">
-                                        {schema.nombres+" "+schema.primerApellido+" "+schema.segundoApellido}
+                                        {schema.nombres && schema.nombres+ " "}
+                                        {schema.primerApellido && schema.primerApellido+" "}
+                                        {schema.segundoApellido && schema.segundoApellido}
                                     </StyledTableCell>
                                     {schema.institucionDependencia &&
                                     <StyledTableCell style={{ width: 160 }} align="center">

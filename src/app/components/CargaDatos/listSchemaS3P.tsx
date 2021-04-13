@@ -21,7 +21,7 @@ import {
     Divider,
     Tooltip,
     Toolbar,
-    MenuItem
+    MenuItem, useTheme, DialogProps
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
 import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
@@ -50,6 +50,8 @@ import deLocale from "date-fns/locale/es";
 import {ConnectedCreateRegS3P} from "./createRegS3P";
 import NumberFormat from "react-number-format";
 import { OnChange } from 'react-final-form-listeners'
+import CloseIcon from "@material-ui/icons/Close";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 interface FormDataEsquemaS3P {
     particularSancionado?:{
@@ -168,6 +170,7 @@ export const ListS3PSchema = () => {
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS3P>({});
     const [match, setMatch] =   React.useState({params: {id: ""}});
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -410,6 +413,9 @@ export const ListS3PSchema = () => {
             title: {
                 flex: "0 0 auto"
             },
+            titleDialogDetail: {
+                flex: 1,
+            },
             fontblack:{
                 color: '#666666'
             },
@@ -469,8 +475,8 @@ export const ListS3PSchema = () => {
     );
 
     const classes = useStyles();
-
-    // @ts-ignore
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     // @ts-ignore
     return (
 
@@ -481,14 +487,17 @@ export const ListS3PSchema = () => {
                 </Alert>
             </Snackbar>
 
-            <Modal
-                open={openModalUserInfo}
-                onClose={handleCloseModalUserInfo}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                className={classes.modal}
-            >
-                <Grid container item md={8} className={classes.paper}>
+            <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo} aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
+                <Toolbar>
+                    <Typography variant="h6" className={classes.titleDialogDetail}>
+                        Detalle del registro
+                    </Typography>
+                    <IconButton edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
+                        <CloseIcon />
+                    </IconButton>
+                </Toolbar>
+                <DialogContent dividers>
+                <Grid container item md={12}>
                     <Grid container>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
@@ -1178,7 +1187,8 @@ export const ListS3PSchema = () => {
 
                     </Grid>
                 </Grid>
-            </Modal>
+                </DialogContent>
+            </Dialog>
 
             <Dialog
                 open={open}
@@ -1186,10 +1196,10 @@ export const ListS3PSchema = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el Registro "+ nombreUsuario+"?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el registro "+ nombreUsuario+"?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Los cambios no seran reversibles
+                        Los cambios no serán reversibles
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
