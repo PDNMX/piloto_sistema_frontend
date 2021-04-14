@@ -245,7 +245,7 @@ export const ListUser = () => {
                                        {selectedUser.usuario}
                                    </StyledTableCell>
                                    <StyledTableCell style={{width: 160}} align="center">
-                                       {selectedUser.estatus.toString()=="true" ? "Activado" : "Desactivado"}
+                                       {selectedUser.estatus.toString()=="true" ? "Vigente" : "No vigente"}
                                    </StyledTableCell>
                                    <StyledTableCell style={{width: 160}} align="center">
                                        {selectedUser.sistemas.map( value => (
