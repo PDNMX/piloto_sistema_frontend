@@ -1175,7 +1175,9 @@ export function* getListSchemaS2(){
     while(true){
         const {filters} = yield take (S2Constants.REQUEST_LIST_S2);
         const token = localStorage.token;
-
+        let payload = jwt.decode(token);
+        console.log("idUser:"+payload.idUser);
+        filters["idUser"]=payload.idUser;
         const respuestaArray = yield axios.post(ur + `/listSchemaS2`,filters,{ headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -1184,7 +1186,7 @@ export function* getListSchemaS2(){
 
         yield put (S2Actions.setListS2(respuestaArray.data.results));
         yield put (S2Actions.setpaginationS2(respuestaArray.data.pagination));
-
+        console.log(respuestaArray.data.results);
     }
 }
 
@@ -1218,20 +1220,19 @@ export function* getListSchemaS3P(){
                 'Authorization': `Bearer ${token}`
             }});
 
-       /* const respuestaArrayTipoPersona = yield axios.post(ur + `/getCatalogs`, {docType: "tipoPersona"}, {
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        let arrayFormatS3P = [] ;
-        for(let elementS3P of respuestaArray.data.results){
-            arrayFormatS3P.push(yield formatS3PField(elementS3P,respuestaArrayTipoPersona));
-        }
-                yield put (S3PActions.setListS3P(arrayFormatS3P));
-                */
+        /* const respuestaArrayTipoPersona = yield axios.post(ur + `/getCatalogs`, {docType: "tipoPersona"}, {
+             headers: {
+                 'Content-Type': 'application/json',
+                 Accept: 'application/json',
+                 'Authorization': `Bearer ${token}`
+             }
+         });
+         let arrayFormatS3P = [] ;
+         for(let elementS3P of respuestaArray.data.results){
+             arrayFormatS3P.push(yield formatS3PField(elementS3P,respuestaArrayTipoPersona));
+         }
+                 yield put (S3PActions.setListS3P(arrayFormatS3P));
+                 */
 
         yield put (S3PActions.setListS3P(respuestaArray.data.results));
         yield put (S3PActions.setpaginationS3P(respuestaArray.data.pagination));
