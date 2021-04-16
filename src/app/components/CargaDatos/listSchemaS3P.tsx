@@ -1329,9 +1329,7 @@ export const ListS3PSchema = () => {
                         </TableHead>
                         {S3PList.map((schema)  => (
                         <TableBody key="usuarios">
-                            {recordsS3P.map((reg)  => (
-                                reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                <TableRow key={schema._id} {...cont++}>
+                                <TableRow key={schema._id} >
                                     <TableCell className="selectCheckbox" padding="checkbox">
                                         <Checkbox  key={"check"+ schema._id}
                                                    onClick={event =>
@@ -1385,8 +1383,7 @@ export const ListS3PSchema = () => {
                                         </Tooltip>
                                     </StyledTableCell>
                                 </TableRow>
-                                    : <TableRow></TableRow>
-                            )) }
+
                         </TableBody>
                         ))}
                         <TableFooter>

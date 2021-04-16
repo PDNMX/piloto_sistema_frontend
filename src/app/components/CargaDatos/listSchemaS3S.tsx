@@ -943,9 +943,8 @@ export const ListS3SSchema = () => {
                         </TableHead>
                         {S3SList.map((schema)  => (
                         <TableBody key="usuarios">
-                            {recordsS3S.map((reg)  => (
-                                reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                <TableRow key={schema._id} {...cont++}>
+
+                                <TableRow key={schema._id} >
                                     <TableCell className="selectCheckbox" padding="checkbox">
                                         <Checkbox  key={"check"+ schema._id}
                                                    onClick={event =>
@@ -1011,8 +1010,7 @@ export const ListS3SSchema = () => {
 
                                     </StyledTableCell>
                                 </TableRow>
-                                    : <TableRow></TableRow>
-                            )) }
+
                         </TableBody>
                                 ))}
                         <TableFooter>
