@@ -107,6 +107,18 @@ function MyForm(props: MyFormProps ) {
             color: '#666666'
         },
         boton:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'16px',
+            marginBottom:'16px',
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
+        boton2:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'-12px',
+            marginBottom:'16px',
             backgroundColor:'#ffe01b',
             color: '#666666'
         },
@@ -138,7 +150,7 @@ function MyForm(props: MyFormProps ) {
                     <form  onSubmit={handleSubmit} noValidate>
                         {loaderDisplay == false &&
                         <div>
-                            <Grid className= {classes.gridpadding} spacing={3} container >
+                            <Grid spacing={3} container >
                                 <Grid item xs={12} md={6}>
                                     <TextField label="Proveedor" name="dependencia" required={true} />
                                 </Grid>
@@ -150,21 +162,16 @@ function MyForm(props: MyFormProps ) {
                                     <Switches label="Estatus" name="estatus" required={true} data={estatus}/>
                                 </Grid>}
                             </Grid>
-                            <Grid  spacing={3} justify="flex-end" className={classes.gridpadding}
-                                   alignItems="flex-end"
-                                   container
-                                   item
-                                   xs={12}
-                                   md={12}>
+                            <Grid spacing={3} container justify="flex-end" xs={12} md={12}>
                                 <Tooltip title="Cancelar" placement="left">
                                 <Button  onClick={ () => redirectToRoute("/proveedores")}  variant="contained"
-                                         className={classes.marginright}
+                                         className={classes.boton}
                                 > Cancelar
                                 </Button>
                                 </Tooltip>
                                 <Tooltip title="Guardar" placement="right">
                                 <Button  variant="contained"
-                                         className={classes.boton}
+                                         className={classes.boton2}
                                          type="submit"
                                          disabled={submitting}> Guardar
                                 </Button>

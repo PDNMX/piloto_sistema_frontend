@@ -168,6 +168,22 @@ function MyForm(props: MyFormProps ) {
         invLine:{
             color: '#FFFFFF80'
         },
+        boton1:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'16px',
+            marginBottom:'16px',
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
+        boton2:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'-10px',
+            marginBottom:'16px',
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
         boton:{
             backgroundColor:'#ffe01b',
             color: '#666666',
@@ -551,10 +567,10 @@ function MyForm(props: MyFormProps ) {
                                    xs={12}
                                    md={12}>
 
-                                <Button  onClick={ () => redirectToRoute("/consulta/S3S")} variant="contained"  className={cla.marginright}>
+                                <Button  onClick={ () => redirectToRoute("/consulta/S3S")} variant="contained"  className={cla.boton1}>
                                     Cancelar
                                 </Button>
-                                <Button  className={cla.boton}  variant="contained"
+                                <Button  className={cla.boton2}  variant="contained"
                                          type="submit"
                                          disabled={submitting}> Guardar </Button>
                             </Grid>

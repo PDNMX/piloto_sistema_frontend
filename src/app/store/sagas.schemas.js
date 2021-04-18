@@ -286,7 +286,7 @@ export function* loginUser(){
         try{
             const token = yield axios.post(urOauth2 + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
             localStorage.setItem("token", token.data.access_token);
-
+            yield put(alertActions.clear());
             const toke = localStorage.token;
             let payload = jwt.decode(toke);
             const usuario={id_usuario: payload.idUser};
@@ -314,7 +314,7 @@ export function* loginUser(){
 
                 if(status.data.contrasenaNueva===true){
                     history.push('/usuario/cambiarcontrasena');
-                    yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
+                    yield put(alertActions.error("¡Debes cambiar tu contraseña de manera obligatoria!"));
                 }else
                 if(status.data.rol=="2"){
                     history.push('/cargamasiva');
@@ -420,12 +420,12 @@ export function* creationUser(){
 
         if(status.data.Status===500){
             yield put(alertActions.clear());
-            history.push('/usuario/crear');
+            //history.push('/usuario/crear');
             yield put(alertActions.error("El nombre de usuario y/o correo electrónico ya han sido registrados anteriormente."));
         }else if(status.status === 200){
             //all OK
             yield put(alertActions.clear());
-            history.push('/usuarios');
+            //history.push('/usuarios');
             yield put(alertActions.success("Usuario creado con éxito"));
 
 
@@ -454,13 +454,13 @@ export function* editUser(){
 
         if(status.data.Status===500){
             yield put(alertActions.error(status.data.message));
-            history.push('/usuarios');
+            //history.push('/usuarios');
 
         }else if(status.status === 200){
             //all OK
 
             yield put(alertActions.success("Usuario editado con éxito"));
-            history.push('/usuarios');
+            //history.push('/usuarios');
 
         }else{
             //error in response
@@ -1694,6 +1694,10 @@ export function* changePassword(){
 
             if(status.data.Status === 200){
                 yield put(alertActions.success(status.data.message));
+                closeSession();
+                setTimeout(function(){
+                    history.push('/login');
+                },3000);
 
             }else{
                 //error in response
