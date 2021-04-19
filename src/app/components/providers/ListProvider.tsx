@@ -10,7 +10,18 @@ import {
     TablePagination,
     TableFooter,
     Tooltip,
-    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography,Snackbar
+    makeStyles,
+    Button,
+    TableHead,
+    ButtonGroup,
+    Grid,
+    IconButton,
+    Modal,
+    Typography,
+    Snackbar,
+    DialogProps,
+    useTheme,
+    Toolbar
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -30,6 +41,8 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import {withStyles} from "@material-ui/core/styles";
 import {userActions} from "../../_actions/user.action"
 import {alertActions} from "../../_actions/alert.actions";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import CloseIcon from "@material-ui/icons/Close";
 
 
 
@@ -48,6 +61,7 @@ export const ListProvider = () => {
     const [openModalProviderInfo, setOpenModalProviderInfo] = React.useState(false);
     const [selectedProvider, setSelectedProvider] = React.useState({_id : "",fechaAlta : "", fechaActualizacion:"", dependencia: "" , estatus: "" , sistemas :[]});
     var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
 
     const handleOpenModalProviderInfo = (provider) => {
         setOpenModalProviderInfo(true);
@@ -123,6 +137,9 @@ export const ListProvider = () => {
         fontblack:{
             color: '#666666'
         },
+        titleDialogDetail: {
+            flex: 1,
+        },
         boton:{
             backgroundColor:'#ffe01b',
             color: '#666666'
@@ -150,6 +167,9 @@ export const ListProvider = () => {
     }));
 
     const classes = useStyles();
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
 
     return (
         <div>
@@ -166,13 +186,17 @@ export const ListProvider = () => {
                 </Snackbar>
             </Grid>
 
-            <Modal
-                open={openModalProviderInfo}
-                onClose={handleCloseModalProviderInfo}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-            >
-                <Grid container item md={8} className={classes.paper}>
+            <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalProviderInfo} aria-labelledby="customized-dialog-title" open={openModalProviderInfo}>
+                <Toolbar>
+                    <Typography variant="h6" className={classes.titleDialogDetail}>
+                        Detalle del proveedor
+                    </Typography>
+                    <IconButton edge="end" color="inherit" onClick={handleCloseModalProviderInfo} aria-label="close">
+                        <CloseIcon />
+                    </IconButton>
+                </Toolbar>
+                <DialogContent dividers>
+                <Grid container item md={12}>
 
                     <TableContainer component={Paper}>
                         <TableHead>
@@ -210,7 +234,8 @@ export const ListProvider = () => {
                         </TableBody>
                     </TableContainer>
                 </Grid>
-            </Modal>
+                </DialogContent>
+            </Dialog>
 
             <Dialog
                 open={open}

@@ -376,7 +376,7 @@ export const Main = ()=> (
                                            storeValidate.dispatch(S3PActions.requestListS3P({}));
                                            storeValidate.dispatch((alertActions.clear()));
                                            return (<ConnectedMenuV propiedades={{renderView: "S3PSchema"}}/>)
-                                       } else {
+                                       }else{
                                            return <Redirect to="/login"/>;
                                        }
                                    }

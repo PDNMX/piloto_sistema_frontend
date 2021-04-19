@@ -63,19 +63,22 @@ export function* validationErrors(){
                     urlValidation= `/validateSchemaS3P`;
                 }
 
-                respuestaArray = yield axios.post(ur + urlValidation ,SCHEMA, { headers: {
+                const { status,data} = yield axios.post(ur + urlValidation ,SCHEMA, { headers: {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`,
                         'usuario':usuario
-                    }});
+                    } , validateStatus: () => true});
 
-                if(respuestaArray.data.Status === 500){
-                    console.log(respuestaArray.data.response);
-                    yield put(mutations.setErrorsValidation(respuestaArray.data.response));
+                if(status === 500){
+                    console.log(data.response);
+                    yield put(mutations.setErrorsValidation(data.response));
                     yield put(alertActions.error("No se realizó el registro ya que se encontraron errores en la validación, favor de verificar"));
-                }else{
-                    let numeroRegistros= respuestaArray.data.detail.numeroRegistros;
+                } else if (status === 401){
+                yield put(alertActions.error(data.message));
+                //error in token
+                }else {
+                    let numeroRegistros= data.detail.numeroRegistros;
                     yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
                 }
 
@@ -225,9 +228,9 @@ export function* deleteUser(){
             try{
                 let payload = jwt.decode(token);
                 yield put (userActions.setUserInSession(payload.idUser))
-                console.log(payload.idUser);
+
                 let request = {"_id": id,"user":payload.idUser};
-                const {status} = yield axios.delete(ur + `/deleteUser`, { data : {request} , headers: {
+                const {status,data} = yield axios.delete(ur + `/deleteUser`, { data : {request} , headers: {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`
@@ -235,6 +238,10 @@ export function* deleteUser(){
                 if(status === 200){
                     yield put(userActions.deleteUserDo(id));
                     yield put(alertActions.success("Se elimino el usuario con éxito"));
+
+                }else if (status === 401){
+                    yield put(alertActions.error(data.message));
+                    //error in token
                 }else{
                     //error in response
                     yield put(alertActions.error("El usuario NO fue eliminado"));
@@ -255,7 +262,7 @@ export function* deleteProvider(){
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
         let request = {"_id": id,"usuario":payload.idUser};
-        const {status} = yield axios.delete(ur + `/deleteProvider`, { data : {request} ,headers: {
+        const {status, data} = yield axios.delete(ur + `/deleteProvider`, { data : {request} ,headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -263,8 +270,11 @@ export function* deleteProvider(){
         if(status === 200){
             yield put(providerActions.deleteProviderDo(id));
             yield put(alertActions.success("Proveedor eliminado con éxito"));
+        }else if (status === 401){
+            yield put(alertActions.error(data.message));
+            //error in token
         }else{
-            //error in response
+            yield put(alertActions.error("Error al eliminar"));
         }
     }
 }
@@ -412,25 +422,32 @@ export function* creationUser(){
         }
 
         usuarioJson["user"]=payload.idUser;
-        const status = yield axios.post(ur + `/create/user`,usuarioJson, {headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'Authorization': `Bearer ${token}`
-            } , validateStatus: () => true});
+        try {
+            const {status, data} = yield axios.post(ur + `/create/user`, usuarioJson, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }, validateStatus: () => true
+            });
 
-        if(status.data.Status===500){
-            yield put(alertActions.clear());
-            history.push('/usuario/crear');
-            yield put(alertActions.error("El nombre de usuario y/o correo electrónico ya han sido registrados anteriormente."));
-        }else if(status.status === 200){
-            //all OK
-            yield put(alertActions.clear());
-            history.push('/usuarios');
-            yield put(alertActions.success("Usuario creado con éxito"));
-
-
-        }else{
-            //error in response
+            if (status === 500) {
+                yield put(alertActions.clear());
+                history.push('/usuario/crear');
+                yield put(alertActions.error("El nombre de usuario y/o correo electrónico ya han sido registrados anteriormente."));
+            } else if (status === 200) {
+                //all OK
+                yield put(alertActions.clear());
+                history.push('/usuarios');
+                yield put(alertActions.success("Usuario creado con éxito"));
+            } else if (status === 401) {
+                yield put(alertActions.error(data.message));
+                //error in token
+            } else {
+                yield put(alertActions.error("Error al crear"));
+            }
+        }catch (e) {
+                yield put(alertActions.error("Error al crear "+ e.toString()));
         }
     }
 }
@@ -446,25 +463,31 @@ export function* editUser(){
         yield put (userActions.setUserInSession(payload.idUser))
 
         usuarioJson["user"]=payload.idUser;
-        const status = yield axios.put(ur + `/edit/user`,usuarioJson, {headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'Authorization': `Bearer ${token}`
-            } , validateStatus: () => true});
+        try{
+            const {status,data} = yield axios.put(ur + `/edit/user`,usuarioJson, {headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Authorization': `Bearer ${token}`
+                } , validateStatus: () => true});
 
-        if(status.data.Status===500){
-            yield put(alertActions.error(status.data.message));
-            history.push('/usuarios');
+            if(status === 500){
+                yield put(alertActions.error(data.message));
+                history.push('/usuarios');
+            }else if(status === 200){
+                //all OK
+                yield put(alertActions.success("Usuario editado con éxito"));
+                history.push('/usuarios');
 
-        }else if(status.status === 200){
-            //all OK
-
-            yield put(alertActions.success("Usuario editado con éxito"));
-            history.push('/usuarios');
-
-        }else{
-            //error in response
+            }else if (status === 401){
+                yield put(alertActions.error(data.message));
+                //error in token
+            }else{
+                yield put(alertActions.error("Error al actualizar"));
+            }
+        }catch (e) {
+        yield put(alertActions.error("Error al actualizar "+ e.toString()));
         }
+
     }
 }
 
@@ -484,7 +507,7 @@ export function* creationProvider(){
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser))
         usuarioJson["usuario"]=payload.idUser;
-        const {status}  =yield axios.post(ur + `/create/provider`, usuarioJson, {headers: {
+        const {status, data}  =yield axios.post(ur + `/create/provider`, usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -492,8 +515,11 @@ export function* creationProvider(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Proveedor creado con éxito"));
+        }else if (status === 401){
+            yield put(alertActions.error(data.message));
+            //error in token
         }else{
-            //error in response
+            yield put(alertActions.error("Error al crear"));
         }
 
     }
@@ -514,18 +540,19 @@ export function* editProvider(){
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser));
         usuarioJson["usuario"]=payload.idUser;
-        const {status}  =yield axios.put(ur + `/edit/provider`, usuarioJson, {headers: {
+        const {status, data}  =yield axios.put(ur + `/edit/provider`, usuarioJson, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             } ,validateStatus: () => true});
         if(status === 200){
             //all OK
-
-            yield put(alertActions.success("Proveedor editado con éxito"));
-
+            yield put(alertActions.success("Proveedor actualizado con éxito"));
+        }else if (status === 401){
+            yield put(alertActions.error(data.message));
+            //error in token
         }else{
-            //error in response
+            yield put(alertActions.error("Error al actualizar"));
         }
     }
 }
@@ -876,7 +903,7 @@ export function* creationS3PSchema(){
                 //error in response
             }
         } else {
-            const {status} = yield axios.post(ur + `/insertS3PSchema`, {...values, usuario: usuario}, {
+            const {status, data} = yield axios.post(ur + `/insertS3PSchema`, {...values, usuario: usuario}, {
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
@@ -886,9 +913,11 @@ export function* creationS3PSchema(){
             if (status === 200) {
                 //all OK
                 yield put(alertActions.success("Registro creado con éxito"));
-            } else {
+            }else if (status === 401){
+                yield put(alertActions.error(data.message));
+                //error in token
+            }else{
                 yield put(alertActions.error("Error al crear"));
-                //error in response
             }
         }
     }
@@ -1064,7 +1093,7 @@ export function* creationS3SSchema(){
                 //error in response
             }
         }else{
-            const {status} = yield axios.post(ur + `/insertS3SSchema`,{...docSend, usuario:usuario}, {headers: {
+            const {status, data} = yield axios.post(ur + `/insertS3SSchema`,{...docSend, usuario:usuario}, {headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -1072,9 +1101,11 @@ export function* creationS3SSchema(){
             if(status === 200){
                 //all OK
                 yield put(alertActions.success("Registro creado con éxito"));
+            }else if (status === 401){
+                yield put(alertActions.error(data.message));
+                //error in token
             }else{
                 yield put(alertActions.error("Error al crear"));
-                //error in response
             }
         }
 
@@ -1123,7 +1154,7 @@ export function* creationS2Schema(){
         let usuario=payload.idUser;
         docSend["usuario"]=usuario;
 
-        const {status} = yield axios.post(ur + `/insertS2Schema`,docSend, {headers: {
+        const {status, data } = yield axios.post(ur + `/insertS2Schema`,docSend, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -1131,9 +1162,11 @@ export function* creationS2Schema(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Registro creado con éxito "));
+        }else if (status === 401){
+            yield put(alertActions.error(data.message));
+            //error in token
         }else{
             yield put(alertActions.error("Error al crear"));
-            //error in response
         }
     }
 }
@@ -1146,7 +1179,7 @@ export function* updateS2Schema(){
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser));
         let usuario=payload.idUser;
-        const {status} = yield axios.post(ur + `/updateS2Schema`,{...values,usuario:usuario}, {headers: {
+        const {status, data } = yield axios.post(ur + `/updateS2Schema`,{...values,usuario:usuario}, {headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -1154,9 +1187,11 @@ export function* updateS2Schema(){
         if(status === 200){
             //all OK
             yield put(alertActions.success("Registro actualizado con éxito "));
+        }else if (status === 401){
+            yield put(alertActions.error(data.message));
+            //error in token
         }else{
-            yield put(alertActions.error("Error al crear"));
-            //error in response
+            yield put(alertActions.error("Error al actualizar"));
         }
 
     }
@@ -1180,7 +1215,7 @@ export function* getListSchemaS2(){
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
-            }});
+            } , validateStatus: () => true});
 
         yield put (S2Actions.setListS2(respuestaArray.data.results));
         yield put (S2Actions.setpaginationS2(respuestaArray.data.pagination));
@@ -1545,6 +1580,9 @@ export function* deleteSchemaS2(){
                     console.log("Response",  );
                     yield put(S2Actions.deleteRecordDo(id));
                     yield put(alertActions.success(data.messageFront));
+                }else if (status === 401){
+                    yield put(alertActions.error(data.message));
+                    //error in token
                 }else{
                     //error in response
                     yield put(alertActions.error("El Registro NO fue eliminado"));
@@ -1573,14 +1611,17 @@ export function* deleteSchemaS3S(){
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`
                     } , validateStatus: () => true});
-                if(status === 200){
-                    console.log("Response",  );
+                if(status === 200) {
+                    console.log("Response",);
                     yield put(S2Actions.deleteRecordDo(id));
                     yield put(alertActions.success(data.messageFront));
-                }else{
-                    //error in response
-                    yield put(alertActions.error("El Registro NO fue eliminado"));
-                }
+                    }else if (status === 401){
+                        yield put(alertActions.error(data.message));
+                        //error in token
+                    }else{
+                        //error in response
+                        yield put(alertActions.error("El Registro NO fue eliminado"));
+                    }
             }catch (e) {
                 yield put(alertActions.error("El Registro NO fue eliminado"));
             }
@@ -1605,14 +1646,17 @@ export function* deleteSchemaS3P(){
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`
                     } , validateStatus: () => true});
-                if(status === 200){
-                    console.log("Response",  );
+                if(status === 200) {
+                    console.log("Response",);
                     yield put(S2Actions.deleteRecordDo(id));
                     yield put(alertActions.success(data.messageFront));
-                }else{
-                    //error in response
-                    yield put(alertActions.error("El Registro NO fue eliminado"));
-                }
+                }else if (status === 401){
+                        yield put(alertActions.error(data.message));
+                        //error in token
+                    }else{
+                        //error in response
+                        yield put(alertActions.error("El Registro NO fue eliminado"));
+                    }
             }catch (e) {
                 yield put(alertActions.error("El Registro NO fue eliminado"));
             }

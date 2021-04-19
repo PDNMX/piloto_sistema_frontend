@@ -512,7 +512,8 @@ export const ListS3PSchema = () => {
                                 Fecha Captura
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.fechaCaptura}
+                                {//@ts-ignore
+                                    new Date(selectedRegistro.fechaCaptura).toLocaleDateString("es-ES", optionsDate)}
                             </Typography>
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -1041,7 +1042,8 @@ export const ListS3PSchema = () => {
                                     Fecha Resolución
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.resolucion?.fechaNotificacion}
+                                    {//@ts-ignore
+                                        new Date(selectedRegistro.resolucion?.fechaNotificacion).toLocaleDateString("es-ES", optionsDate)}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -1107,7 +1109,8 @@ export const ListS3PSchema = () => {
                                     Fecha inicial
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.inhabilitacion?.fechaInicial}
+                                    {//@ts-ignore
+                                        new Date(selectedRegistro.inhabilitacion?.fechaInicial).toLocaleDateString("es-ES", optionsDate)}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -1115,7 +1118,8 @@ export const ListS3PSchema = () => {
                                     Fecha final
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.inhabilitacion?.fechaFinal}
+                                    {//@ts-ignore
+                                        new Date(selectedRegistro.inhabilitacion?.fechaFinal).toLocaleDateString("es-ES", optionsDate)}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -1188,7 +1192,8 @@ export const ListS3PSchema = () => {
                                         Fecha
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {doc?.fecha}
+                                        {//@ts-ignore
+                                            new Date(doc?.fecha).toLocaleDateString("es-ES", optionsDate)}
                                     </Typography>
                                 </Grid>
                             </Grid>

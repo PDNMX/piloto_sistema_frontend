@@ -121,6 +121,7 @@ export const ListS3SSchema = () => {
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS3S>({});
     const [match, setMatch] =   React.useState({params: {id: ""}});
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
+    var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -463,7 +464,8 @@ export const ListS3SSchema = () => {
                                 Fecha Captura
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.fechaCaptura}
+                                {//@ts-ignore
+                                    new Date(selectedRegistro.fechaCaptura).toLocaleDateString("es-ES", optionsDate)}
                             </Typography>
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -647,7 +649,8 @@ export const ListS3SSchema = () => {
                                         Fecha Resolución
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.resolucion?.fechaResolucion}
+                                        {//@ts-ignore
+                                            new Date(selectedRegistro.resolucion?.fechaResolucion).toLocaleDateString("es-ES", optionsDate)}
                                     </Typography>
                                 </Grid>
                                 <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -713,7 +716,8 @@ export const ListS3SSchema = () => {
                                     Fecha inicial
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.inhabilitacion?.fechaInicial}
+                                    {//@ts-ignore
+                                        new Date(selectedRegistro.inhabilitacion?.fechaInicial).toLocaleDateString("es-ES", optionsDate)}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -721,7 +725,8 @@ export const ListS3SSchema = () => {
                                     Fecha final
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.inhabilitacion?.fechaFinal}
+                                    {//@ts-ignore
+                                        new Date(selectedRegistro.inhabilitacion?.fechaFinal).toLocaleDateString("es-ES", optionsDate)}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -794,7 +799,8 @@ export const ListS3SSchema = () => {
                                         Fecha
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {doc?.fecha}
+                                        {//@ts-ignore
+                                            new Date(doc?.fecha).toLocaleDateString("es-ES", optionsDate)}
                                     </Typography>
                                 </Grid>
                             </Grid>

@@ -10,7 +10,18 @@ import {
     TablePagination,
     TableFooter,
     Tooltip,
-    makeStyles, Button, TableHead, ButtonGroup, Grid, IconButton, Modal, Typography, Snackbar
+    makeStyles,
+    Button,
+    TableHead,
+    ButtonGroup,
+    Grid,
+    IconButton,
+    Modal,
+    Typography,
+    Snackbar,
+    Toolbar,
+    DialogProps,
+    useTheme
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -32,6 +43,8 @@ import {history} from "../../store/history";
 import KeyboardHideIcon from '@material-ui/icons/KeyboardHide';
 import EnhancedEncryptionIcon from '@material-ui/icons/EnhancedEncryption';
 import {requestResetPassword} from "../../store/mutations";
+import CloseIcon from "@material-ui/icons/Close";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 
 
@@ -53,6 +66,8 @@ export const ListUser = () => {
     const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
     const [openPassword, setOpenPassword] = React.useState(false);
     const [usuarioCorreo, setUsuarioCorreo]= React.useState("");
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('lg');
+    var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
 
     const renderSelect = (user) => {
         let c1= false;
@@ -161,6 +176,9 @@ export const ListUser = () => {
             fontblack:{
                 color: '#666666'
             },
+            titleDialogDetail: {
+                flex: 1,
+            },
             boton:{
                 backgroundColor:'#ffe01b',
                 color: '#666666'
@@ -190,6 +208,8 @@ export const ListUser = () => {
     );
 
     const classes = useStyles();
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
         return (
 
@@ -205,14 +225,17 @@ export const ListUser = () => {
                    </Alert>
                </Snackbar>
 
-
-               <Modal
-                   open={openModalUserInfo}
-                   onClose={handleCloseModalUserInfo}
-                   aria-labelledby="simple-modal-title"
-                   aria-describedby="simple-modal-description"
-               >
-                   <Grid container item md={8} className={classes.paper}>
+               <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo} aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
+                   <Toolbar>
+                       <Typography variant="h6" className={classes.titleDialogDetail}>
+                           Detalle del usuario
+                       </Typography>
+                       <IconButton edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
+                           <CloseIcon />
+                       </IconButton>
+                   </Toolbar>
+                   <DialogContent dividers>
+                   <Grid container item md={12} >
                        <TableContainer component={Paper}>
                            <TableHead>
                                <TableRow>
@@ -253,16 +276,18 @@ export const ListUser = () => {
                                        ))}
                                    </StyledTableCell>
                                    <StyledTableCell style={{width: 160}} align="center">
-                                       {selectedUser.fechaAlta}
+                                       {new Date(selectedUser.fechaAlta).toLocaleDateString("es-ES", optionsDate)}
                                    </StyledTableCell>
                                    <StyledTableCell style={{width: 160}} align="center">
-                                       {selectedUser.vigenciaContrasena}
+                                       {new Date(selectedUser.vigenciaContrasena).toLocaleDateString("es-ES", optionsDate)}
                                    </StyledTableCell>
                                </TableRow>
                            </TableBody>
                        </TableContainer>
                    </Grid>
-               </Modal>
+                   </DialogContent>
+               </Dialog>
+
 
                 <Dialog
                     open={open}

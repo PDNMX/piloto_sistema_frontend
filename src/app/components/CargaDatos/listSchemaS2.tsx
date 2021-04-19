@@ -398,6 +398,7 @@ export const ListS2Schema = () => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
         // @ts-ignore
+    // @ts-ignore
     return (
 
         <div >
@@ -425,7 +426,7 @@ export const ListS2Schema = () => {
                                     Fecha Captura
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.fechaCaptura}
+
                                 </Typography>
 
                             </Grid>
@@ -466,7 +467,7 @@ export const ListS2Schema = () => {
 
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Rfc
+                                    RFC
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {selectedRegistro.rfc}
@@ -700,7 +701,7 @@ export const ListS2Schema = () => {
 
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Rfc
+                                    RFC
                                 </Typography>
                                 {selectedRegistro.superiorInmediato?.rfc &&
                                 <Typography className={classes.body2} align="left" variant="body2">
