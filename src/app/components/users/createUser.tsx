@@ -21,6 +21,10 @@ import ListItem from "@material-ui/core/ListItem";
 import { OnChange } from 'react-final-form-listeners'
 import {Alert} from "@material-ui/lab";
 import {providersEnabled} from "../../_reducers/providerEnabled.reducer";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
 
 const CreateUser = ({id, user,alert, providers }) => {
     return <MyForm initialValues={user}  id={id} alerta={alert} providers={providers}/>;
@@ -45,7 +49,7 @@ interface FormDataUser {
 interface MyFormProps {
     initialValues: FormDataUser;
     id: string;
-    alerta: { status: boolean };
+    alerta: { status: boolean, message:string };
     providers : [];
 }
 
@@ -89,16 +93,21 @@ function MyForm(props: MyFormProps ) {
 
     const styles = makeStyles({
         boton:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'16px',
             backgroundColor:'#ffe01b',
             color: '#666666'
         },
-        marginright:{
-            marginRight: '30px',
+        boton2:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'10px',
             backgroundColor:'#ffe01b',
             color: '#666666'
         },
         gridpadding: {
-            padding: '30px',
+            padding: '0px',
         },
         primary: {
             main: "#89d4f2",
@@ -155,11 +164,27 @@ function MyForm(props: MyFormProps ) {
                     {id != null ? <b>Editar usuario</b> :  <b>Crear usuario</b> }
                 </Typography>
             </Grid>
-            <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta2.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-                <Alert onClose={handleCloseSnackbar} severity={alerta2.type}>
-                    {alerta2.message}
-                </Alert>
-            </Snackbar>
+            <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                open={alerta2.status}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Resultado"}</DialogTitle>
+                <DialogContent>
+                    <DialogContent id="alert-dialog-description">
+                        <Typography  noWrap variant="h6" className={cla.fontblack}>
+                            {alerta2.message}
+                        </Typography>
+                    </DialogContent>
+                </DialogContent>
+                <DialogActions>
+                    <Button disabled={!alerta2.status} onClick={ () => redirectToRoute("/usuarios")} color="primary" autoFocus>
+                        Aceptar
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
         <Form
             onSubmit={onSubmit}
@@ -169,7 +194,7 @@ function MyForm(props: MyFormProps ) {
                 <form  onSubmit={handleSubmit} noValidate>
                     {alerta2.status === undefined &&
                         <div>
-                        <Grid className= {cla.gridpadding} spacing={3} container >
+                        <Grid spacing={3} container >
                         <Grid item xs={12} md={3}>
                             <TextField label="Nombre" name="nombre" required={true} />
                         </Grid>
@@ -237,21 +262,16 @@ function MyForm(props: MyFormProps ) {
                             </Grid>
 
                         </Grid>
-                            <Grid  spacing={3} justify="flex-end"
-                                   alignItems="flex-end"
-                                   container
-                                   item
-                                   xs={12}
-                                   md={12}>
+                            <Grid spacing={3} container justify="flex-end" >
                                 <Tooltip title="Cancelar" placement="left">
-                                    <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.marginright}
+                                    <Button  onClick={ () => redirectToRoute("/usuarios")} variant="contained"  className={cla.boton}
                                              type="submit">
                                         Cancelar
                                     </Button>
                                 </Tooltip>
 
                                 <Tooltip title="Guardar" placement="right">
-                                    <Button  className={cla.boton}  variant="contained"
+                                    <Button  className={cla.boton2}  variant="contained"
                                              type="submit"
                                              disabled={submitting}> Guardar
                                     </Button>

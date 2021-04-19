@@ -180,6 +180,8 @@ export const ListUser = () => {
                 flex: 1,
             },
             boton:{
+                marginTop: '16px',
+                marginLeft:'16px',
                 backgroundColor:'#ffe01b',
                 color: '#666666'
             },
@@ -417,7 +419,7 @@ export const ListUser = () => {
                       alignItems="flex-end" >
 
                     <Tooltip title="Agregar usuario" placement="right">
-                        <Button  onClick={ () => redirectToRoute(`/usuario/crear`)} className={classes.marginright}
+                        <Button  onClick={ () => redirectToRoute(`/usuario/crear`)} className={classes.boton}
                                  variant="contained"
                                  endIcon={<AddBoxIcon>Crear usuario</AddBoxIcon>}
                         >

@@ -20,6 +20,10 @@ import {history} from "../../store/history";
 import ListItem from "@material-ui/core/ListItem";
 import { OnChange } from 'react-final-form-listeners'
 import {Alert} from "@material-ui/lab";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
 
 const ChangePassword = ({id, user,alert}) => {
     return <MyForm initialValues={user}  id={id} alerta={alert}/>;
@@ -114,6 +118,10 @@ function MyForm(props: MyFormProps ) {
         }
     }
 
+    const changepassword=()=>{
+        history.push("/usuario/cambiarcontrasena");
+    }
+
     const cla = styles();
 
     const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
@@ -134,13 +142,27 @@ function MyForm(props: MyFormProps ) {
                 </Typography>
             </Grid>
 
-            <Grid item xs={12}>
-                <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={5000} onClose={handleCloseSnackbar}>
-                    <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
-                        {alerta.message}
-                    </Alert>
-                </Snackbar>
-            </Grid>
+            <Dialog
+                disableBackdropClick
+                disableEscapeKeyDown
+                open={alerta.status}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Resultado"}</DialogTitle>
+                <DialogContent>
+                    <DialogContent id="alert-dialog-description">
+                        <Typography  noWrap variant="h6" className={cla.fontblack}>
+                            {alerta.message}
+                        </Typography>
+                    </DialogContent>
+                </DialogContent>
+                <DialogActions>
+                    <Button disabled={!alerta.status} onClick={ () => changepassword()} color="primary" autoFocus>
+                        Aceptar
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <Form
                 onSubmit={onSubmit}
                 initialValues={initialValues}
@@ -171,7 +193,7 @@ function MyForm(props: MyFormProps ) {
                                     </Button>
                                 </Tooltip>
 
-                                <Tooltip title="Guardar" placement="right">
+                                <Tooltip title="Cambiar" placement="right">
                                     <Button  className={cla.boton}  variant="contained"
                                              type="submit"
                                              disabled={submitting}> Cambiar

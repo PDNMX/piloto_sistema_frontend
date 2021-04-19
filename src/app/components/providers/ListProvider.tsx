@@ -141,11 +141,15 @@ export const ListProvider = () => {
             flex: 1,
         },
         boton:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'-12px',
+            marginBottom:'16px',
             backgroundColor:'#ffe01b',
             color: '#666666'
         },
         gridpadding: {
-            padding: '30px',
+            padding: '14px',
         },
         marginright:{
             marginRight: '30px',
@@ -340,7 +344,7 @@ export const ListProvider = () => {
                 <Tooltip title="Agregar proveedor" placement="right">
                     <Button  onClick={ () => redirectToRoute("/proveedor/crear")}
                              variant="contained"
-                             className={classes.marginright}
+                             className={classes.boton}
                              endIcon={<AddBoxIcon>Crear proveedor</AddBoxIcon>}
                     >
                         Crear proveedor

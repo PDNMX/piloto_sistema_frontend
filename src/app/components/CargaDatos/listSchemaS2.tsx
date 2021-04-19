@@ -343,6 +343,18 @@ export const ListS2Schema = () => {
                 color: '#666666'
             },
             boton:{
+                marginTop:'16px',
+                marginLeft:'16px',
+                marginRight:'16px',
+                marginBottom:'0px',
+                backgroundColor:'#ffe01b',
+                color: '#666666'
+            },
+            boton2:{
+                marginTop:'16px',
+                marginLeft:'16px',
+                marginRight:'-10px',
+                marginBottom:'0px',
                 backgroundColor:'#ffe01b',
                 color: '#666666'
             },
@@ -819,9 +831,9 @@ export const ListS2Schema = () => {
                                         </Grid>
                                     </Grid>
                                     <Grid container justify={"flex-end"}>
-                                        <Button style={{margin: "0px 8px 0px 0px"}} className={classes.boton}  variant="contained"
-                                                 onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
                                         <Button  className={classes.boton}  variant="contained"
+                                                 onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
+                                        <Button  className={classes.boton2}  variant="contained"
                                                  type="submit"
                                                  disabled={submitting}> BUSCAR </Button>
                                     </Grid>
@@ -865,9 +877,8 @@ export const ListS2Schema = () => {
                         {S2List.map((schema)  => (
 
                         <TableBody key="usuarios">
-                            {recordsS2.map((reg)  => (
-                                reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                <TableRow key={schema._id} {...cont++}>
+
+                                <TableRow key={schema._id} >
                                     <TableCell className="selectCheckbox" padding="checkbox" >
                                         <Checkbox  key={"check"+ schema._id}
                                                    onClick={event =>
@@ -925,8 +936,7 @@ export const ListS2Schema = () => {
                                             </Tooltip>
                                     </StyledTableCell>
                                     </TableRow>
-                                    : <TableRow></TableRow>
-                            )) }
+
                         </TableBody>
                         ))}
 

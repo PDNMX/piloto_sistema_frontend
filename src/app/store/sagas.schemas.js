@@ -296,7 +296,7 @@ export function* loginUser(){
         try{
             const token = yield axios.post(urOauth2 + `/oauth/token`, qs.stringify(requestBody), { headers: {validateStatus: () => true ,'Content-Type': 'application/x-www-form-urlencoded' } });
             localStorage.setItem("token", token.data.access_token);
-
+            yield put(alertActions.clear());
             const toke = localStorage.token;
             let payload = jwt.decode(toke);
             const usuario={id_usuario: payload.idUser};
@@ -324,7 +324,7 @@ export function* loginUser(){
 
                 if(status.data.contrasenaNueva===true){
                     history.push('/usuario/cambiarcontrasena');
-                    yield put(alertActions.error("Debes cambiar tu contraseña de manera obligatoria."));
+                    yield put(alertActions.error("¡Debes cambiar tu contraseña de manera obligatoria!"));
                 }else
                 if(status.data.rol=="2"){
                     history.push('/cargamasiva');
@@ -1210,7 +1210,9 @@ export function* getListSchemaS2(){
     while(true){
         const {filters} = yield take (S2Constants.REQUEST_LIST_S2);
         const token = localStorage.token;
-
+        let payload = jwt.decode(token);
+        console.log("idUser:"+payload.idUser);
+        filters["idUser"]=payload.idUser;
         const respuestaArray = yield axios.post(ur + `/listSchemaS2`,filters,{ headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -1219,7 +1221,7 @@ export function* getListSchemaS2(){
 
         yield put (S2Actions.setListS2(respuestaArray.data.results));
         yield put (S2Actions.setpaginationS2(respuestaArray.data.pagination));
-
+        console.log(respuestaArray.data.results);
     }
 }
 
@@ -1737,6 +1739,10 @@ export function* changePassword(){
 
             if(status.data.Status === 200){
                 yield put(alertActions.success(status.data.message));
+                closeSession();
+                setTimeout(function(){
+                    history.push('/login');
+                },3000);
 
             }else{
                 //error in response

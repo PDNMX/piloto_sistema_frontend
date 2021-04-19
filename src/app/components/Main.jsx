@@ -207,13 +207,9 @@ export const Main = ()=> (
                                        return <Redirect to="/login"/>;
                                    }else{
                                        if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
-                                           storeValidate.dispatch(userActions.requestRecordsS2());
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
-                                           storeValidate.dispatch(userActions.requestRecordsS2());
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
-                                           //storeValidate.dispatch(userActions.requestProvider());
                                            storeValidate.dispatch(S2Actions.requestListS2({}));
-
                                            storeValidate.dispatch((alertActions.clear()));
                                            return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
                                        } else {

@@ -72,6 +72,18 @@ function MyForm(props: MyFormProps ) {
 
     const styles = makeStyles({
         boton:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'16px',
+            marginBottom:'0px',
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
+        boton2:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'-10px',
+            marginBottom:'0px',
             backgroundColor:'#ffe01b',
             color: '#666666'
         },
@@ -81,7 +93,7 @@ function MyForm(props: MyFormProps ) {
             color: '#666666'
         },
         gridpadding: {
-            padding: '30px',
+            padding: '0px',
         },
         primary: {
             main: "#89d4f2",
@@ -171,20 +183,15 @@ function MyForm(props: MyFormProps ) {
                                     </Select>
                                 </Grid>
                             </Grid>
-                            <Grid  spacing={3} justify="flex-end"
-                                   alignItems="flex-end"
-                                   container
-                                   item
-                                   xs={12}
-                                   md={12}>
+                            <Grid spacing={3} container justify="flex-end" xs={12} md={12}>
                                 {
                                     <Tooltip title="Limpiar" placement="right">
-                                        <Button style={{margin: "0px 8px 0px 0px"}} className={cla.boton}  variant="contained"
+                                        <Button className={cla.boton}  variant="contained"
                                                 onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
                                     </Tooltip>
                                 }
                                 <Tooltip title="Generar" placement="right">
-                                <Button  className={cla.boton}  variant="contained"
+                                <Button  className={cla.boton2}  variant="contained"
                                          type="submit"
                                          disabled={submitting}> Generar
                                 </Button>

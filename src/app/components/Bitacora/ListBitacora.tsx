@@ -84,11 +84,23 @@ export const ListBitacora = () => {
             color: '#666666'
         },
         boton:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'16px',
+            marginBottom:'12px',
+            backgroundColor:'#ffe01b',
+            color: '#666666'
+        },
+        boton2:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'-10px',
+            marginBottom:'12px',
             backgroundColor:'#ffe01b',
             color: '#666666'
         },
         gridpadding: {
-            padding: '30px',
+            padding: '10px',
         },
         marginright:{
             marginRight: '30px',
@@ -205,7 +217,7 @@ export const ListBitacora = () => {
                     <Tooltip title="Reporte Nuevo" placement="left">
                         <Button  onClick={ () => redirectToRoute("/bitacora")}
                                  variant="contained"
-                                 className={classes.marginright}
+                                 className={classes.boton}
                                  endIcon={<AddBoxIcon>Reporte Nuevo</AddBoxIcon>}
                         >
                             Reporte Nuevo
@@ -215,7 +227,7 @@ export const ListBitacora = () => {
                         <CSVLink data={data} headers={headers} filename={"Bitacora.csv"}>
                         <Button
                                  variant="contained"
-                                 className={classes.marginright}
+                                 className={classes.boton2}
                                  endIcon={<FileCopyIcon>Descargar CSV</FileCopyIcon>}
                         >
                             Descargar CSV

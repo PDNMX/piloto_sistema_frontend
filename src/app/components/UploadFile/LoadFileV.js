@@ -68,12 +68,15 @@ export const LoadFileV = () => {
             width: '100%'
         },
         botonera: {
-            textAlign: "right"
+            textAlign: "right",
         },
         boton:{
+            marginTop:'16px',
+            marginLeft:'16px',
+            marginRight:'16px',
+            marginBottom:'16px',
             backgroundColor:'#ffe01b',
-            color: '#666666',
-            marginBottom:'15pt',
+            color: '#666666'
         },
         gridpadding: {
             padding: '30px',
@@ -180,8 +183,9 @@ export const LoadFileV = () => {
                                onChange={e => handleFileChosen(e.target.files[0])} />
                     </Grid>
 
-                    <Grid item xs={12} className={style.botonera} >
+                    <Grid spacing={3} container justify="flex-end" >
                         <Button
+                            className={style.boton}
                             variant="contained"
                             disabled={!docText || !(system != "")}
                             onClick={() =>{console.log(contentFileJson); dispatch(clearErrorsValidation()); dispatch(alertActions.clear()); setDocText(false); fileInputRef.current.value = "";  setOpen(true); dispatch(requestErrorsValidation(contentFileJson , system)) } } className={style.boton}>

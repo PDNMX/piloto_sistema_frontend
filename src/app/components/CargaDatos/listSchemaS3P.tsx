@@ -430,6 +430,18 @@ export const ListS3PSchema = () => {
                 color: '#666666'
             },
             boton:{
+                marginTop:'16px',
+                marginLeft:'16px',
+                marginRight:'16px',
+                marginBottom:'0px',
+                backgroundColor:'#ffe01b',
+                color: '#666666'
+            },
+            boton2:{
+                marginTop:'16px',
+                marginLeft:'16px',
+                marginRight:'-10px',
+                marginBottom:'0px',
                 backgroundColor:'#ffe01b',
                 color: '#666666'
             },
@@ -437,7 +449,7 @@ export const ListS3PSchema = () => {
                 'padding': '10px 10px 20px 10px',
             },
             gridpadding: {
-                'padding-top': '10px',
+                marginRight: '10px',
             },
             gridpaddingBottom: {
                 'padding-bottom': '10px',
@@ -1248,7 +1260,7 @@ export const ListS3PSchema = () => {
                                         </Typography>
                                     </Grid>
 
-                                    <Grid className= {classes.gridpadding} spacing={3} container >
+                                    <Grid spacing={3} container item style={{ marginRight:'100px' }}>
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
                                                 locale={deLocale}
@@ -1295,10 +1307,10 @@ export const ListS3PSchema = () => {
                                                 dateFunsUtils={DateFnsUtils} />
                                         </Grid>
                                     </Grid>
-                                    <Grid container justify={"flex-end"}>
-                                        <Button style={{margin: "0px 8px 0px 0px"}} className={classes.boton}  variant="contained"
-                                                onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
+                                    <Grid container justify={"flex-end"} >
                                         <Button  className={classes.boton}  variant="contained"
+                                                onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
+                                        <Button  className={classes.boton2}  variant="contained"
                                                  type="submit"
                                                  disabled={submitting}> BUSCAR </Button>
                                     </Grid>
@@ -1345,9 +1357,7 @@ export const ListS3PSchema = () => {
                         </TableHead>
                         {S3PList.map((schema)  => (
                         <TableBody key="usuarios">
-                            {recordsS3P.map((reg)  => (
-                                reg.proveedorId==providerUser && reg.registroSistemaId==schema._id ?
-                                <TableRow key={schema._id} {...cont++}>
+                                <TableRow key={schema._id} >
                                     <TableCell className="selectCheckbox" padding="checkbox">
                                         <Checkbox  key={"check"+ schema._id}
                                                    onClick={event =>
@@ -1401,8 +1411,7 @@ export const ListS3PSchema = () => {
                                         </Tooltip>
                                     </StyledTableCell>
                                 </TableRow>
-                                    : <TableRow></TableRow>
-                            )) }
+
                         </TableBody>
                         ))}
                         <TableFooter>
