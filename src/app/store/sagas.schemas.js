@@ -1230,6 +1230,9 @@ export function* getListSchemaS3S(){
     while(true){
         const {filters} = yield take (S3SConstants.REQUEST_LIST_S3S);
         const token = localStorage.token;
+        let payload = jwt.decode(token);
+        console.log("idUser:"+payload.idUser);
+        filters["idUser"]=payload.idUser;
 
         const respuestaArray = yield axios.post(ur + `/listSchemaS3S`,filters,{ headers: {
                 'Content-Type': 'application/json',
@@ -1248,6 +1251,9 @@ export function* getListSchemaS3P(){
     while(true){
         const {filters} = yield take (S3PConstants.REQUEST_LIST_S3P);
         const token = localStorage.token;
+        let payload = jwt.decode(token);
+        console.log("idUser:"+payload.idUser);
+        filters["idUser"]=payload.idUser;
 
         const respuestaArray = yield axios.post(ur + `/listSchemaS3P`,filters,{ headers: {
                 'Content-Type': 'application/json',
