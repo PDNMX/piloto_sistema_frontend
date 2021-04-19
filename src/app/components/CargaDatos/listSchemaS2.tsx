@@ -759,7 +759,6 @@ export const ListS2Schema = () => {
                 </DialogContent>
             </Dialog>
 
-
             <Dialog
                 open={open}
                 onClose={handleClose}
