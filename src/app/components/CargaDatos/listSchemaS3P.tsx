@@ -171,6 +171,7 @@ export const ListS3PSchema = () => {
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS3P>({});
     const [match, setMatch] =   React.useState({params: {id: ""}});
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
+    var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
