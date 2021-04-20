@@ -317,7 +317,7 @@ export const ListProvider = () => {
                         <TableFooter>
                             <TableRow>
                                 { pagination.pageSize != undefined  && pagination.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: -1 }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'Todos', value: -1 }]}
                                     colSpan={6}
                                     count={providers.length}
                                     rowsPerPage={pagination.pageSize}

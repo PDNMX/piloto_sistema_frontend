@@ -241,7 +241,7 @@ export const LoadFileV = () => {
             <Dialog
                 disableBackdropClick
                 disableEscapeKeyDown
-                open={open}
+                open={open && alert.message}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >

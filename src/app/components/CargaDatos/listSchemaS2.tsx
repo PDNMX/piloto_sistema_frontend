@@ -941,7 +941,7 @@ export const ListS2Schema = () => {
                         <TableFooter>
                             <TableRow>
                                 { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'All', value: paginationSuper.totalRows }]}
+                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'Todos', value: paginationSuper.totalRows }]}
                                     colSpan={6}
                                     count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}
