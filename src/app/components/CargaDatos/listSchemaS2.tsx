@@ -143,17 +143,24 @@ export const ListS2Schema = () => {
     };
 
     const confirmAction = (id) => {
-        dispatch(S2Actions.deleteRecordRequest(id));
-        paginationSuper.totalRows= paginationSuper.totalRows-1;
+        let disco= 1;
+        if(Array.isArray(id)){
+            disco = id.length;
+        }
+        let sizeList=S2List.length - disco;
 
-        if(S2List.length <= 1 ){
-            if(paginationSuper.page -1 > 0 ){
-                dispatch(S2Actions.requestListS2({query: query, page:  paginationSuper.page -1 , pageSize: paginationSuper.pageSize}));
+        dispatch(S2Actions.deleteRecordRequest(id));
+        paginationSuper.totalRows = paginationSuper.totalRows-disco;
+
+        if(sizeList  < 1 ){
+            if(paginationSuper.page - 1 > 0 ){
+                dispatch(S2Actions.requestListS2({query: query, page:  paginationSuper.page - 1 , pageSize: paginationSuper.pageSize}));
             }else{
                 dispatch(S2Actions.requestListS2({query: query, page: 1 , pageSize: paginationSuper.pageSize }));
             }
 
         }
+        setSelectedCheckBox([]);
         handleClose();
     }
 
@@ -487,7 +494,7 @@ export const ListS2Schema = () => {
 
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Curp
+                                    CURP
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {selectedRegistro.curp}
@@ -723,7 +730,7 @@ export const ListS2Schema = () => {
 
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Curp
+                                    CURP
                                 </Typography>
                                 {selectedRegistro.superiorInmediato?.curp &&
                                 <Typography className={classes.body2} align="left" variant="body2">

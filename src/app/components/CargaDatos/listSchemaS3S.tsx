@@ -160,10 +160,16 @@ export const ListS3SSchema = () => {
     };
 
     const confirmAction = (id) => {
-        dispatch(S3SActions.deleteRecordRequest(id));
-        paginationSuper.totalRows= paginationSuper.totalRows-1;
+        let disco= 1;
+        if(Array.isArray(id)){
+            disco = id.length;
+        }
+        let sizeList=S3SList.length - disco;
 
-        if(S3SList.length <= 1 ){
+        dispatch(S3SActions.deleteRecordRequest(id));
+        paginationSuper.totalRows = paginationSuper.totalRows-disco;
+
+        if(sizeList < 1 ){
             if(paginationSuper.page -1 > 0 ){
                 dispatch(S3SActions.requestListS3S({query: query, page:  paginationSuper.page -1 , pageSize: paginationSuper.pageSize}));
             }else{
@@ -171,6 +177,7 @@ export const ListS3SSchema = () => {
             }
 
         }
+        setSelectedCheckBox([]);
         handleClose();
     }
 
