@@ -221,11 +221,6 @@ export const ListUser = () => {
                        <b>Lista de usuarios</b>
                    </Typography>
                </Grid>
-               <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
-                   <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
-                       {alerta.message}
-                   </Alert>
-               </Snackbar>
 
                <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo} aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
                    <Toolbar>

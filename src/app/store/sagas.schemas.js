@@ -438,7 +438,6 @@ export function* creationUser(){
             } else if (status === 200) {
                 //all OK
                 yield put(alertActions.clear());
-                history.push('/usuarios');
                 yield put(alertActions.success("Usuario creado con éxito"));
             } else if (status === 401) {
                 yield put(alertActions.error(data.message));
@@ -476,8 +475,6 @@ export function* editUser(){
             }else if(status === 200){
                 //all OK
                 yield put(alertActions.success("Usuario editado con éxito"));
-                history.push('/usuarios');
-
             }else if (status === 401){
                 yield put(alertActions.error(data.message));
                 //error in token
