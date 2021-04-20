@@ -188,7 +188,7 @@ export const LoadFileV = () => {
                             className={style.boton}
                             variant="contained"
                             disabled={!docText || !(system != "")}
-                            onClick={() =>{console.log(contentFileJson); dispatch(clearErrorsValidation()); dispatch(alertActions.clear()); setDocText(false); fileInputRef.current.value = "";  setOpen(true); dispatch(requestErrorsValidation(contentFileJson , system)) } } className={style.boton}>
+                            onClick={() =>{dispatch(clearErrorsValidation()); dispatch(alertActions.clear()); setDocText(false); fileInputRef.current.value = "";  setOpen(true); dispatch(requestErrorsValidation(contentFileJson , system)) } } className={style.boton}>
                             Guardar
                         </Button>
                     </Grid>

@@ -63,13 +63,15 @@ export function* validationErrors(){
                     urlValidation= `/validateSchemaS3P`;
                 }
 
-                const { status,data} = yield axios.post(ur + urlValidation ,SCHEMA, { headers: {
+                const {status,data} = yield axios.post(ur + urlValidation ,SCHEMA, { headers: {
                         'Content-Type': 'application/json',
                         Accept: 'application/json',
                         'Authorization': `Bearer ${token}`,
                         'usuario':usuario
                     } , validateStatus: () => true});
 
+                console.log(status);
+                console.log(data);
                 if(status === 500){
                     console.log(data.response);
                     yield put(mutations.setErrorsValidation(data.response));
@@ -77,7 +79,7 @@ export function* validationErrors(){
                 } else if (status === 401){
                 yield put(alertActions.error(data.message));
                 //error in token
-                }else {
+                }else  if (status === 200){
                     let numeroRegistros= data.detail.numeroRegistros;
                     yield put(alertActions.success("Se insertaron "+ numeroRegistros+" registros correctamente"));
                 }
