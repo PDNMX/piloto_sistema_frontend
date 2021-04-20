@@ -88,12 +88,11 @@ interface FormDataEsquemaS2 {
 }
 
 export const ListS2Schema = () => {
-    const {S2List,alerta,paginationSuper, providerUser, recordsS2} = useSelector(state => ({
+    const {S2List,alerta,paginationSuper, providerUser} = useSelector(state => ({
         S2List : state.S2,
         alerta : state.alert,
         paginationSuper: state.pagination,
-        providerUser: state.providerUser,
-        recordsS2: state.recordsS2
+        providerUser: state.providerUser
     }));
 
     const dispatch = useDispatch();

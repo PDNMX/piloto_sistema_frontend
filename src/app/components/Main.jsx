@@ -332,7 +332,6 @@ export const Main = ()=> (
                                        return <Redirect to="/login"/>;
                                    }else{
                                        if (localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true") {
-                                           storeValidate.dispatch(userActions.requestRecordsS3S());
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
                                            storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
@@ -364,7 +363,6 @@ export const Main = ()=> (
                                        return <Redirect to="/login"/>;
                                    }else{
                                        if (localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true") {
-                                           storeValidate.dispatch(userActions.requestRecordsS3P());
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
                                            storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
