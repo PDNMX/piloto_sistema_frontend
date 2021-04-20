@@ -151,14 +151,13 @@ interface FormDataEsquemaS3P {
 }
 
 export const ListS3PSchema = () => {
-    const {S3PList,alerta,paginationSuper,catalogos, permisos, providerUser, recordsS3P} = useSelector(state => ({
+    const {S3PList,alerta,paginationSuper,catalogos, permisos, providerUser} = useSelector(state => ({
         S3PList : state.S3P,
         alerta : state.alert,
         paginationSuper: state.pagination,
         catalogos: state.catalogs,
         permisos: state.permisos,
-        providerUser: state.providerUser,
-        recordsS3P: state.recordsS3P
+        providerUser: state.providerUser
     }));
 
     const dispatch = useDispatch();

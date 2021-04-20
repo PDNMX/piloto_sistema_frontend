@@ -17,9 +17,6 @@ import {vigencia} from './vigenciaPassword.reducer';
 import {rol} from './rolUser.reducer';
 import {permisos} from "./permisosSistemasUser.reducer";
 import {providerUser} from "./providerUser.reducer";
-import {recordsS2} from "./recordsS2.reducer";
-import {recordsS3S} from "./recordsS3S.reducer";
-import {recordsS3P} from "./recordsS3P.reducer";
 import {providersEnabled} from "./providerEnabled.reducer";
 
 const rootReducer = combineReducers({
@@ -41,9 +38,6 @@ const rootReducer = combineReducers({
     rol,
     permisos,
     providerUser,
-    recordsS2,
-    recordsS3S,
-    recordsS3P,
     providersEnabled
 });
 
