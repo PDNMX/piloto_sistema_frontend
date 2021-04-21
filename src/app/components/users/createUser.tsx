@@ -68,6 +68,14 @@ function MyForm(props: MyFormProps ) {
     async function onSubmit(values: FormDataUser) {
         alert.status =false;
         if(id != undefined){
+            console.log(values.sistemas);
+            /*let arrsistemas: string[] = [];
+
+            for (let sis in values.sistemas){
+                console.log(values.sistemas[sis])
+                arrsistemas.push(values.sistemas[sis])
+            }
+            values["sistemas"]=arrsistemas;*/
             dispatch(requestEditUser({...values, _id : id}));
         }else{
             dispatch(requestCreationUser(values));
@@ -139,9 +147,7 @@ function MyForm(props: MyFormProps ) {
     const cla = styles();
 
     let sistemasData = [
-        {label: 'Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación', value: 'S2'},
-        {label: 'Sistema de los Servidores Públicos Sancionados', value: 'S3S'},
-        {label: 'Sistema de los Particulares Sancionados', value: 'S3P'}
+
     ];
     var sistemaspro=[];
     for(let pro of providers){
