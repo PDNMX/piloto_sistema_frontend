@@ -31,12 +31,6 @@ export const REQUEST_PERMISOS_SISTEMA='REQUEST_PERMISOS_SISTEMA';
 export const REQUEST_PERMISOS_SISTEMA_SET='REQUEST_PERMISOS_SISTEMA_SET';
 export const REQUEST_PROVIDER='REQUEST_PROVIDER';
 export const REQUEST_PROVIDER_SET='REQUEST_PROVIDER_SET';
-export const REQUEST_RECORDS_S2='REQUEST_RECORDS_S2';
-export const REQUEST_RECORDS_S2_SET='REQUEST_RECORDS_S2_SET';
-export const REQUEST_RECORDS_S3S='REQUEST_RECORDS_S3S';
-export const REQUEST_RECORDS_S3S_SET='REQUEST_RECORDS_S3S_SET';
-export const REQUEST_RECORDS_S3P='REQUEST_RECORDS_S3P';
-export const REQUEST_RECORDS_S3P_SET='REQUEST_RECORDS_S3P_SET';
 
 export const clearErrorsValidation = () => ({
     type : CLEAR_ERRORS_VALIDATION
@@ -142,19 +136,4 @@ export const requestPermisosSistema= (permisos) => ({
 export const requestProvider= (providerUser) => ({
     type: REQUEST_PROVIDER,
     providerUser
-});
-
-export const requestRecordsS2= (recordsS2) => ({
-    type: REQUEST_RECORDS_S2,
-    recordsS2
-});
-
-export const requestRecordsS3S= (recordsS3S) => ({
-    type: REQUEST_RECORDS_S3S,
-    recordsS3S
-});
-
-export const requestRecordsS3P= (recordsS3P) => ({
-    type: REQUEST_RECORDS_S3P,
-    recordsS3P
 });
