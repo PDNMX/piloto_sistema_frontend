@@ -22,7 +22,6 @@ function fillRegEdit(id){
 function deleteRecordRequest(id){
     return {type: S2Constants.DELETE_REQUEST, id }
 }
-
 function deleteRecordDo(id){
     return {type: S2Constants.DELETE_OPERATION, id }
 }
