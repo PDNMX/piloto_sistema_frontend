@@ -143,7 +143,28 @@ function MyForm(props: MyFormProps ) {
         {label: 'Sistema de los Servidores Públicos Sancionados', value: 'S3S'},
         {label: 'Sistema de los Particulares Sancionados', value: 'S3P'}
     ];
-
+    var sistemaspro=[];
+    for(let pro of providers){
+        if(initialValues!=undefined){
+            if(pro['value']==initialValues.proveedorDatos){
+                sistemaspro=pro['sistemas'];
+                var sistemasNew=[];
+                for (let sistema of sistemaspro){
+                    if(sistema === "S2"){
+                        // @ts-ignore
+                        sistemasNew.push({label : 'Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación', value: 'S2'})
+                    }else if(sistema === "S3S"){
+                        // @ts-ignore
+                        sistemasNew.push({label: 'Sistema de los Servidores Públicos Sancionados', value: 'S3S'});
+                    }else if(sistema === "S3P"){
+                        // @ts-ignore
+                        sistemasNew.push( {label: 'Sistema de los Particulares Sancionados', value: 'S3P'});
+                    }
+                }
+                sistemasData= sistemasNew;
+            }
+        }
+    }
 
     const estatus = [
         {label: 'Vigente', value: true},
