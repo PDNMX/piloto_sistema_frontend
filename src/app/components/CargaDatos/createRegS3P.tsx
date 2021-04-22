@@ -180,7 +180,7 @@ function MyForm(props: MyFormProps ) {
                 numeroExterior:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
                 numeroInterior: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
             }),
-            domicilioExranjero: Yup.object().shape({
+            domicilioExtranjero: Yup.object().shape({
                 calle:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
                 numeroExterior:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
                 numeroInterior: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
@@ -639,25 +639,25 @@ function MyForm(props: MyFormProps ) {
                                             <Divider className={cla.boton} />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <Select  name = "particularSancionado.domicilioExranjero.pais" label="País" data={catalogos.paises} ></Select>
+                                            <Select  name = "particularSancionado.domicilioExtranjero.pais" label="País" data={catalogos.paises} ></Select>
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Estado / Provincia" name="particularSancionado.domicilioExranjero.estadoProvincia" />
+                                            <TextField label="Estado / Provincia" name="particularSancionado.domicilioExtranjero.estadoProvincia" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Ciudad/ Localidad" name="particularSancionado.domicilioExranjero.ciudadLocalidad" />
+                                            <TextField label="Ciudad/ Localidad" name="particularSancionado.domicilioExtranjero.ciudadLocalidad" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Calle" name="particularSancionado.domicilioExranjero.calle" />
+                                            <TextField label="Calle" name="particularSancionado.domicilioExtranjero.calle" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Número exterior" name="particularSancionado.domicilioExranjero.numeroExterior" />
+                                            <TextField label="Número exterior" name="particularSancionado.domicilioExtranjero.numeroExterior" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Número interior" name="particularSancionado.domicilioExranjero.numeroInterior" />
+                                            <TextField label="Número interior" name="particularSancionado.domicilioExtranjero.numeroInterior" />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Código postal" name="particularSancionado.domicilioExranjero.codigoPostal" />
+                                            <TextField label="Código postal" name="particularSancionado.domicilioExtranjero.codigoPostal" />
                                         </Grid>
                                     </Grid>
                                 }

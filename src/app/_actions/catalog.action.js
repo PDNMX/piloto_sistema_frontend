@@ -29,6 +29,7 @@ export const catalogActions = {
     setEstadoSucces,
     requestMunicipioByEstadoCatalogo,
     setMunicipioSucces,
+    setLocalidadSucces,
     requestVialidadCatalogo,
     setVialidadSucces,
 };
@@ -90,6 +91,14 @@ function setMunicipioSucces(municipio){
         municipio
     }
 }
+
+function setLocalidadSucces(localidad){
+    return {
+        type : catalogConstants.LOCALIDAD_SET,
+        localidad
+    }
+}
+
 
 function  requestVialidadCatalogo (docType){
     return {

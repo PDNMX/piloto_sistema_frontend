@@ -181,7 +181,6 @@ export const Main = ()=> (
                                            storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
                                            storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
                                            storeValidate.dispatch(catalogActions.requestEstadoCatalogo("estado"));
-                                           //storeValidate.dispatch(catalogActions.requestMunicipioCatalogo("municipio"));
                                            storeValidate.dispatch(catalogActions.requestVialidadCatalogo("vialidad"));
                                            storeValidate.dispatch(catalogActions.requesTipoDocumentoCatalogo("tipoDocumento"));
                                            return <ConnectedMenuV propiedades = {{renderView : "createRegS3P"}} />

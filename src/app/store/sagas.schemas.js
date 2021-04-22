@@ -798,8 +798,11 @@ export function* creationS3PSchema(){
 
 
         if(values.domicilio === 'mex'){
-            delete values.particularSancionado.domicilioExranjero;
+            delete values.particularSancionado.domicilioExtranjero;
         }else if(values.domicilio === 'ext'){
+            delete values.particularSancionado.domicilioMexico;
+        }else{
+            delete values.particularSancionado.domicilioExtranjero;
             delete values.particularSancionado.domicilioMexico;
         }
 
@@ -878,6 +881,12 @@ export function* creationS3PSchema(){
                     if (values.particularSancionado.domicilioMexico.descripcionVialidad) {
                         delete values.particularSancionado.domicilioMexico.descripcionVialidad;
                     }
+                }
+            }
+            if (values.particularSancionado.domicilioExtranjero) {
+                if (values.particularSancionado.domicilioExtranjero.pais) {
+                    let paisDomExt = JSON.parse(values.particularSancionado.domicilioExtranjero.pais);
+                    values.particularSancionado.domicilioExtranjero.pais = paisDomExt;
                 }
             }
         }
@@ -1361,7 +1370,7 @@ export function* fillUpdateRegS3P() {
         });
 
         let registro = respuestaArray.data.results[0];
-
+        let entidadSelect;
         for (let [key, row] of Object.entries(registro)) {
 
             if (key === "particularSancionado") {
@@ -1381,6 +1390,8 @@ export function* fillUpdateRegS3P() {
                         }
                     }
                 }
+
+
                 if(row.domicilioMexico){
                     registro.domicilio= 'mex';
                     if(row.domicilioMexico.pais){
@@ -1388,9 +1399,32 @@ export function* fillUpdateRegS3P() {
                     }
                     if(row.domicilioMexico.entidadFederativa){
                         row.domicilioMexico.entidadFederativa = JSON.stringify(row.domicilioMexico.entidadFederativa);
+                        entidadSelect =  row.domicilioMexico.entidadFederativa
+                        const respuestaArrayMunicipio = yield axios.post(ur + `/getCatalogsMunicipiosPorEstado`, {idEstado: row.domicilioMexico.entidadFederativa}, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Accept: 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if(Array.isArray(respuestaArrayMunicipio.data.results)){
+                            yield put(catalogActions.setMunicipioSucces(respuestaArrayMunicipio.data.results));
+                        }
                     }
                     if(row.domicilioMexico.municipio){
                         row.domicilioMexico.municipio= JSON.stringify(row.domicilioMexico.municipio);
+                        const respuestaArrayLocalidad = yield axios.post(ur + `/getCatalogsLocalidadesPorEstado`, {idMunicipio:  row.domicilioMexico.municipio, idEntidad: entidadSelect}, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Accept: 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if(Array.isArray(respuestaArrayLocalidad.data.results)){
+                           yield put(catalogActions.setLocalidadSucces( respuestaArrayLocalidad.data.results));
+                        }
                     }
                     if(row.domicilioMexico.localidad){
                         row.domicilioMexico.localidad= JSON.stringify(row.domicilioMexico.localidad);
@@ -1400,9 +1434,14 @@ export function* fillUpdateRegS3P() {
                         row.domicilioMexico.vialidad= JSON.stringify({clave: row.domicilioMexico.vialidad.clave, valor: row.domicilioMexico.vialidad.clave});
                     }
                 }
-                if(row.domicilioExranjero){
-                    registro.domicilio= 'mex';
+                if(row.domicilioExtranjero){
+                    registro.domicilio= 'ext';
+
+                    if(row.domicilioExtranjero.pais){
+                        row.domicilioExtranjero.pais= JSON.stringify(row.domicilioExtranjero.pais);
+                    }
                 }
+
             } else if (key === "multa") {
                 if(row.moneda){
                     row.moneda = JSON.stringify(row.moneda);

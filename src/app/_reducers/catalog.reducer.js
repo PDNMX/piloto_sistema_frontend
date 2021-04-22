@@ -30,6 +30,8 @@ export function catalogs(state = {genero: [], ramo: [], puesto: [] ,tipoSancion 
             return {...state , estados : action.estado}
         case catalogConstants.MUNICIPIO_SET:
             return {...state , municipios : action.municipio}
+        case catalogConstants.LOCALIDAD_SET:
+            return {...state , localidades : action.localidad}
         case catalogConstants.VIALIDAD_SET:
             return {...state , vialidades : action.vialidad}
 
