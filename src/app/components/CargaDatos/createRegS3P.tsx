@@ -307,6 +307,10 @@ function MyForm(props: MyFormProps ) {
             backgroundColor:'#ffe01b',
             color: '#666666',
         },
+        overSelect:{
+            'max-height': '19px',
+            "white-space": "normal !important"
+        },
         marginright:{
             marginRight: '30px',
             backgroundColor:'#ffe01b',
@@ -487,7 +491,10 @@ function MyForm(props: MyFormProps ) {
                                                 </Grid>
                                                 {catalogos.tipoSancion &&
                                                 <Grid item xs={12} md={12}>
-                                                    <Select  name={`tipoSancion.${index}.tipoSancion`} label="Tipo de sanción *" data={catalogos.tipoSancion} ></Select>
+                                                    <Select  inputProps={{
+                                                        classes: {
+                                                            select: cla.overSelect,
+                                                        },}}  name={`tipoSancion.${index}.tipoSancion`} label="Tipo de sanción *" data={catalogos.tipoSancion} ></Select>
                                                 </Grid>}
                                                 <Grid item xs={12} md={12}>
                                                     <TextField label="Descripción" name={`tipoSancion.${index}.descripcion`} />

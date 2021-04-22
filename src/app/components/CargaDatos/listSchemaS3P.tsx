@@ -411,6 +411,10 @@ export const ListS3PSchema = () => {
                 color: 'white',
                 backgroundColor: '#7f7e7e'
             },
+            overSelect:{
+                'max-height': '19px',
+                "white-space": "normal !important"
+            },
             spacer: {
                 flex: "1 1 100%"
             },
@@ -1287,7 +1291,11 @@ export const ListS3PSchema = () => {
                                         </Grid>
                                         {catalogos.tipoSancion &&
                                         <Grid item xs={12} md={3}>
-                                            <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
+                                            <Select  inputProps={{
+                                                classes: {
+                                                    select: classes.overSelect,
+                                                },
+                                            }}  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
                                         </Grid>}
                                         {catalogos.tipoSancion &&
                                         <OnChange name="tipoSancion">
