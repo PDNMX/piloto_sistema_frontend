@@ -104,6 +104,7 @@ export const ListS2Schema = () => {
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS2>({});
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
+    var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -160,7 +161,7 @@ export const ListS2Schema = () => {
             }
 
         }
-        setSelectedCheckBox([]);
+
         handleClose();
     }
 
@@ -444,7 +445,8 @@ export const ListS2Schema = () => {
                                     Fecha Captura
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-
+                                    {//@ts-ignore
+                                        new Date(selectedRegistro.fechaCaptura).toLocaleDateString("es-ES", optionsDate)}
                                 </Typography>
 
                             </Grid>

@@ -176,7 +176,7 @@ export const Main = ()=> (
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
                                            storeValidate.dispatch((alertActions.clear()));
-                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancionS3P"));
                                            storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
                                            storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
                                            storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
@@ -212,7 +212,7 @@ export const Main = ()=> (
                                            storeValidate.dispatch(S2Actions.requestListS2({}));
                                            storeValidate.dispatch((alertActions.clear()));
                                            return (<ConnectedMenuV propiedades={{renderView: "S2Schema"}}/>)
-                                       } else {
+                                       }else{
                                            return <Redirect to="/login"/>;
                                        }
                                    }
@@ -233,7 +233,10 @@ export const Main = ()=> (
                                        localStorage.clear();
                                        return <Redirect to="/login"/>;
                                    }else{
+                                       console.log("ROL "+ localStorage.rol);
+                                       console.log("S2 " + localStorage.S2);
                                        if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
+                                           console.log("entre");
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
                                            storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));
@@ -268,7 +271,7 @@ export const Main = ()=> (
                                        if ( localStorage.token && localStorage.rol =="2"){
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch((alertActions.clear()));
-                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancionS3P"));
                                            storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
                                            storeValidate.dispatch(catalogActions.requestMonedaCatalogo("moneda"));
                                            storeValidate.dispatch(catalogActions.requestPaisCatalogo("pais"));
@@ -365,7 +368,7 @@ export const Main = ()=> (
                                        if (localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true") {
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
-                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
+                                           storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancionS3P"));
                                            storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
                                            storeValidate.dispatch(S3PActions.requestListS3P({}));
                                            storeValidate.dispatch((alertActions.clear()));

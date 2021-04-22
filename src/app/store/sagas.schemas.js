@@ -1349,6 +1349,8 @@ export function* fillUpdateRegS3P() {
         const {id} = yield take(S3PConstants.FILL_REG_S3P_EDIT);
         const token = localStorage.token;
         let query = {"query": {"_id": id}};
+        let payload = jwt.decode(token);
+        query["idUser"]=payload.idUser;
 
         const respuestaArray = yield axios.post(ur + `/listSchemaS3P`, query, {
             headers: {
@@ -1436,6 +1438,8 @@ export function* fillUpdateRegS3S(){
         const {id} = yield take (S3SConstants.FILL_REG_S3S_EDIT);
         const token = localStorage.token;
         let query = {"query" : {"_id" : id}};
+        let payload = jwt.decode(token);
+        query["idUser"]=payload.idUser;
 
         const respuestaArray = yield axios.post(ur + `/listSchemaS3S`,query,{ headers: {
                 'Content-Type': 'application/json',
@@ -1522,6 +1526,8 @@ export function* fillUpdateRegS2(){
         const {id} = yield take (S2Constants.FILL_REG_S2_EDIT);
         const token = localStorage.token;
         let query = {"query" : {"_id" : id}};
+        let payload = jwt.decode(token);
+        query["idUser"]=payload.idUser;
 
         const respuestaArray = yield axios.post(ur + `/listSchemaS2`,query,{ headers: {
                 'Content-Type': 'application/json',
@@ -1533,7 +1539,6 @@ export function* fillUpdateRegS2(){
 
         let newRow={};
         for (let [key, row] of Object.entries(registro)) {
-
             if(key ===  "genero" || key === "ramo"){
                 newRow[key]=  JSON.stringify({clave:row.clave.toString() ,valor : row.valor});
             }else if(key === "tipoArea" || key === "nivelResponsabilidad" || key === "tipoProcedimiento") {
@@ -1563,6 +1568,7 @@ export function* fillUpdateRegS2(){
                 newRow[key] = row ;
             }
         }
+        console.log("EL REGISTRO"+ newRow)
         yield put (S2Actions.setListS2([newRow]));
     }
 }
