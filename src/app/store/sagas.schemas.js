@@ -192,11 +192,8 @@ export function* fillAllProvidersEnabled(){
 
         var arrdata=[];
         respuestaArray.data.results.forEach(function(row){
-            if(row.estatus==true){
                 arrdata.push({label:row.label,value:row.value, sistemas:row.sistemas});
-            }
         });
-
         yield put(providerActions.setProvidersAllEnable(arrdata));
     }
 }
@@ -473,7 +470,7 @@ export function* editUser(){
 
             if(status === 500){
                 yield put(alertActions.error(data.message));
-                history.push('/usuarios');
+                //history.push('/usuarios');
             }else if(status === 200){
                 //all OK
                 yield put(alertActions.success("Usuario editado con éxito"));

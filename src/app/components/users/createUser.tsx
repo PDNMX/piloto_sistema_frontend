@@ -173,7 +173,7 @@ function MyForm(props: MyFormProps ) {
     }
 
     const estatus = [
-        {label: 'Vigente', value: true},
+        {label: 'Vigente', value: true}
     ];
     const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
         variant:"contained",
