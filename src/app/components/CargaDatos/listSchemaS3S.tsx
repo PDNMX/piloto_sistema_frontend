@@ -425,6 +425,10 @@ export const ListS3SSchema = () => {
                 color: '#666666',
                 marginBottom: '30px'
             },
+            overSelect:{
+                'max-height': '19px',
+                "white-space": "normal !important"
+            },
             paper: {
                 'text-align': 'center',
                 margin: 0,
@@ -896,7 +900,11 @@ export const ListS3SSchema = () => {
                                         </Grid>
                                         {catalogos.tipoSancion &&
                                         <Grid item xs={12} md={3}>
-                                            <Select  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
+                                            <Select  inputProps={{
+                                                classes: {
+                                                    select: classes.overSelect,
+                                                },
+                                            }}  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
                                         </Grid>}
                                         {catalogos.tipoSancion &&
                                         <OnChange name="tipoSancion">
