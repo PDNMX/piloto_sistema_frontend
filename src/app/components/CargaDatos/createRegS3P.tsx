@@ -908,8 +908,6 @@ function MyForm(props: MyFormProps ) {
                                 </Button>
                             </DialogActions>
                         </Dialog>
-
-                        <pre>{JSON.stringify(values)}</pre>
                     </form>
                 )}
             />
