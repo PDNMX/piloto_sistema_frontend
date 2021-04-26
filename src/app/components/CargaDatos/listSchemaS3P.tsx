@@ -1066,10 +1066,12 @@ export const ListS3PSchema = () => {
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                     Fecha Resolución
                                 </Typography>
+                                {selectedRegistro.resolucion?.fechaNotificacion &&
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
                                         new Date(selectedRegistro.resolucion?.fechaNotificacion+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
-                                </Typography>
+                                </Typography>}
+
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
@@ -1133,19 +1135,24 @@ export const ListS3PSchema = () => {
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                     Fecha inicial
                                 </Typography>
+                                {selectedRegistro.inhabilitacion?.fechaInicial &&
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
                                         new Date(selectedRegistro.inhabilitacion?.fechaInicial+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
-                                </Typography>
+                                </Typography>}
+
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                     Fecha final
                                 </Typography>
+                                {selectedRegistro.inhabilitacion?.fechaFinal &&
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
                                         new Date(selectedRegistro.inhabilitacion?.fechaFinal+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
                                 </Typography>
+                                }
+
                             </Grid>
                         </Grid>
                         <Grid container justify={"center"} item md={12}>

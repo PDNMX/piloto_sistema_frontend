@@ -671,10 +671,12 @@ export const ListS3SSchema = () => {
                                     <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                         Fecha Resolución
                                     </Typography>
+                                    {selectedRegistro.resolucion?.fechaResolucion &&
                                     <Typography className={classes.body2} align="left" variant="body2">
                                         {//@ts-ignore
                                             new Date(selectedRegistro.resolucion?.fechaResolucion+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
-                                    </Typography>
+                                    </Typography>}
+
                                 </Grid>
                                 <Grid className={classes.gridpadding} item md={3} sm={12}>
                                     <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
