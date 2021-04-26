@@ -1,4 +1,5 @@
 import { S3SConstants } from '../_constants/s3s.constants';
+import {S3PConstants} from "../_constants/s3p.constants";
 
 export const S3SActions = {
     requestCreationS3S,
@@ -8,8 +9,8 @@ export const S3SActions = {
     deleteRecordRequest,
     deleteRecordDo,
     fillRegEdit,
-    requestEditDo
-
+    requestEditDo,
+    setclearS3S
 };
 
 function requestEditDo(values){
@@ -41,4 +42,8 @@ function requestCreationS3S(values) {
 
 function setpaginationS3S(pagination) {
     return { type: S3SConstants.PAGINATION_SET_SCHEMA3S, pagination };
+}
+
+function setclearS3S(){
+    return { type: S3SConstants.SET_CLEAR_S3S}
 }

@@ -25,6 +25,7 @@ import {ListBitacora} from "./Bitacora/ListBitacora";
 import {S3SActions} from "../_actions/s3s.action";
 import {S3PActions} from "../_actions/s3p.action";
 import {ResetPasswordV} from "./Login/ResetPassword";
+import {S3P} from "../_reducers/S3PSchema.reducer";
 
 const theme = createMuiTheme({
     typography: {
@@ -207,6 +208,7 @@ export const Main = ()=> (
                                    }else{
                                        if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(S2Actions.setclearS2());
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
                                            storeValidate.dispatch(S2Actions.requestListS2({}));
                                            storeValidate.dispatch((alertActions.clear()));
@@ -335,6 +337,7 @@ export const Main = ()=> (
                                    }else{
                                        if (localStorage.token && localStorage.rol =="2" && localStorage.S3S=="true") {
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
+                                           storeValidate.dispatch(S3SActions.setclearS3S());
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
                                            storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancion"));
                                            S3SActions.setListS3S([]);
@@ -367,6 +370,7 @@ export const Main = ()=> (
                                        if (localStorage.token && localStorage.rol =="2" && localStorage.S3P=="true") {
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
+                                           storeValidate.dispatch(S3PActions.setclearS3P());
                                            storeValidate.dispatch(catalogActions.requestTipoSancionCatalogo("tipoSancionS3P"));
                                            storeValidate.dispatch(catalogActions.requesTipoPersonaCatalogo("tipoPersona"));
                                            storeValidate.dispatch(S3PActions.requestListS3P({}));

@@ -4,6 +4,8 @@ export function S2(state = [] ,action){
     switch (action.type){
         case S2Constants.SET_LIST_S2 :
             return  action.list;
+        case S2Constants.SET_CLEAR_S2:
+            return [];
         case S2Constants.DELETE_OPERATION:
             let array = [];
             if(Array.isArray(action.id)){

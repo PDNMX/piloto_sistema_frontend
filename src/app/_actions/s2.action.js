@@ -8,8 +8,8 @@ export const S2Actions = {
     deleteRecordRequest,
     deleteRecordDo,
     fillRegEdit,
-    requestEditDo
-
+    requestEditDo,
+    setclearS2
 };
 
 function requestEditDo(values){
@@ -40,4 +40,8 @@ function requestCreationS2(values) {
 
 function setpaginationS2(pagination) {
     return { type: S2Constants.PAGINATION_SET_SCHEMA2, pagination };
+}
+
+function setclearS2(){
+    return { type: S2Constants.SET_CLEAR_S2}
 }

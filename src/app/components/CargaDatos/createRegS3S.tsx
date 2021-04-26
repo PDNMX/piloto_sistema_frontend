@@ -118,7 +118,7 @@ function MyForm(props: MyFormProps ) {
             .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                 'Introduce una direccion de internet valida'
             ).trim(),
-        resolucionFecha:  Yup.string().trim()
+        resolucionFecha:  Yup.string().trim().nullable(true)
             .when('resolucionURL',  (resolucionURL) => {
                 if(resolucionURL)
                     return  Yup.string().required("El campo Fecha de resolución es requerido").trim()
@@ -136,8 +136,8 @@ function MyForm(props: MyFormProps ) {
                 }),
         }, ['moneda','monto']),
         inhabilitacionPlazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]*$'),'No se permiten cadenas vacías').trim(),
-        inhabilitacionFechaInicial:  Yup.string().trim(),
-        inhabilitacionFechaFinal:  Yup.string().trim(),
+        inhabilitacionFechaInicial:  Yup.string().trim().nullable(true),
+        inhabilitacionFechaFinal:  Yup.string().trim().nullable(true),
         observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n\/ ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documents: Yup.array().of(
             Yup.object().shape({

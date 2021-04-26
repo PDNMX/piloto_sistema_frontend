@@ -321,7 +321,7 @@ export const ListS3PSchema = () => {
         SP3nombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SP3primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SP3segundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        fechaCaptura:  Yup.string(),
+        fechaCaptura:  Yup.string().nullable(true),
     });
 
     const validate = makeValidate(schema);

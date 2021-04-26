@@ -274,8 +274,8 @@ export const ListS3SSchema = () => {
         SPSnombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SPSprimerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SPSsegundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        inhabilitacionFechaFinal:  Yup.string(),
-        fechaCaptura: Yup.string(),
+        inhabilitacionFechaFinal:  Yup.string().nullable(true),
+        fechaCaptura: Yup.string().nullable(true),
     });
 
     const validate = makeValidate(schema);
