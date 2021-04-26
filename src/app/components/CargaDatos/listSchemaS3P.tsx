@@ -171,6 +171,8 @@ export const ListS3PSchema = () => {
     const [match, setMatch] =   React.useState({params: {id: ""}});
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
     var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
+    var optionsOnlyDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -1066,7 +1068,7 @@ export const ListS3PSchema = () => {
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
-                                        new Date(selectedRegistro.resolucion?.fechaNotificacion).toLocaleDateString("es-ES", optionsDate)}
+                                        new Date(selectedRegistro.resolucion?.fechaNotificacion+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -1133,7 +1135,7 @@ export const ListS3PSchema = () => {
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
-                                        new Date(selectedRegistro.inhabilitacion?.fechaInicial).toLocaleDateString("es-ES", optionsDate)}
+                                        new Date(selectedRegistro.inhabilitacion?.fechaInicial+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -1142,7 +1144,7 @@ export const ListS3PSchema = () => {
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
-                                        new Date(selectedRegistro.inhabilitacion?.fechaFinal).toLocaleDateString("es-ES", optionsDate)}
+                                        new Date(selectedRegistro.inhabilitacion?.fechaFinal+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -1216,7 +1218,7 @@ export const ListS3PSchema = () => {
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
                                         {//@ts-ignore
-                                            new Date(doc?.fecha).toLocaleDateString("es-ES", optionsDate)}
+                                            new Date(doc?.fecha+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
                                     </Typography>
                                 </Grid>
                             </Grid>

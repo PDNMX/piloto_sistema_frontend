@@ -277,7 +277,6 @@ function MyForm(props: MyFormProps ) {
     const validate = makeValidate(schema);
     const required = makeRequired(schema);
 
-
     const styles = makeStyles({
 
         hideGrid:{display: 'none'},
@@ -343,7 +342,6 @@ function MyForm(props: MyFormProps ) {
         history.push(path);
         dispatch(alertActions.clear());
     }
-
 
     const cla = styles();
 
@@ -742,7 +740,12 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha de resolución"
                                         name="resolucion.fechaNotificacion"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                    />
                                 </Grid>
 
                                 <Grid item xs={12} md={12}>
@@ -777,7 +780,12 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha Inicial"
                                         name="inhabilitacion.fechaInicial"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <DatePicker
@@ -785,7 +793,12 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha Final"
                                         name="inhabilitacion.fechaFinal"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} md={12}>
                                     <Typography className={cla.titleCategory} variant="h6" gutterBottom>
@@ -844,7 +857,12 @@ function MyForm(props: MyFormProps ) {
                                                         format={"yyyy-MM-dd"}
                                                         label="Fecha"
                                                         name={`documentos.${index}.fecha`}
-                                                        dateFunsUtils={DateFnsUtils} />
+                                                        dateFunsUtils={DateFnsUtils}
+                                                        clearable={true}
+                                                        cancelLabel={"Cancelar"}
+                                                        clearLabel={"Limpiar"}
+                                                        okLabel={"Aceptar"}
+                                                    />
                                                 </Grid>
                                             </Grid>
                                         ))
@@ -890,6 +908,8 @@ function MyForm(props: MyFormProps ) {
                                 </Button>
                             </DialogActions>
                         </Dialog>
+
+                        <pre>{JSON.stringify(values)}</pre>
                     </form>
                 )}
             />

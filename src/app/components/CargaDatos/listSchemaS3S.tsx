@@ -121,6 +121,7 @@ export const ListS3SSchema = () => {
     const [match, setMatch] =   React.useState({params: {id: ""}});
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
     var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
+    var optionsOnlyDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -672,7 +673,7 @@ export const ListS3SSchema = () => {
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
                                         {//@ts-ignore
-                                            new Date(selectedRegistro.resolucion?.fechaResolucion).toLocaleDateString("es-ES", optionsDate)}
+                                            new Date(selectedRegistro.resolucion?.fechaResolucion+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
                                     </Typography>
                                 </Grid>
                                 <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -737,19 +738,23 @@ export const ListS3SSchema = () => {
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                     Fecha inicial
                                 </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {//@ts-ignore
-                                        new Date(selectedRegistro.inhabilitacion?.fechaInicial).toLocaleDateString("es-ES", optionsDate)}
-                                </Typography>
+                                {selectedRegistro.inhabilitacion?.fechaInicial &&
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {//@ts-ignore
+                                            new Date(selectedRegistro.inhabilitacion?.fechaInicial+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
+                                    </Typography>
+                                }
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
                                     Fecha final
                                 </Typography>
+                                {selectedRegistro.inhabilitacion?.fechaFinal &&
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
-                                        new Date(selectedRegistro.inhabilitacion?.fechaFinal).toLocaleDateString("es-ES", optionsDate)}
+                                        new Date(selectedRegistro.inhabilitacion?.fechaFinal + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
                                 </Typography>
+                                }
                             </Grid>
                         </Grid>
                         <Grid container justify={"center"} item md={12}>
@@ -822,7 +827,7 @@ export const ListS3SSchema = () => {
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
                                         {//@ts-ignore
-                                            new Date(doc?.fecha).toLocaleDateString("es-ES", optionsDate)}
+                                            new Date(doc?.fecha+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
                                     </Typography>
                                 </Grid>
                             </Grid>

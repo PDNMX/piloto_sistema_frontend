@@ -27,7 +27,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('underscore');
 import { formatISO } from 'date-fns'
 import {forEach} from "underscore";
-
+var momento = require("moment-timezone");
 
 const host = process.env.URLAPI;
 const urOauth2 = host+process.env.PORTOAUTH
@@ -1447,7 +1447,11 @@ export function* fillUpdateRegS3P() {
                 if (Array.isArray(row)) {
                     for (let i of row) {
                         i.tipo = JSON.stringify({clave: i.tipo, valor: i.tipo});
-                        console.log("TIPOOOO----"+ i.tipo);
+
+                        if(i.fecha){
+                            let fecha = new Date(i.fecha+ "T00:00:00.000");
+                            i.fecha = momento(fecha).tz("America/Mexico_City");
+                        }
                     }
                 }
             }else if(key === "tipoSancion"){
@@ -1463,6 +1467,20 @@ export function* fillUpdateRegS3P() {
                     arraySanciones.push(obj);
                 }
                 registro.tipoSancion = arraySanciones;
+            }else if(key=== "resolucion"){
+                    if (row.fechaNotificacion) {
+                        let fecha = new Date(row.fechaNotificacion+ "T00:00:00.000");
+                        row.fechaNotificacion = momento(fecha).tz("America/Mexico_City");
+                    }
+            }else if(key === "inhabilitacion"){
+                if(row.fechaInicial){
+                    let fecha = new Date(row.fechaInicial+ "T00:00:00.000");
+                    row.fechaInicial = momento(fecha).tz("America/Mexico_City");
+                }
+                if(row.fechaFinal){
+                    let fecha = new Date(row.fechaFinal+ "T00:00:00.000");
+                    row.fechaFinal = momento(fecha).tz("America/Mexico_City");
+                }
             }
         }
         yield put (S3PActions.setListS3P([registro]));
@@ -1522,7 +1540,10 @@ export function* fillUpdateRegS3S(){
                 newRow[key] = row;
             }else if(key === "resolucion"){
                 if(row.url){ newRow["resolucionURL"] = row.url;}
-                if(row.fechaResolucion){ newRow["resolucionFecha"] = row.fechaResolucion;}
+                if(row.fechaResolucion){
+                    let fecha = new Date(row.fechaResolucion+ "T00:00:00.000");
+                    newRow["resolucionFecha"] = momento(fecha).tz("America/Mexico_City");
+                }
             }else if(key === "multa"){
                 let objMulta= {};
                 if(row.moneda){ objMulta["moneda"] = JSON.stringify({clave:row.moneda.clave.toString().toUpperCase() ,valor : row.moneda.valor.toUpperCase()});}
@@ -1530,8 +1551,14 @@ export function* fillUpdateRegS3S(){
                 newRow["multa"]= objMulta;
             }else if(key === "inhabilitacion"){
                 if(row.plazo){ newRow["inhabilitacionPlazo"] = row.plazo;}
-                if(row.fechaInicial){ newRow["inhabilitacionFechaInicial"] = row.fechaInicial;}
-                if(row.fechaFinal){ newRow["inhabilitacionFechaFinal"] = row.fechaFinal;}
+                if(row.fechaInicial){
+                    let fecha = new Date(row.fechaInicial+ "T00:00:00.000");
+                    newRow["inhabilitacionFechaInicial"] = momento(fecha).tz("America/Mexico_City");
+                }
+                if(row.fechaFinal){
+                    let fecha = new Date( row.fechaFinal+ "T00:00:00.000");
+                    newRow["inhabilitacionFechaFinal"] = momento(fecha).tz("America/Mexico_City");
+                }
             }else if(key === "observaciones"){
                 newRow[key] = row;
             }else if(key === "documentos"){
@@ -1542,7 +1569,10 @@ export function* fillUpdateRegS3S(){
                     if(objDocumentos.titulo){ obj["titulo"] = objDocumentos.titulo;}
                     if(objDocumentos.descripcion){ obj["descripcion"] = objDocumentos.descripcion;}
                     if(objDocumentos.url){ obj["url"] = objDocumentos.url;}
-                    if(objDocumentos.fecha){ obj["fecha"] = objDocumentos.fecha;}
+                    if(objDocumentos.fecha){
+                        let fecha = new Date( objDocumentos.fecha+ "T00:00:00.000");
+                        obj["fecha"] = momento(fecha).tz("America/Mexico_City");
+                    }
                     if(objDocumentos.tipo){ obj["tipo"] = JSON.stringify({clave:objDocumentos.tipo ,valor : objDocumentos.tipo});}
                     console.log("ARRAYY DOCUMENTOS "+ JSON.stringify(obj));
                     arrayDocumentos.push(obj);
