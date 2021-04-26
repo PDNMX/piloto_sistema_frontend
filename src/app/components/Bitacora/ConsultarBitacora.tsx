@@ -157,7 +157,9 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd'T'HH:mm:ss"}
                                         label="Fecha Inicial *"
                                         name="fechaInicial"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <DateTimePicker
@@ -165,7 +167,9 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd'T'HH:mm:ss"}
                                         label="Fecha Final *"
                                         name="fechaFinal"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <Select

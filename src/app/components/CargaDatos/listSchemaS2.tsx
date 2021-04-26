@@ -816,7 +816,9 @@ export const ListS2Schema = () => {
                                                 format={"yyyy-MM-dd"}
                                                 label="Última actualización"
                                                 name="fechaCaptura"
-                                                dateFunsUtils={DateFnsUtils} />
+                                                dateFunsUtils={DateFnsUtils}
+                                                clearable={true}
+                                            />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Nombre(s)" name="nombres"  />

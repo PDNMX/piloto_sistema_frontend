@@ -445,7 +445,9 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha de resolución"
                                         name="resolucionFecha"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                    />
                                 </Grid>
 
 
@@ -481,7 +483,9 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha Inicial"
                                         name="inhabilitacionFechaInicial"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <DatePicker
@@ -489,7 +493,9 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha Final"
                                         name="inhabilitacionFechaFinal"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                    />
                                 </Grid>
 
 
@@ -551,7 +557,9 @@ function MyForm(props: MyFormProps ) {
                                                         format={"yyyy-MM-dd"}
                                                         label="Fecha"
                                                         name={`documents.${index}.fecha`}
-                                                        dateFunsUtils={DateFnsUtils} />
+                                                        dateFunsUtils={DateFnsUtils}
+                                                        clearable={true}
+                                                    />
                                                 </Grid>
                                             </Grid>
                                         ))
