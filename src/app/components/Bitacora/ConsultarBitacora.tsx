@@ -159,6 +159,9 @@ function MyForm(props: MyFormProps ) {
                                         name="fechaInicial"
                                         dateFunsUtils={DateFnsUtils}
                                         clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
@@ -169,6 +172,9 @@ function MyForm(props: MyFormProps ) {
                                         name="fechaFinal"
                                         dateFunsUtils={DateFnsUtils}
                                         clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={6}>

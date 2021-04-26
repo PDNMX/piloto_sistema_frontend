@@ -24,7 +24,7 @@ import {
     MenuItem, useTheme, DialogProps
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
-import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker, DateTimePicker} from 'mui-rff';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
 import Dialog from '@material-ui/core/Dialog';
@@ -883,6 +883,9 @@ export const ListS3SSchema = () => {
                                                 name="fechaCaptura"
                                                 dateFunsUtils={DateFnsUtils}
                                                 clearable={true}
+                                                cancelLabel={"Cancelar"}
+                                                clearLabel={"Limpiar"}
+                                                okLabel={"Aceptar"}
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
@@ -926,7 +929,12 @@ export const ListS3SSchema = () => {
                                                 format={"yyyy-MM-dd"}
                                                 label="Inhabilitación fecha final"
                                                 name="inhabilitacionFechaFinal"
-                                                dateFunsUtils={DateFnsUtils} />
+                                                dateFunsUtils={DateFnsUtils}
+                                                clearable={true}
+                                                cancelLabel={"Cancelar"}
+                                                clearLabel={"Limpiar"}
+                                                okLabel={"Aceptar"}
+                                            />
                                         </Grid>
                                     </Grid>
                                     <Grid container justify={"flex-end"}>

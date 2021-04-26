@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import {TextField, makeValidate, makeRequired, Select, Switches, DatePicker, Radios} from 'mui-rff';
+import {TextField, makeValidate, makeRequired, Select, Switches, DatePicker, Radios, DateTimePicker} from 'mui-rff';
 import {Grid, Button, Divider, Tooltip, } from "@material-ui/core";
 import * as Yup from 'yup';
 import { css } from "@emotion/core";
@@ -744,6 +744,9 @@ function MyForm(props: MyFormProps ) {
                                         name="resolucion.fechaNotificacion"
                                         dateFunsUtils={DateFnsUtils}
                                         clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
                                     />
                                 </Grid>
 
@@ -781,6 +784,9 @@ function MyForm(props: MyFormProps ) {
                                         name="inhabilitacion.fechaInicial"
                                         dateFunsUtils={DateFnsUtils}
                                         clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
@@ -791,6 +797,9 @@ function MyForm(props: MyFormProps ) {
                                         name="inhabilitacion.fechaFinal"
                                         dateFunsUtils={DateFnsUtils}
                                         clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={12}>
@@ -852,6 +861,9 @@ function MyForm(props: MyFormProps ) {
                                                         name={`documentos.${index}.fecha`}
                                                         dateFunsUtils={DateFnsUtils}
                                                         clearable={true}
+                                                        cancelLabel={"Cancelar"}
+                                                        clearLabel={"Limpiar"}
+                                                        okLabel={"Aceptar"}
                                                     />
                                                 </Grid>
                                             </Grid>
