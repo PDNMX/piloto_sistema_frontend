@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import {TextField, makeValidate, makeRequired, Select, Switches, DatePicker, Radios} from 'mui-rff';
+import {TextField, makeValidate, makeRequired, Select, Switches, DatePicker, Radios, DateTimePicker} from 'mui-rff';
 import {Grid, Button, Divider, Tooltip, } from "@material-ui/core";
 import * as Yup from 'yup';
 import { css } from "@emotion/core";
@@ -237,7 +237,7 @@ function MyForm(props: MyFormProps ) {
                 .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                     'Introduce una direccion de internet valida'
                 ).trim(),
-            fechaNotificacion : Yup.string().trim(),
+            fechaNotificacion : Yup.string().trim().nullable(true),
         }),
         multa:Yup.object().shape({
             monto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').trim()
@@ -253,8 +253,8 @@ function MyForm(props: MyFormProps ) {
         }, ['moneda','monto']),
         inhabilitacion: Yup.object().shape({
             plazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
-            fechaInicial:  Yup.string().trim(),
-            fechaFinal: Yup.string().trim()
+            fechaInicial:  Yup.string().trim().nullable(true),
+            fechaFinal: Yup.string().trim().nullable(true)
         }),
         domicilio: Yup.string(),
         observaciones:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),

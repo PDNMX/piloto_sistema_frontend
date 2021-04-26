@@ -1,9 +1,12 @@
 import {S3SConstants} from "../_constants/s3s.constants";
+import {S3PConstants} from "../_constants/s3p.constants";
 
 export function S3S(state = [] ,action){
     switch (action.type){
         case S3SConstants.SET_LIST_S3S :
             return  action.list;
+        case S3SConstants.SET_CLEAR_S3S:
+            return [];
         case S3SConstants.DELETE_OPERATION:
             let array = [];
             if(Array.isArray(action.id)){

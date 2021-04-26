@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Form } from 'react-final-form';
-import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker, DateTimePicker} from 'mui-rff';
 import {Grid, Button, Divider, MenuItem, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
 import { css } from "@emotion/core";
@@ -118,7 +118,7 @@ function MyForm(props: MyFormProps ) {
             .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                 'Introduce una direccion de internet valida'
             ).trim(),
-        resolucionFecha:  Yup.string().trim()
+        resolucionFecha:  Yup.string().trim().nullable(true)
             .when('resolucionURL',  (resolucionURL) => {
                 if(resolucionURL)
                     return  Yup.string().required("El campo Fecha de resolución es requerido").trim()
@@ -136,8 +136,8 @@ function MyForm(props: MyFormProps ) {
                 }),
         }, ['moneda','monto']),
         inhabilitacionPlazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]*$'),'No se permiten cadenas vacías').trim(),
-        inhabilitacionFechaInicial:  Yup.string().trim(),
-        inhabilitacionFechaFinal:  Yup.string().trim(),
+        inhabilitacionFechaInicial:  Yup.string().trim().nullable(true),
+        inhabilitacionFechaFinal:  Yup.string().trim().nullable(true),
         observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n\/ ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documents: Yup.array().of(
             Yup.object().shape({
@@ -445,7 +445,12 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha de resolución"
                                         name="resolucionFecha"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                    />
                                 </Grid>
 
 
@@ -481,7 +486,12 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha Inicial"
                                         name="inhabilitacionFechaInicial"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                    />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <DatePicker
@@ -489,7 +499,12 @@ function MyForm(props: MyFormProps ) {
                                         format={"yyyy-MM-dd"}
                                         label="Fecha Final"
                                         name="inhabilitacionFechaFinal"
-                                        dateFunsUtils={DateFnsUtils} />
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                    />
                                 </Grid>
 
 
@@ -551,7 +566,12 @@ function MyForm(props: MyFormProps ) {
                                                         format={"yyyy-MM-dd"}
                                                         label="Fecha"
                                                         name={`documents.${index}.fecha`}
-                                                        dateFunsUtils={DateFnsUtils} />
+                                                        dateFunsUtils={DateFnsUtils}
+                                                        clearable={true}
+                                                        cancelLabel={"Cancelar"}
+                                                        clearLabel={"Limpiar"}
+                                                        okLabel={"Aceptar"}
+                                                    />
                                                 </Grid>
                                             </Grid>
                                         ))

@@ -24,7 +24,7 @@ import {
     MenuItem, useTheme, DialogProps
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
-import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker, DateTimePicker} from 'mui-rff';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
 import Dialog from '@material-ui/core/Dialog';
@@ -323,7 +323,7 @@ export const ListS3PSchema = () => {
         SP3nombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SP3primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         SP3segundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        fechaCaptura:  Yup.string(),
+        fechaCaptura:  Yup.string().nullable(true),
     });
 
     const validate = makeValidate(schema);
@@ -1280,7 +1280,12 @@ export const ListS3PSchema = () => {
                                                 format={"yyyy-MM-dd"}
                                                 label="Última actualización"
                                                 name="fechaCaptura"
-                                                dateFunsUtils={DateFnsUtils} />
+                                                dateFunsUtils={DateFnsUtils}
+                                                clearable={true}
+                                                cancelLabel={"Cancelar"}
+                                                clearLabel={"Limpiar"}
+                                                okLabel={"Aceptar"}
+                                            />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Expediente" name="expediente"  />
@@ -1321,7 +1326,12 @@ export const ListS3PSchema = () => {
                                                 format={"yyyy-MM-dd"}
                                                 label="Inhabilitación fecha final"
                                                 name="fechaFinal"
-                                                dateFunsUtils={DateFnsUtils} />
+                                                dateFunsUtils={DateFnsUtils}
+                                                clearable={true}
+                                                cancelLabel={"Cancelar"}
+                                                clearLabel={"Limpiar"}
+                                                okLabel={"Aceptar"}
+                                            />
                                         </Grid>
                                     </Grid>
                                     <Grid container justify={"flex-end"} >

@@ -24,7 +24,7 @@ import {
     useTheme, DialogProps
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
-import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker} from 'mui-rff';
+import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker, DateTimePicker} from 'mui-rff';
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import PropTypes from "prop-types";
 import Dialog from '@material-ui/core/Dialog';
@@ -258,7 +258,7 @@ export const ListS2Schema = () => {
         segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
         idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
         puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
-        fechaCaptura: Yup.string(),
+        fechaCaptura: Yup.string().nullable(true)
     });
 
     const validate = makeValidate(schema);
@@ -816,7 +816,12 @@ export const ListS2Schema = () => {
                                                 format={"yyyy-MM-dd"}
                                                 label="Última actualización"
                                                 name="fechaCaptura"
-                                                dateFunsUtils={DateFnsUtils} />
+                                                dateFunsUtils={DateFnsUtils}
+                                                clearable={true}
+                                                cancelLabel={"Cancelar"}
+                                                clearLabel={"Limpiar"}
+                                                okLabel={"Aceptar"}
+                                            />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <TextField label="Nombre(s)" name="nombres"  />
