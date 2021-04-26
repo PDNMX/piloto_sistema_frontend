@@ -831,17 +831,17 @@ export function* creationS3PSchema(){
             }
         }
         if (values.resolucion) {
-            if (values.resolucion.fechaNotificacion) {
+            if (values.resolucion.fechaNotificacion && values.resolucion.fechaNotificacion != null) {
                 let fecha = Date.parse(values.resolucion.fechaNotificacion);
                 values.resolucion.fechaNotificacion = formatISO(fecha, {representation: 'date'})
             }
         }
         if (values.inhabilitacion) {
-            if (values.inhabilitacion.fechaInicial) {
+            if (values.inhabilitacion.fechaInicial && values.inhabilitacion.fechaInicial != null) {
                 let fecha = Date.parse(values.inhabilitacion.fechaInicial);
                 values.inhabilitacion.fechaInicial = formatISO(fecha, {representation: 'date'})
             }
-            if (values.inhabilitacion.fechaFinal) {
+            if (values.inhabilitacion.fechaFinal && values.inhabilitacion.fechaFinal != null ) {
                 let fecha = Date.parse(values.inhabilitacion.fechaFinal);
                 values.inhabilitacion.fechaFinal = formatISO(fecha, {representation: 'date'})
             }
