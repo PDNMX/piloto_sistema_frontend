@@ -679,8 +679,10 @@ export function* getCatalogTipoSancion(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-        respuestaArray.data.results.push({label: "NINGUNO", value:""});
-        yield put (catalogActions.setTipoSancionSucces(respuestaArray.data.results));
+        if(respuestaArray.data.results){
+            respuestaArray.data.results.push({label: "NINGUNO", value:""});
+            yield put (catalogActions.setTipoSancionSucces(respuestaArray.data.results));
+        }
     }
 }
 
@@ -831,17 +833,27 @@ export function* creationS3PSchema(){
             }
         }
         if (values.resolucion) {
-            if (values.resolucion.fechaNotificacion && values.resolucion.fechaNotificacion != null) {
+            if(values.resolucion.fechaNotificacion === null){
+                delete values.resolucion.fechaNotificacion;
+            }
+            if (values.resolucion.fechaNotificacion) {
                 let fecha = Date.parse(values.resolucion.fechaNotificacion);
                 values.resolucion.fechaNotificacion = formatISO(fecha, {representation: 'date'})
             }
         }
         if (values.inhabilitacion) {
-            if (values.inhabilitacion.fechaInicial && values.inhabilitacion.fechaInicial != null) {
+            if(values.inhabilitacion.fechaInicial === null){
+                delete values.inhabilitacion.fechaInicial;
+            }
+            if(values.inhabilitacion.fechaFinal === null ){
+                delete values.inhabilitacion.fechaFinal;
+            }
+
+            if (values.inhabilitacion.fechaInicial) {
                 let fecha = Date.parse(values.inhabilitacion.fechaInicial);
                 values.inhabilitacion.fechaInicial = formatISO(fecha, {representation: 'date'})
             }
-            if (values.inhabilitacion.fechaFinal && values.inhabilitacion.fechaFinal != null ) {
+            if (values.inhabilitacion.fechaFinal) {
                 let fecha = Date.parse(values.inhabilitacion.fechaFinal);
                 values.inhabilitacion.fechaFinal = formatISO(fecha, {representation: 'date'})
             }
