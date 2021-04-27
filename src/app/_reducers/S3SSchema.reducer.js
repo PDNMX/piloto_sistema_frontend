@@ -7,7 +7,7 @@ export function S3S(state = [] ,action){
             return  action.list;
         case S3SConstants.SET_CLEAR_S3S:
             return [];
-        case S3SConstants.DELETE_OPERATION:
+        case S3SConstants.DELETE_OPERATIONS3S:
             let array = [];
             if(Array.isArray(action.id)){
                 for(let i =0 ; i < state.length; i++){

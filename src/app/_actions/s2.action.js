@@ -20,10 +20,10 @@ function fillRegEdit(id){
     return {type: S2Constants.FILL_REG_S2_EDIT, id }
 }
 function deleteRecordRequest(id){
-    return {type: S2Constants.DELETE_REQUEST, id }
+    return {type: S2Constants.DELETE_REQUESTS2, id }
 }
 function deleteRecordDo(id){
-    return {type: S2Constants.DELETE_OPERATION, id }
+    return {type: S2Constants.DELETE_OPERATIONS2, id }
 }
 
 function requestListS2(filters) {

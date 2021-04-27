@@ -6,7 +6,7 @@ export function S2(state = [] ,action){
             return  action.list;
         case S2Constants.SET_CLEAR_S2:
             return [];
-        case S2Constants.DELETE_OPERATION:
+        case S2Constants.DELETE_OPERATIONS2:
             let array = [];
             if(Array.isArray(action.id)){
                 for(let i =0 ; i < state.length; i++){

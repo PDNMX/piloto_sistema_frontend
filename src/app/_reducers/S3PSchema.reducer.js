@@ -7,7 +7,7 @@ export function S3P(state = [] ,action){
             return  action.list;
         case S3PConstants.SET_CLEAR_S3P:
             return [];
-        case S3PConstants.DELETE_OPERATION:
+        case S3PConstants.DELETE_OPERATIONS3P:
             let array = [];
             if(Array.isArray(action.id)){
                 for(let i =0 ; i < state.length; i++){

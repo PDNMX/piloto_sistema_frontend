@@ -21,11 +21,11 @@ function fillRegEdit(id){
     return {type: S3SConstants.FILL_REG_S3S_EDIT, id }
 }
 function deleteRecordRequest(id){
-    return {type: S3SConstants.DELETE_REQUEST, id }
+    return {type: S3SConstants.DELETE_REQUESTS3S, id }
 }
 
 function deleteRecordDo(id){
-    return {type: S3SConstants.DELETE_OPERATION, id }
+    return {type: S3SConstants.DELETE_OPERATIONS3S, id }
 }
 
 function requestListS3S(filters) {

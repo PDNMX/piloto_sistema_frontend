@@ -1654,7 +1654,7 @@ export function* fillUpdateRegS2(){
 
 export function* deleteSchemaS2(){
     while (true) {
-        const {id} = yield take (S2Constants.DELETE_REQUEST);
+        const {id} = yield take (S2Constants.DELETE_REQUESTS2);
         const token = localStorage.token;
         if(token){
             let request = {"_id": id};
@@ -1689,7 +1689,7 @@ export function* deleteSchemaS2(){
 
 export function* deleteSchemaS3S(){
     while (true) {
-        const {id} = yield take (S3SConstants.DELETE_REQUEST);
+        const {id} = yield take (S3SConstants.DELETE_REQUESTS3S);
         const token = localStorage.token;
         if(token){
             let request = {"_id": id};
@@ -1724,7 +1724,7 @@ export function* deleteSchemaS3S(){
 
 export function* deleteSchemaS3P(){
     while (true) {
-        const {id} = yield take (S3PConstants.DELETE_REQUEST);
+        const {id} = yield take (S3PConstants.DELETE_REQUESTS3P);
         const token = localStorage.token;
         if(token){
             let request = {"_id": id};

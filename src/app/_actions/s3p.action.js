@@ -21,11 +21,11 @@ function fillRegEdit(id){
     return {type: S3PConstants.FILL_REG_S3P_EDIT, id }
 }
 function deleteRecordRequest(id){
-    return {type: S3PConstants.DELETE_REQUEST, id }
+    return {type: S3PConstants.DELETE_REQUESTS3P, id }
 }
 
 function deleteRecordDo(id){
-    return {type: S3PConstants.DELETE_OPERATION, id }
+    return {type: S3PConstants.DELETE_OPERATIONS3P, id }
 }
 
 function requestListS3P(filters) {
