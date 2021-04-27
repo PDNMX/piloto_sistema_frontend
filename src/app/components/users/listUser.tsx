@@ -21,7 +21,13 @@ import {
     Snackbar,
     Toolbar,
     DialogProps,
-    useTheme
+    useTheme,
+    List,
+    ListItem,
+    ListItemText,
+    AppBar,
+    ToolbarClassKey,
+    Divider
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -66,7 +72,7 @@ export const ListUser = () => {
     const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
     const [openPassword, setOpenPassword] = React.useState(false);
     const [usuarioCorreo, setUsuarioCorreo]= React.useState("");
-    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('lg');
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('sm');
     var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
 
     const renderSelect = (user) => {
@@ -74,7 +80,7 @@ export const ListUser = () => {
         for(let value of providerSelect){
             if(value._id === user.proveedorDatos ) {
                 c1=true;
-                return (<StyledTableCell key={value._id} style={{width: 160}} align="center">{value.label}</StyledTableCell>);
+                return ( value.label);
             }
         }
         if(!c1){
@@ -178,6 +184,7 @@ export const ListUser = () => {
             },
             titleDialogDetail: {
                 flex: 1,
+                color: '#666666'
             },
             boton:{
                 marginTop: '16px',
@@ -186,7 +193,7 @@ export const ListUser = () => {
                 color: '#666666'
             },
             gridpadding: {
-                padding: '30px',
+                padding: '0px',
             },
             marginright:{
                 marginRight: '30px',
@@ -205,7 +212,7 @@ export const ListUser = () => {
                 backgroundColor: theme.palette.background.paper,
                 boxShadow: theme.shadows[5],
                 padding: theme.spacing(2, 4, 3),
-            },
+            }
         }),
     );
 
@@ -227,60 +234,62 @@ export const ListUser = () => {
                        <Typography variant="h6" className={classes.titleDialogDetail}>
                            Detalle del usuario
                        </Typography>
-                       <IconButton edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
+                       <IconButton className={classes.fontblack} edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
                            <CloseIcon />
                        </IconButton>
                    </Toolbar>
                    <DialogContent dividers>
-                   <Grid container item md={12} >
-                       <TableContainer component={Paper}>
-                           <TableHead>
-                               <TableRow>
-                                   <StyledTableCell align="center" >Cargo</StyledTableCell>
-                                   <StyledTableCell align="center">Correo Electrónico</StyledTableCell>
-                                   <StyledTableCell align="center">Teléfono</StyledTableCell>
-                                   <StyledTableCell align="center" >Extensión</StyledTableCell>
-                                   <StyledTableCell align="center" >Usuario</StyledTableCell>
-                                   <StyledTableCell align="center" >Estatus</StyledTableCell>
-                                   <StyledTableCell align="center" >Sistemas</StyledTableCell>
-                                   <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
-                                   <StyledTableCell align="center" >Vigencia de Contraseña</StyledTableCell>
-                               </TableRow>
-                           </TableHead>
-                           <TableBody key="InfoPlusUser">
-                               <TableRow key={selectedUser._id + "InfoPlusUser"}>
-                                   <StyledTableCell align="center" style={{width: 160}} component="th" scope="row">
-                                       {selectedUser.cargo}
-                                   </StyledTableCell>
-                                   <StyledTableCell style={{width: 160}} align="center">
-                                       {selectedUser.correoElectronico}
-                                   </StyledTableCell>
-                                   <StyledTableCell style={{width: 160}} align="center">
-                                       {selectedUser.telefono}
-                                   </StyledTableCell>
-                                   <StyledTableCell style={{width: 160}}align="center">
-                                       {selectedUser.extension}
-                                   </StyledTableCell>
-                                   <StyledTableCell style={{width: 160}} align="center">
-                                       {selectedUser.usuario}
-                                   </StyledTableCell>
-                                   <StyledTableCell style={{width: 160}} align="center">
-                                       {selectedUser.estatus.toString()=="true" ? "Vigente" : "No vigente"}
-                                   </StyledTableCell>
-                                   <StyledTableCell style={{width: 160}} align="center">
-                                       {selectedUser.sistemas.map( value => (
-                                           <Typography>{sistemas[value]}, </Typography>
-                                       ))}
-                                   </StyledTableCell>
-                                   <StyledTableCell style={{width: 160}} align="center">
-                                       {new Date(selectedUser.fechaAlta).toLocaleDateString("es-ES", optionsDate)}
-                                   </StyledTableCell>
-                                   <StyledTableCell style={{width: 160}} align="center">
-                                       {new Date(selectedUser.vigenciaContrasena).toLocaleDateString("es-ES", optionsDate)}
-                                   </StyledTableCell>
-                               </TableRow>
-                           </TableBody>
-                       </TableContainer>
+                   <Grid container item md={12} lg={12}>
+                       <Grid className={classes.gridpadding} item md={12} sm={12}>
+                           <List className={classes.fontblack}>
+                               <ListItem button>
+                                   <ListItemText primary="Cargo" secondary={selectedUser.cargo} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Correo electrónico" secondary={selectedUser.correoElectronico} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Teléfono" secondary={selectedUser.telefono} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Extensión" secondary={selectedUser.extension} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Usuario" secondary={selectedUser.usuario} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Proveedor" secondary={(renderSelect(selectedUser))} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Estatus" secondary={selectedUser.estatus.toString()=="true" ? "Vigente" : "No vigente"} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Sistemas" secondary={(selectedUser.sistemas).map((sistema)=>
+                                       <div>
+                                           {sistema=='S2' ? <li key ={"S2ListModal"}>Servidores Públicos que Intervienen en Procedimientos de Contratación.</li> :
+                                               sistema=='S3S' ? <li key ={"S3SListModal"} >Sistema de los Servidores Públicos Sancionados.</li> :
+                                                   sistema=='S3P' ? <li key ={"S3PListModal"} >Sistema de los Particulares Sancionados.</li> : ''}
+                                       </div>
+
+                                   )} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Fecha alta" secondary={new Date(selectedUser.fechaAlta).toLocaleDateString("es-ES", optionsDate)} />
+                               </ListItem>
+                               <Divider />
+                               <ListItem button>
+                                   <ListItemText primary="Vigencia de contraseña" secondary={new Date(selectedUser.vigenciaContrasena).toLocaleDateString("es-ES", optionsDate)} />
+                               </ListItem>
+                           </List>
+                       </Grid>
                    </Grid>
                    </DialogContent>
                </Dialog>
@@ -338,7 +347,7 @@ export const ListUser = () => {
                                 <StyledTableCell align="center" >Nombre completo</StyledTableCell>
                                 <StyledTableCell align="center" >Usuario</StyledTableCell>
                                 <StyledTableCell align="center">Correo</StyledTableCell>
-                                <StyledTableCell align="center">Proveedor</StyledTableCell>
+                                <StyledTableCell align="center" style={{width: 160}} >Proveedor</StyledTableCell>
                                 <StyledTableCell align="center">Acciones</StyledTableCell>
                             </TableRow>
                         </TableHead>
@@ -355,9 +364,9 @@ export const ListUser = () => {
                                     <StyledTableCell style={{ width: 160 }}  align="center">
                                         {user.correoElectronico}
                                     </StyledTableCell>
-
-                                    {renderSelect(user)}
-
+                                    <StyledTableCell style={{ width: 160 }}  align="center">
+                                        {renderSelect(user)}
+                                    </StyledTableCell>
                                     <StyledTableCell style={{ width: 430 }} align="center">
                                         <Button onClick={() => handleOpenModalUserInfo(user)}>
                                             <Tooltip title="Más información" placement="left">
