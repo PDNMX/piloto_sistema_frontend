@@ -165,6 +165,7 @@ export function* fillAllProviders(){
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser));
         let query = { "usuario":payload.idUser};
+        query["all"]=true;
 
         const respuestaArray = yield axios.post(ur + `/getProvidersFull`,query,{ headers: {
                 'Content-Type': 'application/json',
@@ -183,6 +184,7 @@ export function* fillAllProvidersEnabled(){
         let payload = jwt.decode(token);
         yield put (userActions.setUserInSession(payload.idUser));
         let query = { "usuario":payload.idUser};
+        query["all"]=false;
 
         const respuestaArray = yield axios.post(ur + `/getProvidersFull`,query,{ headers: {
                 'Content-Type': 'application/json',

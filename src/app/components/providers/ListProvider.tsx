@@ -21,7 +21,11 @@ import {
     Snackbar,
     DialogProps,
     useTheme,
-    Toolbar
+    Toolbar,
+    List,
+    ListItem,
+    ListItemText,
+    Divider
 } from "@material-ui/core";
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
@@ -61,7 +65,7 @@ export const ListProvider = () => {
     const [openModalProviderInfo, setOpenModalProviderInfo] = React.useState(false);
     const [selectedProvider, setSelectedProvider] = React.useState({_id : "",fechaAlta : "", fechaActualizacion:"", dependencia: "" , estatus: "" , sistemas :[]});
     var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
-    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('sm');
 
     const handleOpenModalProviderInfo = (provider) => {
         setOpenModalProviderInfo(true);
@@ -139,6 +143,7 @@ export const ListProvider = () => {
         },
         titleDialogDetail: {
             flex: 1,
+            color: '#666666'
         },
         boton:{
             marginTop:'16px',
@@ -150,6 +155,9 @@ export const ListProvider = () => {
         },
         gridpadding: {
             padding: '14px',
+        },
+        gridialog: {
+            padding: '0px',
         },
         marginright:{
             marginRight: '30px',
@@ -195,48 +203,41 @@ export const ListProvider = () => {
                     <Typography variant="h6" className={classes.titleDialogDetail}>
                         Detalle del proveedor
                     </Typography>
-                    <IconButton edge="end" color="inherit" onClick={handleCloseModalProviderInfo} aria-label="close">
+                    <IconButton className={classes.fontblack} edge="end" color="inherit" onClick={handleCloseModalProviderInfo} aria-label="close">
                         <CloseIcon />
                     </IconButton>
                 </Toolbar>
                 <DialogContent dividers>
-                <Grid container item md={12}>
-
-                    <TableContainer component={Paper}>
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Proveedor</StyledTableCell>
-                                <StyledTableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">Estatus</StyledTableCell>
-                                <StyledTableCell className={classes.fontblack} align="center">Sistema</StyledTableCell>
-                                <StyledTableCell align="center" >Fecha de alta</StyledTableCell>
-                                <StyledTableCell align="center" >Fecha de actualización</StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody key="InfoPlusProvider">
-                            <StyledTableCell key={""} className={classes.fontblack} component="th" scope="row" style={{ width: 'auto'}} align="left">
-                                {selectedProvider.dependencia}
-                            </StyledTableCell>
-                            <StyledTableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
-                                {selectedProvider.estatus? 'Vigente' : 'No vigente'}
-                            </StyledTableCell>
-                            <StyledTableCell className={classes.fontblack} style={{ width: 'auto' }} align="left">
-                                {(selectedProvider.sistemas).map((sistema)=>
-                                    <div>
-                                        {sistema=='S2' ? <li key ={"S2ListModal"}>Servidores Públicos que Intervienen en Procedimientos de Contratación</li> :
-                                            sistema=='S3S' ? <li key ={"S3SListModal"} >Sistema de los Servidores Públicos Sancionados</li> :
-                                                sistema=='S3P' ? <li key ={"S3PListModal"} >Sistema de los Particulares Sancionados</li> : ''}
-                                    </div>
-
-                                )}
-                            </StyledTableCell>
-                            <StyledTableCell style={{width: 160}} align="center">
-                                    {new Date(selectedProvider.fechaAlta).toLocaleDateString("es-ES", optionsDate)}
-                            </StyledTableCell>
-                            <StyledTableCell style={{width: 160}} align="center">
-                                {new Date(selectedProvider.fechaActualizacion).toLocaleDateString("es-ES", optionsDate)}
-                            </StyledTableCell>
-                        </TableBody>
-                    </TableContainer>
+                    <Grid container item md={12} lg={12}>
+                        <Grid className={classes.gridialog} item md={12} sm={12}>
+                            <List className={classes.fontblack}>
+                                <ListItem button>
+                                    <ListItemText primary="Proveedor" secondary={selectedProvider.dependencia} />
+                                </ListItem>
+                                <Divider />
+                                <ListItem button>
+                                    <ListItemText primary="Estatus" secondary={selectedProvider.estatus? 'Vigente' : 'No vigente'} />
+                                </ListItem>
+                                <Divider />
+                                <ListItem button>
+                                    <ListItemText primary="Sistemas" secondary={(selectedProvider.sistemas).map((sistema)=>
+                                        <div>
+                                            {sistema=='S2' ? <li key ={"S2ListModal"}>Servidores Públicos que Intervienen en Procedimientos de Contratación.</li> :
+                                                sistema=='S3S' ? <li key ={"S3SListModal"} >Sistema de los Servidores Públicos Sancionados.</li> :
+                                                    sistema=='S3P' ? <li key ={"S3PListModal"} >Sistema de los Particulares Sancionados.</li> : ''}
+                                        </div>
+                                    )} />
+                                </ListItem>
+                                <Divider />
+                                <ListItem button>
+                                    <ListItemText primary="Fecha alta" secondary={new Date(selectedProvider.fechaAlta).toLocaleDateString("es-ES", optionsDate)} />
+                                </ListItem>
+                                <Divider />
+                                <ListItem button>
+                                    <ListItemText primary="Fecha actualización" secondary={selectedProvider.fechaActualizacion!=null? new Date(selectedProvider.fechaActualizacion).toLocaleDateString("es-ES", optionsDate) : ""} />
+                                </ListItem>
+                            </List>
+                        </Grid>
                 </Grid>
                 </DialogContent>
             </Dialog>
