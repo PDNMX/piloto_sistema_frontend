@@ -95,6 +95,7 @@ export const ListS2Schema = () => {
         providerUser: state.providerUser
     }));
 
+
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
