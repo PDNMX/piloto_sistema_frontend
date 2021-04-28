@@ -72,7 +72,7 @@ export const ListUser = () => {
     const sistemas = {S2: "Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación", S3S : "Sistema de los Servidores Públicos Sancionados", S3P : "Sistema de los Particulares Sancionados"}
     const [openPassword, setOpenPassword] = React.useState(false);
     const [usuarioCorreo, setUsuarioCorreo]= React.useState("");
-    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('sm');
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
     var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
 
     const renderSelect = (user) => {
@@ -179,6 +179,12 @@ export const ListUser = () => {
 
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
+            titlegridModal: {
+                color: '#585858'
+            },
+            body2:{
+                color: '#666666'
+            },
             fontblack:{
                 color: '#666666'
             },
@@ -193,7 +199,7 @@ export const ListUser = () => {
                 color: '#666666'
             },
             gridpadding: {
-                padding: '0px',
+                padding: '2px 0px 2px',
             },
             marginright:{
                 marginRight: '30px',
@@ -240,57 +246,101 @@ export const ListUser = () => {
                    </Toolbar>
                    <DialogContent dividers>
                    <Grid container item md={12} lg={12}>
-                       <Grid className={classes.gridpadding} item md={12} sm={12}>
-                           <List className={classes.fontblack}>
-                               <ListItem button>
-                                   <ListItemText primary="Cargo" secondary={selectedUser.cargo} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Correo electrónico" secondary={selectedUser.correoElectronico} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Teléfono" secondary={selectedUser.telefono} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Extensión" secondary={selectedUser.extension} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Usuario" secondary={selectedUser.usuario} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Proveedor" secondary={(renderSelect(selectedUser))} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Estatus" secondary={selectedUser.estatus.toString()=="true" ? "Vigente" : "No vigente"} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Sistemas" secondary={(selectedUser.sistemas).map((sistema)=>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Cargo
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {selectedUser.cargo}
+                               </Typography>
+
+                           </Grid>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Correo electrónico
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {selectedUser.correoElectronico}
+                               </Typography>
+                           </Grid>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Teléfono
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {selectedUser.telefono}
+                               </Typography>
+                           </Grid>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Extensión
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {selectedUser.extension}
+                               </Typography>
+                           </Grid>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Usuario
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {selectedUser.usuario}
+                               </Typography>
+                           </Grid>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Proveedor
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {(renderSelect(selectedUser))}
+                               </Typography>
+                           </Grid>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Estatus
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {selectedUser.estatus.toString()=="true" ? "Vigente" : "No vigente"}
+                               </Typography>
+                           </Grid>
+                   </Grid>
+                       <Grid container style={{"padding" : "15px 0px 15px"}}>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Fecha alta
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {new Date(selectedUser.fechaAlta).toLocaleDateString("es-ES", optionsDate)}
+                               </Typography>
+                           </Grid>
+                           <Grid className={classes.gridpadding} item md={3} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Vigencia de contraseña
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {new Date(selectedUser.vigenciaContrasena).toLocaleDateString("es-ES", optionsDate)}
+                               </Typography>
+                           </Grid>
+                       </Grid>
+                       <Grid container>
+                           <Grid className={classes.gridpadding} item md={12} sm={12}>
+                               <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                   Sistemas
+                               </Typography>
+                               <Typography className={classes.body2} align="left" variant="body2">
+                                   {(selectedUser.sistemas).map((sistema)=>
                                        <div>
-                                           {sistema=='S2' ? <li key ={"S2ListModal"}>Servidores Públicos que Intervienen en Procedimientos de Contratación.</li> :
-                                               sistema=='S3S' ? <li key ={"S3SListModal"} >Sistema de los Servidores Públicos Sancionados.</li> :
-                                                   sistema=='S3P' ? <li key ={"S3PListModal"} >Sistema de los Particulares Sancionados.</li> : ''}
+                                           <tr>
+                                               {sistema=='S2' ? <td key ={"S2ListModal"}>Servidores Públicos que Intervienen en Procedimientos de Contratación.</td> :
+                                                   sistema=='S3S' ? <td key ={"S3SListModal"} >Sistema de los Servidores Públicos Sancionados.</td> :
+                                                       sistema=='S3P' ? <td key ={"S3PListModal"} >Sistema de los Particulares Sancionados.</td> : ''}
+                                           </tr>
                                        </div>
 
-                                   )} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Fecha alta" secondary={new Date(selectedUser.fechaAlta).toLocaleDateString("es-ES", optionsDate)} />
-                               </ListItem>
-                               <Divider />
-                               <ListItem button>
-                                   <ListItemText primary="Vigencia de contraseña" secondary={new Date(selectedUser.vigenciaContrasena).toLocaleDateString("es-ES", optionsDate)} />
-                               </ListItem>
-                           </List>
+                                   )}
+                               </Typography>
+                           </Grid>
                        </Grid>
-                   </Grid>
                    </DialogContent>
                </Dialog>
 

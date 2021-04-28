@@ -65,7 +65,7 @@ export const ListProvider = () => {
     const [openModalProviderInfo, setOpenModalProviderInfo] = React.useState(false);
     const [selectedProvider, setSelectedProvider] = React.useState({_id : "",fechaAlta : "", fechaActualizacion:"", dependencia: "" , estatus: "" , sistemas :[]});
     var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
-    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('sm');
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
 
     const handleOpenModalProviderInfo = (provider) => {
         setOpenModalProviderInfo(true);
@@ -154,7 +154,16 @@ export const ListProvider = () => {
             color: '#666666'
         },
         gridpadding: {
+            padding: '2px 0px 2px',
+        },
+        gridpaddingBot: {
             padding: '14px',
+        },
+        titlegridModal: {
+            color: '#585858'
+        },
+        body2:{
+            color: '#666666'
         },
         gridialog: {
             padding: '0px',
@@ -209,36 +218,61 @@ export const ListProvider = () => {
                 </Toolbar>
                 <DialogContent dividers>
                     <Grid container item md={12} lg={12}>
-                        <Grid className={classes.gridialog} item md={12} sm={12}>
-                            <List className={classes.fontblack}>
-                                <ListItem button>
-                                    <ListItemText primary="Proveedor" secondary={selectedProvider.dependencia} />
-                                </ListItem>
-                                <Divider />
-                                <ListItem button>
-                                    <ListItemText primary="Estatus" secondary={selectedProvider.estatus? 'Vigente' : 'No vigente'} />
-                                </ListItem>
-                                <Divider />
-                                <ListItem button>
-                                    <ListItemText primary="Sistemas" secondary={(selectedProvider.sistemas).map((sistema)=>
-                                        <div>
-                                            {sistema=='S2' ? <li key ={"S2ListModal"}>Servidores Públicos que Intervienen en Procedimientos de Contratación.</li> :
-                                                sistema=='S3S' ? <li key ={"S3SListModal"} >Sistema de los Servidores Públicos Sancionados.</li> :
-                                                    sistema=='S3P' ? <li key ={"S3PListModal"} >Sistema de los Particulares Sancionados.</li> : ''}
-                                        </div>
-                                    )} />
-                                </ListItem>
-                                <Divider />
-                                <ListItem button>
-                                    <ListItemText primary="Fecha alta" secondary={new Date(selectedProvider.fechaAlta).toLocaleDateString("es-ES", optionsDate)} />
-                                </ListItem>
-                                <Divider />
-                                <ListItem button>
-                                    <ListItemText primary="Fecha actualización" secondary={selectedProvider.fechaActualizacion!=null? new Date(selectedProvider.fechaActualizacion).toLocaleDateString("es-ES", optionsDate) : ""} />
-                                </ListItem>
-                            </List>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                Proveedor
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedProvider.dependencia}
+                            </Typography>
                         </Grid>
-                </Grid>
+
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                Estatus
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedProvider.estatus? 'Vigente' : 'No vigente'}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                Fecha alta
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {new Date(selectedProvider.fechaAlta).toLocaleDateString("es-ES", optionsDate)}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                Fecha actualización
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedProvider.fechaActualizacion!=null? new Date(selectedProvider.fechaActualizacion).toLocaleDateString("es-ES", optionsDate) : ""}
+                            </Typography>
+                        </Grid>
+
+                        <Grid container style={{"padding" : "15px 0px 15px"}}>
+                            <Grid className={classes.gridpadding} item md={12} sm={12}>
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    Sistemas
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {(selectedProvider.sistemas).map((sistema)=>
+                                        <div>
+                                            <tr>
+                                                {sistema=='S2' ? <td key ={"S2ListModal"}>Servidores Públicos que Intervienen en Procedimientos de Contratación.</td> :
+                                                    sistema=='S3S' ? <td key ={"S3SListModal"} >Sistema de los Servidores Públicos Sancionados.</td> :
+                                                        sistema=='S3P' ? <td key ={"S3PListModal"} >Sistema de los Particulares Sancionados.</td> : ''}
+                                            </tr>
+                                        </div>
+
+                                    )}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
                 </DialogContent>
             </Dialog>
 
@@ -263,7 +297,7 @@ export const ListProvider = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Grid className= {classes.gridpadding} spacing={3} container >
+            <Grid className= {classes.gridpaddingBot} spacing={3} container >
                 <TableContainer component={Paper} >
                     {providers.length > 0  && <Table aria-label="custom pagination table">
                         <TableHead >
