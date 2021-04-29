@@ -410,6 +410,12 @@ export const ListS2Schema = () => {
                 height:'100%',
                 display:'block',
                 backgroundColor: theme.palette.background.paper
+            },
+            tableHead:{
+                backgroundColor: '#34b3eb'
+            },
+            tableHeaderColumn:{
+                color: '#ffff'
             }
         }),
     );
@@ -805,8 +811,8 @@ export const ListS2Schema = () => {
                                 {alerta.status === undefined &&
                                 <div>
                                     <Grid className= {classes.gridpadding} container justify={"flex-start"}>
-                                        <Typography  variant="h6" className={classes.fontblack}>
-                                            Búsqueda
+                                        <Typography  variant="body1" className={classes.fontblack}>
+                                            <b>Búsqueda</b>
                                         </Typography>
                                     </Grid>
 
@@ -859,13 +865,13 @@ export const ListS2Schema = () => {
                 <Grid item md={12} sm={12}>{selectedCheckBox.length > 0 && <EnhancedTableToolbar></EnhancedTableToolbar>} </Grid>
 
                 <Grid className= {`${classes.gridpadding} ${classes.gridpaddingBottom} `} container justify={"flex-start"}>
-                    <Typography  variant="h6" className={classes.fontblack}>
-                        Resultados
+                    <Typography  variant="body1" className={classes.fontblack}>
+                        <b>Resultados</b>
                     </Typography>
                 </Grid>
                 <TableContainer  component={Paper}>
                     <Table  aria-label="custom pagination table">
-                        <TableHead >
+                        <TableHead className={classes.tableHead}>
                             <TableRow>
                                 <TableCell padding="checkbox">
                                     <Checkbox
@@ -880,11 +886,11 @@ export const ListS2Schema = () => {
                                             handleCheckboxAll(event)}
                                     />
                                 </TableCell>
-                                <StyledTableCell align="center" >Ejercicio fiscal</StyledTableCell>
-                                <StyledTableCell align="center" >Servidor público</StyledTableCell>
-                                <StyledTableCell align="center">Institución</StyledTableCell>
-                                <StyledTableCell align="center">Puesto</StyledTableCell>
-                                <StyledTableCell align="center">Acciones</StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Ejercicio fiscal</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Servidor público</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Institución</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Puesto</b></StyledTableCell>
+                            <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Acciones</b></StyledTableCell>
                             </TableRow>
                         </TableHead>
                         {S2List.map((schema)  => (
@@ -927,8 +933,8 @@ export const ListS2Schema = () => {
 
                                     <StyledTableCell style={{ width: 260 }} align="center">
                                             <Tooltip title="Más información" placement="left">
-                                                <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
-                                                    <IconButton aria-label="expand row" size="small" >
+                                                <Button  style= {{padding: '0px'}}  onClick={() => handleOpenModalUserInfo(schema)}>
+                                                    <IconButton style={{color:"#34b3eb"}} aria-label="expand row" size="small" >
                                                         <KeyboardArrowDownIcon />
                                                     </IconButton>
 
@@ -937,12 +943,12 @@ export const ListS2Schema = () => {
                                             <Tooltip title="Editar registro" placement="top">
                                                     <Button style={{padding: '0px'}}
                                                             onClick={() => redirectToRoute(`/editar/S2/${schema._id}`)}>
-                                                        <Button style={{color: 'gray'}}><EditOutlinedIcon/></Button>
+                                                        <Button style={{color: '#ffe01b'}}><EditOutlinedIcon/></Button>
 
                                                     </Button>
                                             </Tooltip>
                                             <Tooltip title="Eliminar registro" placement="right">
-                                            <Button style={{color: 'gray', padding: '0px'}}
+                                            <Button style={{color: '#f44336', padding: '0px'}}
                                             onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
                                             <DeleteOutlineOutlinedIcon/>
                                             </Button>

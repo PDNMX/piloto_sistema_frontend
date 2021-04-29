@@ -444,6 +444,12 @@ export const ListS3SSchema = () => {
             },
             modal:{
                 overflowY: 'auto'
+            },
+            tableHead:{
+                backgroundColor: '#34b3eb'
+            },
+            tableHeaderColumn:{
+                color: '#ffff'
             }
         }),
     );
@@ -877,8 +883,8 @@ export const ListS3SSchema = () => {
                                 {alerta.status === undefined &&
                                 <div>
                                     <Grid className= {classes.gridpadding} container justify={"flex-start"}>
-                                        <Typography  variant="h6" className={classes.fontblack}>
-                                            Búsqueda
+                                        <Typography  variant="body1" className={classes.fontblack}>
+                                            <b>Búsqueda</b>
                                         </Typography>
                                     </Grid>
                                     <Grid className= {classes.gridpadding} spacing={3} container >
@@ -962,13 +968,13 @@ export const ListS3SSchema = () => {
                 <Grid item md={12} sm={12}>{selectedCheckBox.length > 0 && <EnhancedTableToolbar></EnhancedTableToolbar>} </Grid>
 
                 <Grid className= {`${classes.gridpadding} ${classes.gridpaddingBottom} `} container justify={"flex-start"}>
-                    <Typography  variant="h6" className={classes.fontblack}>
-                        Resultados
+                    <Typography  variant="body1" className={classes.fontblack}>
+                        <b>Resultados</b>
                     </Typography>
                 </Grid>
                 <TableContainer  component={Paper}>
                     <Table  aria-label="custom pagination table">
-                        <TableHead >
+                        <TableHead className={classes.tableHead}>
                             <TableRow>
                                 <TableCell padding="checkbox">
                                     <Checkbox
@@ -983,11 +989,11 @@ export const ListS3SSchema = () => {
                                             handleCheckboxAll(event)}
                                     />
                                 </TableCell>
-                                <StyledTableCell align="center" >Expediente</StyledTableCell>
-                                <StyledTableCell align="center">Institución</StyledTableCell>
-                                <StyledTableCell align="center" >Servidor público</StyledTableCell>
-                                <StyledTableCell align="center">Tipo sanción</StyledTableCell>
-                                <StyledTableCell align="center">Acciones</StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Expediente</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Institución</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Servidor público</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Tipo sanción</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Acciones</b></StyledTableCell>
                             </TableRow>
                         </TableHead>
                         {S3SList.map((schema)  => (
@@ -1036,7 +1042,7 @@ export const ListS3SSchema = () => {
 
                                         <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
                                             <Tooltip title="Más información" placement="left">
-                                                <IconButton aria-label="expand row" size="small" >
+                                                <IconButton style={{color:"#34b3eb"}} aria-label="expand row" size="small" >
                                                     <KeyboardArrowDownIcon />
                                                 </IconButton>
                                             </Tooltip>
@@ -1046,12 +1052,12 @@ export const ListS3SSchema = () => {
 
                                         <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S3S/${schema._id}`)} >
                                             <Tooltip title="Editar registro" placement="top">
-                                                <Button   style={{ color: 'gray'}} ><EditOutlinedIcon/></Button>
+                                                <Button   style={{color: '#ffe01b'}} ><EditOutlinedIcon/></Button>
                                             </Tooltip>
                                         </Button>
 
                                         <Tooltip title="Eliminar registro" placement="right">
-                                            <Button style={{ color: 'gray', padding: '0px' }}
+                                            <Button style={{ color: '#f44336', padding: '0px' }}
                                                     onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
                                                 <DeleteOutlineOutlinedIcon/>
                                             </Button>
