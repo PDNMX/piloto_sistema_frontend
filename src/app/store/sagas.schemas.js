@@ -784,7 +784,7 @@ export function* getCatalogTipoPersona(){
                 Accept: 'application/json',
                 'Authorization': `Bearer ${token}`
             }});
-
+        respuestaArray.data.results.push({label: "NINGUNO", value:""});
         yield put (catalogActions.setTipoPersonaSucces(respuestaArray.data.results));
     }
 }
