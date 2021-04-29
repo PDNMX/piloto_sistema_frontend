@@ -793,7 +793,7 @@ export const ListS2Schema = () => {
             <Grid container>
                 <Grid container justify={"center"}>
                     <Typography  variant="h6" className={classes.fontblack}>
-                        Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación
+                        <b>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</b>
                     </Typography>
                 </Grid>
                 <Grid container className={classes.filterContainer} >

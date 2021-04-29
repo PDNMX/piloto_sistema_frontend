@@ -865,7 +865,7 @@ export const ListS3SSchema = () => {
             <Grid container>
                 <Grid container justify={"center"}>
                     <Typography  variant="h6" className={classes.fontblack}>
-                        Sistema de los Servidores Públicos Sancionados
+                        <b>Sistema de los Servidores Públicos Sancionados</b>
                     </Typography>
                 </Grid>
                 <Grid container className={classes.filterContainer} >

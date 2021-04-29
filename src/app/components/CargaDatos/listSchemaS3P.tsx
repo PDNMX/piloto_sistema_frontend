@@ -1263,7 +1263,7 @@ export const ListS3PSchema = () => {
             <Grid container>
                 <Grid container justify={"center"}>
                     <Typography  variant="h6" className={classes.fontblack}>
-                        Sistema de los Particulares Sancionados
+                        <b>Sistema de los Particulares Sancionados</b>
                     </Typography>
                 </Grid>
                 <Grid container className={classes.filterContainer} >
