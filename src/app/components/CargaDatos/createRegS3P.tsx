@@ -221,14 +221,14 @@ function MyForm(props: MyFormProps ) {
         responsableSancion:Yup.object().shape({
             nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim()
                 .when('primerApellido',  (primerApellido) => {
-                if(primerApellido)
-                    return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo nombres de la sección Responsable sanción es requerido").trim()
-            }),
+                    if(primerApellido)
+                        return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo nombres de la sección Responsable sanción es requerido").trim()
+                }),
             primerApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim()
-            .when('nombres',  (nombres) => {
+                .when('nombres',  (nombres) => {
                     if (nombres)
                         return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Primer apellido de la sección Responsable sanción es requerido").trim()
-            }),
+                }),
             segundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
         }, ['nombres','primerApellido']),
         resolucion:Yup.object().shape({
@@ -403,12 +403,12 @@ function MyForm(props: MyFormProps ) {
         <div>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    Sistema de los Servidores Públicos Sancionados
+                    <b>Sistema de los Particulares Sancionados</b>
                 </Typography>
             </Grid>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    {id != undefined ? "Edición" :  "Captura" }
+                    <b>{id != undefined ? "Edición" :  "Captura" }</b>
                 </Typography>
             </Grid>
             <Form
@@ -544,19 +544,19 @@ function MyForm(props: MyFormProps ) {
                                 </Grid>
 
                                 <Grid item xs={12} md={12}>
-                                <Radios
-                                    label="Selecciona el tipo de domicilio para cargar los datos"
-                                    name="domicilio"
-                                    required={true}
-                                    data={[
-                                        {label: 'México', value: 'mex'},
-                                        {label: 'Extranjero', value: 'ext'},
-                                        {label: 'Ninguno', value: ''}
-                                    ]}
-                                />
+                                    <Radios
+                                        label="Selecciona el tipo de domicilio para cargar los datos"
+                                        name="domicilio"
+                                        required={true}
+                                        data={[
+                                            {label: 'México', value: 'mex'},
+                                            {label: 'Extranjero', value: 'ext'},
+                                            {label: 'Ninguno', value: ''}
+                                        ]}
+                                    />
                                 </Grid>
                                 {values.domicilio === 'mex' &&
-                                <Grid container>
+                                <Grid container spacing={3}>
                                     <Grid item xs={12} md={12}>
                                         <Typography className={cla.titleCategory} variant="h6" gutterBottom>
                                             Domicilio méxico
@@ -636,35 +636,35 @@ function MyForm(props: MyFormProps ) {
                                 }
 
                                 {values.domicilio === 'ext' &&
-                                    <Grid container>
-                                        <Grid item xs={12} md={12}>
-                                            <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                                Domicilio extranjero
-                                            </Typography>
-                                            <Divider className={cla.boton} />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Select  name = "particularSancionado.domicilioExtranjero.pais" label="País" data={catalogos.paises} ></Select>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <TextField label="Estado / Provincia" name="particularSancionado.domicilioExtranjero.estadoProvincia" />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <TextField label="Ciudad/ Localidad" name="particularSancionado.domicilioExtranjero.ciudadLocalidad" />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <TextField label="Calle" name="particularSancionado.domicilioExtranjero.calle" />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <TextField label="Número exterior" name="particularSancionado.domicilioExtranjero.numeroExterior" />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <TextField label="Número interior" name="particularSancionado.domicilioExtranjero.numeroInterior" />
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <TextField label="Código postal" name="particularSancionado.domicilioExtranjero.codigoPostal" />
-                                        </Grid>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                            Domicilio extranjero
+                                        </Typography>
+                                        <Divider className={cla.boton} />
                                     </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <Select  name = "particularSancionado.domicilioExtranjero.pais" label="País" data={catalogos.paises} ></Select>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Estado / Provincia" name="particularSancionado.domicilioExtranjero.estadoProvincia" />
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Ciudad/ Localidad" name="particularSancionado.domicilioExtranjero.ciudadLocalidad" />
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Calle" name="particularSancionado.domicilioExtranjero.calle" />
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Número exterior" name="particularSancionado.domicilioExtranjero.numeroExterior" />
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Número interior" name="particularSancionado.domicilioExtranjero.numeroInterior" />
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Código postal" name="particularSancionado.domicilioExtranjero.codigoPostal" />
+                                    </Grid>
+                                </Grid>
                                 }
 
 

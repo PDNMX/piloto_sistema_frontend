@@ -188,12 +188,12 @@ function MyForm(props: MyFormProps ) {
         <div>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación
+                    <b>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</b>
                 </Typography>
             </Grid>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    {id != undefined ? "Edición" :  "Captura" }
+                    <b>{id != undefined ? "Edición" :  "Captura" }</b>
                 </Typography>
             </Grid>
             <Form

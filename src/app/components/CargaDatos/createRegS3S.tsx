@@ -270,12 +270,12 @@ function MyForm(props: MyFormProps ) {
         <div>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    Sistema de los Servidores Públicos Sancionados
+                    <b>Sistema de los Servidores Públicos Sancionados</b>
                 </Typography>
             </Grid>
             <Grid  container justify={"center"}>
                 <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    {id != undefined ? "Edición" :  "Captura" }
+                    <b>{id != undefined ? "Edición" :  "Captura" }</b>
                 </Typography>
             </Grid>
             <Form
