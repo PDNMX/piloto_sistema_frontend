@@ -343,6 +343,7 @@ export const ListS2Schema = () => {
             },
             titleDialogDetail: {
                 flex: 1,
+                color: "#ffff",
             },
             fontblack: {
                 color: '#666666'
@@ -424,17 +425,20 @@ export const ListS2Schema = () => {
             tableHeaderColumn: {
                 color: '#ffff'
             },
-            nota: {
-                color: '#34b3eb'
+            whiteStyle: {
+                color: '#ffff'
             },
             titulo: {
                 fontSize: 15,
                 fontWeight: "bold",
                 marginBottom: 10,
                 textDecoration: "underline",
-                textDecorationColor: '#56a3bf',
-                color: '#56a3bf',
+                textDecorationColor: '#34b3eb',
+                color: '#34b3eb',
             },
+            toolBarModal:{
+                backgroundColor: "#34b3eb"
+            }
         })
     );
 
@@ -457,15 +461,15 @@ export const ListS2Schema = () => {
 
             <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo}
                     aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
-                <Toolbar>
+                <Toolbar className={classes.toolBarModal}>
                     <Typography variant="h6" className={classes.titleDialogDetail}>
                         <b>Detalle del registro</b>
-                        <Typography className={classes.nota}>
+                        <Typography className={classes.whiteStyle}>
                             *(DNC) = Dato No Capturado
                         </Typography>
                     </Typography>
                     <IconButton edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
-                        <CloseIcon/>
+                        <CloseIcon className={classes.whiteStyle}/>
                     </IconButton>
                 </Toolbar>
                 <DialogContent dividers>
@@ -597,15 +601,7 @@ export const ListS2Schema = () => {
                                 Procedimientos
                             </Typography>
                         </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                <b>Ramo</b>
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.ramo ? selectedRegistro.ramo.valor + '(' + selectedRegistro.ramo.clave + ')' : NOTA}
-                            </Typography>
-                        </Grid>
-                        <Grid item md={3} sm={12}>
+                        <Grid item md={6} sm={12}>
                             <Typography className={classes.titlegridModal} variant="subtitle2" align="left">
                                 <b>Tipo de área</b>
                             </Typography>
@@ -615,7 +611,19 @@ export const ListS2Schema = () => {
                                 )) : NOTA}
                             </Typography>
                         </Grid>
-                        <Grid item md={3} sm={12}>
+                        <Grid item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} variant="subtitle2" align="left">
+                                <b>Tipo de procedimiento</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.tipoProcedimiento ? selectedRegistro.tipoProcedimiento.map(e => (
+                                    <li>{e.valor}</li>
+                                )) : NOTA}
+                            </Typography>
+                        </Grid>
+
+
+                        <Grid item md={6} sm={12}>
                             <Typography className={classes.titlegridModal} variant="subtitle2" align="left">
                                 <b>Nivel de responsabilidad</b>
                             </Typography>
@@ -625,14 +633,12 @@ export const ListS2Schema = () => {
                                 )) : NOTA}
                             </Typography>
                         </Grid>
-                        <Grid item md={3} sm={12}>
-                            <Typography className={classes.titlegridModal} variant="subtitle2" align="left">
-                                <b>Tipo de procedimiento</b>
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Ramo</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.tipoProcedimiento ? selectedRegistro.tipoProcedimiento.map(e => (
-                                    <li>{e.valor}</li>
-                                )) : NOTA}
+                                {selectedRegistro.ramo ? selectedRegistro.ramo.valor + '(' + selectedRegistro.ramo.clave + ')' : NOTA}
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
