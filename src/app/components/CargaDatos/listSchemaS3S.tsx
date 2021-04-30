@@ -560,7 +560,7 @@ export const ListS3SSchema = () => {
                                     <b>Segundo apellido</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.servidorPublicoSancionado ? selectedRegistro.servidorPublicoSancionado.segundoApellido : NOTA}
+                                    {selectedRegistro.servidorPublicoSancionado && selectedRegistro.servidorPublicoSancionado.segundoApellido? selectedRegistro.servidorPublicoSancionado.segundoApellido : NOTA}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -632,26 +632,8 @@ export const ListS3SSchema = () => {
                                     Datos de la sanción
                                 </Typography>
                             </Grid>
-                            <Grid className={classes.gridpadding} item md={6} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Tipo de falta</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.tipoFalta ?
-                                        (selectedRegistro.tipoFalta.valor + " - Descripción: " + (selectedRegistro.tipoFalta.descripcion ? selectedRegistro.tipoFalta.descripcion : NOTA))
-                                        : NOTA}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={6} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Tipo sanción</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.tipoSancion ? selectedRegistro.tipoSancion.map(e => (
-                                        <li>{e.valor} - Descripción: {e.descripcion ? e.descripcion : NOTA}</li>
-                                    )) : NOTA}
-                                </Typography>
-                            </Grid>
+
+
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
                                     <b>Autoridad sancionadora</b>
@@ -719,6 +701,26 @@ export const ListS3SSchema = () => {
                                     {//@ts-ignore
                                         selectedRegistro.inhabilitacion && selectedRegistro.inhabilitacion.fechaFinal ? new Date(selectedRegistro.inhabilitacion?.fechaFinal + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)() : NOTA
                                         }
+                                </Typography>
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={6} sm={12}>
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Tipo sanción</b>
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.tipoSancion ? selectedRegistro.tipoSancion.map(e => (
+                                        <li>{e.valor} - Descripción: {e.descripcion ? e.descripcion : NOTA}</li>
+                                    )) : NOTA}
+                                </Typography>
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={6} sm={12}>
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Tipo de falta</b>
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.tipoFalta ?
+                                        (selectedRegistro.tipoFalta.valor + " - Descripción: " + (selectedRegistro.tipoFalta.descripcion ? selectedRegistro.tipoFalta.descripcion : NOTA))
+                                        : NOTA}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={12} sm={12}>
@@ -932,7 +934,7 @@ export const ListS3SSchema = () => {
 
                                         />
                                     </TableCell>
-                                    <StyledTableCell style={{width: 140}} align="center">
+                                    <StyledTableCell style={{width: 100}} align="center">
                                         {schema.expediente}
                                     </StyledTableCell>
                                     {schema.institucionDependencia &&
@@ -948,15 +950,15 @@ export const ListS3SSchema = () => {
                                     </StyledTableCell>
                                     }
 
-                                    {schema.tipoSancion && <StyledTableCell style={{width: 160}} align="center">
+                                    {schema.tipoSancion && <StyledTableCell style={{width: 230}} align="center">
                                         {schema.tipoSancion?.map((sancion) => (
-                                            <div>{sancion.valor + " "}</div>
+                                            <li>{sancion.valor + " "}</li>
                                         ))}
                                     </StyledTableCell>
                                     }
 
 
-                                    <StyledTableCell style={{width: 230}} align="center">
+                                    <StyledTableCell style={{width: 180}} align="center">
 
                                         <Button style={{padding: '0px'}}
                                                 onClick={() => handleOpenModalUserInfo(schema)}>
