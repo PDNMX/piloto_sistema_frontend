@@ -1,6 +1,6 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
     Table,
     TableBody,
@@ -71,9 +71,9 @@ interface FormDataEsquemaS2 {
         nombre: String,
         nivel: String
     },
-    tipoArea?: [{clave : string, valor : string}],
-    tipoProcedimiento?: [{clave : string, valor : string}],
-    nivelResponsabilidad?: [{clave : string, valor : string}],
+    tipoArea?: [{ clave: string, valor: string }],
+    tipoProcedimiento?: [{ clave: string, valor: string }],
+    nivelResponsabilidad?: [{ clave: string, valor: string }],
     superiorInmediato?: {
         nombres: String,
         primerApellido: String,
@@ -88,9 +88,9 @@ interface FormDataEsquemaS2 {
 }
 
 export const ListS2Schema = () => {
-    const {S2List,alerta,paginationSuper, providerUser} = useSelector(state => ({
-        S2List : state.S2,
-        alerta : state.alert,
+    const {S2List, alerta, paginationSuper, providerUser} = useSelector(state => ({
+        S2List: state.S2,
+        alerta: state.alert,
         paginationSuper: state.pagination,
         providerUser: state.providerUser
     }));
@@ -99,13 +99,13 @@ export const ListS2Schema = () => {
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
-    const [nombreUsuario, setNombreUsuario] =  React.useState("");
-    const [selectedCheckBox, setSelectedCheckBox ] = React.useState([]);
-    const [query, setQuery] =  React.useState({});
+    const [nombreUsuario, setNombreUsuario] = React.useState("");
+    const [selectedCheckBox, setSelectedCheckBox] = React.useState([]);
+    const [query, setQuery] = React.useState({});
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS2>({});
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
-    var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
+    var optionsDate = {year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
 
     const handleOpenModalUserInfo = (user) => {
         setOpenModalUserInfo(true);
@@ -117,10 +117,10 @@ export const ListS2Schema = () => {
     };
 
 
-    const handleClickOpen = (id ,nameReg) => {
+    const handleClickOpen = (id, nameReg) => {
         setOpen(true);
         setRegistroId(id);
-       // setNombreUsuario(name+ " "+ primerApellido+ " "+ segundoApellido);
+        // setNombreUsuario(name+ " "+ primerApellido+ " "+ segundoApellido);
     };
 
     const handleClose = () => {
@@ -132,33 +132,37 @@ export const ListS2Schema = () => {
     };
 
     const handleChangePage = (event, newPage) => {
-        dispatch(S2Actions.requestListS2({query: query, page : newPage +1  ,pageSize: paginationSuper.pageSize}));
+        dispatch(S2Actions.requestListS2({query: query, page: newPage + 1, pageSize: paginationSuper.pageSize}));
     };
 
     const handleChangeRowsPerPage = (event) => {
-        let newSize= parseInt(event.target.value, 10);
-        if(paginationSuper.page * newSize > paginationSuper.totalRows){
-            dispatch(S2Actions.requestListS2({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
-        }else{
-            dispatch(S2Actions.requestListS2({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
+        let newSize = parseInt(event.target.value, 10);
+        if (paginationSuper.page * newSize > paginationSuper.totalRows) {
+            dispatch(S2Actions.requestListS2({query: query, page: 1, pageSize: parseInt(event.target.value, 10)}));
+        } else {
+            dispatch(S2Actions.requestListS2({query: query, page: 1, pageSize: parseInt(event.target.value, 10)}));
         }
     };
 
     const confirmAction = (id) => {
-        let disco= 1;
-        if(Array.isArray(id)){
+        let disco = 1;
+        if (Array.isArray(id)) {
             disco = id.length;
         }
-        let sizeList=S2List.length - disco;
+        let sizeList = S2List.length - disco;
 
         dispatch(S2Actions.deleteRecordRequest(id));
-        paginationSuper.totalRows = paginationSuper.totalRows-disco;
+        paginationSuper.totalRows = paginationSuper.totalRows - disco;
 
-        if(sizeList  < 1 ){
-            if(paginationSuper.page - 1 > 0 ){
-                dispatch(S2Actions.requestListS2({query: query, page:  paginationSuper.page - 1 , pageSize: paginationSuper.pageSize}));
-            }else{
-                dispatch(S2Actions.requestListS2({query: query, page: 1 , pageSize: paginationSuper.pageSize }));
+        if (sizeList < 1) {
+            if (paginationSuper.page - 1 > 0) {
+                dispatch(S2Actions.requestListS2({
+                    query: query,
+                    page: paginationSuper.page - 1,
+                    pageSize: paginationSuper.pageSize
+                }));
+            } else {
+                dispatch(S2Actions.requestListS2({query: query, page: 1, pageSize: paginationSuper.pageSize}));
             }
 
         }
@@ -171,36 +175,38 @@ export const ListS2Schema = () => {
             <Toolbar className={classes.tool}>
                 <div className={classes.title}>
                     {selectedCheckBox.length > 0 &&
-                        <Typography color="inherit" variant="subtitle1">
-                            {selectedCheckBox.length} registros seleccionados
-                        </Typography>
+                    <Typography color="inherit" variant="subtitle1">
+                        {selectedCheckBox.length} registros seleccionados
+                    </Typography>
                     }
                 </div>
-                <div className={classes.spacer} />
+                <div className={classes.spacer}/>
                 <div className={classes.actions}>
                     {selectedCheckBox.length > 0 &&
-                        <Tooltip title="Delete">
-                            <Button style={{ color: 'white', padding: '0px' }}
-                                    onClick= {()=> {handleClickOpen(selectedCheckBox, "nomre")}} >
-                                <DeleteOutlineOutlinedIcon/>
-                            </Button>
-                        </Tooltip>
-                  }
+                    <Tooltip title="Delete">
+                        <Button style={{color: 'white', padding: '0px'}}
+                                onClick={() => {
+                                    handleClickOpen(selectedCheckBox, "nomre")
+                                }}>
+                            <DeleteOutlineOutlinedIcon/>
+                        </Button>
+                    </Tooltip>
+                    }
                 </div>
             </Toolbar>
         );
     };
 
-    const handleCheckboxAll= (event) => {
-        let array= [];
+    const handleCheckboxAll = (event) => {
+        let array = [];
         if (event.target.checked) {
-            for(let schema of S2List){
+            for (let schema of S2List) {
                 // @ts-ignore
                 array.push(schema._id);
             }
         }
         setSelectedCheckBox(array);
-        console.log("array "+array);
+        console.log("array " + array);
     }
 
     const handleCheckboxClick = (event, id) => {
@@ -249,16 +255,16 @@ export const ListS2Schema = () => {
         segundoApellido?: string,
         idnombre?: string,
         puestoNombre?: string,
-        fechaCaptura?:string
+        fechaCaptura?: string
     }
 
     const schema = Yup.object().shape({
-        ejercicioFiscal: Yup.string().matches(new RegExp('^[0-9]{4}$'),'Debe tener 4 dígitos'),
-        nombres : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
-        primerApellido : Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
-        segundoApellido :Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
-        idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'no se permiten cadenas vacias , max 50 caracteres ').trim(),
-        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'no se permiten números, ni cadenas vacias ' ).trim(),
+        ejercicioFiscal: Yup.string().matches(new RegExp('^[0-9]{4}$'), 'Debe tener 4 dígitos'),
+        nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'no se permiten números, ni cadenas vacias ').trim(),
+        primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'no se permiten números, ni cadenas vacias ').trim(),
+        segundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'no se permiten números, ni cadenas vacias ').trim(),
+        idnombre: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'), 'no se permiten cadenas vacias , max 50 caracteres ').trim(),
+        puestoNombre: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'no se permiten números, ni cadenas vacias ').trim(),
         fechaCaptura: Yup.string().nullable(true)
     });
 
@@ -269,26 +275,27 @@ export const ListS2Schema = () => {
     async function onSubmit(values: FormFiltersEsquemaS2) {
         let newQuery = {};
         for (let [key, value] of Object.entries(values)) {
-            if(key === "puestoNombre" && value !== null && value !== ''){
-                newQuery["puesto.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if(key === "idnombre" && value !== null && value !== ''){
-                newQuery["institucionDependencia.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if(key === "fechaCaptura" && value !== null && value !== ''){
+            if (key === "puestoNombre" && value !== null && value !== '') {
+                newQuery["puesto.nombre"] = {$regex: diacriticSensitiveRegex(value), $options: 'i'};
+            } else if (key === "idnombre" && value !== null && value !== '') {
+                newQuery["institucionDependencia.nombre"] = {$regex: diacriticSensitiveRegex(value), $options: 'i'};
+            } else if (key === "fechaCaptura" && value !== null && value !== '') {
                 let fecha = Date.parse(value);
-                console.log(formatISO(fecha, { representation: 'date' }));
-                newQuery["fechaCaptura"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
-            }else if ( value !== null && value !== ''){
-                newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+                console.log(formatISO(fecha, {representation: 'date'}));
+                newQuery["fechaCaptura"] = {$regex: formatISO(fecha, {representation: 'date'})};
+                ;
+            } else if (value !== null && value !== '') {
+                newQuery[key] = {$regex: diacriticSensitiveRegex(value), $options: 'i'};
             }
         }
         setQuery(newQuery);
-        dispatch(S2Actions.requestListS2({query : newQuery, page: 1 , pageSize: paginationSuper.pageSize }));
+        dispatch(S2Actions.requestListS2({query: newQuery, page: 1, pageSize: paginationSuper.pageSize}));
     }
 
-    function resetForm (form){
+    function resetForm(form) {
         form.reset();
         setQuery({});
-        dispatch(S2Actions.requestListS2({page: paginationSuper.page , pageSize: paginationSuper.pageSize }));
+        dispatch(S2Actions.requestListS2({page: paginationSuper.page, pageSize: paginationSuper.pageSize}));
     }
 
     const StyledTableCell = withStyles({
@@ -297,7 +304,7 @@ export const ListS2Schema = () => {
         }
     })(TableCell);
 
-    const redirectToRoute = (path) =>{
+    const redirectToRoute = (path) => {
         history.push(path);
     }
 
@@ -308,7 +315,7 @@ export const ListS2Schema = () => {
         rowsPerPage: PropTypes.number.isRequired
     };
 
-    var cont=0;
+    var cont = 0;
 
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
@@ -318,10 +325,10 @@ export const ListS2Schema = () => {
                 }
             },
             checked: {},
-            indeterminate:{
+            indeterminate: {
                 color: '#666666'
             },
-            tool : {
+            tool: {
                 color: 'white',
                 backgroundColor: '#7f7e7e'
             },
@@ -337,33 +344,33 @@ export const ListS2Schema = () => {
             titleDialogDetail: {
                 flex: 1,
             },
-            fontblack:{
+            fontblack: {
                 color: '#666666'
             },
-            titleModal:{
+            titleModal: {
                 "padding-top": "13px",
                 color: '#585858',
-                "font-size" : '17px'
+                "font-size": '17px'
             },
             divider: {
                 width: '100%',
-                backgroundColor:'#ffe01b',
+                backgroundColor: '#ffe01b',
                 color: '#666666'
             },
-            boton:{
-                marginTop:'16px',
-                marginLeft:'16px',
-                marginRight:'16px',
-                marginBottom:'0px',
-                backgroundColor:'#ffe01b',
+            boton: {
+                marginTop: '16px',
+                marginLeft: '16px',
+                marginRight: '16px',
+                marginBottom: '0px',
+                backgroundColor: '#ffe01b',
                 color: '#666666'
             },
-            boton2:{
-                marginTop:'16px',
-                marginLeft:'16px',
-                marginRight:'-10px',
-                marginBottom:'0px',
-                backgroundColor:'#ffe01b',
+            boton2: {
+                marginTop: '16px',
+                marginLeft: '16px',
+                marginRight: '-10px',
+                marginBottom: '0px',
+                backgroundColor: '#ffe01b',
                 color: '#666666'
             },
             filterContainer: {
@@ -377,15 +384,15 @@ export const ListS2Schema = () => {
                 'padding-left': '10px'
             },
             titlegridModal: {
-                color: '#585858'
-            },
-            body2:{
                 color: '#666666'
             },
-            marginright:{
+            body2: {
+                color: '#666666'
+            },
+            marginright: {
                 marginRight: '30px',
                 marginTop: '15px',
-                backgroundColor:'#ffe01b',
+                backgroundColor: '#ffe01b',
                 color: '#666666',
                 marginBottom: '30px'
             },
@@ -401,65 +408,94 @@ export const ListS2Schema = () => {
                 boxShadow: theme.shadows[5],
 
             },
-            modal:{
-                position:'absolute',
-                top:'10%',
-                left:'10%',
+            modal: {
+                position: 'absolute',
+                top: '10%',
+                left: '10%',
                 padding: theme.spacing(2, 4, 3),
-                overflow:'scroll',
-                height:'100%',
-                display:'block',
+                overflow: 'scroll',
+                height: '100%',
+                display: 'block',
                 backgroundColor: theme.palette.background.paper
             },
-            tableHead:{
+            tableHead: {
                 backgroundColor: '#34b3eb'
             },
-            tableHeaderColumn:{
+            tableHeaderColumn: {
                 color: '#ffff'
-            }
-        }),
+            },
+            nota: {
+                color: '#34b3eb'
+            },
+            titulo: {
+                fontSize: 15,
+                fontWeight: "bold",
+                marginBottom: 10,
+                textDecoration: "underline",
+                textDecorationColor: '#56a3bf',
+                color: '#56a3bf',
+            },
+        })
     );
 
     const classes = useStyles();
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-        // @ts-ignore
     // @ts-ignore
+    // @ts-ignore
+    const NOTA = "(DNC)"
     return (
 
-        <div >
-            <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+        <div>
+            <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'center'}} open={alerta.status}
+                      autoHideDuration={3000} onClose={handleCloseSnackbar}>
                 <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
                     {alerta.message}
                 </Alert>
             </Snackbar>
 
 
-            <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo} aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
+            <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo}
+                    aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
                 <Toolbar>
                     <Typography variant="h6" className={classes.titleDialogDetail}>
-                        Detalle del registro
+                        <b>Detalle del registro</b>
+                        <Typography className={classes.nota}>
+                            *(DNC) = Dato No Capturado
+                        </Typography>
                     </Typography>
                     <IconButton edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
-                        <CloseIcon />
+                        <CloseIcon/>
                     </IconButton>
                 </Toolbar>
                 <DialogContent dividers>
-                    <Grid container item md={12} >
-                        <Grid container>
+                    <Grid container item md={12} spacing={1}>
+                        <Grid item xs={12}>
+                            <Typography className={classes.titulo} align={"center"}>
+                                Datos generales
+                            </Typography>
+                        </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Fecha Captura
+                                    <b>Ejercicio Fiscal</b>
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.ejercicioFiscal ? selectedRegistro.ejercicioFiscal : NOTA}
+                                </Typography>
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Fecha última actualización</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
                                         new Date(selectedRegistro.fechaCaptura).toLocaleDateString("es-ES", optionsDate)}
                                 </Typography>
-
                             </Grid>
+
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nombre(s)
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Nombre(s)</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {selectedRegistro.nombres}
@@ -467,8 +503,8 @@ export const ListS2Schema = () => {
 
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Primer apellido
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Primer apellido</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {selectedRegistro.primerApellido}
@@ -476,299 +512,195 @@ export const ListS2Schema = () => {
 
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Segundo apellido
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Segundo apellido</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.segundoApellido}
+                                    {selectedRegistro.segundoApellido ? selectedRegistro.segundoApellido : NOTA}
                                 </Typography>
                             </Grid>
+
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Ejercicio Fiscal
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>RFC</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.ejercicioFiscal}
+                                    {selectedRegistro.rfc ? selectedRegistro.rfc : NOTA}
                                 </Typography>
                             </Grid>
 
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    RFC
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>CURP</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.rfc}
+                                    {selectedRegistro.curp ? selectedRegistro.curp : NOTA}
                                 </Typography>
                             </Grid>
 
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    CURP
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Género</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.curp}
+                                    {selectedRegistro.genero ? selectedRegistro.genero.valor : NOTA}
                                 </Typography>
                             </Grid>
 
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Género
-                                </Typography>
-                                <Typography className={classes.body2}  align="left" variant="body2">
-                                    {selectedRegistro.genero?.valor}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography className={classes.titleModal} variant="h6"  align="center">
-                                Tipo de área
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        {selectedRegistro.tipoArea?.map((area) => (
-                            <Grid container>
-                                <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Clave
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {area?.clave}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Valor
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {area?.valor}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        ))}
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Tipo de procedimiento
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        {selectedRegistro.tipoProcedimiento?.map((area) => (
-                            <Grid container>
-                                <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Clave
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {area?.clave}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Valor
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {area?.valor}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        ))}
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Nivel de responsabilidad
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        {selectedRegistro.nivelResponsabilidad?.map((area) => (
-                            <Grid container>
-                                <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Clave
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {area?.clave}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Valor
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {area?.valor}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        ))}
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Ramo
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Clave
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Institución/Dependencia</b> <br/>
+                                    <b>(Clave)</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.ramo?.clave}
+                                    {selectedRegistro.institucionDependencia && selectedRegistro.institucionDependencia.clave ? selectedRegistro.institucionDependencia.clave : NOTA}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Valor
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Institución/Dependencia</b> <br/>
+                                    <b>(Siglas)</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.ramo?.valor}
+                                    {selectedRegistro.institucionDependencia && selectedRegistro.institucionDependencia.siglas ? selectedRegistro.institucionDependencia.siglas: NOTA}
                                 </Typography>
-
                             </Grid>
-                        </Grid>
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Institución dependencia
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        {selectedRegistro.institucionDependencia &&
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nombre
+                            <Grid className={classes.gridpadding} item md={6} sm={12}>
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Institución/Dependencia</b><br/>
+                                    <b>(Nombre)</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {selectedRegistro.institucionDependencia?.nombre}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Clave
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>{"Puesto"}<br/>
+                                        (Nombre)</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia?.clave}
+                                    {selectedRegistro.puesto && selectedRegistro.puesto.nombre ? selectedRegistro.puesto.nombre : NOTA}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Siglas
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Puesto <br/>
+                                        (Nivel)</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia?.siglas}
+                                    {selectedRegistro.puesto && selectedRegistro.puesto.nivel ? selectedRegistro.puesto.nivel : NOTA}
                                 </Typography>
                             </Grid>
-                        </Grid>
-                        }
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Puesto
+                        <Grid item xs={12}>
+                            <Typography className={classes.titulo} align={"center"}>
+                                Procedimientos
                             </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
                         </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nombre
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.puesto?.nombre}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nivel
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.puesto?.nivel}
-                                </Typography>
-                            </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Ramo</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.ramo ? selectedRegistro.ramo.valor + '(' + selectedRegistro.ramo.clave + ')' : NOTA}
+                            </Typography>
                         </Grid>
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography   className={classes.titleModal} variant="h6"  align="center">
+                        <Grid item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} variant="subtitle2" align="left">
+                                <b>Tipo de área</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.tipoArea ? selectedRegistro.tipoArea.map(e => (
+                                    <li>{e.valor}</li>
+                                )) : NOTA}
+                            </Typography>
+                        </Grid>
+                        <Grid item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} variant="subtitle2" align="left">
+                                <b>Nivel de responsabilidad</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.nivelResponsabilidad ? selectedRegistro.nivelResponsabilidad.map(e => (
+                                    <li>{e.valor}</li>
+                                )) : NOTA}
+                            </Typography>
+                        </Grid>
+                        <Grid item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} variant="subtitle2" align="left">
+                                <b>Tipo de procedimiento</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.tipoProcedimiento ? selectedRegistro.tipoProcedimiento.map(e => (
+                                    <li>{e.valor}</li>
+                                )) : NOTA}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.titulo} align={"center"}>
                                 Superior inmediato
                             </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
                         </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nombre(s)
-                                </Typography>
-                                {selectedRegistro.superiorInmediato?.nombres &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.superiorInmediato?.nombres}
-                                </Typography>}
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nombre(s)</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {(selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.nombres) ? selectedRegistro.superiorInmediato.nombres : NOTA}
+                            </Typography>
+                        </Grid>
 
-                            </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Primer Apellido</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.primerApellido ? selectedRegistro.superiorInmediato.primerApellido : NOTA}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Segundo apellido</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.segundoApellido ? selectedRegistro.superiorInmediato.segundoApellido : NOTA}
+                            </Typography>
+                        </Grid>
 
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Primer Apellido
-                                </Typography>
-                                {selectedRegistro.superiorInmediato?.primerApellido &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.superiorInmediato?.primerApellido}
-                                </Typography>
-                                }
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Segundo apellido
-                                </Typography>
-                                {selectedRegistro.superiorInmediato?.segundoApellido &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.superiorInmediato?.segundoApellido}
-                                </Typography>
-                                }
-                            </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>RFC</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.rfc ? selectedRegistro.superiorInmediato.rfc : NOTA}
+                            </Typography>
+                        </Grid>
 
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    RFC
-                                </Typography>
-                                {selectedRegistro.superiorInmediato?.rfc &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.superiorInmediato?.rfc}
-                                </Typography>
-                                }
-                            </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>CURP</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.curp ? selectedRegistro.superiorInmediato.curp : NOTA}
+                            </Typography>
+                        </Grid>
 
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    CURP
-                                </Typography>
-                                {selectedRegistro.superiorInmediato?.curp &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.superiorInmediato?.curp}
-                                </Typography>
-                                }
-                            </Grid>
-
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Puesto nombre
-                                </Typography>
-                                {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nombre &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.superiorInmediato?.puesto.nombre}
-                                </Typography>
-                                }
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Puesto nivel
-                                </Typography>
-                                {selectedRegistro.superiorInmediato?.puesto && selectedRegistro.superiorInmediato?.puesto.nivel &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.superiorInmediato?.puesto.nivel}
-                                </Typography>
-                                }
-                            </Grid>
-
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Puesto <br/>
+                                    (Nombre)</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.puesto && selectedRegistro.superiorInmediato.puesto.nombre ? selectedRegistro.superiorInmediato.puesto.nombre : NOTA}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Puesto <br/>
+                                    (Nivel)</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.puesto && selectedRegistro.superiorInmediato.puesto.nivel ? selectedRegistro.superiorInmediato.puesto.nivel : NOTA}
+                            </Typography>
                         </Grid>
                     </Grid>
                 </DialogContent>
@@ -780,7 +712,8 @@ export const ListS2Schema = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el registro "+ nombreUsuario+"?"}</DialogTitle>
+                <DialogTitle
+                    id="alert-dialog-title">{"¿Seguro que desea eliminar el registro " + nombreUsuario + "?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Los cambios no serán reversibles
@@ -790,7 +723,9 @@ export const ListS2Schema = () => {
                     <Button onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button onClick={()=> {confirmAction(RegistroId)}} color="primary" autoFocus>
+                    <Button onClick={() => {
+                        confirmAction(RegistroId)
+                    }} color="primary" autoFocus>
                         Aceptar
                     </Button>
                 </DialogActions>
@@ -798,25 +733,25 @@ export const ListS2Schema = () => {
 
             <Grid container>
                 <Grid container justify={"center"}>
-                    <Typography  variant="h6" className={classes.fontblack}>
+                    <Typography variant="h6" className={classes.fontblack}>
                         <b>Sistema de Servidores Públicos que Intervienen en Procedimientos de Contratación</b>
                     </Typography>
                 </Grid>
-                <Grid container className={classes.filterContainer} >
+                <Grid container className={classes.filterContainer}>
                     <Form
                         onSubmit={onSubmit}
                         validate={validate}
-                        render={({handleSubmit, form,  values, submitting}) => (
+                        render={({handleSubmit, form, values, submitting}) => (
                             <form onSubmit={handleSubmit} noValidate>
                                 {alerta.status === undefined &&
                                 <div>
-                                    <Grid className= {classes.gridpadding} container justify={"flex-start"}>
-                                        <Typography  variant="body1" className={classes.fontblack}>
+                                    <Grid className={classes.gridpadding} container justify={"flex-start"}>
+                                        <Typography variant="body1" className={classes.fontblack}>
                                             <b>Búsqueda</b>
                                         </Typography>
                                     </Grid>
 
-                                    <Grid className= {classes.gridpadding} spacing={3} container >
+                                    <Grid className={classes.gridpadding} spacing={3} container>
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
                                                 locale={deLocale}
@@ -831,30 +766,32 @@ export const ListS2Schema = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Nombre(s)" name="nombres"  />
+                                            <TextField label="Nombre(s)" name="nombres"/>
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Primer apellido" name="primerApellido"  />
+                                            <TextField label="Primer apellido" name="primerApellido"/>
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Segundo apellido" name="segundoApellido" />
+                                            <TextField label="Segundo apellido" name="segundoApellido"/>
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Institución / Dependencia" name="idnombre" />
+                                            <TextField label="Institución / Dependencia" name="idnombre"/>
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Puesto" name="puestoNombre" />
+                                            <TextField label="Puesto" name="puestoNombre"/>
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Ejercicio fiscal"  name="ejercicioFiscal"  />
+                                            <TextField label="Ejercicio fiscal" name="ejercicioFiscal"/>
                                         </Grid>
                                     </Grid>
                                     <Grid container justify={"flex-end"}>
-                                        <Button  className={classes.boton}  variant="contained"
-                                                 onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
-                                        <Button  className={classes.boton2}  variant="contained"
-                                                 type="submit"
-                                                 disabled={submitting}> BUSCAR </Button>
+                                        <Button className={classes.boton} variant="contained"
+                                                onClick={() => {
+                                                    resetForm(form)
+                                                }}> LIMPIAR </Button>
+                                        <Button className={classes.boton2} variant="contained"
+                                                type="submit"
+                                                disabled={submitting}> BUSCAR </Button>
                                     </Grid>
                                 </div>
                                 }
@@ -862,15 +799,17 @@ export const ListS2Schema = () => {
                         )}
                     />
                 </Grid>
-                <Grid item md={12} sm={12}>{selectedCheckBox.length > 0 && <EnhancedTableToolbar></EnhancedTableToolbar>} </Grid>
+                <Grid item md={12} sm={12}>{selectedCheckBox.length > 0 &&
+                <EnhancedTableToolbar></EnhancedTableToolbar>} </Grid>
 
-                <Grid className= {`${classes.gridpadding} ${classes.gridpaddingBottom} `} container justify={"flex-start"}>
-                    <Typography  variant="body1" className={classes.fontblack}>
+                <Grid className={`${classes.gridpadding} ${classes.gridpaddingBottom} `} container
+                      justify={"flex-start"}>
+                    <Typography variant="body1" className={classes.fontblack}>
                         <b>Resultados</b>
                     </Typography>
                 </Grid>
-                <TableContainer  component={Paper}>
-                    <Table  aria-label="custom pagination table">
+                <TableContainer component={Paper}>
+                    <Table aria-label="custom pagination table">
                         <TableHead className={classes.tableHead}>
                             <TableRow>
                                 <TableCell padding="checkbox">
@@ -886,89 +825,101 @@ export const ListS2Schema = () => {
                                             handleCheckboxAll(event)}
                                     />
                                 </TableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Ejercicio fiscal</b></StyledTableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Servidor público</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Ejercicio
+                                    fiscal</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Servidor
+                                    público</b></StyledTableCell>
                                 <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Institución</b></StyledTableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Puesto</b></StyledTableCell>
-                            <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Acciones</b></StyledTableCell>
+                                <StyledTableCell align="center"
+                                                 className={classes.tableHeaderColumn}><b>Puesto</b></StyledTableCell>
+                                <StyledTableCell align="center"
+                                                 className={classes.tableHeaderColumn}><b>Acciones</b></StyledTableCell>
                             </TableRow>
                         </TableHead>
-                        {S2List.map((schema)  => (
+                        {S2List.map((schema) => (
 
-                        <TableBody key="usuarios">
+                            <TableBody key="usuarios">
 
-                                <TableRow key={schema._id} >
-                                    <TableCell className="selectCheckbox" padding="checkbox" >
-                                        <Checkbox  key={"check"+ schema._id}
-                                                   onClick={event =>
-                                                handleCheckboxClick(event, schema._id)}
-                                            className="selectCheckbox"
-                                                   classes={{
-                                                       root: classes.root,
-                                                       checked: classes.checked
-                                                   }}
+                                <TableRow key={schema._id}>
+                                    <TableCell className="selectCheckbox" padding="checkbox">
+                                        <Checkbox key={"check" + schema._id}
+                                                  onClick={event =>
+                                                      handleCheckboxClick(event, schema._id)}
+                                                  className="selectCheckbox"
+                                                  classes={{
+                                                      root: classes.root,
+                                                      checked: classes.checked
+                                                  }}
                                             // @ts-ignore
-                                            checked={selectedCheckBox.indexOf(schema._id) > -1 }
+                                                  checked={selectedCheckBox.indexOf(schema._id) > -1}
 
                                         />
                                     </TableCell>
-                                    <StyledTableCell style={{ width: 140 }}  align="center">
+                                    <StyledTableCell style={{width: 140}} align="center">
                                         {schema.ejercicioFiscal}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }}  align="center">
-                                        {schema.nombres && schema.nombres+ " "}
-                                        {schema.primerApellido && schema.primerApellido+" "}
+                                    <StyledTableCell style={{width: 160}} align="center">
+                                        {schema.nombres && schema.nombres + " "}
+                                        {schema.primerApellido && schema.primerApellido + " "}
                                         {schema.segundoApellido && schema.segundoApellido}
                                     </StyledTableCell>
                                     {schema.institucionDependencia &&
-                                    <StyledTableCell style={{ width: 160 }} align="center">
+                                    <StyledTableCell style={{width: 160}} align="center">
                                         {schema.institucionDependencia.nombre}
                                     </StyledTableCell>
                                     }
                                     {schema.puesto &&
-                                    <StyledTableCell style={{ width: 160 }} align="center">
+                                    <StyledTableCell style={{width: 160}} align="center">
                                         {schema.puesto.nombre}
                                     </StyledTableCell>
                                     }
 
-                                    <StyledTableCell style={{ width: 260 }} align="center">
-                                            <Tooltip title="Más información" placement="left">
-                                                <Button  style= {{padding: '0px'}}  onClick={() => handleOpenModalUserInfo(schema)}>
-                                                    <IconButton style={{color:"#34b3eb"}} aria-label="expand row" size="small" >
-                                                        <KeyboardArrowDownIcon />
-                                                    </IconButton>
+                                    <StyledTableCell style={{width: 260}} align="center">
+                                        <Tooltip title="Más información" placement="left">
+                                            <Button style={{padding: '0px'}}
+                                                    onClick={() => handleOpenModalUserInfo(schema)}>
+                                                <IconButton style={{color: "#34b3eb"}} aria-label="expand row"
+                                                            size="small">
+                                                    <KeyboardArrowDownIcon/>
+                                                </IconButton>
 
-                                                </Button>
-                                            </Tooltip>
-                                            <Tooltip title="Editar registro" placement="top">
-                                                    <Button style={{padding: '0px'}}
-                                                            onClick={() => redirectToRoute(`/editar/S2/${schema._id}`)}>
-                                                        <Button style={{color: '#ffe01b'}}><EditOutlinedIcon/></Button>
-
-                                                    </Button>
-                                            </Tooltip>
-                                            <Tooltip title="Eliminar registro" placement="right">
-                                            <Button style={{color: '#f44336', padding: '0px'}}
-                                            onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
-                                            <DeleteOutlineOutlinedIcon/>
                                             </Button>
-                                            </Tooltip>
-                                    </StyledTableCell>
-                                    </TableRow>
+                                        </Tooltip>
+                                        <Tooltip title="Editar registro" placement="top">
+                                            <Button style={{padding: '0px'}}
+                                                    onClick={() => redirectToRoute(`/editar/S2/${schema._id}`)}>
+                                                <Button style={{color: '#ffe01b'}}><EditOutlinedIcon/></Button>
 
-                        </TableBody>
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip title="Eliminar registro" placement="right">
+                                            <Button style={{color: '#f44336', padding: '0px'}}
+                                                    onClick={() => {
+                                                        handleClickOpen(schema._id, "nomre")
+                                                    }}>
+                                                <DeleteOutlineOutlinedIcon/>
+                                            </Button>
+                                        </Tooltip>
+                                    </StyledTableCell>
+                                </TableRow>
+
+                            </TableBody>
                         ))}
 
                         <TableFooter>
                             <TableRow>
-                                { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'Todos', value: paginationSuper.totalRows }]}
+                                {paginationSuper.pageSize != undefined && paginationSuper.page != undefined &&
+                                <TablePagination
+                                    rowsPerPageOptions={[3, 5, 10, 25, {
+                                        label: 'Todos',
+                                        value: paginationSuper.totalRows
+                                    }]}
                                     colSpan={6}
                                     count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}
-                                    page={paginationSuper.page-1}
+                                    page={paginationSuper.page - 1}
                                     SelectProps={{
-                                        inputProps: { 'aria-label': 'Registros por página' },
+                                        inputProps: {'aria-label': 'Registros por página'},
                                         native: true,
                                     }}
                                     onChangePage={handleChangePage}

@@ -3,20 +3,22 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import {Main} from "./components/Main";
 import {MenuV} from "./components/Menu/MenuV";
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider,MuiThemeProvider } from '@material-ui/core/styles';
 import { esES } from '@material-ui/core/locale';
 
 const theme = createMuiTheme({
     palette: {
-        primary: { main: '#1976d2' },
-    },
+        primary: {
+            main: '#1976d2'
+        }
+    }
 }, esES);
 
 
 ReactDOM.render(
-    <ThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
         <Main/>
-    </ThemeProvider>,
+    </MuiThemeProvider>,
     document.getElementById("app")
 );
 
