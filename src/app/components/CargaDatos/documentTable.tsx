@@ -45,17 +45,16 @@ const useStyles = makeStyles({
 export default function DocumentTable(props) {
     const classes = useStyles();
     const rows = props.documents.map(e => createData(e.id, e.tipo, e.titulo, e.url, e.fecha, e.descripcion));
-    console.log(rows)
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
                 <TableHead>
                     <TableRow>
                         <StyledTableCell><b>Tipo</b></StyledTableCell>
-                        <StyledTableCell align="right"><b>Título</b></StyledTableCell>
-                        <StyledTableCell align="right"><b>URL</b></StyledTableCell>
-                        <StyledTableCell align="right"><b>Fecha</b></StyledTableCell>
-                        <StyledTableCell align="right"><b>Descripción</b></StyledTableCell>
+                        <StyledTableCell align="left"><b>Título</b></StyledTableCell>
+                        <StyledTableCell align="left"><b>URL</b></StyledTableCell>
+                        <StyledTableCell align="left"><b>Fecha</b></StyledTableCell>
+                        <StyledTableCell align="left"><b>Descripción</b></StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -64,10 +63,10 @@ export default function DocumentTable(props) {
                             <StyledTableCell component="th" scope="row">
                                 {row.tipo}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{row.titulo}</StyledTableCell>
-                            <StyledTableCell align="right">{row.url}</StyledTableCell>
-                            <StyledTableCell align="right">{row.fecha}</StyledTableCell>
-                            <StyledTableCell align="right">{row.descripcion}</StyledTableCell>
+                            <StyledTableCell align="left">{row.titulo}</StyledTableCell>
+                            <StyledTableCell align="left">{row.url}</StyledTableCell>
+                            <StyledTableCell align="left">{row.fecha}</StyledTableCell>
+                            <StyledTableCell align="left">{row.descripcion}</StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>

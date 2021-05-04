@@ -1,6 +1,6 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
     Table,
     TableBody,
@@ -49,39 +49,41 @@ import {Moment} from "moment";
 import deLocale from "date-fns/locale/es";
 import {ConnectedCreateRegS3P} from "./createRegS3P";
 import NumberFormat from "react-number-format";
-import { OnChange } from 'react-final-form-listeners'
+import {OnChange} from 'react-final-form-listeners'
 import CloseIcon from "@material-ui/icons/Close";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import DocumentTable from './documentTable';
+import Nota from './Nota';
 
 interface FormDataEsquemaS3P {
-    particularSancionado?:{
-        domicilioMexico:{
-            pais:{
+    particularSancionado?: {
+        domicilioMexico: {
+            pais: {
                 valor: String,
                 clave: String
             },
-            entidadFederativa:{
+            entidadFederativa: {
                 valor: String,
                 clave: String
             },
-            municipio:{
+            municipio: {
                 valor: String,
                 clave: String
             },
-            localidad:{
+            localidad: {
                 valor: String,
                 clave: String
             },
-            vialidad:{
+            vialidad: {
                 valor: String,
                 clave: String
             },
-            codigoPostal:String,
+            codigoPostal: String,
             numeroExterior: String,
             numeroInterior: String
         },
-        domicilioExtranjero:{
-            pais:{
+        domicilioExtranjero: {
+            pais: {
                 valor: String,
                 clave: String
             },
@@ -92,29 +94,29 @@ interface FormDataEsquemaS3P {
             numeroExterior: String,
             numeroInterior: String
         },
-        nombreRazonSocial:String,
+        nombreRazonSocial: String,
         objetoSocial: String,
         rfc: String,
         tipoPersona: String,
         telefono: String,
-        directorGeneral?:{
+        directorGeneral?: {
             nombres: String,
             primerApellido: String,
             segundoApellido: String,
             curp: String
         },
-        apoderadoLegal?:{
+        apoderadoLegal?: {
             nombres: String,
             primerApellido: String,
             segundoApellido: String,
             curp: String
         },
     },
-    multa?:{
+    multa?: {
         monto: Number,
         moneda: {
-            clave:String,
-            valor:String
+            clave: String,
+            valor: String
         }
     },
     fechaCaptura?: String,
@@ -124,36 +126,36 @@ interface FormDataEsquemaS3P {
         clave: String,
         siglas: String
     },
-    objetoContrato?:String,
+    objetoContrato?: String,
     autoridadSancionadora?: String,
     tipoFalta?: String,
-    tipoSancion?: [{clave :String , valor: String , descripcion: String}],
+    tipoSancion?: [{ clave: String, valor: String, descripcion: String }],
     causaMotivoHechos?: String,
     acto?: String,
-    responsableSancion?:{
+    responsableSancion?: {
         nombres: String,
         primerApellido: String,
         segundoApellido: String,
         curp: String
     },
-    resolucion?:{
+    resolucion?: {
         sentido: String,
         url: String,
         fechaNotificacion: String
     },
-    inhabilitacion?:{
+    inhabilitacion?: {
         plazo: String,
-        fechaInicial:String,
-        fechaFinal:String
+        fechaInicial: String,
+        fechaFinal: String
     },
-    documentos?: [{id: String, tipo:String, titulo:String , descripcion :String , url: String, fecha:String}],
+    documentos?: [{ id: String, tipo: String, titulo: String, descripcion: String, url: String, fecha: String }],
     observaciones?: String
 }
 
 export const ListS3PSchema = () => {
-    const {S3PList,alerta,paginationSuper,catalogos, permisos, providerUser} = useSelector(state => ({
-        S3PList : state.S3P,
-        alerta : state.alert,
+    const {S3PList, alerta, paginationSuper, catalogos, permisos, providerUser} = useSelector(state => ({
+        S3PList: state.S3P,
+        alerta: state.alert,
         paginationSuper: state.pagination,
         catalogos: state.catalogs,
         permisos: state.permisos,
@@ -163,15 +165,21 @@ export const ListS3PSchema = () => {
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [RegistroId, setRegistroId] = React.useState("");
-    const [nombreUsuario, setNombreUsuario] =  React.useState("");
-    const [selectedCheckBox, setSelectedCheckBox ] = React.useState([]);
-    const [query, setQuery] =  React.useState({});
+    const [nombreUsuario, setNombreUsuario] = React.useState("");
+    const [selectedCheckBox, setSelectedCheckBox] = React.useState([]);
+    const [query, setQuery] = React.useState({});
     const [openModalUserInfo, setOpenModalUserInfo] = React.useState(false);
     const [selectedRegistro, setSelectedRegistro] = React.useState<FormDataEsquemaS3P>({});
-    const [match, setMatch] =   React.useState({params: {id: ""}});
+    const [match, setMatch] = React.useState({params: {id: ""}});
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('md');
-    var optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',  hour: 'numeric', minute: 'numeric' };
-    var optionsOnlyDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    var optionsDate = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+    };
+    var optionsOnlyDate = {year: 'numeric', month: 'long', day: 'numeric'};
 
 
     const handleOpenModalUserInfo = (user) => {
@@ -183,7 +191,7 @@ export const ListS3PSchema = () => {
         setOpenModalUserInfo(false);
     };
 
-    const handleClickOpen = (id ,nameReg) => {
+    const handleClickOpen = (id, nameReg) => {
         setOpen(true);
         setRegistroId(id);
         // setNombreUsuario(name+ " "+ primerApellido+ " "+ segundoApellido);
@@ -198,33 +206,37 @@ export const ListS3PSchema = () => {
     };
 
     const handleChangePage = (event, newPage) => {
-        dispatch(S3PActions.requestListS3P({query: query, page : newPage +1  ,pageSize: paginationSuper.pageSize}));
+        dispatch(S3PActions.requestListS3P({query: query, page: newPage + 1, pageSize: paginationSuper.pageSize}));
     };
 
     const handleChangeRowsPerPage = (event) => {
-        let newSize= parseInt(event.target.value, 10);
-        if(paginationSuper.page * newSize > paginationSuper.totalRows){
-            dispatch(S3PActions.requestListS3P({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
-        }else{
-            dispatch(S3PActions.requestListS3P({query: query, page: 1 , pageSize: parseInt(event.target.value, 10) }));
+        let newSize = parseInt(event.target.value, 10);
+        if (paginationSuper.page * newSize > paginationSuper.totalRows) {
+            dispatch(S3PActions.requestListS3P({query: query, page: 1, pageSize: parseInt(event.target.value, 10)}));
+        } else {
+            dispatch(S3PActions.requestListS3P({query: query, page: 1, pageSize: parseInt(event.target.value, 10)}));
         }
     };
 
     const confirmAction = (id) => {
-        let disco= 1;
-        if(Array.isArray(id)){
+        let disco = 1;
+        if (Array.isArray(id)) {
             disco = id.length;
         }
-        let sizeList=S3PList.length - disco;
+        let sizeList = S3PList.length - disco;
 
         dispatch(S3PActions.deleteRecordRequest(id));
-        paginationSuper.totalRows = paginationSuper.totalRows-disco;
+        paginationSuper.totalRows = paginationSuper.totalRows - disco;
 
-        if(sizeList  < 1 ){
-            if(paginationSuper.page -1 > 0 ){
-                dispatch(S3PActions.requestListS3P({query: query, page:  paginationSuper.page -1 , pageSize: paginationSuper.pageSize}));
-            }else{
-                dispatch(S3PActions.requestListS3P({query: query, page: 1 , pageSize: paginationSuper.pageSize }));
+        if (sizeList < 1) {
+            if (paginationSuper.page - 1 > 0) {
+                dispatch(S3PActions.requestListS3P({
+                    query: query,
+                    page: paginationSuper.page - 1,
+                    pageSize: paginationSuper.pageSize
+                }));
+            } else {
+                dispatch(S3PActions.requestListS3P({query: query, page: 1, pageSize: paginationSuper.pageSize}));
             }
 
         }
@@ -242,12 +254,14 @@ export const ListS3PSchema = () => {
                     </Typography>
                     }
                 </div>
-                <div className={classes.spacer} />
+                <div className={classes.spacer}/>
                 <div className={classes.actions}>
                     {selectedCheckBox.length > 0 &&
                     <Tooltip title="Delete">
-                        <Button style={{ color: 'white', padding: '0px' }}
-                                onClick= {()=> {handleClickOpen(selectedCheckBox, "nomre")}} >
+                        <Button style={{color: 'white', padding: '0px'}}
+                                onClick={() => {
+                                    handleClickOpen(selectedCheckBox, "nomre")
+                                }}>
                             <DeleteOutlineOutlinedIcon/>
                         </Button>
                     </Tooltip>
@@ -257,16 +271,16 @@ export const ListS3PSchema = () => {
         );
     };
 
-    const handleCheckboxAll= (event) => {
-        let array= [];
+    const handleCheckboxAll = (event) => {
+        let array = [];
         if (event.target.checked) {
-            for(let schema of S3PList){
+            for (let schema of S3PList) {
                 // @ts-ignore
                 array.push(schema._id);
             }
         }
         setSelectedCheckBox(array);
-        console.log("array "+array);
+        console.log("array " + array);
     }
 
     const handleCheckboxClick = (event, id) => {
@@ -318,12 +332,12 @@ export const ListS3PSchema = () => {
     }
 
     const schema = Yup.object().shape({
-        expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
-        idnombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
-        SP3nombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        SP3primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        SP3segundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        fechaCaptura:  Yup.string().nullable(true),
+        expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'), 'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
+        idnombre: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
+        SP3nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        SP3primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        SP3segundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        fechaCaptura: Yup.string().nullable(true),
     });
 
     const validate = makeValidate(schema);
@@ -334,49 +348,53 @@ export const ListS3PSchema = () => {
 
         let newQuery = {};
         for (let [key, value] of Object.entries(values)) {
-            if(key === "expediente" && value !== null && value !== ''){
-                newQuery["expediente"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if(key === "idnombre" && value !== null && value !== ''){
-                newQuery["institucionDependencia.nombre"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if(key === "SP3nombres" && value !== null && value !== ''){
-                newQuery["particularSancionado.nombreRazonSocial"] = { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
-            }else if(key === "tipoPersona" && value !== null && value !== ''){
-                let objTipoPersona= JSON.parse(value);
-                newQuery["particularSancionado.tipoPersona"]= { $in : [objTipoPersona.clave]};
-            }else if(key === "tipoSancion" ){
-                if(value.length > 0){
+            if (key === "expediente" && value !== null && value !== '') {
+                newQuery["expediente"] = {$regex: diacriticSensitiveRegex(value), $options: 'i'};
+            } else if (key === "idnombre" && value !== null && value !== '') {
+                newQuery["institucionDependencia.nombre"] = {$regex: diacriticSensitiveRegex(value), $options: 'i'};
+            } else if (key === "SP3nombres" && value !== null && value !== '') {
+                newQuery["particularSancionado.nombreRazonSocial"] = {
+                    $regex: diacriticSensitiveRegex(value),
+                    $options: 'i'
+                };
+            } else if (key === "tipoPersona" && value !== null && value !== '') {
+                let objTipoPersona = JSON.parse(value);
+                newQuery["particularSancionado.tipoPersona"] = {$in: [objTipoPersona.clave]};
+            } else if (key === "tipoSancion") {
+                if (value.length > 0) {
                     console.log(value);
-                    let arrayObjTipoSancion= value;
-                    let acumulado= []
-                    for(let obSancion of arrayObjTipoSancion){
+                    let arrayObjTipoSancion = value;
+                    let acumulado = []
+                    for (let obSancion of arrayObjTipoSancion) {
                         // @ts-ignore
-                        acumulado.push( JSON.parse(obSancion).clave);
+                        acumulado.push(JSON.parse(obSancion).clave);
                     }
-                    newQuery["tipoSancion.clave"]= { $in :acumulado };
+                    newQuery["tipoSancion.clave"] = {$in: acumulado};
                 }
-            }else if(key === "fechaFinal" && value !== null && value !== ''){
+            } else if (key === "fechaFinal" && value !== null && value !== '') {
                 let fecha = Date.parse(value);
-                console.log(formatISO(fecha, { representation: 'date' }));
-                newQuery["inhabilitacion.fechaFinal"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
-            }else if(key === "fechaCaptura" && value !== null && value !== ''){
+                console.log(formatISO(fecha, {representation: 'date'}));
+                newQuery["inhabilitacion.fechaFinal"] = {$regex: formatISO(fecha, {representation: 'date'})};
+                ;
+            } else if (key === "fechaCaptura" && value !== null && value !== '') {
                 let fecha = Date.parse(value);
-                console.log(formatISO(fecha, { representation: 'date' }));
-                newQuery["fechaCaptura"] =  { $regex : formatISO(fecha, { representation: 'date' })};;
-            }else
-            if ( value !== null && value !== ''){
-                newQuery[key]= { $regex : diacriticSensitiveRegex(value),  $options : 'i'};
+                console.log(formatISO(fecha, {representation: 'date'}));
+                newQuery["fechaCaptura"] = {$regex: formatISO(fecha, {representation: 'date'})};
+                ;
+            } else if (value !== null && value !== '') {
+                newQuery[key] = {$regex: diacriticSensitiveRegex(value), $options: 'i'};
             }
         }
         setQuery(newQuery);
-        dispatch(S3PActions.requestListS3P({query : newQuery, page: 1 , pageSize: paginationSuper.pageSize }));
+        dispatch(S3PActions.requestListS3P({query: newQuery, page: 1, pageSize: paginationSuper.pageSize}));
 
 
     }
 
-    function resetForm (form){
+    function resetForm(form) {
         form.reset();
         setQuery({});
-        dispatch(S3PActions.requestListS3P({page: paginationSuper.page , pageSize: paginationSuper.pageSize }));
+        dispatch(S3PActions.requestListS3P({page: paginationSuper.page, pageSize: paginationSuper.pageSize}));
     }
 
     const StyledTableCell = withStyles({
@@ -385,7 +403,7 @@ export const ListS3PSchema = () => {
         }
     })(TableCell);
 
-    const redirectToRoute = (path) =>{
+    const redirectToRoute = (path) => {
         history.push(path);
     }
 
@@ -396,7 +414,7 @@ export const ListS3PSchema = () => {
         rowsPerPage: PropTypes.number.isRequired
     };
 
-    var cont=0;
+    var cont = 0;
 
     const useStyles = makeStyles((theme: Theme) =>
         createStyles({
@@ -406,19 +424,19 @@ export const ListS3PSchema = () => {
                 }
             },
             checked: {},
-            indeterminate:{
+            indeterminate: {
                 color: '#666666'
             },
-            tool : {
+            tool: {
                 color: 'white',
                 backgroundColor: '#7f7e7e'
             },
-            overSelect:{
-                'max-height': '19px',
-                "white-space": "normal !important"
-            },
             spacer: {
                 flex: "1 1 100%"
+            },
+            titleDialogDetail: {
+                flex: 1,
+                color: "#ffff",
             },
             actions: {
                 color: theme.palette.text.secondary
@@ -426,43 +444,41 @@ export const ListS3PSchema = () => {
             title: {
                 flex: "0 0 auto"
             },
-            titleDialogDetail: {
-                flex: 1,
-            },
-            fontblack:{
+            fontblack: {
                 color: '#666666'
             },
-            titleModal:{
+            titleModal: {
                 "padding-top": "13px",
                 color: '#585858',
-                "font-size" : '17px'
+                "font-size": '17px'
             },
             divider: {
                 width: '100%',
-                backgroundColor:'#ffe01b',
+                backgroundColor: '##b7a426',
+                color: '#b7a426',
+                margin: '10px'
+            },
+            boton: {
+                marginTop: '16px',
+                marginLeft: '16px',
+                marginRight: '16px',
+                marginBottom: '0px',
+                backgroundColor: '#ffe01b',
                 color: '#666666'
             },
-            boton:{
-                marginTop:'16px',
-                marginLeft:'16px',
-                marginRight:'16px',
-                marginBottom:'0px',
-                backgroundColor:'#ffe01b',
-                color: '#666666'
-            },
-            boton2:{
-                marginTop:'16px',
-                marginLeft:'16px',
-                marginRight:'-10px',
-                marginBottom:'0px',
-                backgroundColor:'#ffe01b',
+            boton2: {
+                marginTop: '16px',
+                marginLeft: '16px',
+                marginRight: '-10px',
+                marginBottom: '0px',
+                backgroundColor: '#ffe01b',
                 color: '#666666'
             },
             filterContainer: {
                 'padding': '10px 10px 20px 10px',
             },
             gridpadding: {
-                marginRight: '10px',
+                'padding-top': '10px',
             },
             gridpaddingBottom: {
                 'padding-bottom': '10px',
@@ -471,36 +487,67 @@ export const ListS3PSchema = () => {
             titlegridModal: {
                 color: '#585858'
             },
-            body2:{
+            body2: {
                 color: '#666666'
             },
-            marginright:{
+            marginright: {
                 marginRight: '30px',
                 marginTop: '15px',
-                backgroundColor:'#ffe01b',
+                backgroundColor: '#ffe01b',
                 color: '#666666',
                 marginBottom: '30px'
+            },
+            overSelect: {
+                'max-height': '19px',
+                "white-space": "normal !important"
             },
             paper: {
                 'text-align': 'center',
                 margin: 0,
-                marginTop: '-450px',
+                marginTop: '75px',
                 position: 'absolute',
-                top: '150%',
+                top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 backgroundColor: theme.palette.background.paper,
                 boxShadow: theme.shadows[5],
                 padding: theme.spacing(2, 4, 3),
             },
-            modal:{
+            modal: {
                 overflowY: 'auto'
             },
-            tableHead:{
+            tableHead: {
                 backgroundColor: '#34b3eb'
             },
-            tableHeaderColumn:{
+            tableHeaderColumn: {
                 color: '#ffff'
+            },
+            whiteStyle: {
+                color: '#ffff'
+            },
+            titulo: {
+                fontSize: 15,
+                fontWeight: "bold",
+                marginBottom: 10,
+                textDecoration: "underline",
+                textDecorationColor: '#34b3eb',
+                color: '#34b3eb',
+                margin: '15px'
+            },
+            toolBarModal: {
+                backgroundColor: "#34b3eb"
+            },
+            subtitulo: {
+                fontSize: 15,
+                fontWeight: "bold",
+                textDecoration: "underline",
+                textDecorationColor: '#585858',
+                color: '#585858',
+                paddingTop: '10px'
+            },
+            containerDivider: {
+                paddingLeft: '15px',
+                paddingRight: '15px'
             }
         }),
     );
@@ -509,738 +556,592 @@ export const ListS3PSchema = () => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     // @ts-ignore
+
     return (
 
-        <div >
-            <Snackbar anchorOrigin={ { vertical: 'top', horizontal: 'center' }}  open={alerta.status} autoHideDuration={3000} onClose={handleCloseSnackbar}>
+        <div>
+            <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'center'}} open={alerta.status}
+                      autoHideDuration={3000} onClose={handleCloseSnackbar}>
                 <Alert onClose={handleCloseSnackbar} severity={alerta.type}>
                     {alerta.message}
                 </Alert>
             </Snackbar>
 
-            <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo} aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
-                <Toolbar>
+            <Dialog fullWidth={true} maxWidth={maxWidth} fullScreen={fullScreen} onClose={handleCloseModalUserInfo}
+                    aria-labelledby="customized-dialog-title" open={openModalUserInfo}>
+                <Toolbar className={classes.toolBarModal}>
                     <Typography variant="h6" className={classes.titleDialogDetail}>
-                        Detalle del registro
+                        <b>Detalle del registro</b>
+                        <Typography className={classes.whiteStyle}>
+                            *(DNC) = Dato No Capturado
+                        </Typography>
                     </Typography>
                     <IconButton edge="end" color="inherit" onClick={handleCloseModalUserInfo} aria-label="close">
-                        <CloseIcon />
+                        <CloseIcon className={classes.whiteStyle}/>
                     </IconButton>
                 </Toolbar>
                 <DialogContent dividers>
-                <Grid container item md={12}>
                     <Grid container>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Expediente
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.expediente}
+                        <Grid item xs={12}>
+                            <Typography className={classes.titulo} align={"center"}>
+                                Datos generales
                             </Typography>
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Fecha Captura
+                                <b>Expediente</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.expediente ? selectedRegistro.expediente : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Fecha última actualización</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {//@ts-ignore
-                                    new Date(selectedRegistro.fechaCaptura).toLocaleDateString("es-ES", optionsDate)}
+                                    new Date(selectedRegistro.fechaCaptura).toLocaleDateString("es-ES", optionsDate)
+                                }
                             </Typography>
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Nombre / Razón Social
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nombre / Razón social</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.particularSancionado?.nombreRazonSocial}
                             </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>RFC</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.rfc ? selectedRegistro.particularSancionado.rfc :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.subtitulo} align={"left"}>
+                                Institución / Dependencia
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Clave</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.institucionDependencia?.clave ? selectedRegistro.institucionDependencia.clave :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Siglas</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.institucionDependencia?.siglas ? selectedRegistro.institucionDependencia.siglas :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nombre</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.institucionDependencia?.nombre ? selectedRegistro.institucionDependencia.nombre :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.containerDivider}>
+                            <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                     light={true}/>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={12} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Observaciones</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.observaciones ? selectedRegistro.observaciones : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.titulo} align={"center"}>
+                                Datos de la sanción
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Tipo sanción</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.tipoSancion ? selectedRegistro.tipoSancion.map(e => (
+                                    <li>{e.valor}  {e.descripcion ? ' - DESCRIPCIÓN:' + e.descripcion : ''}</li>
+                                )) : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Tipo falta</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.tipoFalta ? selectedRegistro.tipoFalta : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.subtitulo} align={"left"}>
+                                Resolución
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Autoridad sancionadora</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.autoridadSancionadora}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Fecha</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {//@ts-ignore
+                                    selectedRegistro.resolucion?.fechaNotificacion ? new Date(selectedRegistro.resolucion.fechaNotificacion + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate) :
+                                        <Nota/>
+                                }
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>URL</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.resolucion ? selectedRegistro.resolucion.url : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Sentido</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.resolucion?.sentido ? selectedRegistro.resolucion.sentido : <Nota/>}
+                            </Typography>
+                        </Grid>
 
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Objeto social
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.particularSancionado?.objetoSocial}
-                            </Typography>
-
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                RFC
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.particularSancionado?.rfc}
-                            </Typography>
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Tipo persona
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.particularSancionado?.tipoPersona}
-                            </Typography>
-                        </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                Telefono
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.particularSancionado?.telefono}
-                            </Typography>
+                        <Grid item xs={12} className={classes.containerDivider}>
+                            <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                     light={true}/>
                         </Grid>
 
+
+                        <Grid item xs={12}>
+                            <Typography className={classes.subtitulo} align={"left"}>
+                                Inhabilitación / Multa
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Plazo</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.inhabilitacion?.plazo ? selectedRegistro.inhabilitacion.plazo :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Fecha inicial</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {//@ts-ignore
+                                    selectedRegistro.inhabilitacion?.fechaInicial ? new Date(selectedRegistro.inhabilitacion.fechaInicial + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate) :
+                                        <Nota/>
+                                }
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Fecha final</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {//@ts-ignore
+                                    selectedRegistro.inhabilitacion?.fechaFinal ? new Date(selectedRegistro.inhabilitacion.fechaFinal + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate) :
+                                        <Nota/>
+                                }
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Multa</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.multa ?
+                                    (<NumberFormat value={String(selectedRegistro.multa?.monto)}
+                                                   displayType={'text'} thousandSeparator={true} prefix={'$'}/>)
+                                    : <Nota/>}
+                                {selectedRegistro.multa?.moneda ? selectedRegistro.multa.moneda.clave : ''}
+
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.containerDivider}>
+                            <Divider orientation="horizontal" className={classes.divider}/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.subtitulo} align={"left"}>
+                                Responsable de la sanción
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nombre</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.responsableSancion?.nombres ? selectedRegistro.responsableSancion.nombres :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Apellido uno</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.responsableSancion?.primerApellido ? selectedRegistro.responsableSancion.primerApellido :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Apellido dos</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.responsableSancion?.segundoApellido ? selectedRegistro.responsableSancion.segundoApellido :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>CURP</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.responsableSancion?.curp ? selectedRegistro.responsableSancion.curp :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.containerDivider}>
+                            <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                     light={true}/>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Causa, motivo o hechos</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.causaMotivoHechos}
+                            </Typography>
+                        </Grid>
+
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Acto</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.acto ? selectedRegistro.acto : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.titulo} align={"center"}>
+                                Datos del particular sancionado
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Tipo persona</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.tipoPersona ? (selectedRegistro.particularSancionado.tipoPersona === 'M' ? 'Moral' : 'Física') :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Teléfono</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.telefono ? selectedRegistro.particularSancionado.telefono :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Objeto social</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.objetoSocial ? selectedRegistro.particularSancionado.objetoSocial :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.subtitulo} align={"left"}>
+                                Director general
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nombre</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.directorGeneral?.nombres ? selectedRegistro.particularSancionado.directorGeneral.nombres :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Apellido Paterno</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.directorGeneral?.primerApellido ? selectedRegistro.particularSancionado.directorGeneral.primerApellido :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Apellido Materno</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.directorGeneral?.segundoApellido ? selectedRegistro.particularSancionado.directorGeneral.segundoApellido :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>CURP</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.directorGeneral?.curp ? selectedRegistro.particularSancionado.directorGeneral.curp :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.containerDivider}>
+                            <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                     light={true}/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.subtitulo} align={"left"}>
+                                Apoderado legal
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nombre</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.apoderadoLegal?.nombres ? selectedRegistro.particularSancionado.apoderadoLegal.nombres :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Apellido Paterno</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.apoderadoLegal?.primerApellido ? selectedRegistro.particularSancionado.apoderadoLegal.primerApellido :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Apellido Materno</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.apoderadoLegal?.segundoApellido ? selectedRegistro.particularSancionado.apoderadoLegal.segundoApellido :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>CURP</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.particularSancionado?.apoderadoLegal?.curp ? selectedRegistro.particularSancionado.apoderadoLegal.curp :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.containerDivider}>
+                            <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                     light={true}/>
+                        </Grid>
                         {selectedRegistro.particularSancionado?.domicilioMexico &&
-                            <div>
-                                <Grid container justify={"center"} item md={12}>
-                                    <Typography className={classes.titleModal} variant="h6"  align="center">
+                        <Grid item xs={12}>
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <Typography className={classes.titulo} align={"center"}>
                                         Domicilio México
                                     </Typography>
-                                    <Divider orientation="horizontal"  className={classes.divider} />
                                 </Grid>
-                                <Grid container>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            País valor
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.pais?.valor}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            País clave
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.pais?.clave}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Entidad federativa valor
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.entidadFederativa?.valor}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Entidad federativa clave
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.entidadFederativa?.clave}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Municipio valor
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.municipio?.valor}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Municipio clave
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.municipio?.clave}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Localidad valor
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.localidad?.valor}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Localidad clave
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.localidad?.clave}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Vialidad valor
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.vialidad?.valor}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Vialidad clave
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.vialidad?.clave}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Código Postal
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.codigoPostal}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Número Exterior
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.numeroExterior}
-                                        </Typography>
-                                    </Grid>
-                                    <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                        <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                            Número Interior
-                                        </Typography>
-                                        <Typography className={classes.body2} align="left" variant="body2">
-                                            {selectedRegistro.particularSancionado?.domicilioMexico?.numeroInterior}
-                                        </Typography>
-                                    </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>País</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.pais?.valor ? selectedRegistro.particularSancionado.domicilioMexico.pais.valor :
+                                            <Nota/>}
+                                    </Typography>
                                 </Grid>
-                            </div>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Entidad federativa</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.entidadFederativa?.valor ? selectedRegistro.particularSancionado.domicilioMexico.entidadFederativa.valor :
+                                            <Nota/>}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Municipio</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.municipio?.valor ? selectedRegistro.particularSancionado.domicilioMexico.municipio.valor :
+                                            <Nota/>}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Localidad</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.localidad?.valor ? selectedRegistro.particularSancionado.domicilioMexico.localidad.valor :
+                                            <Nota/>}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Vialidad</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.vialidad?.valor ? selectedRegistro.particularSancionado.domicilioMexico.vialidad.valor :
+                                            <Nota/>}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Código postal</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.codigoPostal}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Número exterior</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.numeroExterior}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Número interior</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.numeroInterior}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
                         }
-
 
 
                         {selectedRegistro.particularSancionado?.domicilioExtranjero &&
-                        <div>
-                            <Grid container justify={"center"} item md={12}>
-                                <Typography className={classes.titleModal} variant="h6" align="center">
-                                    Domicilio Extranjero
-                                </Typography>
-                                <Divider orientation="horizontal" className={classes.divider}/>
-                            </Grid>
-                            <Grid container>
-                                <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        País valor
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.pais?.valor}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        País clave
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.pais?.clave}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Calle
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.calle}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Ciudad / Localidad
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.ciudadLocalidad}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Estado / Provincia
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.estadoProvincia}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Código Postal
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.codigoPostal}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Número Exterior
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.numeroExterior}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={2} sm={12}>
-                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Número Interior
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.numeroInterior}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </div>
-                        }
-
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography className={classes.titleModal} variant="h6"  align="center">
-                                Objeto contrato
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Objeto contrato
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.objetoContrato}
+                        <Grid item xs={12}>
+                            <Grid item xs={12}>
+                                <Typography className={classes.titulo} align={"center"}>
+                                    Domicilio extranjero
                                 </Typography>
                             </Grid>
-                        </Grid>
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography className={classes.titleModal} variant="h6"  align="center">
-                                Autoridad Sancionadora
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Autoridad Sancionadora
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.autoridadSancionadora}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography className={classes.titleModal} variant="h6"  align="center">
-                                Tipo falta
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        {selectedRegistro.tipoFalta &&
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Tipo falta
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.tipoFalta}
-                                </Typography>
-                            </Grid>
-
-                        </Grid>
-                        }
-
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Tipo Sanción
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        {selectedRegistro.tipoSancion?.map((tipo) => (
                             <Grid container>
                                 <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Clave
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>País</b>
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {tipo?.clave}
+                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.pais?.valor ? selectedRegistro.particularSancionado.domicilioExtranjero.pais.valor :
+                                            <Nota/>}
                                     </Typography>
                                 </Grid>
                                 <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Valor
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Calle</b>
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {tipo?.valor}
+                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.calle ? selectedRegistro.particularSancionado.domicilioExtranjero.calle :
+                                            <Nota/>}
                                     </Typography>
                                 </Grid>
-                                <Grid className={classes.gridpadding} item md={6} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Descripción
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Ciudad / Localidad</b>
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {tipo?.descripcion}
+                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.ciudadLocalidad ? selectedRegistro.particularSancionado.domicilioExtranjero.ciudadLocalidad :
+                                            <Nota/>}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Estado / Provincia</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.estadoProvincia ? selectedRegistro.particularSancionado.domicilioExtranjero.estadoProvincia :
+                                            <Nota/>}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Código postal</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.codigoPostal ? selectedRegistro.particularSancionado.domicilioExtranjero.codigoPostal :
+                                            <Nota/>}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Número exterior</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.numeroExterior ? selectedRegistro.particularSancionado.domicilioExtranjero.numeroExterior :
+                                            <Nota/>}
+                                    </Typography>
+                                </Grid>
+                                <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                    <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                        <b>Número interior</b>
+                                    </Typography>
+                                    <Typography className={classes.body2} align="left" variant="body2">
+                                        {selectedRegistro.particularSancionado?.domicilioExtranjero?.numeroInterior ? selectedRegistro.particularSancionado.domicilioExtranjero.numeroInterior :
+                                            <Nota/>}
                                     </Typography>
                                 </Grid>
                             </Grid>
-                        ))}
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Causa o motivo hechos
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
                         </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={12} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Causa o Motivo de hechos
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.causaMotivoHechos}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Acto
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={12} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Acto
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.acto}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Institución / Dependencia
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nombre
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia?.nombre}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Clave
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia?.clave}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={12} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Siglas
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia?.siglas}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Director general
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nombre
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.directorGeneral?.nombres}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Apellido Paterno
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.directorGeneral?.primerApellido}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Apellido Materno
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.directorGeneral?.segundoApellido}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    CURP
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.directorGeneral?.curp}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Apoderado legal
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nombre
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.apoderadoLegal?.nombres}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Apellido Paterno
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.apoderadoLegal?.primerApellido}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Apellido Materno
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.apoderadoLegal?.segundoApellido}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    CURP
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.particularSancionado?.apoderadoLegal?.curp}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Responsable Sanción
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Nombre
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.responsableSancion?.nombres}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Apellido Paterno
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.responsableSancion?.primerApellido}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Apellido Materno
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.responsableSancion?.segundoApellido}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    CURP
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.responsableSancion?.curp}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Resolución
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Fecha Resolución
-                                </Typography>
-                                {selectedRegistro.resolucion?.fechaNotificacion &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {//@ts-ignore
-                                        new Date(selectedRegistro.resolucion?.fechaNotificacion+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
-                                </Typography>}
-
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    URL
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.resolucion?.url}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Multa
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Monto
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-
-                                    <NumberFormat value={String(selectedRegistro.multa?.monto) } displayType={'text'} thousandSeparator={true} prefix={'$'} />
-
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Valor
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.multa?.moneda?.valor}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Clave
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.multa?.moneda?.clave}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Inhabilitación
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Plazo
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.inhabilitacion?.plazo}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Fecha inicial
-                                </Typography>
-                                {selectedRegistro.inhabilitacion?.fechaInicial &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {//@ts-ignore
-                                        new Date(selectedRegistro.inhabilitacion?.fechaInicial+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
-                                </Typography>}
-
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Fecha final
-                                </Typography>
-                                {selectedRegistro.inhabilitacion?.fechaFinal &&
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {//@ts-ignore
-                                        new Date(selectedRegistro.inhabilitacion?.fechaFinal+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
-                                </Typography>
-                                }
-
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
-                                Observaciones
-                            </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
-                        </Grid>
-                        <Grid container>
-                            <Grid className={classes.gridpadding} item md={12} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    Observaciones
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.observaciones}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container justify={"center"} item md={12}>
-                            <Typography  className={classes.titleModal} variant="h6"  align="center">
+                        }
+                        <Grid item xs={12}>
+                            <Typography className={classes.titulo} align={"center"}>
                                 Documentos
                             </Typography>
-                            <Divider orientation="horizontal"  className={classes.divider} />
                         </Grid>
-                        {selectedRegistro.documentos?.map((doc) => (
-                            <Grid container>
-                                <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Id
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {doc?.id}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Tipo
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {doc?.tipo}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={6} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Título
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {doc?.titulo}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={6} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Descricpción
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {doc?.descripcion}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={6} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        URL
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {doc?.url}
-                                    </Typography>
-                                </Grid>
-                                <Grid className={classes.gridpadding} item md={6} sm={12}>
-                                    <Typography  className={classes.titlegridModal} align="left" variant="subtitle2">
-                                        Fecha
-                                    </Typography>
-                                    <Typography className={classes.body2} align="left" variant="body2">
-                                        {//@ts-ignore
-                                            new Date(doc?.fecha+ "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        ))}
-
-
+                        {!selectedRegistro.documentos || selectedRegistro.documentos.length < 1 ?
+                            <Typography className={classes.body2} align="left" variant="body2"><b>*No se proporcionaron
+                                documentos</b></Typography> : ''}
+                        {selectedRegistro.documentos && selectedRegistro.documentos.length > 0 &&
+                        <DocumentTable documents={selectedRegistro.documentos}/>
+                        }
 
                     </Grid>
-                </Grid>
                 </DialogContent>
             </Dialog>
 
@@ -1250,7 +1151,8 @@ export const ListS3PSchema = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"¿Seguro que desea eliminar el registro "+ nombreUsuario+"?"}</DialogTitle>
+                <DialogTitle
+                    id="alert-dialog-title">{"¿Seguro que desea eliminar el registro " + nombreUsuario + "?"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Los cambios no serán reversibles
@@ -1260,7 +1162,9 @@ export const ListS3PSchema = () => {
                     <Button onClick={handleClose} color="primary">
                         Cancelar
                     </Button>
-                    <Button onClick={()=> {confirmAction(RegistroId)}} color="primary" autoFocus>
+                    <Button onClick={() => {
+                        confirmAction(RegistroId)
+                    }} color="primary" autoFocus>
                         Aceptar
                     </Button>
                 </DialogActions>
@@ -1268,25 +1172,25 @@ export const ListS3PSchema = () => {
 
             <Grid container>
                 <Grid container justify={"center"}>
-                    <Typography  variant="h6" className={classes.fontblack}>
+                    <Typography variant="h6" className={classes.fontblack}>
                         <b>Sistema de los Particulares Sancionados</b>
                     </Typography>
                 </Grid>
-                <Grid container className={classes.filterContainer} >
+                <Grid container className={classes.filterContainer}>
                     <Form
                         onSubmit={onSubmit}
                         validate={validate}
-                        render={({handleSubmit, form,  values, submitting}) => (
+                        render={({handleSubmit, form, values, submitting}) => (
                             <form onSubmit={handleSubmit} noValidate>
                                 {alerta.status === undefined &&
                                 <div>
-                                    <Grid className= {classes.gridpadding} container justify={"flex-start"}>
-                                        <Typography  variant="body1" className={classes.fontblack}>
+                                    <Grid className={classes.gridpadding} container justify={"flex-start"}>
+                                        <Typography variant="body1" className={classes.fontblack}>
                                             <b>Búsqueda</b>
                                         </Typography>
                                     </Grid>
 
-                                    <Grid spacing={3} container item style={{ marginRight:'100px' }}>
+                                    <Grid spacing={3} container item style={{marginRight: '100px'}}>
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
                                                 locale={deLocale}
@@ -1301,21 +1205,22 @@ export const ListS3PSchema = () => {
                                             />
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Expediente" name="expediente"  />
+                                            <TextField label="Expediente" name="expediente"/>
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Institución / Dependencia" name="idnombre" />
+                                            <TextField label="Institución / Dependencia" name="idnombre"/>
                                         </Grid>
                                         <Grid item xs={12} md={3}>
-                                            <TextField label="Nombre/Razón social" name="SP3nombres"  />
+                                            <TextField label="Nombre/Razón social" name="SP3nombres"/>
                                         </Grid>
                                         {catalogos.tipoSancion &&
                                         <Grid item xs={12} md={3}>
-                                            <Select  inputProps={{
+                                            <Select inputProps={{
                                                 classes: {
                                                     select: classes.overSelect,
                                                 },
-                                            }}  name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion} multiple={true} ></Select>
+                                            }} name={`tipoSancion`} label="Tipo sanción" data={catalogos.tipoSancion}
+                                                    multiple={true}></Select>
                                         </Grid>}
                                         {catalogos.tipoSancion &&
                                         <OnChange name="tipoSancion">
@@ -1331,7 +1236,8 @@ export const ListS3PSchema = () => {
                                         }
                                         {catalogos.tipoPersona &&
                                         <Grid item xs={12} md={3}>
-                                            <Select  name={`tipoPersona`} label="Tipo persona" data={catalogos.tipoPersona} ></Select>
+                                            <Select name={`tipoPersona`} label="Tipo persona"
+                                                    data={catalogos.tipoPersona}></Select>
                                         </Grid>}
                                         <Grid item xs={12} md={3}>
                                             <DatePicker
@@ -1347,12 +1253,14 @@ export const ListS3PSchema = () => {
                                             />
                                         </Grid>
                                     </Grid>
-                                    <Grid container justify={"flex-end"} >
-                                        <Button  className={classes.boton}  variant="contained"
-                                                onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
-                                        <Button  className={classes.boton2}  variant="contained"
-                                                 type="submit"
-                                                 disabled={submitting}> BUSCAR </Button>
+                                    <Grid container justify={"flex-end"}>
+                                        <Button className={classes.boton} variant="contained"
+                                                onClick={() => {
+                                                    resetForm(form)
+                                                }}> LIMPIAR </Button>
+                                        <Button className={classes.boton2} variant="contained"
+                                                type="submit"
+                                                disabled={submitting}> BUSCAR </Button>
                                     </Grid>
 
 
@@ -1363,15 +1271,17 @@ export const ListS3PSchema = () => {
                         )}
                     />
                 </Grid>
-                <Grid item md={12} sm={12}>{selectedCheckBox.length > 0 && <EnhancedTableToolbar></EnhancedTableToolbar>} </Grid>
+                <Grid item md={12} sm={12}>{selectedCheckBox.length > 0 &&
+                <EnhancedTableToolbar></EnhancedTableToolbar>} </Grid>
 
-                <Grid className= {`${classes.gridpadding} ${classes.gridpaddingBottom} `} container justify={"flex-start"}>
-                    <Typography  variant="body1" className={classes.fontblack}>
+                <Grid className={`${classes.gridpadding} ${classes.gridpaddingBottom} `} container
+                      justify={"flex-start"}>
+                    <Typography variant="body1" className={classes.fontblack}>
                         <b>Resultados</b>
                     </Typography>
                 </Grid>
-                <TableContainer  component={Paper}>
-                    <Table  aria-label="custom pagination table">
+                <TableContainer component={Paper}>
+                    <Table aria-label="custom pagination table">
                         <TableHead className={classes.tableHead}>
                             <TableRow>
                                 <TableCell padding="checkbox">
@@ -1388,82 +1298,96 @@ export const ListS3PSchema = () => {
                                     />
                                 </TableCell>
                                 <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Expediente</b></StyledTableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Institución/Dependencia</b></StyledTableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Nombre/Razón Social</b></StyledTableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Tipo persona</b></StyledTableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Tipo sanción</b></StyledTableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Acciones</b></StyledTableCell>
+                                <StyledTableCell align="center"
+                                                 className={classes.tableHeaderColumn}><b>Institución/Dependencia</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Nombre/Razón
+                                    Social</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Tipo
+                                    persona</b></StyledTableCell>
+                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Tipo
+                                    sanción</b></StyledTableCell>
+                                <StyledTableCell align="center"
+                                                 className={classes.tableHeaderColumn}><b>Acciones</b></StyledTableCell>
                             </TableRow>
                         </TableHead>
-                        {S3PList.map((schema)  => (
-                        <TableBody key="usuarios">
-                                <TableRow key={schema._id} >
+                        {S3PList.map((schema) => (
+                            <TableBody key="usuarios">
+                                <TableRow key={schema._id}>
                                     <TableCell className="selectCheckbox" padding="checkbox">
-                                        <Checkbox  key={"check"+ schema._id}
-                                                   onClick={event =>
-                                                       handleCheckboxClick(event, schema._id)}
-                                                   className="selectCheckbox"
-                                                   classes={{
-                                                       root: classes.root,
-                                                       checked: classes.checked
-                                                   }}
+                                        <Checkbox key={"check" + schema._id}
+                                                  onClick={event =>
+                                                      handleCheckboxClick(event, schema._id)}
+                                                  className="selectCheckbox"
+                                                  classes={{
+                                                      root: classes.root,
+                                                      checked: classes.checked
+                                                  }}
                                             // @ts-ignore
-                                                   checked={selectedCheckBox.indexOf(schema._id) > -1 }
+                                                  checked={selectedCheckBox.indexOf(schema._id) > -1}
 
                                         />
                                     </TableCell>
-                                    <StyledTableCell style={{ width: 140 }}  align="center">
+                                    <StyledTableCell style={{width: 140}} align="center">
                                         {schema.expediente}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }}  align="center">
+                                    <StyledTableCell style={{width: 160}} align="center">
                                         {schema.institucionDependencia.nombre}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
+                                    <StyledTableCell style={{width: 160}} align="center">
                                         {schema.particularSancionado.nombreRazonSocial}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
-                                        {(schema.particularSancionado.tipoPersona=="F") ? "Física" : "Moral"}
+                                    <StyledTableCell style={{width: 160}} align="center">
+                                        {(schema.particularSancionado.tipoPersona == "F") ? "Física" : "Moral"}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{ width: 160 }} align="center">
+                                    <StyledTableCell style={{width: 160}} align="center">
                                         {schema.tipoSancion?.map((sancion) => (
-                                            <div>{sancion.valor+ " "}</div>
+                                            <div>{sancion.valor + " "}</div>
                                         ))}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ width: 260 }} align="center">
-                                        <Button  style= {{padding: '0px' }}  onClick={() => handleOpenModalUserInfo(schema)}>
+                                    <StyledTableCell style={{width: 260}} align="center">
+                                        <Button style={{padding: '0px'}}
+                                                onClick={() => handleOpenModalUserInfo(schema)}>
                                             <Tooltip title="Más información" placement="left">
-                                                <IconButton style={{color:"#34b3eb"}} aria-label="expand row" size="small" >
-                                                    <KeyboardArrowDownIcon />
+                                                <IconButton style={{color: "#34b3eb"}} aria-label="expand row"
+                                                            size="small">
+                                                    <KeyboardArrowDownIcon/>
                                                 </IconButton>
                                             </Tooltip>
                                         </Button>
-                                        <Button  style= {{padding: '0px' }} onClick={ () => redirectToRoute(`/editar/S3P/${schema._id}`)} >
+                                        <Button style={{padding: '0px'}}
+                                                onClick={() => redirectToRoute(`/editar/S3P/${schema._id}`)}>
                                             <Tooltip title="Editar registro" placement="top">
-                                                <Button   style={{color: '#ffe01b'}} ><EditOutlinedIcon/></Button>
+                                                <Button style={{color: '#ffe01b'}}><EditOutlinedIcon/></Button>
                                             </Tooltip>
                                         </Button>
                                         <Tooltip title="Eliminar registro" placement="right">
-                                            <Button style={{ color: '#f44336', padding: '0px' }}
-                                                    onClick= {()=> {handleClickOpen(schema._id, "nomre")}} >
+                                            <Button style={{color: '#f44336', padding: '0px'}}
+                                                    onClick={() => {
+                                                        handleClickOpen(schema._id, "nomre")
+                                                    }}>
                                                 <DeleteOutlineOutlinedIcon/>
                                             </Button>
                                         </Tooltip>
                                     </StyledTableCell>
                                 </TableRow>
 
-                        </TableBody>
+                            </TableBody>
                         ))}
                         <TableFooter>
                             <TableRow>
-                                { paginationSuper.pageSize != undefined  && paginationSuper.page != undefined  && <TablePagination
-                                    rowsPerPageOptions={[3,5, 10, 25, { label: 'Todos', value: paginationSuper.totalRows }]}
+                                {paginationSuper.pageSize != undefined && paginationSuper.page != undefined &&
+                                <TablePagination
+                                    rowsPerPageOptions={[3, 5, 10, 25, {
+                                        label: 'Todos',
+                                        value: paginationSuper.totalRows
+                                    }]}
                                     colSpan={5}
                                     count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}
-                                    page={paginationSuper.page-1}
+                                    page={paginationSuper.page - 1}
                                     SelectProps={{
-                                        inputProps: { 'aria-label': 'Registros por página' },
+                                        inputProps: {'aria-label': 'Registros por página'},
                                         native: true,
                                     }}
                                     onChangePage={handleChangePage}

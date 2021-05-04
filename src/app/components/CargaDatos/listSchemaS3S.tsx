@@ -52,6 +52,7 @@ import {OnChange} from 'react-final-form-listeners'
 import CloseIcon from "@material-ui/icons/Close";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DocumentTable from './documentTable';
+import Nota from './Nota';
 
 interface FormDataEsquemaS3S {
     fechaCaptura?: String,
@@ -399,8 +400,9 @@ export const ListS3SSchema = () => {
             },
             divider: {
                 width: '100%',
-                backgroundColor: '#ffe01b',
-                color: '#666666'
+                backgroundColor: '##b7a426',
+                color: '#b7a426',
+                margin: '10px'
             },
             boton: {
                 marginTop: '16px',
@@ -477,8 +479,20 @@ export const ListS3SSchema = () => {
                 textDecorationColor: '#34b3eb',
                 color: '#34b3eb',
             },
-            toolBarModal:{
+            toolBarModal: {
                 backgroundColor: "#34b3eb"
+            },
+            subtitulo: {
+                fontSize: 15,
+                fontWeight: "bold",
+                textDecoration: "underline",
+                textDecorationColor: '#585858',
+                color: '#585858',
+                paddingTop: '10px'
+            },
+            containerDivider: {
+                paddingLeft: '15px',
+                paddingRight: '15px'
             }
         }),
     );
@@ -488,7 +502,6 @@ export const ListS3SSchema = () => {
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     // @ts-ignore
     // @ts-ignore
-    const NOTA = "(DNC)"
     return (
 
         <div>
@@ -525,7 +538,7 @@ export const ListS3SSchema = () => {
                                     <b>Expediente</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.expediente ? selectedRegistro.expediente : NOTA}
+                                    {selectedRegistro.expediente ? selectedRegistro.expediente : <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -560,7 +573,8 @@ export const ListS3SSchema = () => {
                                     <b>Segundo apellido</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.servidorPublicoSancionado && selectedRegistro.servidorPublicoSancionado.segundoApellido? selectedRegistro.servidorPublicoSancionado.segundoApellido : NOTA}
+                                    {selectedRegistro.servidorPublicoSancionado?.segundoApellido ? selectedRegistro.servidorPublicoSancionado.segundoApellido :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -568,7 +582,8 @@ export const ListS3SSchema = () => {
                                     <b>RFC</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.servidorPublicoSancionado && selectedRegistro.servidorPublicoSancionado.rfc ? selectedRegistro.servidorPublicoSancionado.rfc : NOTA}
+                                    {selectedRegistro.servidorPublicoSancionado?.rfc ? selectedRegistro.servidorPublicoSancionado.rfc :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -576,7 +591,8 @@ export const ListS3SSchema = () => {
                                     <b>CURP</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.servidorPublicoSancionado && selectedRegistro.servidorPublicoSancionado.curp ? selectedRegistro.servidorPublicoSancionado.curp : NOTA}
+                                    {selectedRegistro.servidorPublicoSancionado?.curp ? selectedRegistro.servidorPublicoSancionado.curp :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -584,39 +600,53 @@ export const ListS3SSchema = () => {
                                     <b>Género</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.servidorPublicoSancionado && selectedRegistro.servidorPublicoSancionado.genero ? selectedRegistro.servidorPublicoSancionado.genero.valor : NOTA}
+                                    {selectedRegistro.servidorPublicoSancionado?.genero ? selectedRegistro.servidorPublicoSancionado.genero.valor :
+                                        <Nota/>}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography className={classes.subtitulo} align={"left"}>
+                                    Institución / Dependencia
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Institución/Dependencia <br/>(Clave)</b>
+                                    <b>Clave</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia && selectedRegistro.institucionDependencia.clave ? selectedRegistro.institucionDependencia.clave : NOTA}
+                                    {selectedRegistro.institucionDependencia?.clave ? selectedRegistro.institucionDependencia.clave :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Institución/Dependencia <br/>(Siglas)</b>
+                                    <b>Siglas</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia && selectedRegistro.institucionDependencia.siglas ? selectedRegistro.institucionDependencia.siglas : NOTA}
+                                    {selectedRegistro.institucionDependencia?.siglas ? selectedRegistro.institucionDependencia.siglas :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={6} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Institución/Dependencia <br/>(Nombre)</b>
+                                    <b>Nombre</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia && selectedRegistro.institucionDependencia.nombre ? selectedRegistro.institucionDependencia.nombre : NOTA}
+                                    {selectedRegistro.institucionDependencia?.nombre ? selectedRegistro.institucionDependencia.nombre :
+                                        <Nota/>}
                                 </Typography>
+                            </Grid>
+                            <Grid item xs={12} className={classes.containerDivider}>
+                                <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                         light={true}/>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
                                     <b>Puesto</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.servidorPublicoSancionado && selectedRegistro.servidorPublicoSancionado.puesto ? selectedRegistro.servidorPublicoSancionado.puesto : NOTA}
+                                    {selectedRegistro.servidorPublicoSancionado?.puesto ? selectedRegistro.servidorPublicoSancionado.puesto :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -624,7 +654,8 @@ export const ListS3SSchema = () => {
                                     <b>Nivel</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.servidorPublicoSancionado && selectedRegistro.servidorPublicoSancionado.nivel ? selectedRegistro.servidorPublicoSancionado.nivel : NOTA}
+                                    {selectedRegistro.servidorPublicoSancionado?.nivel ? selectedRegistro.servidorPublicoSancionado.nivel :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
@@ -633,51 +664,55 @@ export const ListS3SSchema = () => {
                                 </Typography>
                             </Grid>
 
-
+                            <Grid item xs={12}>
+                                <Typography className={classes.subtitulo} align={"left"}>
+                                    Resolución
+                                </Typography>
+                            </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
                                     <b>Autoridad sancionadora</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.autoridadSancionadora ? selectedRegistro.autoridadSancionadora : NOTA}
+                                    {selectedRegistro.autoridadSancionadora ? selectedRegistro.autoridadSancionadora :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Fecha resolución</b>
+                                    <b>Fecha</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
-                                        selectedRegistro.fechaResolucion ? new Date(selectedRegistro.resolucion?.fechaResolucion + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate) : NOTA}
+                                        selectedRegistro.fechaResolucion ? new Date(selectedRegistro.resolucion?.fechaResolucion + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate) :
+                                            <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Resolución-URL</b>
+                                    <b>URL</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.resolucion ? selectedRegistro.resolucion.url : NOTA}
+                                    {selectedRegistro.resolucion ? selectedRegistro.resolucion.url : <Nota/>}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} className={classes.containerDivider}>
+                                <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                         light={true}/>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography className={classes.subtitulo} align={"left"}>
+                                    Inhabilitación / Multa
                                 </Typography>
                             </Grid>
 
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Multa</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.multa ?
-                                        (<NumberFormat value={String(selectedRegistro.multa?.monto)} displayType={'text'}thousandSeparator={true} prefix={'$'}/>)
-                                        : NOTA}
-                                    {selectedRegistro.multa && selectedRegistro.multa.moneda ? selectedRegistro.multa.moneda.clave : ''}
-
-                                </Typography>
-                            </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
                                     <b>Plazo</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.inhabilitacion && selectedRegistro.inhabilitacion.plazo ? selectedRegistro.inhabilitacion.plazo : NOTA}
+                                    {selectedRegistro.inhabilitacion?.plazo ? selectedRegistro.inhabilitacion.plazo :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -687,7 +722,8 @@ export const ListS3SSchema = () => {
 
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
-                                        selectedRegistro.inhabilitacion && selectedRegistro.inhabilitacion.fechaInicial ? new Date(selectedRegistro.inhabilitacion?.fechaInicial + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)() : NOTA
+                                        selectedRegistro.inhabilitacion?.fechaInicial ? new Date(selectedRegistro.inhabilitacion.fechaInicial + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate) :
+                                            <Nota/>
                                     }
 
                                 </Typography>
@@ -699,9 +735,28 @@ export const ListS3SSchema = () => {
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {//@ts-ignore
-                                        selectedRegistro.inhabilitacion && selectedRegistro.inhabilitacion.fechaFinal ? new Date(selectedRegistro.inhabilitacion?.fechaFinal + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate)() : NOTA
-                                        }
+                                        selectedRegistro.inhabilitacion?.fechaFinal ? new Date(selectedRegistro.inhabilitacion.fechaFinal + "T00:00:00.000").toLocaleDateString("es-ES", optionsOnlyDate) :
+                                            <Nota/>
+                                    }
                                 </Typography>
+                            </Grid>
+                            <Grid className={classes.gridpadding} item md={3} sm={12}>
+                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                    <b>Multa</b>
+                                </Typography>
+                                <Typography className={classes.body2} align="left" variant="body2">
+                                    {selectedRegistro.multa ?
+                                        (<NumberFormat value={String(selectedRegistro.multa?.monto)}
+                                                       displayType={'text'}
+                                                       thousandSeparator={true} prefix={'$'}/>)
+                                        : <Nota/>}
+                                    {selectedRegistro.multa?.moneda ? selectedRegistro.multa.moneda.clave : ''}
+
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} className={classes.containerDivider}>
+                                <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                         light={true}/>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={6} sm={12}>
                                 <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
@@ -709,8 +764,8 @@ export const ListS3SSchema = () => {
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {selectedRegistro.tipoSancion ? selectedRegistro.tipoSancion.map(e => (
-                                        <li>{e.valor} - Descripción: {e.descripcion ? e.descripcion : NOTA}</li>
-                                    )) : NOTA}
+                                        <li>{e.valor}  {e.descripcion ? ' - DESCRIPCIÓN: '+e.descripcion : ''}</li>
+                                    )) : <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={6} sm={12}>
@@ -718,9 +773,7 @@ export const ListS3SSchema = () => {
                                     <b>Tipo de falta</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.tipoFalta ?
-                                        (selectedRegistro.tipoFalta.valor + " - Descripción: " + (selectedRegistro.tipoFalta.descripcion ? selectedRegistro.tipoFalta.descripcion : NOTA))
-                                        : NOTA}
+                                    {selectedRegistro.tipoFalta?.valor ?(selectedRegistro.tipoFalta.valor + ' '+ (selectedRegistro.tipoFalta.descripcion ? ' - DESCRIPCIÓN: ' + selectedRegistro.tipoFalta.descripcion : '')) : <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={12} sm={12}>
@@ -736,7 +789,7 @@ export const ListS3SSchema = () => {
                                     <b>Observaciones</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.observaciones ? selectedRegistro.observaciones : NOTA}
+                                    {selectedRegistro.observaciones ? selectedRegistro.observaciones : <Nota/>}
                                 </Typography>
                             </Grid>
 
@@ -745,9 +798,12 @@ export const ListS3SSchema = () => {
                                     Documentos
                                 </Typography>
                             </Grid>
-                            {!selectedRegistro.documentos || selectedRegistro.documentos.length<1 ? <Typography className={classes.body2} align="left" variant="body2"><b>*No se proporcionaron documentos</b></Typography> : ''}
+                            {!selectedRegistro.documentos || selectedRegistro.documentos.length < 1 ?
+                                <Typography className={classes.body2} align="left" variant="body2"><b>*No se
+                                    proporcionaron
+                                    documentos</b></Typography> : ''}
                             {selectedRegistro.documentos && selectedRegistro.documentos.length > 0 &&
-                                <DocumentTable documents = {selectedRegistro.documentos}/>
+                            <DocumentTable documents={selectedRegistro.documentos}/>
                             }
 
                         </Grid>
@@ -906,8 +962,10 @@ export const ListS3SSchema = () => {
                                             handleCheckboxAll(event)}
                                     />
                                 </TableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Expediente</b></StyledTableCell>
-                                <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Institución</b></StyledTableCell>
+                                <StyledTableCell align="center"
+                                                 className={classes.tableHeaderColumn}><b>Expediente</b></StyledTableCell>
+                                <StyledTableCell align="center"
+                                                 className={classes.tableHeaderColumn}><b>Institución</b></StyledTableCell>
                                 <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Servidor
                                     público</b></StyledTableCell>
                                 <StyledTableCell align="center" className={classes.tableHeaderColumn}><b>Tipo

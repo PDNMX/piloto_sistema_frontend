@@ -48,6 +48,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import {formatISO} from "date-fns";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CloseIcon from '@material-ui/icons/Close';
+import Nota from './Nota';
 
 interface FormDataEsquemaS2 {
     fechaCaptura?: string,
@@ -355,8 +356,9 @@ export const ListS2Schema = () => {
             },
             divider: {
                 width: '100%',
-                backgroundColor: '#ffe01b',
-                color: '#666666'
+                backgroundColor: '##b7a426',
+                color: '#b7a426',
+                margin: '10px'
             },
             boton: {
                 marginTop: '16px',
@@ -436,8 +438,20 @@ export const ListS2Schema = () => {
                 textDecorationColor: '#34b3eb',
                 color: '#34b3eb',
             },
-            toolBarModal:{
+            toolBarModal: {
                 backgroundColor: "#34b3eb"
+            },
+            subtitulo: {
+                fontSize: 15,
+                fontWeight: "bold",
+                textDecoration: "underline",
+                textDecorationColor: '#585858',
+                color: '#585858',
+                paddingTop: '10px'
+            },
+            containerDivider: {
+                paddingLeft: '15px',
+                paddingRight: '15px'
             }
         })
     );
@@ -447,7 +461,6 @@ export const ListS2Schema = () => {
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     // @ts-ignore
     // @ts-ignore
-    const NOTA = "(DNC)"
     return (
 
         <div>
@@ -479,123 +492,128 @@ export const ListS2Schema = () => {
                                 Datos generales
                             </Typography>
                         </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Ejercicio Fiscal</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.ejercicioFiscal ? selectedRegistro.ejercicioFiscal : NOTA}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Fecha última actualización</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {//@ts-ignore
-                                        new Date(selectedRegistro.fechaCaptura).toLocaleDateString("es-ES", optionsDate)}
-                                </Typography>
-                            </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Ejercicio Fiscal</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.ejercicioFiscal ? selectedRegistro.ejercicioFiscal : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Fecha última actualización</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {//@ts-ignore
+                                    new Date(selectedRegistro.fechaCaptura).toLocaleDateString("es-ES", optionsDate)}
+                            </Typography>
+                        </Grid>
 
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Nombre(s)</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.nombres}
-                                </Typography>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nombre(s)</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.nombres}
+                            </Typography>
 
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Primer apellido</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.primerApellido}
-                                </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Primer apellido</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.primerApellido}
+                            </Typography>
 
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Segundo apellido</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.segundoApellido ? selectedRegistro.segundoApellido : NOTA}
-                                </Typography>
-                            </Grid>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Segundo apellido</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.segundoApellido ? selectedRegistro.segundoApellido : <Nota/>}
+                            </Typography>
+                        </Grid>
 
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>RFC</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.rfc ? selectedRegistro.rfc : NOTA}
-                                </Typography>
-                            </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>RFC</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.rfc ? selectedRegistro.rfc : <Nota/>}
+                            </Typography>
+                        </Grid>
 
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>CURP</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.curp ? selectedRegistro.curp : NOTA}
-                                </Typography>
-                            </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>CURP</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.curp ? selectedRegistro.curp : <Nota/>}
+                            </Typography>
+                        </Grid>
 
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Género</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.genero ? selectedRegistro.genero.valor : NOTA}
-                                </Typography>
-                            </Grid>
-
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Institución/Dependencia</b> <br/>
-                                    <b>(Clave)</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia && selectedRegistro.institucionDependencia.clave ? selectedRegistro.institucionDependencia.clave : NOTA}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Institución/Dependencia</b> <br/>
-                                    <b>(Siglas)</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia && selectedRegistro.institucionDependencia.siglas ? selectedRegistro.institucionDependencia.siglas: NOTA}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={6} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Institución/Dependencia</b><br/>
-                                    <b>(Nombre)</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.institucionDependencia?.nombre}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>{"Puesto"}<br/>
-                                        (Nombre)</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.puesto && selectedRegistro.puesto.nombre ? selectedRegistro.puesto.nombre : NOTA}
-                                </Typography>
-                            </Grid>
-                            <Grid className={classes.gridpadding} item md={3} sm={12}>
-                                <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                    <b>Puesto <br/>
-                                        (Nivel)</b>
-                                </Typography>
-                                <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.puesto && selectedRegistro.puesto.nivel ? selectedRegistro.puesto.nivel : NOTA}
-                                </Typography>
-                            </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Género</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.genero ? selectedRegistro.genero.valor : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography className={classes.subtitulo} align={"left"}>
+                                Institución / Dependencia
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Clave</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.institucionDependencia?.clave ? selectedRegistro.institucionDependencia.clave :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Siglas</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.institucionDependencia?.siglas ? selectedRegistro.institucionDependencia.siglas :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nombre</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.institucionDependencia?.nombre}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.containerDivider}>
+                            <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                     light={true}/>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Puesto</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.puesto?.nombre ? selectedRegistro.puesto.nombre : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nivel</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.puesto?.nivel ? selectedRegistro.puesto.nivel : <Nota/>}
+                            </Typography>
+                        </Grid>
                         <Grid item xs={12}>
                             <Typography className={classes.titulo} align={"center"}>
                                 Procedimientos
@@ -608,7 +626,7 @@ export const ListS2Schema = () => {
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.tipoArea ? selectedRegistro.tipoArea.map(e => (
                                     <li>{e.valor}</li>
-                                )) : NOTA}
+                                )) : <Nota/>}
                             </Typography>
                         </Grid>
                         <Grid item md={6} sm={12}>
@@ -618,7 +636,7 @@ export const ListS2Schema = () => {
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.tipoProcedimiento ? selectedRegistro.tipoProcedimiento.map(e => (
                                     <li>{e.valor}</li>
-                                )) : NOTA}
+                                )) : <Nota/>}
                             </Typography>
                         </Grid>
 
@@ -630,7 +648,7 @@ export const ListS2Schema = () => {
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.nivelResponsabilidad ? selectedRegistro.nivelResponsabilidad.map(e => (
                                     <li>{e.valor}</li>
-                                )) : NOTA}
+                                )) : <Nota/>}
                             </Typography>
                         </Grid>
                         <Grid className={classes.gridpadding} item md={6} sm={12}>
@@ -638,7 +656,8 @@ export const ListS2Schema = () => {
                                 <b>Ramo</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.ramo ? selectedRegistro.ramo.valor + '(' + selectedRegistro.ramo.clave + ')' : NOTA}
+                                {selectedRegistro.ramo ? selectedRegistro.ramo.valor + '(' + selectedRegistro.ramo.clave + ')' :
+                                    <Nota/>}
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -651,7 +670,8 @@ export const ListS2Schema = () => {
                                 <b>Nombre(s)</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {(selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.nombres) ? selectedRegistro.superiorInmediato.nombres : NOTA}
+                                {selectedRegistro.superiorInmediato?.nombres ? selectedRegistro.superiorInmediato.nombres :
+                                    <Nota/>}
                             </Typography>
                         </Grid>
 
@@ -660,7 +680,8 @@ export const ListS2Schema = () => {
                                 <b>Primer Apellido</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.primerApellido ? selectedRegistro.superiorInmediato.primerApellido : NOTA}
+                                {selectedRegistro.superiorInmediato?.primerApellido ? selectedRegistro.superiorInmediato.primerApellido :
+                                    <Nota/>}
                             </Typography>
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -668,7 +689,8 @@ export const ListS2Schema = () => {
                                 <b>Segundo apellido</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.segundoApellido ? selectedRegistro.superiorInmediato.segundoApellido : NOTA}
+                                {selectedRegistro.superiorInmediato?.segundoApellido ? selectedRegistro.superiorInmediato.segundoApellido :
+                                    <Nota/>}
                             </Typography>
                         </Grid>
 
@@ -677,7 +699,8 @@ export const ListS2Schema = () => {
                                 <b>RFC</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.rfc ? selectedRegistro.superiorInmediato.rfc : NOTA}
+                                {selectedRegistro.superiorInmediato?.rfc ? selectedRegistro.superiorInmediato.rfc :
+                                    <Nota/>}
                             </Typography>
                         </Grid>
 
@@ -686,26 +709,26 @@ export const ListS2Schema = () => {
                                 <b>CURP</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.curp ? selectedRegistro.superiorInmediato.curp : NOTA}
-                            </Typography>
-                        </Grid>
-
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
-                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                <b>Puesto <br/>
-                                    (Nombre)</b>
-                            </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.puesto && selectedRegistro.superiorInmediato.puesto.nombre ? selectedRegistro.superiorInmediato.puesto.nombre : NOTA}
+                                {selectedRegistro.superiorInmediato?.curp ? selectedRegistro.superiorInmediato.curp :
+                                    <Nota/>}
                             </Typography>
                         </Grid>
                         <Grid className={classes.gridpadding} item md={3} sm={12}>
                             <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
-                                <b>Puesto <br/>
-                                    (Nivel)</b>
+                                <b>Puesto</b>
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
-                                {selectedRegistro.superiorInmediato && selectedRegistro.superiorInmediato.puesto && selectedRegistro.superiorInmediato.puesto.nivel ? selectedRegistro.superiorInmediato.puesto.nivel : NOTA}
+                                {selectedRegistro.superiorInmediato?.puesto?.nombre ? selectedRegistro.superiorInmediato.puesto.nombre  :
+                                    <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Nivel</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.superiorInmediato?.puesto?.nivel ? selectedRegistro.superiorInmediato.puesto.nivel :
+                                    <Nota/>}
                             </Typography>
                         </Grid>
                     </Grid>
