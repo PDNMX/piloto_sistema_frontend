@@ -828,7 +828,9 @@ export function* creationS3PSchema(){
             if (Array.isArray(values.documentos)) {
                 for (let i of values.documentos) {
                     i.id = i.id.toString();
-                    i.tipo = JSON.parse(i.tipo).clave;
+                    if(i.tipo){
+                        i.tipo = JSON.parse(i.tipo).clave;
+                    }
                     let fecha = Date.parse(i.fecha);
                     i.fecha = formatISO(fecha, {representation: 'date'});
                 }
@@ -1088,7 +1090,9 @@ export function* creationS3SSchema(){
             if (Array.isArray(values.documents)) {
                 for (let i of values.documents) {
                     i.id= i.id.toString();
-                    i.tipo = JSON.parse(i.tipo).clave;
+                    if(i.tipo){
+                        i.tipo = JSON.parse(i.tipo).clave;
+                    }
                     let fecha = Date.parse(i.fecha);
                     i.fecha = formatISO(fecha, { representation: 'date' });
                 }

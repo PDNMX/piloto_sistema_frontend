@@ -61,7 +61,7 @@ export default function DocumentTable(props) {
                     {rows.map((row) => (
                         <StyledTableRow key={row.id}>
                             <StyledTableCell component="th" scope="row">
-                                {row.tipo}
+                                {row.tipo ? row.tipo : '(DNC)'}
                             </StyledTableCell>
                             <StyledTableCell align="left">{row.titulo}</StyledTableCell>
                             <StyledTableCell align="left">{row.url}</StyledTableCell>

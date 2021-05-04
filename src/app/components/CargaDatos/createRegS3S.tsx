@@ -146,7 +146,7 @@ function MyForm(props: MyFormProps ) {
                 descripcion: Yup.string().required('El campo Descripción de la sección Documentos es requerido ').max(200, 'Máximo 200 caracteres').trim(),
                 url: Yup.string()
                     .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-                        'Introduce una direccion de internet valida'
+                        'Introduce una dirección de internet valida'
                     )
                     .required('El campo URL de la sección Documentos es requerido').trim(),
                 fecha: Yup.string().required("El campo Fecha de la sección Documentos es requerido").trim(),
