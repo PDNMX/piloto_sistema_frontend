@@ -282,7 +282,7 @@ export const ListUser = () => {
                     </Typography>
                     <IconButton className={classes.fontblack} edge="end" color="inherit"
                                 onClick={handleCloseModalUserInfo} aria-label="close">
-                        <CloseIcon/>
+                        <CloseIcon className={classes.whiteStyle}/>
                     </IconButton>
                 </Toolbar>
                 <DialogContent dividers>
