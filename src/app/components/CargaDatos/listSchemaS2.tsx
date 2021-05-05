@@ -48,7 +48,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import {formatISO} from "date-fns";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import CloseIcon from '@material-ui/icons/Close';
-import Nota from './Nota';
+import Nota from '../Common/Nota';
 
 interface FormDataEsquemaS2 {
     fechaCaptura?: string,

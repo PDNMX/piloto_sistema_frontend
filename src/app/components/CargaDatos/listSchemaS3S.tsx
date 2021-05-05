@@ -52,7 +52,7 @@ import {OnChange} from 'react-final-form-listeners'
 import CloseIcon from "@material-ui/icons/Close";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DocumentTable from './documentTable';
-import Nota from './Nota';
+import Nota from '../Common/Nota';
 
 interface FormDataEsquemaS3S {
     fechaCaptura?: String,
