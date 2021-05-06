@@ -13,8 +13,8 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 export const ListaPrincipal = (
   <div>
     <ListItem button>
-      <ListItemIcon>
-        <PeopleIcon />
+      <ListItemIcon >
+        <PeopleIcon style={{color:'#34b3eb'}}/>
       </ListItemIcon>
       <ListItemText primary="Usuarios" />
     </ListItem>
@@ -26,6 +26,7 @@ export const ListaPrincipal = (
     </ListItem>
   </div>
 );
+
 
 export const ListaSecundaria = (
   <div>

@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import Header from "../Header/Header"
 import Paper from "@material-ui/core/Paper";
 import clsx from 'clsx';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import InputLabel from '@material-ui/core/InputLabel';
 import Grid from "@material-ui/core/Grid";
-import axios from 'axios';
-import {requestSchemaS2Creation, requestTaskCreation} from '../../store/mutations'
-import {makeStyles, ThemeProvider} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -17,37 +13,20 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-//import { ListaPrincipal, ListaSecundaria } from './ItemsPrincipal';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import MenuItem from '@material-ui/core/MenuItem';
-import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import BallotIcon from '@material-ui/icons/Ballot';
-import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
 import BookmarksIcon from '@material-ui/icons/Bookmarks';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
-//import CerrarSesion from './CerrarSesion';
 import LOGO from "../assets/pdn.png";
 import { ConnectedCreateProvider } from '../providers/CreateProvider';
-import {Main} from "../Main";
 import {history} from "../../store/history";
-import FolderSpecialIcon from '@material-ui/icons/FolderSpecial';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import Collapse from '@material-ui/core/Collapse';
 import Tooltip from '@material-ui/core/Tooltip';
 import {LoadFileV} from "../UploadFile/LoadFileV";
@@ -68,6 +47,10 @@ import {ConnectedCreateRegS3S} from "../CargaDatos/createRegS3S";
 import {ConnectedChangePassword} from "../users/changePassword";
 import {useSelector} from 'react-redux';
 import {ConnectedCreateRegS3P} from "../CargaDatos/createRegS3P";
+import FolderIcon from '@material-ui/icons/Folder';
+import KeyboardIcon from '@material-ui/icons/Keyboard';
+import PublishIcon from '@material-ui/icons/Publish';
+
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
     const {vigencia, permisos} = useSelector(state => ({
@@ -252,6 +235,8 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
             justifyContent: 'flex-end',
             padding: '0 8px',
             ...theme.mixins.toolbar,
+            marginTop:'5px',
+            marginBottom: '5px'
         },
         appBar: {
             zIndex: theme.zIndex.drawer + 1,
@@ -329,11 +314,20 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         },
         submenuicono:{
             paddingLeft:'15px',
-            backgroundColor:'#eee'
+            backgroundColor:'#ffff'
         },
         submenuicono2:{
             paddingLeft:'30px',
             backgroundColor:'#eee'
+        },
+        itemOne:{
+            color:'#34b3eb'
+        },
+        itemTwo:{
+            color:'#9ACA83'
+        },
+        itemThree:{
+            color:'#67BFB7'
         }
 
     }));
@@ -402,154 +396,148 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                 }}
                 open={open}
             >
-                <div className={classes.toolbarIcon}>
-                    <IconButton onClick={handleDrawerClose}>
-                        <ChevronLeftIcon />
-                    </IconButton>
+                <div className={classes.toolbarIcon} onClick={handleDrawerClose}>
+
                 </div>
                 <Divider />
                 <List className={classes.fontblack}>
                     <div>
                         { rol==2 || rol=="" ?
-                            <ListItem button onClick={e=>menuDatos(e)}>
-                                <ListItemIcon>
-                                    <FolderSpecialIcon />
-                                </ListItemIcon>
-                                <ListItemText  primary="Administración datos" />
-                            </ListItem>
-                            : "" }
-
-                        { submenuAdmonDatos ?
-                            <Collapse in={checkedDatos}>
-                                <div>
-                                    <Tooltip title="Administrador datos" placement="right">
-                                        <ListItem button className={classes.submenuicono} onClick={e=>menuAdminDatos2(e)}>
-                                            <ListItemIcon>
-                                                <ArrowForwardIcon fontSize="small" />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Administrador datos" />
-                                        </ListItem>
-                                    </Tooltip>
-                                    {permisos.map(item => (
-                                        item==="S2" ?
-                                            <Collapse in={checkedAdminDatos2}>
-                                                <div>
-                                                    <Tooltip title="S2" placement="right">
-                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")}>
-                                                            <ListItemIcon>
-                                                                <ArrowRightIcon fontSize="small" />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="S2" />
-                                                        </ListItem>
-                                                    </Tooltip>
-                                                </div>
-                                            </Collapse>
-                                            : ""
-                                    ))}
-                                    {permisos.map(item => (
-                                        item==="S3S" ?
-                                            <Collapse in={checkedAdminDatosS3S}>
-                                                <div>
-                                                    <Tooltip title="S3S" placement="right">
-                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3S")}>
-                                                            <ListItemIcon>
-                                                                <ArrowRightIcon fontSize="small" />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="S3S" />
-                                                        </ListItem>
-                                                    </Tooltip>
-                                                </div>
-                                            </Collapse>
-                                            : ""
-                                    ))}
-                                    {permisos.map(item => (
-                                        item==="S3P" ?
-                                            <Collapse in={checkedAdminDatosS3P}>
-                                                <div>
-                                                    <Tooltip title="S3S" placement="right">
-                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3P")}>
-                                                            <ListItemIcon>
-                                                                <ArrowRightIcon fontSize="small" />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="S3P" />
-                                                        </ListItem>
-                                                    </Tooltip>
-                                                </div>
-                                            </Collapse>
-                                            : ""
-                                    ))}
-                                    <Tooltip title="Cargar datos" placement="right">
-                                        <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
-                                            <ListItemIcon>
-                                                <ArrowForwardIcon fontSize="small" />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Cargar datos" />
-                                        </ListItem>
-                                    </Tooltip>
-                                    <Tooltip title="Capturar datos" placement="right">
-                                        <ListItem button className={classes.submenuicono} onClick={e=>menuDatos2(e)}>
-                                            <ListItemIcon>
-                                                <ArrowForwardIcon fontSize="small" />
-                                            </ListItemIcon>
-                                            <ListItemText primary="Capturar datos" />
-                                        </ListItem>
-                                    </Tooltip>
-                                    {permisos.map(item => (
-                                        item==="S2" ?
-                                            <Collapse in={checkedDatos2}>
-                                                <div>
-                                                    <Tooltip title="S2" placement="right">
-                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S2")}>
-                                                            <ListItemIcon>
-                                                                <ArrowRightIcon fontSize="small" />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="S2" />
-                                                        </ListItem>
-                                                    </Tooltip>
-                                                </div>
-                                            </Collapse>
-                                            : ""
-                                    ))}
-                                    {permisos.map(item => (
-                                        item==="S3S" ?
-                                            <Collapse in={checkedDatosS3S}>
-                                                <div>
-                                                    <Tooltip title="S3S" placement="right">
-                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3S")}>
-                                                            <ListItemIcon>
-                                                                <ArrowRightIcon fontSize="small" />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="S3S" />
-                                                        </ListItem>
-                                                    </Tooltip>
-                                                </div>
-                                            </Collapse>
-                                            : ""
-                                    ))}
-                                    {permisos.map(item => (
-                                        item==="S3P" ?
-                                            <Collapse in={checkedDatosS3P}>
-                                                <div>
-                                                    <Tooltip title="S3P" placement="right">
-                                                        <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3P")}>
-                                                            <ListItemIcon>
-                                                                <ArrowRightIcon fontSize="small" />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary="S3P" />
-                                                        </ListItem>
-                                                    </Tooltip>
-                                                </div>
-                                            </Collapse>
-                                            : ""
-                                    ))}
-                                </div>
-                            </Collapse>
+                            <Tooltip title="Administrador datos" placement="right">
+                                <ListItem button className={classes.submenuicono} onClick={e=>menuAdminDatos2(e)}>
+                                    <ListItemIcon>
+                                        <FolderIcon className={classes.itemOne}/>
+                                    </ListItemIcon>
+                                    <ListItemText primary="Administrador datos" />
+                                </ListItem>
+                            </Tooltip>
                             : ""
                         }
+                        {permisos.map(item => (
+                            item==="S2" ?
+                                <Collapse in={checkedAdminDatos2}>
+                                    <div>
+                                        <Tooltip title="S2" placement="right">
+                                            <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")}>
+                                                <ListItemIcon>
+                                                    <ArrowRightIcon fontSize="small" className={classes.itemOne} />
+                                                </ListItemIcon>
+                                                <ListItemText primary="S2" />
+                                            </ListItem>
+                                        </Tooltip>
+                                    </div>
+                                </Collapse>
+                                : ""
+                        ))}
+                        {permisos.map(item => (
+                            item==="S3S" ?
+                                <Collapse in={checkedAdminDatosS3S}>
+                                    <div>
+                                        <Tooltip title="S3S" placement="right">
+                                            <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3S")}>
+                                                <ListItemIcon>
+                                                    <ArrowRightIcon fontSize="small" className={classes.itemOne}/>
+                                                </ListItemIcon>
+                                                <ListItemText primary="S3S" />
+                                            </ListItem>
+                                        </Tooltip>
+                                    </div>
+                                </Collapse>
+                                : ""
+                        ))}
+                        {permisos.map(item => (
+                            item==="S3P" ?
+                                <Collapse in={checkedAdminDatosS3P}>
+                                    <div>
+                                        <Tooltip title="S3S" placement="right">
+                                            <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3P")}>
+                                                <ListItemIcon>
+                                                    <ArrowRightIcon fontSize="small" className={classes.itemOne} />
+                                                </ListItemIcon>
+                                                <ListItemText primary="S3P" />
+                                            </ListItem>
+                                        </Tooltip>
+                                    </div>
+                                </Collapse>
+                                : ""
+                        ))}
+                        {
+                            rol ==2 || rol =="" ?
+                                <Tooltip title="Cargar datos" placement="right">
+                                    <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
+                                        <ListItemIcon>
+                                            <PublishIcon className={classes.itemTwo} />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Cargar datos" />
+                                    </ListItem>
+                                </Tooltip> :""
+
+                        }
+                        {
+                            rol == 2 || rol == "" ?
+                                <Tooltip title="Capturar datos" placement="right">
+                                    <ListItem button className={classes.submenuicono} onClick={e=>menuDatos2(e)}>
+                                        <ListItemIcon>
+                                            <KeyboardIcon className={classes.itemThree}/>
+                                        </ListItemIcon>
+                                        <ListItemText primary="Capturar datos" />
+                                    </ListItem>
+                                </Tooltip> : ""
+                        }
+                        {permisos.map(item => (
+                            item==="S2" ?
+                                <Collapse in={checkedDatos2}>
+                                    <div>
+                                        <Tooltip title="S2" placement="right">
+                                            <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S2")}>
+                                                <ListItemIcon>
+                                                    <ArrowRightIcon fontSize="small" className={classes.itemThree} />
+                                                </ListItemIcon>
+                                                <ListItemText primary="S2" />
+                                            </ListItem>
+                                        </Tooltip>
+                                    </div>
+                                </Collapse>
+                                : ""
+                        ))}
+                        {permisos.map(item => (
+                            item==="S3S" ?
+                                <Collapse in={checkedDatosS3S}>
+                                    <div>
+                                        <Tooltip title="S3S" placement="right">
+                                            <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3S")}>
+                                                <ListItemIcon>
+                                                    <ArrowRightIcon fontSize="small"  className={classes.itemThree}/>
+                                                </ListItemIcon>
+                                                <ListItemText primary="S3S" />
+                                            </ListItem>
+                                        </Tooltip>
+                                    </div>
+                                </Collapse>
+                                : ""
+                        ))}
+                        {permisos.map(item => (
+                            item==="S3P" ?
+                                <Collapse in={checkedDatosS3P}>
+                                    <div>
+                                        <Tooltip title="S3P" placement="right">
+                                            <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3P")}>
+                                                <ListItemIcon>
+                                                    <ArrowRightIcon fontSize="small" className={classes.itemThree} />
+                                                </ListItemIcon>
+                                                <ListItemText primary="S3P" />
+                                            </ListItem>
+                                        </Tooltip>
+                                    </div>
+                                </Collapse>
+                                : ""
+                        ))}
+
+
                         { rol==1 ?
                             <ListItem button onClick={e=>menuUser(e)}>
                                 <ListItemIcon>
-                                    <PeopleIcon />
+                                    <PeopleIcon style={{color:'#34b3eb'}}/>
                                 </ListItemIcon>
                                 <ListItemText  primary="Usuarios" />
                             </ListItem>
@@ -560,7 +548,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                     <Tooltip title="Crear usuario" placement="right">
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuario/crear")}>
                                             <ListItemIcon>
-                                                <ArrowForwardIcon fontSize="small" />
+                                                <ArrowRightIcon fontSize="small" className={classes.itemOne }/>
                                             </ListItemIcon>
                                             <ListItemText primary="Crear usuario" />
                                         </ListItem>
@@ -570,7 +558,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
 
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuarios")}>
                                             <ListItemIcon>
-                                                <ArrowForwardIcon fontSize="small" />
+                                                <ArrowRightIcon fontSize="small" className={classes.itemOne}/>
                                             </ListItemIcon>
 
                                             <ListItemText primary="Listar usuarios" />
@@ -583,7 +571,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         { rol==1 ?
                             <ListItem button onClick={e=>menuProveedor(e)}>
                                 <ListItemIcon>
-                                    <AssignmentIcon />
+                                    <AssignmentIcon className={classes.itemTwo} />
                                 </ListItemIcon>
                                 <ListItemText primary="Proveedores" />
                             </ListItem>
@@ -594,7 +582,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                     <Tooltip title="Crear proveedor" placement="right">
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedor/crear")}>
                                             <ListItemIcon>
-                                                <ArrowForwardIcon fontSize="small" />
+                                                <ArrowRightIcon fontSize="small" className={classes.itemTwo} />
                                             </ListItemIcon>
                                             <ListItemText primary="Crear proveedor" />
                                         </ListItem>
@@ -604,7 +592,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
 
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedores")}>
                                             <ListItemIcon>
-                                                <ArrowForwardIcon fontSize="small" />
+                                                <ArrowRightIcon fontSize="small" className={classes.itemTwo} />
                                             </ListItemIcon>
                                             <ListItemText primary="Listar proveedores" />
                                         </ListItem>
@@ -617,7 +605,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         { rol==1 ?
                             <ListItem button onClick={e=>menuBitacora(e)}>
                                 <ListItemIcon>
-                                    <BookmarksIcon />
+                                    <BookmarksIcon className={classes.itemThree}  />
                                 </ListItemIcon>
                                 <ListItemText primary="Bitácora" />
                             </ListItem>
@@ -625,7 +613,6 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
 
                     </div>
                 </List>
-                <Divider />
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.appBarSpacer} />
@@ -659,22 +646,6 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                 {vistaRender === "cambiarcontrasena" && <ConnectedChangePassword/> }
                             </Paper>
                         </Grid>
-                        {/* Grid 2
-<<<<<<< HEAD
-=======
-
->>>>>>> developer
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                
-              </Paper>
-            </Grid>
-              Grid 3 *
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                
-              </Paper>
-            </Grid>*/}
                     </Grid>
                     <Box pt={4}>
                         <Copyright />

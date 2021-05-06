@@ -147,7 +147,7 @@ export const ListBitacora = () => {
                             <TableHead className={classes.tableHead}>
                                 <TableRow>
                                     <TableCell className={classes.tableHeaderColumn} style={{width: 'auto'}}
-                                               align="center"><b>Operación</b></TableCell>
+                                               align="left"><b>Operación</b></TableCell>
                                     <TableCell className={classes.tableHeaderColumn} style={{width: 'auto'}}
                                                align="left"><b>Fecha</b></TableCell>
                                     <TableCell className={classes.tableHeaderColumn} style={{width: 'auto'}}
@@ -162,7 +162,7 @@ export const ListBitacora = () => {
 
                                     <TableRow key={rowbitacora._id}>
                                         <TableCell className={classes.fontblack} component="th" scope="row"
-                                                   style={{width: 'auto'}} align="center">
+                                                   style={{width: 'auto'}} align="left">
                                             {rowbitacora.tipo}
                                         </TableCell>
                                         <TableCell className={classes.fontblack} style={{width: 'auto'}} align="left">
