@@ -15,7 +15,6 @@ import {
     TableHead,
     Grid,
     IconButton,
-    Modal,
     Typography,
     Toolbar,
     DialogProps,
@@ -24,8 +23,6 @@ import {
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import {userActions} from "../../_actions/user.action";
-import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
-import PropTypes from "prop-types";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -42,9 +39,9 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Nota from '../Common/Nota';
 import CheckIcon from '@material-ui/icons/Check';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import TablePaginationActions from '../Common/TablePaginationActionsProps';
 
 export const ListUser = () => {
-
     const {users, alerta, providerSelect} = useSelector(state => ({
         users: state.users,
         alerta: state.alert,
@@ -175,12 +172,6 @@ export const ListUser = () => {
         history.push(path);
     }
 
-    TablePaginationActions.propTypes = {
-        count: PropTypes.number.isRequired,
-        onChangePage: PropTypes.func.isRequired,
-        page: PropTypes.number.isRequired,
-        rowsPerPage: PropTypes.number.isRequired
-    };
 
     const handleOpenModalUserPassword = (id, name, primerApellido, segundoApellido, correoElectronico) => {
         setOpenPassword(true);

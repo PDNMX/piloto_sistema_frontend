@@ -12,27 +12,21 @@ import {
     makeStyles,
     Button,
     TableHead,
-    ButtonGroup,
     Grid,
     IconButton,
-    Modal,
     Typography,
     Snackbar,
     Divider,
     Tooltip,
-    Toolbar,
-    MenuItem, useTheme, DialogProps
+    Toolbar, useTheme, DialogProps
 } from "@material-ui/core";
 import Checkbox from '@material-ui/core/Checkbox';
-import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker, DateTimePicker} from 'mui-rff';
-import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
-import PropTypes from "prop-types";
+import {TextField, makeValidate, makeRequired, Select, DatePicker} from 'mui-rff';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import AddBoxIcon from '@material-ui/icons/AddBox';
 import {Alert} from "@material-ui/lab";
 import {createStyles, Theme, withStyles} from '@material-ui/core/styles';
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -45,15 +39,15 @@ import {Form} from "react-final-form";
 import * as Yup from 'yup';
 import DateFnsUtils from "@date-io/date-fns";
 import {formatISO} from "date-fns";
-import {Moment} from "moment";
 import deLocale from "date-fns/locale/es";
-import {ConnectedCreateRegS3P} from "./createRegS3P";
 import NumberFormat from "react-number-format";
 import {OnChange} from 'react-final-form-listeners'
 import CloseIcon from "@material-ui/icons/Close";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import DocumentTable from './documentTable';
 import Nota from '../Common/Nota';
+import TablePaginationActions from '../Common/TablePaginationActionsProps';
+
 
 interface FormDataEsquemaS3P {
     particularSancionado?: {
@@ -406,13 +400,6 @@ export const ListS3PSchema = () => {
     const redirectToRoute = (path) => {
         history.push(path);
     }
-
-    TablePaginationActions.propTypes = {
-        count: PropTypes.number.isRequired,
-        onChangePage: PropTypes.func.isRequired,
-        page: PropTypes.number.isRequired,
-        rowsPerPage: PropTypes.number.isRequired
-    };
 
     var cont = 0;
 
@@ -1339,9 +1326,9 @@ export const ListS3PSchema = () => {
                                     <StyledTableCell style={{width: 160}} align="center">
                                         {(schema.particularSancionado.tipoPersona == "F") ? "Física" : "Moral"}
                                     </StyledTableCell>
-                                    <StyledTableCell style={{width: 160}} align="center">
+                                    <StyledTableCell style={{width: 160}} align="left">
                                         {schema.tipoSancion?.map((sancion) => (
-                                            <div>{sancion.valor + " "}</div>
+                                            <li>{sancion.valor + " "}</li>
                                         ))}
                                     </StyledTableCell>
 
@@ -1382,7 +1369,7 @@ export const ListS3PSchema = () => {
                                         label: 'Todos',
                                         value: paginationSuper.totalRows
                                     }]}
-                                    colSpan={6}
+                                    colSpan={7}
                                     count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page - 1}

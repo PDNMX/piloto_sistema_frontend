@@ -24,8 +24,6 @@ import {
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import {providerActions} from "../../_actions/provider.action";
-import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
-import PropTypes from "prop-types";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -41,7 +39,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from '@material-ui/icons/Check';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
-
+import TablePaginationActions from '../Common/TablePaginationActionsProps';
 
 export const ListProvider = () => {
 
@@ -144,12 +142,6 @@ export const ListProvider = () => {
         }),
     )(TableRow);
 
-    TablePaginationActions.propTypes = {
-        count: PropTypes.number.isRequired,
-        onChangePage: PropTypes.func.isRequired,
-        page: PropTypes.number.isRequired,
-        rowsPerPage: PropTypes.number.isRequired
-    };
 
     const useStyles = makeStyles((theme) => ({
         fontblack: {
