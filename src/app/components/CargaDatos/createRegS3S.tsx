@@ -1,30 +1,25 @@
 
 import React from 'react';
 import { Form } from 'react-final-form';
-import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches, DatePicker, DateTimePicker} from 'mui-rff';
-import {Grid, Button, Divider, MenuItem, Tooltip} from "@material-ui/core";
+import { TextField, makeValidate, makeRequired, Select, DatePicker} from 'mui-rff';
+import {Grid, Button, Divider, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
 import { css } from "@emotion/core";
-import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
 import { connect } from 'react-redux';
 import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../../store/history";
 import { useDispatch } from "react-redux";
-import {requestCreationUser, requestEditUser} from "../../store/mutations";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import {alertActions} from "../../_actions/alert.actions";
-import { OnChange } from 'react-final-form-listeners'
 import DateFnsUtils from "@date-io/date-fns";
 import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
 import {S3SActions} from "../../_actions/s3s.action";
 import deLocale from "date-fns/locale/es";
-import { get, isEmpty } from 'lodash';
 
 const CreateReg = ({id ,alert, catalogos, registry}) => {
         return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancionArray: [undefined]}} catalogos={catalogos}  alerta={alert} id={id}/>;
@@ -137,7 +132,10 @@ function MyForm(props: MyFormProps ) {
         }, ['moneda','monto']),
         inhabilitacionPlazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]*$'),'No se permiten cadenas vacías').trim(),
         inhabilitacionFechaInicial:  Yup.string().trim().nullable(true),
-        inhabilitacionFechaFinal:  Yup.string().trim().nullable(true),
+        inhabilitacionFechaFinal:  Yup.string().trim().nullable(true)
+            .when('inhabilitacionFechaInicial',(inhabilitacionFechaInicial) => {
+                return Yup.date().min(inhabilitacionFechaInicial, 'La fecha final no pude ser anterior a la fecha inicial')
+            }),
         observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n\/ ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documents: Yup.array().of(
             Yup.object().shape({
@@ -504,6 +502,7 @@ function MyForm(props: MyFormProps ) {
                                         cancelLabel={"Cancelar"}
                                         clearLabel={"Limpiar"}
                                         okLabel={"Aceptar"}
+                                        minDate={values.inhabilitacionFechaInicial}
                                     />
                                 </Grid>
 

@@ -1,20 +1,17 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import {TextField, makeValidate, makeRequired, Select, Switches, DatePicker, Radios, DateTimePicker} from 'mui-rff';
+import {TextField, makeValidate, makeRequired, Select, DatePicker, Radios} from 'mui-rff';
 import {Grid, Button, Divider, Tooltip, } from "@material-ui/core";
 import * as Yup from 'yup';
 import { css } from "@emotion/core";
-import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
 import { connect } from 'react-redux';
 import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../../store/history";
 import { useDispatch } from "react-redux";
-import {requestCreationUser, requestEditUser} from "../../store/mutations";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import {alertActions} from "../../_actions/alert.actions";
 import { OnChange } from 'react-final-form-listeners'
@@ -23,7 +20,6 @@ import arrayMutators from 'final-form-arrays'
 import { FieldArray } from 'react-final-form-arrays'
 import {S3PActions} from "../../_actions/s3p.action";
 import deLocale from "date-fns/locale/es";
-import {catalogActions} from "../../_actions/catalog.action";
 import axios from "axios";
 
 const host = process.env.URLAPI;
@@ -255,6 +251,9 @@ function MyForm(props: MyFormProps ) {
             plazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
             fechaInicial:  Yup.string().trim().nullable(true),
             fechaFinal: Yup.string().trim().nullable(true)
+                .when('fechaInicial',(fechaInicial) => {
+                    return Yup.date().min(fechaInicial, 'La fecha final no pude ser anterior a la fecha inicial')
+                })
         }),
         domicilio: Yup.string(),
         observaciones:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
@@ -798,6 +797,7 @@ function MyForm(props: MyFormProps ) {
                                         cancelLabel={"Cancelar"}
                                         clearLabel={"Limpiar"}
                                         okLabel={"Aceptar"}
+                                        minDate={values.inhabilitacion?.fechaInicial}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={12}>
