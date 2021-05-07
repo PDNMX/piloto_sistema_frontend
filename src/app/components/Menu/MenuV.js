@@ -50,6 +50,7 @@ import {ConnectedCreateRegS3P} from "../CargaDatos/createRegS3P";
 import FolderIcon from '@material-ui/icons/Folder';
 import KeyboardIcon from '@material-ui/icons/Keyboard';
 import PublishIcon from '@material-ui/icons/Publish';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 export const MenuV =({ vistaRender, match , closeSession }) => {
 
@@ -317,7 +318,6 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
             backgroundColor:'#ffff'
         },
         submenuicono2:{
-            paddingLeft:'30px',
             backgroundColor:'#eee'
         },
         itemOne:{
@@ -328,12 +328,15 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
         },
         itemThree:{
             color:'#67BFB7'
+        },
+        itemIcon:{
+            minWidth:'35px'
         }
 
     }));
 
     const classes = useStyles();
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const [checkedBitacora, setCheckedBitacora] = useState(false);
     const [checkedUser, setCheckedUser] = useState(false);
     const [checkedDatos, setCheckedDatos] = useState(false);
@@ -370,7 +373,8 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-                        Sistema de Carga de datos S2 y S3
+                        {'Sistema de Carga de Datos'}<br/>
+                        {'S2 y S3'}
                     </Typography>
                     <div>
                         <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
@@ -390,22 +394,21 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                 </Toolbar>
             </AppBar>
             <Drawer
-                variant="permanent"
                 classes={{
                     paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
                 }}
                 open={open}
             >
-                <div className={classes.toolbarIcon} onClick={handleDrawerClose}>
-
-                </div>
+                <div className={classes.toolbarIcon} onClick={handleDrawerClose}/>
+                <IconButton onClick={handleDrawerClose}>
+                    <ChevronLeftIcon className={classes.itemOne}/>
+                </IconButton>
                 <Divider />
                 <List className={classes.fontblack}>
-                    <div>
                         { rol==2 || rol=="" ?
                             <Tooltip title="Administrador datos" placement="right">
                                 <ListItem button className={classes.submenuicono} onClick={e=>menuAdminDatos2(e)}>
-                                    <ListItemIcon>
+                                    <ListItemIcon className={classes.itemIcon}>
                                         <FolderIcon className={classes.itemOne}/>
                                     </ListItemIcon>
                                     <ListItemText primary="Administrador datos" />
@@ -417,12 +420,12 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             item==="S2" ?
                                 <Collapse in={checkedAdminDatos2}>
                                     <div>
-                                        <Tooltip title="S2" placement="right">
+                                        <Tooltip title="Servidores Públicos que Intervienen en Procedimientos de Contratación" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")}>
-                                                <ListItemIcon>
+                                                <ListItemIcon className={classes.itemIcon}>
                                                     <ArrowRightIcon fontSize="small" className={classes.itemOne} />
                                                 </ListItemIcon>
-                                                <ListItemText primary="S2" />
+                                                <ListItemText secondary="S.P. en Contrataciones" />
                                             </ListItem>
                                         </Tooltip>
                                     </div>
@@ -433,12 +436,12 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             item==="S3S" ?
                                 <Collapse in={checkedAdminDatosS3S}>
                                     <div>
-                                        <Tooltip title="S3S" placement="right">
+                                        <Tooltip title="Servidores Públicos Sancionados" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3S")}>
-                                                <ListItemIcon>
+                                                <ListItemIcon className={classes.itemIcon}>
                                                     <ArrowRightIcon fontSize="small" className={classes.itemOne}/>
                                                 </ListItemIcon>
-                                                <ListItemText primary="S3S" />
+                                                <ListItemText secondary="Servidores Sancionados" />
                                             </ListItem>
                                         </Tooltip>
                                     </div>
@@ -449,12 +452,12 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             item==="S3P" ?
                                 <Collapse in={checkedAdminDatosS3P}>
                                     <div>
-                                        <Tooltip title="S3S" placement="right">
+                                        <Tooltip title="Particulares Sancionados" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3P")}>
-                                                <ListItemIcon>
+                                                <ListItemIcon className={classes.itemIcon}>
                                                     <ArrowRightIcon fontSize="small" className={classes.itemOne} />
                                                 </ListItemIcon>
-                                                <ListItemText primary="S3P" />
+                                                <ListItemText secondary="Particulares Sancionados" />
                                             </ListItem>
                                         </Tooltip>
                                     </div>
@@ -465,7 +468,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             rol ==2 || rol =="" ?
                                 <Tooltip title="Cargar datos" placement="right">
                                     <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/cargamasiva")}>
-                                        <ListItemIcon>
+                                        <ListItemIcon className={classes.itemIcon}>
                                             <PublishIcon className={classes.itemTwo} />
                                         </ListItemIcon>
                                         <ListItemText primary="Cargar datos" />
@@ -477,7 +480,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             rol == 2 || rol == "" ?
                                 <Tooltip title="Capturar datos" placement="right">
                                     <ListItem button className={classes.submenuicono} onClick={e=>menuDatos2(e)}>
-                                        <ListItemIcon>
+                                        <ListItemIcon className={classes.itemIcon}>
                                             <KeyboardIcon className={classes.itemThree}/>
                                         </ListItemIcon>
                                         <ListItemText primary="Capturar datos" />
@@ -488,12 +491,12 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             item==="S2" ?
                                 <Collapse in={checkedDatos2}>
                                     <div>
-                                        <Tooltip title="S2" placement="right">
+                                        <Tooltip title="Servidores Públicos que Intervienen en Procedimientos de Contratación" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S2")}>
-                                                <ListItemIcon>
+                                                <ListItemIcon className={classes.itemIcon}>
                                                     <ArrowRightIcon fontSize="small" className={classes.itemThree} />
                                                 </ListItemIcon>
-                                                <ListItemText primary="S2" />
+                                                <ListItemText secondary="S.P. en Contrataciones" />
                                             </ListItem>
                                         </Tooltip>
                                     </div>
@@ -504,12 +507,12 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             item==="S3S" ?
                                 <Collapse in={checkedDatosS3S}>
                                     <div>
-                                        <Tooltip title="S3S" placement="right">
+                                        <Tooltip title="Servidores Públicos Sancionados" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3S")}>
-                                                <ListItemIcon>
+                                                <ListItemIcon className={classes.itemIcon}>
                                                     <ArrowRightIcon fontSize="small"  className={classes.itemThree}/>
                                                 </ListItemIcon>
-                                                <ListItemText primary="S3S" />
+                                                <ListItemText secondary="Servidores Sancionados" />
                                             </ListItem>
                                         </Tooltip>
                                     </div>
@@ -520,12 +523,12 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                             item==="S3P" ?
                                 <Collapse in={checkedDatosS3P}>
                                     <div>
-                                        <Tooltip title="S3P" placement="right">
+                                        <Tooltip title="Particulares Sancionados" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3P")}>
-                                                <ListItemIcon>
+                                                <ListItemIcon className={classes.itemIcon}>
                                                     <ArrowRightIcon fontSize="small" className={classes.itemThree} />
                                                 </ListItemIcon>
-                                                <ListItemText primary="S3P" />
+                                                <ListItemText secondary="Particulares Sancionados" />
                                             </ListItem>
                                         </Tooltip>
                                     </div>
@@ -536,7 +539,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
 
                         { rol==1 ?
                             <ListItem button onClick={e=>menuUser(e)}>
-                                <ListItemIcon>
+                                <ListItemIcon className={classes.itemIcon}>
                                     <PeopleIcon style={{color:'#34b3eb'}}/>
                                 </ListItemIcon>
                                 <ListItemText  primary="Usuarios" />
@@ -547,7 +550,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                 <div>
                                     <Tooltip title="Crear usuario" placement="right">
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuario/crear")}>
-                                            <ListItemIcon>
+                                            <ListItemIcon className={classes.itemIcon}>
                                                 <ArrowRightIcon fontSize="small" className={classes.itemOne }/>
                                             </ListItemIcon>
                                             <ListItemText primary="Crear usuario" />
@@ -557,7 +560,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                     <Tooltip title="Listar usuarios" placement="right">
 
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/usuarios")}>
-                                            <ListItemIcon>
+                                            <ListItemIcon className={classes.itemIcon}>
                                                 <ArrowRightIcon fontSize="small" className={classes.itemOne}/>
                                             </ListItemIcon>
 
@@ -570,7 +573,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         }
                         { rol==1 ?
                             <ListItem button onClick={e=>menuProveedor(e)}>
-                                <ListItemIcon>
+                                <ListItemIcon className={classes.itemIcon}>
                                     <AssignmentIcon className={classes.itemTwo} />
                                 </ListItemIcon>
                                 <ListItemText primary="Proveedores" />
@@ -581,7 +584,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                 <div>
                                     <Tooltip title="Crear proveedor" placement="right">
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedor/crear")}>
-                                            <ListItemIcon>
+                                            <ListItemIcon className={classes.itemIcon}>
                                                 <ArrowRightIcon fontSize="small" className={classes.itemTwo} />
                                             </ListItemIcon>
                                             <ListItemText primary="Crear proveedor" />
@@ -591,7 +594,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                                     <Tooltip title="Listar proveedores" placement="right">
 
                                         <ListItem button className={classes.submenuicono} onClick={ () => redirectToRoute("/proveedores")}>
-                                            <ListItemIcon>
+                                            <ListItemIcon className={classes.itemIcon}>
                                                 <ArrowRightIcon fontSize="small" className={classes.itemTwo} />
                                             </ListItemIcon>
                                             <ListItemText primary="Listar proveedores" />
@@ -604,14 +607,13 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
 
                         { rol==1 ?
                             <ListItem button onClick={e=>menuBitacora(e)}>
-                                <ListItemIcon>
+                                <ListItemIcon className={classes.itemIcon}>
                                     <BookmarksIcon className={classes.itemThree}  />
                                 </ListItemIcon>
                                 <ListItemText primary="Bitácora" />
                             </ListItem>
                             : "" }
 
-                    </div>
                 </List>
             </Drawer>
             <main className={classes.content}>
