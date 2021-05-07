@@ -1382,7 +1382,7 @@ export const ListS3PSchema = () => {
                                         label: 'Todos',
                                         value: paginationSuper.totalRows
                                     }]}
-                                    colSpan={5}
+                                    colSpan={6}
                                     count={paginationSuper.totalRows}
                                     rowsPerPage={paginationSuper.pageSize}
                                     page={paginationSuper.page - 1}

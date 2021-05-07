@@ -39,7 +39,6 @@ import {createStyles, Theme, withStyles} from "@material-ui/core/styles";
 import {alertActions} from "../../_actions/alert.actions";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import CloseIcon from "@material-ui/icons/Close";
-import Nota from '../Common/Nota';
 import CheckIcon from '@material-ui/icons/Check';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 
@@ -416,7 +415,7 @@ export const ListProvider = () => {
                         <TableFooter>
                             <TableRow>
                                 {pagination.pageSize != undefined && pagination.page != undefined && <TablePagination
-                                    rowsPerPageOptions={[3, 5, 10, 25, {label: 'Todos', value: -1}]}
+                                    rowsPerPageOptions={[3, 5, 10, 25, {label: 'Todos', value: providers.length}]}
                                     colSpan={6}
                                     count={providers.length}
                                     rowsPerPage={pagination.pageSize}

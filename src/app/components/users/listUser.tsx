@@ -548,7 +548,7 @@ export const ListUser = () => {
                         <TableFooter>
                             <TableRow>
                                 {pagination.pageSize != undefined && pagination.page != undefined && <TablePagination
-                                    rowsPerPageOptions={[3, 5, 10, 25, {label: 'Todos', value: -1}]}
+                                    rowsPerPageOptions={[3, 5, 10, 25, {label: 'Todos', value: users.length}]}
                                     colSpan={6}
                                     count={users.length}
                                     rowsPerPage={pagination.pageSize}
