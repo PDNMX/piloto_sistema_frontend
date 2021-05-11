@@ -1,66 +1,70 @@
 import React from 'react';
-import { Form } from 'react-final-form';
+import {Form} from 'react-final-form';
 import {TextField, makeValidate, makeRequired, Select, DatePicker, Radios} from 'mui-rff';
-import {Grid, Button, Divider, Tooltip, } from "@material-ui/core";
+import {Grid, Button, Tooltip,} from "@material-ui/core";
 import * as Yup from 'yup';
-import { css } from "@emotion/core";
+import {css} from "@emotion/core";
 import Typography from "@material-ui/core/Typography";
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../../store/history";
-import { useDispatch } from "react-redux";
+import {useDispatch} from "react-redux";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {alertActions} from "../../_actions/alert.actions";
-import { OnChange } from 'react-final-form-listeners'
+import {OnChange} from 'react-final-form-listeners'
 import DateFnsUtils from "@date-io/date-fns";
 import arrayMutators from 'final-form-arrays'
-import { FieldArray } from 'react-final-form-arrays'
+import {FieldArray} from 'react-final-form-arrays'
 import {S3PActions} from "../../_actions/s3p.action";
 import deLocale from "date-fns/locale/es";
 import axios from "axios";
 
 const host = process.env.URLAPI;
 // @ts-ignore
-const ur= host+process.env.PORTAPI;
+const ur = host + process.env.PORTAPI;
 
-const CreateReg = ({id ,alert, catalogos, registry, flagOnlyRead}) => {
+const CreateReg = ({id, alert, catalogos, registry, flagOnlyRead}) => {
     // @ts-ignore
-    return <MyForm initialValues={registry != undefined ? registry : {...registry, tipoSancion: [undefined], particularSancionado: {domicilioMexico: {pais : '{"clave":"MX","valor":"México"}'}}}}  catalogos={catalogos}  alerta={alert} id={id} flagOnlyRead={flagOnlyRead}/>;
+    return <MyForm initialValues={registry != undefined ? registry : {
+        ...registry,
+        tipoSancion: [undefined],
+        particularSancionado: {domicilioMexico: {pais: '{"clave":"MX","valor":"México"}'}}
+    }} catalogos={catalogos} alerta={alert} id={id} flagOnlyRead={flagOnlyRead}/>;
 }
 
 interface FormDataEsquemaS3P {
     domicilio?: string,
-    particularSancionado?:{
-        domicilioMexico:{
-            pais:{
+    particularSancionado?: {
+        domicilioMexico: {
+            pais: {
                 valor: String,
                 clave: String
             },
-            entidadFederativa:{
+            entidadFederativa: {
                 valor: String,
                 clave: String
             },
-            muncipio:{
+            muncipio: {
                 valor: String,
                 clave: String
             },
-            localidad:{
+            localidad: {
                 valor: String,
                 clave: String
             },
-            vialidad:{
+            vialidad: {
                 valor: String,
                 clave: String
             },
-            codigoPostal:String,
+            codigoPostal: String,
             numeroExterior: String,
             numeroInterior: String
         },
-        domicilioExtranjero:{
-            pais:{
+        domicilioExtranjero: {
+            pais: {
                 valor: String,
                 clave: String
             },
@@ -71,17 +75,17 @@ interface FormDataEsquemaS3P {
             numeroExterior: String,
             numeroInterior: String
         },
-        nombreRazonSocial:String,
+        nombreRazonSocial: String,
         objetoSocial: String,
         rfc: String,
         tipoPersona: String,
         telefono: String
     },
-    multa?:{
+    multa?: {
         monto: Number,
         moneda: {
-            clave:String,
-            valor:String
+            clave: String,
+            valor: String
         }
     },
     fechaCaptura?: String,
@@ -91,48 +95,48 @@ interface FormDataEsquemaS3P {
         clave: String,
         siglas: String
     },
-    directorGeneral?:{
+    directorGeneral?: {
         nombres: String,
         primerApellido: String,
         segundoApellido: String,
         curp: String
     },
-    apoderadoLegal?:{
+    apoderadoLegal?: {
         nombres: String,
         primerApellido: String,
         segundoApellido: String,
         curp: String
     },
-    objetoContrato?:String,
+    objetoContrato?: String,
     autoridadSancionadora?: String,
     tipoFalta?: String,
-    tipoSancion?: [{clave :String , valor: String , descripcion: String}],
+    tipoSancion?: [{ clave: String, valor: String, descripcion: String }],
     causaMotivoHechos?: String,
     acto?: String,
-    responsableSancion?:{
+    responsableSancion?: {
         nombres: String,
         primerApellido: String,
         segundoApellido: String,
         curp: String
     },
-    resolucion?:{
+    resolucion?: {
         sentido: String,
         url: String,
         fechaNotificacion: String
     },
-    inhabilitacion?:{
+    inhabilitacion?: {
         plazo: String,
-        fechaInicial:String,
-        fechaFinal:String
+        fechaInicial: String,
+        fechaFinal: String
     },
-    documentos?: [{id: String, tipo:String, titulo:String , descripcion :String , url: String, fecha:String}],
+    documentos?: [{ id: String, tipo: String, titulo: String, descripcion: String, url: String, fecha: String }],
     observaciones?: String
 }
 
 interface MyFormProps {
     initialValues: FormDataEsquemaS3P;
-    alerta: { status: boolean , message :""};
-    catalogos:{tipoPersona: [], paises:[], estados:[], municipios:[], localidades:[],  vialidades: [],   tipoSancion: [], moneda: [] , tipoDoc: []};
+    alerta: { status: boolean, message: "" };
+    catalogos: { tipoPersona: [], paises: [], estados: [], municipios: [], localidades: [], vialidades: [], tipoSancion: [], moneda: [], tipoDoc: [] };
     id: string;
     flagOnlyRead: boolean;
 }
@@ -143,8 +147,8 @@ const override = css`
   border-color: red;
 `;
 
-function MyForm(props: MyFormProps ) {
-    let { initialValues ,  alerta, catalogos, id, flagOnlyRead } = props;
+function MyForm(props: MyFormProps) {
+    let {initialValues, alerta, catalogos, id, flagOnlyRead} = props;
     const alert = alerta;
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
@@ -153,110 +157,110 @@ function MyForm(props: MyFormProps ) {
 
     // @ts-ignore
     let schema = Yup.object().shape({
-        expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
-        institucionDependencia : Yup.object().shape({
-            nombre:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Nombre de la sección Institución Dependencia es requerido").trim(),
-            siglas:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres ').trim(),
-            clave: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').trim()
+        expediente: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'), 'No se permiten cadenas vacías, máximo 25 caracteres').trim(),
+        institucionDependencia: Yup.object().shape({
+            nombre: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Nombre de la sección Institución Dependencia es requerido").trim(),
+            siglas: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'), 'No se permiten cadenas vacías, máximo 25 caracteres ').trim(),
+            clave: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9_\.\' ]{1,25}$'), 'No se permiten cadenas vacías, máximo 25 caracteres').trim()
         }),
-        particularSancionado :Yup.object().shape({
-            nombreRazonSocial:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'),'No se permiten cadenas vacías, máximo 25 caracteres').required("El campo Nombre razon social de Particular sancionado es requerido").trim(),
-            objetoSocial: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n\/ ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
-            rfc: Yup.string().matches(new RegExp("[A-ZÑ&]{3,4}[0-9]{6}[A-V1-9][A-Z1-9][0-9A]"),'No se permiten puntos ,apóstrofes ni cadenas vacías máximo 13 caracteres').trim(),
+        particularSancionado: Yup.object().shape({
+            nombreRazonSocial: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,25}$'), 'No se permiten cadenas vacías, máximo 25 caracteres').required("El campo Nombre razon social de Particular sancionado es requerido").trim(),
+            objetoSocial: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n\/ ]{1,200}$'), 'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
+            rfc: Yup.string().matches(new RegExp("[A-ZÑ&]{3,4}[0-9]{6}[A-V1-9][A-Z1-9][0-9A]"), 'No se permiten puntos ,apóstrofes ni cadenas vacías máximo 13 caracteres').trim(),
             tipoPersona: Yup.object().required('El campo Tipo persona de la sección particular sancionado es requerido'),
-            telefono:  Yup.string().matches(new RegExp('^[0-9]{12}$'), 'Inserta un número de teléfono válido, 12 caracteres').trim(),
+            telefono: Yup.string().matches(new RegExp('^[0-9]{12}$'), 'Inserta un número de teléfono válido, 12 caracteres').trim(),
             domicilioMexico: Yup.object().shape({
                 pais: Yup.object(),
                 entidadFederativa: Yup.object(),
                 municipio: Yup.object(),
-                codigoPostal:  Yup.string().matches(new RegExp('^[0-9]{5}$'),'Inserta un código postal válido, 5 caracteres máximo').trim(),
+                codigoPostal: Yup.string().matches(new RegExp('^[0-9]{5}$'), 'Inserta un código postal válido, 5 caracteres máximo').trim(),
                 localidad: Yup.object(),
                 vialidad: Yup.object(),
-                descripcionVialidad:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
-                numeroExterior:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
-                numeroInterior: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
+                descripcionVialidad: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
+                numeroExterior: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'), 'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
+                numeroInterior: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'), 'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
             }),
             domicilioExtranjero: Yup.object().shape({
-                calle:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
-                numeroExterior:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
-                numeroInterior: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
-                ciudadLocalidad:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
-                estadoProvincia:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
+                calle: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
+                numeroExterior: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'), 'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
+                numeroInterior: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'), 'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
+                ciudadLocalidad: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
+                estadoProvincia: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').trim(),
                 pais: Yup.object(),
-                codigoPostal:  Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'),'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
+                codigoPostal: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,20}$'), 'No se permiten cadenas vacías, máximo 20 caracteres').trim(),
             }),
-            directorGeneral:Yup.object().shape({
-                nombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-                primerApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-                segundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+            directorGeneral: Yup.object().shape({
+                nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+                primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+                segundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
                 curp: Yup.string().matches(new RegExp("[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])" +
                     "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT" +
                     "|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$"), "Introducir un CURP valido")
             }),
 
-            apoderadoLegal:Yup.object().shape({
-                nombres:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-                primerApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-                segundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+            apoderadoLegal: Yup.object().shape({
+                nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+                primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+                segundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
                 curp: Yup.string().matches(new RegExp("[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])" +
                     "(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT" +
                     "|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$"), "Introducir un CURP valido")
             })
         }),
-        objetoContrato:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,300}$'),'No se permiten cadenas vacías, máximo 300 caracteres').trim(),
-        autoridadSancionadora:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Autoridad sancionadora es requerido").trim(),
-        tipoFalta:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,100}$'),'No se permiten cadenas vacías, máximo 100 caracteres').required("El campo tipo Falta es requerido").trim(),
+        objetoContrato: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,300}$'), 'No se permiten cadenas vacías, máximo 300 caracteres').trim(),
+        autoridadSancionadora: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Autoridad sancionadora es requerido").trim(),
+        tipoFalta: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,100}$'), 'No se permiten cadenas vacías, máximo 100 caracteres').required("El campo tipo Falta es requerido").trim(),
         tipoSancion: Yup.array().of(
             Yup.object().shape({
                 tipoSancion: Yup.object().required("El campo Tipo de sanción es requerido"),
-                descripcion: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'),'No se permiten cadenas vacías, máximo 50 caracteres').trim()
+                descripcion: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').trim()
             })
         ).required("Se requiere seleccionar mínimo una opción del campo Tipo sanción"),
-        causaMotivoHechos:  Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').required("El campo Causa o motivo de la sanción es requerido").trim(),
-        acto:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
-        responsableSancion:Yup.object().shape({
-            nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim()
-                .when('primerApellido',  (primerApellido) => {
-                    if(primerApellido)
-                        return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo nombres de la sección Responsable sanción es requerido").trim()
+        causaMotivoHechos: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,200}$'), 'No se permiten cadenas vacías, máximo 200 caracteres').required("El campo Causa o motivo de la sanción es requerido").trim(),
+        acto: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'), 'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
+        responsableSancion: Yup.object().shape({
+            nombres: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim()
+                .when('primerApellido', (primerApellido) => {
+                    if (primerApellido)
+                        return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo nombres de la sección Responsable sanción es requerido").trim()
                 }),
-            primerApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim()
-                .when('nombres',  (nombres) => {
+            primerApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim()
+                .when('nombres', (nombres) => {
                     if (nombres)
                         return Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').required("El campo Primer apellido de la sección Responsable sanción es requerido").trim()
                 }),
-            segundoApellido:Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"),'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
-        }, ['nombres','primerApellido']),
-        resolucion:Yup.object().shape({
-            sentido:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
-            url:Yup.string()
+            segundoApellido: Yup.string().matches(new RegExp("^['A-zÀ-ú-\. ]{1,25}$"), 'No se permiten números, ni cadenas vacías máximo 25 caracteres').trim(),
+        }, ['nombres', 'primerApellido']),
+        resolucion: Yup.object().shape({
+            sentido: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'), 'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
+            url: Yup.string()
                 .matches(/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
                     'Introduce una direccion de internet valida'
                 ).trim(),
-            fechaNotificacion : Yup.string().trim().nullable(true),
+            fechaNotificacion: Yup.string().trim().nullable(true),
         }),
-        multa:Yup.object().shape({
-            monto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').trim()
-                .when('moneda',  (moneda) => {
-                    if(moneda)
-                        return Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"),'Solo se permiten números enteros o decimales').trim().required("El campo monto es requerido ")
+        multa: Yup.object().shape({
+            monto: Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"), 'Solo se permiten números enteros o decimales').trim()
+                .when('moneda', (moneda) => {
+                    if (moneda)
+                        return Yup.string().matches(new RegExp("^([0-9]*[.])?[0-9]+$"), 'Solo se permiten números enteros o decimales').trim().required("El campo monto es requerido ")
                 }),
             moneda: Yup.string()
-                .when('monto',  (monto) => {
-                    if(monto)
+                .when('monto', (monto) => {
+                    if (monto)
                         return Yup.string().trim().required("El campo moneda es requerido ")
                 }),
-        }, ['moneda','monto']),
+        }, ['moneda', 'monto']),
         inhabilitacion: Yup.object().shape({
-            plazo:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'),'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
-            fechaInicial:  Yup.string().trim().nullable(true),
+            plazo: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'), 'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
+            fechaInicial: Yup.string().trim().nullable(true),
             fechaFinal: Yup.string().trim().nullable(true)
-                .when('fechaInicial',(fechaInicial) => {
+                .when('fechaInicial', (fechaInicial) => {
                     return Yup.date().min(fechaInicial, 'La fecha final no pude ser anterior a la fecha inicial')
                 })
         }),
         domicilio: Yup.string(),
-        observaciones:Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,500}$'),'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
+        observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,500}$'), 'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
         documentos: Yup.array().of(
             Yup.object().shape({
                 id: Yup.string().trim(),
@@ -278,40 +282,40 @@ function MyForm(props: MyFormProps ) {
 
     const styles = makeStyles({
 
-        hideGrid:{display: 'none'},
-        titleCategory:{
+        hideGrid: {display: 'none'},
+        titleCategory: {
             color: '#666666'
         },
-        invLine:{
+        invLine: {
             color: '#FFFFFF80'
         },
-        boton1:{
-            marginTop:'16px',
-            marginLeft:'16px',
-            marginRight:'16px',
-            marginBottom:'5px',
-            backgroundColor:'#ffe01b',
+        boton1: {
+            marginTop: '16px',
+            marginLeft: '16px',
+            marginRight: '16px',
+            marginBottom: '5px',
+            backgroundColor: '#ffe01b',
             color: '#666666'
         },
-        boton2:{
-            marginTop:'16px',
-            marginLeft:'16px',
-            marginRight:'-23px',
-            marginBottom:'5px',
-            backgroundColor:'#ffe01b',
+        boton2: {
+            marginTop: '16px',
+            marginLeft: '16px',
+            marginRight: '-23px',
+            marginBottom: '5px',
+            backgroundColor: '#ffe01b',
             color: '#666666'
         },
-        boton:{
-            backgroundColor:'#ffe01b',
+        boton: {
+            backgroundColor: '#ffe01b',
             color: '#666666',
         },
-        overSelect:{
+        overSelect: {
             'max-height': '19px',
             "white-space": "normal !important"
         },
-        marginright:{
+        marginright: {
             marginRight: '30px',
-            backgroundColor:'#ffe01b',
+            backgroundColor: '#ffe01b',
             color: '#666666'
         },
         gridpadding: {
@@ -327,17 +331,31 @@ function MyForm(props: MyFormProps ) {
             light: "#ffff5c",
             dark: "#c8af00"
         },
-        fontblack:{
+        fontblack: {
             color: '#666666'
         },
         gridpaddingBottom: {
             'padding-bottom': '10px',
             'padding-left': '10px'
         },
+        titulo: {
+            fontSize: 15,
+            fontWeight: "bold",
+            textDecoration: "underline",
+            textDecorationColor: '#34b3eb',
+            color: '#34b3eb',
+        },
+        subtitulo: {
+            fontSize: 15,
+            fontWeight: "bold",
+            textDecoration: "underline",
+            textDecorationColor: '#585858',
+            color: '#585858',
+        },
     });
 
 
-    const redirectToRoute = (path) =>{
+    const redirectToRoute = (path) => {
         history.push(path);
         dispatch(alertActions.clear());
     }
@@ -345,9 +363,9 @@ function MyForm(props: MyFormProps ) {
     const cla = styles();
 
     const buttonSubmittProps = { // make sure all required component's inputs/Props keys&types match
-        variant:"contained",
-        color:"primary",
-        type:"submit"
+        variant: "contained",
+        color: "primary",
+        type: "submit"
     }
 
     async function requestMunicipio(value) {
@@ -360,7 +378,7 @@ function MyForm(props: MyFormProps ) {
             }
         });
 
-        if(Array.isArray(respuestaArray.data.results)){
+        if (Array.isArray(respuestaArray.data.results)) {
             catalogos.municipios = respuestaArray.data.results;
         }
 
@@ -369,7 +387,10 @@ function MyForm(props: MyFormProps ) {
 
     async function requestLocalidadByMunicipio(value, entidad) {
         const token = localStorage.token;
-        const respuestaArray = await axios.post(ur + `/getCatalogsLocalidadesPorEstado`, {idMunicipio: value, idEntidad: entidad}, {
+        const respuestaArray = await axios.post(ur + `/getCatalogsLocalidadesPorEstado`, {
+            idMunicipio: value,
+            idEntidad: entidad
+        }, {
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
@@ -377,7 +398,7 @@ function MyForm(props: MyFormProps ) {
             }
         });
 
-        if(Array.isArray(respuestaArray.data.results)){
+        if (Array.isArray(respuestaArray.data.results)) {
             catalogos.localidades = respuestaArray.data.results;
         }
 
@@ -386,9 +407,9 @@ function MyForm(props: MyFormProps ) {
 
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS3P) {
-        if(id != undefined){
-            dispatch(S3PActions.requestCreationS3P({...values, _id : id}));
-        }else{
+        if (id != undefined) {
+            dispatch(S3PActions.requestCreationS3P({...values, _id: id}));
+        } else {
             dispatch(S3PActions.requestCreationS3P(values));
         }
         setOpen(true);
@@ -400,14 +421,14 @@ function MyForm(props: MyFormProps ) {
     return (
 
         <div>
-            <Grid  container justify={"center"}>
-                <Typography  noWrap variant="h6" className={cla.fontblack}>
+            <Grid container justify={"center"}>
+                <Typography noWrap variant="h6" className={cla.fontblack}>
                     <b>Sistema de los Particulares Sancionados</b>
                 </Typography>
             </Grid>
-            <Grid  container justify={"center"}>
-                <Typography  noWrap variant="h6" className={cla.fontblack}>
-                    <b>{id != undefined ? "Edición" :  "Captura" }</b>
+            <Grid container justify={"center"}>
+                <Typography noWrap variant="h6" className={cla.fontblack}>
+                    <b>{id != undefined ? "Edición" : "Captura"}</b>
                 </Typography>
             </Grid>
             <Form
@@ -417,474 +438,501 @@ function MyForm(props: MyFormProps ) {
                 mutators={{
                     ...arrayMutators
                 }}
-                render={({ handleSubmit, form: {
-                    mutators: { push, pop }
-                }, values, submitting   }) => (
-                    <form  onSubmit={handleSubmit} noValidate>
+                render={({
+                             handleSubmit, form: {
+                        mutators: {push, pop}
+                    }, values, submitting
+                         }) => (
+                    <form onSubmit={handleSubmit} noValidate>
                         {alert.status === undefined &&
-                        <fieldset style = {{border: "0px"}} disabled={flagOnlyRead}> <div>
-                            <Grid key={"GridContainerFormCreateRegS3P"} className= {cla.gridpadding} spacing={3} container >
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Datos generales
-                                    </Typography>
-                                    <Divider className={cla.boton}/>
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Expediente" name="expediente"  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Objeto contrato" name="objetoContrato" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Autoridad sancionadora *" name="autoridadSancionadora" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Tipo falta *" name="tipoFalta" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Causa, motivo o hechos *" name="causaMotivoHechos" multiline={true} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Acto" name="acto" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Observaciones"  name="observaciones"  multiline={true}/>
-                                </Grid>
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Tipo sanción
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-
-                                <Grid item xs={12} md={12}>
-                                    <Button  type="button"   onClick={() => push('tipoSancion', undefined)} variant="contained"  className={cla.marginright}>
-                                        Agregar Tipo de sanción
-                                    </Button>
-                                </Grid>
-
-                                <FieldArray name="tipoSancion">
-                                    {({ fields }) =>
-                                        fields.map((name, index) => (
-                                            <Grid item xs={12} md={3} key={name}>
-                                                <Grid container >
-                                                    <Grid item xs={8} md={11} alignContent={"flex-start"}>
-                                                        <Typography className={cla.titleCategory} variant="body1" gutterBottom>
-                                                            Tipo de Sanción. #{index + 1}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={3} md={1} alignContent={"flex-end"}>
-                                                        <Tooltip title="Remover sanción" placement="left">
-                                                         <span
-                                                             onClick={() => fields.remove(index)}
-                                                             style={{ cursor: 'pointer' }}
-                                                         >
-                                                          ❌
-                                                        </span>
-                                                        </Tooltip>
-                                                    </Grid>
-                                                </Grid>
-                                                {catalogos.tipoSancion &&
-                                                <Grid item xs={12} md={12}>
-                                                    <Select  inputProps={{
-                                                        classes: {
-                                                            select: cla.overSelect,
-                                                        },}}  name={`tipoSancion.${index}.tipoSancion`} label="Tipo de sanción *" data={catalogos.tipoSancion} ></Select>
-                                                </Grid>}
-                                                <Grid item xs={12} md={12}>
-                                                    <TextField label="Descripción" name={`tipoSancion.${index}.descripcion`} />
-                                                </Grid>
-                                            </Grid>
-                                        ))
-                                    }
-                                </FieldArray>
-
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Institución / Dependencia
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid key={"institucionDependencia.grid.nombre"} item xs={12} md={6}>
-                                    <TextField key={"institucionDependencia.nombre"} label="Nombre(s) *" name="institucionDependencia.nombre" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Siglas" name="institucionDependencia.siglas"  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Clave" name="institucionDependencia.clave" />
-                                </Grid>
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Particular sancionado
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre(s)/Razón social *" name="particularSancionado.nombreRazonSocial" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Objeto social" name="particularSancionado.objetoSocial" multiline={true}/>
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="RFC" name="particularSancionado.rfc" />
-                                </Grid>
-                                {catalogos.tipoPersona &&
-                                <Grid item xs={12} md={3}>
-                                    <Select  name = "particularSancionado.tipoPersona" label="Tipo persona *" data={catalogos.tipoPersona} ></Select>
-                                </Grid>
-                                }
-
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Teléfono" name="particularSancionado.telefono" />
-                                </Grid>
-
-                                <Grid item xs={12} md={12}>
-                                    <Radios
-                                        label="Selecciona el tipo de domicilio para cargar los datos"
-                                        name="domicilio"
-                                        required={true}
-                                        data={[
-                                            {label: 'México', value: 'mex'},
-                                            {label: 'Extranjero', value: 'ext'},
-                                            {label: 'Ninguno', value: ''}
-                                        ]}
-                                    />
-                                </Grid>
-                                {values.domicilio === 'mex' &&
-                                <Grid container spacing={3}>
+                        <fieldset style={{border: "0px"}} disabled={flagOnlyRead}>
+                            <div>
+                                <Grid key={"GridContainerFormCreateRegS3P"} className={cla.gridpadding} spacing={3}
+                                      container>
                                     <Grid item xs={12} md={12}>
-                                        <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                            Domicilio méxico
+                                        <Typography className={cla.titulo} align={'center'}>
+                                            Datos generales
                                         </Typography>
-                                        <Divider className={cla.boton} />
-                                    </Grid>
-                                    {catalogos.paises &&
-                                    <Grid item xs={12} md={3}>
-                                        <Select disabled name="particularSancionado.domicilioMexico.pais" label="País"
-                                                data={catalogos.paises}></Select>
-                                    </Grid>
-                                    }
-                                    {catalogos.estados &&
-                                    <Grid key={"grid.particularSancionado.domicilioMexico.entidadFederativa"} item
-                                          xs={12} md={3}>
-                                        <Select key={"particularSancionado.domicilioMexico.entidadFederativa"}
-                                                name="particularSancionado.domicilioMexico.entidadFederativa"
-                                                label="Estado" data={catalogos.estados}></Select>
-                                    </Grid>
-                                    }
-                                    {catalogos.estados &&
-                                    <OnChange name="particularSancionado.domicilioMexico.entidadFederativa">
-                                        {(value, previous) => {
-                                            if (value) {
-                                                requestMunicipio(value);
-                                            }
-                                        }}
-                                    </OnChange>
-                                    }
-                                    {catalogos.municipios &&
-                                    <Grid key={"grid.particularSancionado.domicilioMexico.municipio"} item xs={12}
-                                          md={3}>
-                                        <Select key={"particularSancionado.domicilioMexico.municipio.grid"}
-                                                name="particularSancionado.domicilioMexico.municipio" label="Municipio"
-                                                data={catalogos.municipios}></Select>
-                                    </Grid>
-                                    }
-                                    {catalogos.municipios &&
-                                    <OnChange name="particularSancionado.domicilioMexico.municipio">
-                                        {(value, previous) => {
-                                            if (value) {
-                                                // @ts-ignore
-                                                requestLocalidadByMunicipio(value, values.particularSancionado.domicilioMexico.entidadFederativa);
-                                            }
-                                        }}
-                                    </OnChange>
-                                    }
-                                    {catalogos.localidades &&
-                                    <Grid key={"grid.particularSancionado.domicilioMexico.localidad"} item xs={12}
-                                          md={3}>
-                                        <Select key={"particularSancionado.domicilioMexico.localidad.grid"}
-                                                name="particularSancionado.domicilioMexico.localidad" label="Localidad"
-                                                data={catalogos.localidades}></Select>
-                                    </Grid>
-                                    }
-                                    <Grid item xs={12} md={3}>
-                                        <Select name="particularSancionado.domicilioMexico.vialidad"
-                                                label="Tipo vialidad" data={catalogos.vialidades}></Select>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField label="Vialidad nombre"
-                                                   name="particularSancionado.domicilioMexico.descripcionVialidad"/>
+                                        <TextField label="Expediente" name="expediente"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="Nombre(s)/Razón social *"
+                                                   name="particularSancionado.nombreRazonSocial"/>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField label="Código postal"
-                                                   name="particularSancionado.domicilioMexico.codigoPostal"/>
+                                        <TextField label="RFC" name="particularSancionado.rfc"/>
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
-                                        <TextField label="Número exterior"
-                                                   name="particularSancionado.domicilioMexico.numeroExterior"/>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="Causa, motivo o hechos *" name="causaMotivoHechos"
+                                                   multiline={true}/>
                                     </Grid>
-                                    <Grid item xs={12} md={3}>
-                                        <TextField label="Número interior"
-                                                   name="particularSancionado.domicilioMexico.numeroInterior"/>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="Acto" name="acto"/>
                                     </Grid>
-                                </Grid>
-                                }
-
-                                {values.domicilio === 'ext' &&
-                                <Grid container spacing={3}>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="Objeto contrato" name="objetoContrato"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="Tipo falta *" name="tipoFalta"/>
+                                    </Grid>
                                     <Grid item xs={12} md={12}>
-                                        <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                            Domicilio extranjero
+                                        <Typography className={cla.subtitulo}>
+                                            Institución / Dependencia
                                         </Typography>
-                                        <Divider className={cla.boton} />
+                                    </Grid>
+                                    <Grid key={"institucionDependencia.grid.nombre"} item xs={12} md={6}>
+                                        <TextField key={"institucionDependencia.nombre"} label="Nombre(s) *"
+                                                   name="institucionDependencia.nombre"/>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <Select  name = "particularSancionado.domicilioExtranjero.pais" label="País" data={catalogos.paises} ></Select>
+                                        <TextField label="Siglas" name="institucionDependencia.siglas"/>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField label="Estado / Provincia" name="particularSancionado.domicilioExtranjero.estadoProvincia" />
+                                        <TextField label="Clave" name="institucionDependencia.clave"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="Observaciones" name="observaciones" multiline={true}/>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.titulo} align={'center'}>
+                                            Datos de la sanción
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.subtitulo}>
+                                            Resolución
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField label="Ciudad/ Localidad" name="particularSancionado.domicilioExtranjero.ciudadLocalidad" />
+                                        <TextField label="Autoridad sancionadora *" name="autoridadSancionadora"/>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField label="Calle" name="particularSancionado.domicilioExtranjero.calle" />
+                                        <TextField label="Sentido" name="resolucion.sentido"/>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField label="Número exterior" name="particularSancionado.domicilioExtranjero.numeroExterior" />
+                                        <TextField label="Url" name="resolucion.url"/>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField label="Número interior" name="particularSancionado.domicilioExtranjero.numeroInterior" />
+                                        <DatePicker
+                                            locale={deLocale}
+                                            format={"yyyy-MM-dd"}
+                                            label="Fecha de resolución"
+                                            name="resolucion.fechaNotificacion"
+                                            dateFunsUtils={DateFnsUtils}
+                                            clearable={true}
+                                            cancelLabel={"Cancelar"}
+                                            clearLabel={"Limpiar"}
+                                            okLabel={"Aceptar"}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.subtitulo}>
+                                            Responsable sanción
+                                        </Typography>
                                     </Grid>
                                     <Grid item xs={12} md={3}>
-                                        <TextField label="Código postal" name="particularSancionado.domicilioExtranjero.codigoPostal" />
+                                        <TextField label="Nombre(s) *" name="responsableSancion.nombres"/>
                                     </Grid>
-                                </Grid>
-                                }
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Primer apellido *" name="responsableSancion.primerApellido"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Segundo apellido" name="responsableSancion.segundoApellido"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.subtitulo}>
+                                            Inhabilitación
+                                        </Typography>
+                                    </Grid>
 
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Plazo" name="inhabilitacion.plazo"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <DatePicker
+                                            locale={deLocale}
+                                            format={"yyyy-MM-dd"}
+                                            label="Fecha Inicial"
+                                            name="inhabilitacion.fechaInicial"
+                                            dateFunsUtils={DateFnsUtils}
+                                            clearable={true}
+                                            cancelLabel={"Cancelar"}
+                                            clearLabel={"Limpiar"}
+                                            okLabel={"Aceptar"}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <DatePicker
+                                            locale={deLocale}
+                                            format={"yyyy-MM-dd"}
+                                            label="Fecha Final"
+                                            name="inhabilitacion.fechaFinal"
+                                            dateFunsUtils={DateFnsUtils}
+                                            clearable={true}
+                                            cancelLabel={"Cancelar"}
+                                            clearLabel={"Limpiar"}
+                                            okLabel={"Aceptar"}
+                                            minDate={values.inhabilitacion?.fechaInicial}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.subtitulo}>
+                                            Multa
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Monto" name="multa.monto"/>
+                                    </Grid>
+                                    {catalogos.moneda &&
+                                    <Grid item xs={12} md={3}>
+                                        <Select name="multa.moneda" label="Moneda" data={catalogos.moneda}/>
+                                    </Grid>
+                                    }
+                                    <Grid item md={6}/>
 
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Director general
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre(s)" name="particularSancionado.directorGeneral.nombres" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Primer apellido" name="particularSancionado.directorGeneral.primerApellido" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Segundo apellido" name="particularSancionado.directorGeneral.segundoApellido" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="CURP" name="particularSancionado.directorGeneral.curp" />
-                                </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.titulo} align={'center'}>
+                                            Datos del particular sancionado
+                                        </Typography>
+                                    </Grid>
+                                    {catalogos.tipoPersona &&
+                                    <Grid item xs={12} md={3}>
+                                        <Select name="particularSancionado.tipoPersona" label="Tipo persona *"
+                                                data={catalogos.tipoPersona}/>
+                                    </Grid>
+                                    }
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Teléfono" name="particularSancionado.telefono"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        <TextField label="Objeto social" name="particularSancionado.objetoSocial"
+                                                   multiline={true}/>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.subtitulo}>
+                                            Director general
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Nombre(s)"
+                                                   name="particularSancionado.directorGeneral.nombres"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Primer apellido"
+                                                   name="particularSancionado.directorGeneral.primerApellido"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Segundo apellido"
+                                                   name="particularSancionado.directorGeneral.segundoApellido"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="CURP" name="particularSancionado.directorGeneral.curp"/>
+                                    </Grid>
 
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Apoderado legal
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre(s)" name="particularSancionado.apoderadoLegal.nombres" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Primer apellido" name="particularSancionado.apoderadoLegal.primerApellido" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Segundo apellido" name="particularSancionado.apoderadoLegal.segundoApellido" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="CURP" name="particularSancionado.apoderadoLegal.curp" />
-                                </Grid>
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Responsable sanción
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Nombre(s) *" name="responsableSancion.nombres" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Primer apellido *" name="responsableSancion.primerApellido" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Segundo apellido" name="responsableSancion.segundoApellido" />
-                                </Grid>
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Resolución
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Sentido" name="resolucion.sentido" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Url" name="resolucion.url" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <DatePicker
-                                        locale={deLocale}
-                                        format={"yyyy-MM-dd"}
-                                        label="Fecha de resolución"
-                                        name="resolucion.fechaNotificacion"
-                                        dateFunsUtils={DateFnsUtils}
-                                        clearable={true}
-                                        cancelLabel={"Cancelar"}
-                                        clearLabel={"Limpiar"}
-                                        okLabel={"Aceptar"}
-                                    />
-                                </Grid>
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Multa
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Monto"  name="multa.monto"  />
-                                </Grid>
-
-                                {catalogos.moneda &&
-                                <Grid item xs={12} md={3}>
-                                    <Select name="multa.moneda" label="Moneda" data={catalogos.moneda}></Select>
-                                </Grid>
-                                }
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Inhabilitación
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Plazo"  name="inhabilitacion.plazo"  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <DatePicker
-                                        locale={deLocale}
-                                        format={"yyyy-MM-dd"}
-                                        label="Fecha Inicial"
-                                        name="inhabilitacion.fechaInicial"
-                                        dateFunsUtils={DateFnsUtils}
-                                        clearable={true}
-                                        cancelLabel={"Cancelar"}
-                                        clearLabel={"Limpiar"}
-                                        okLabel={"Aceptar"}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <DatePicker
-                                        locale={deLocale}
-                                        format={"yyyy-MM-dd"}
-                                        label="Fecha Final"
-                                        name="inhabilitacion.fechaFinal"
-                                        dateFunsUtils={DateFnsUtils}
-                                        clearable={true}
-                                        cancelLabel={"Cancelar"}
-                                        clearLabel={"Limpiar"}
-                                        okLabel={"Aceptar"}
-                                        minDate={values.inhabilitacion?.fechaInicial}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Documentos
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-
-                                <Grid item xs={12} md={12}>
-                                    <Button  type="button"   onClick={() => push('documentos', undefined)} variant="contained"  className={cla.marginright}>
-                                        Agregar Documento
-                                    </Button>
-                                </Grid>
-
-                                <FieldArray name="documentos">
-                                    {({ fields }) =>
-                                        fields.map((name, index) => (
-                                            <Grid item xs={12} md={3} key={name}>
-                                                <Grid container >
-                                                    <Grid item xs={8} md={11} alignContent={"flex-start"}>
-                                                        <Typography className={cla.titleCategory} variant="body1" gutterBottom>
-                                                            Documento . #{index + 1}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={3} md={1} alignContent={"flex-end"}>
-                                                        <Tooltip title="Remover documento" placement="left">
-                                                         <span
-                                                             onClick={() => fields.remove(index)}
-                                                             style={{ cursor: 'pointer' }}
-                                                         >
-                                                          ❌
-                                                        </span>
-                                                        </Tooltip>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid className={cla.hideGrid} key={`${name}.GridId`} item xs={12} md={12}>
-                                                    <TextField label="Id" name={`documentos.${index}.id`} fieldProps= {{initialValue : index}}  />
-                                                </Grid>
-                                                <Grid key={`${name}.GridTitulo`} item xs={12} md={12}>
-                                                    <TextField label="Título"  name={`documentos.${index}.titulo`} />
-                                                </Grid>
-                                                {catalogos.tipoDoc &&
-                                                <Grid item xs={12} md={12}>
-                                                    <Select name={`documentos.${index}.tipo`} label="Tipo de documento" data={catalogos.tipoDoc}></Select>
-                                                </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.subtitulo}>
+                                            Apoderado legal
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Nombre(s)"
+                                                   name="particularSancionado.apoderadoLegal.nombres"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Primer apellido"
+                                                   name="particularSancionado.apoderadoLegal.primerApellido"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="Segundo apellido"
+                                                   name="particularSancionado.apoderadoLegal.segundoApellido"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={3}>
+                                        <TextField label="CURP" name="particularSancionado.apoderadoLegal.curp"/>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.titulo} align={'center'}>
+                                            Domicilio
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Radios
+                                            radioGroupProps={{row: true}}
+                                            label="Selecciona el tipo de domicilio para cargar los datos"
+                                            name="domicilio"
+                                            required={true}
+                                            data={[
+                                                {label: 'México', value: 'mex'},
+                                                {label: 'Extranjero', value: 'ext'},
+                                                {label: 'Ninguno', value: ''}
+                                            ]}
+                                        />
+                                    </Grid>
+                                    {values.domicilio === 'mex' &&
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12} md={12}>
+                                            <Typography className={cla.subtitulo}>
+                                                Domicilio México
+                                            </Typography>
+                                        </Grid>
+                                        {catalogos.paises &&
+                                        <Grid item xs={12} md={3}>
+                                            <Select disabled name="particularSancionado.domicilioMexico.pais"
+                                                    label="País"
+                                                    data={catalogos.paises}/>
+                                        </Grid>
+                                        }
+                                        {catalogos.estados &&
+                                        <Grid key={"grid.particularSancionado.domicilioMexico.entidadFederativa"} item
+                                              xs={12} md={3}>
+                                            <Select key={"particularSancionado.domicilioMexico.entidadFederativa"}
+                                                    name="particularSancionado.domicilioMexico.entidadFederativa"
+                                                    label="Estado" data={catalogos.estados}/>
+                                        </Grid>
+                                        }
+                                        {catalogos.estados &&
+                                        <OnChange name="particularSancionado.domicilioMexico.entidadFederativa">
+                                            {(value, previous) => {
+                                                if (value) {
+                                                    requestMunicipio(value);
                                                 }
-                                                <Grid key={`${name}.GridDes`} item xs={12} md={12}>
-                                                    <TextField label="Descripción" name={`documentos.${index}.descripcion`} />
-                                                </Grid>
-                                                <Grid  key={`${name}.GridUrl`} item xs={12} md={12}>
-                                                    <TextField label="URL"   name={`documentos.${index}.url`}  />
-                                                </Grid>
-                                                <Grid  key={`${name}.GridFecha`} item xs={12} md={12}>
-                                                    <DatePicker
-                                                        locale={deLocale}
-                                                        format={"yyyy-MM-dd"}
-                                                        label="Fecha"
-                                                        name={`documentos.${index}.fecha`}
-                                                        dateFunsUtils={DateFnsUtils}
-                                                        clearable={true}
-                                                        cancelLabel={"Cancelar"}
-                                                        clearLabel={"Limpiar"}
-                                                        okLabel={"Aceptar"}
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                        ))
+                                            }}
+                                        </OnChange>
+                                        }
+                                        {catalogos.municipios &&
+                                        <Grid key={"grid.particularSancionado.domicilioMexico.municipio"} item xs={12}
+                                              md={3}>
+                                            <Select key={"particularSancionado.domicilioMexico.municipio.grid"}
+                                                    name="particularSancionado.domicilioMexico.municipio"
+                                                    label="Municipio"
+                                                    data={catalogos.municipios}/>
+                                        </Grid>
+                                        }
+                                        {catalogos.municipios &&
+                                        <OnChange name="particularSancionado.domicilioMexico.municipio">
+                                            {(value, previous) => {
+                                                if (value) {
+                                                    // @ts-ignore
+                                                    requestLocalidadByMunicipio(value, values.particularSancionado.domicilioMexico.entidadFederativa);
+                                                }
+                                            }}
+                                        </OnChange>
+                                        }
+                                        {catalogos.localidades &&
+                                        <Grid key={"grid.particularSancionado.domicilioMexico.localidad"} item xs={12}
+                                              md={3}>
+                                            <Select key={"particularSancionado.domicilioMexico.localidad.grid"}
+                                                    name="particularSancionado.domicilioMexico.localidad"
+                                                    label="Localidad"
+                                                    data={catalogos.localidades}/>
+                                        </Grid>
+                                        }
+                                        <Grid item xs={12} md={3}>
+                                            <Select name="particularSancionado.domicilioMexico.vialidad"
+                                                    label="Tipo vialidad" data={catalogos.vialidades}/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Vialidad nombre"
+                                                       name="particularSancionado.domicilioMexico.descripcionVialidad"/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Código postal"
+                                                       name="particularSancionado.domicilioMexico.codigoPostal"/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Número exterior"
+                                                       name="particularSancionado.domicilioMexico.numeroExterior"/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Número interior"
+                                                       name="particularSancionado.domicilioMexico.numeroInterior"/>
+                                        </Grid>
+                                    </Grid>
                                     }
-                                </FieldArray>
-                            </Grid>
 
-                            <Grid  spacing={3} justify="flex-end"
-                                   alignItems="flex-end"
-                                   container
-                                   item
-                                   xs={12}
-                                   md={12}>
+                                    {values.domicilio === 'ext' &&
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12} md={12}>
+                                            <Typography className={cla.subtitulo}>
+                                                Domicilio extranjero
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <Select name="particularSancionado.domicilioExtranjero.pais" label="País"
+                                                    data={catalogos.paises}/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Estado / Provincia"
+                                                       name="particularSancionado.domicilioExtranjero.estadoProvincia"/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Ciudad/ Localidad"
+                                                       name="particularSancionado.domicilioExtranjero.ciudadLocalidad"/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Calle"
+                                                       name="particularSancionado.domicilioExtranjero.calle"/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Número exterior"
+                                                       name="particularSancionado.domicilioExtranjero.numeroExterior"/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Número interior"
+                                                       name="particularSancionado.domicilioExtranjero.numeroInterior"/>
+                                        </Grid>
+                                        <Grid item xs={12} md={3}>
+                                            <TextField label="Código postal"
+                                                       name="particularSancionado.domicilioExtranjero.codigoPostal"/>
+                                        </Grid>
+                                    </Grid>
+                                    }
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.subtitulo}>
+                                            Tipo sanción
+                                        </Typography>
+                                    </Grid>
 
-                                <Button  onClick={ () => redirectToRoute("/consulta/S3P")} variant="contained"  className={cla.boton1}>
-                                    Cancelar
-                                </Button>
-                                <Button  className={cla.boton2}  variant="contained"
-                                         type="submit"
-                                         disabled={submitting}> Guardar </Button>
-                            </Grid>
-                        </div>  </fieldset>
+                                    <Grid item xs={12} md={12}>
+                                        <Button type="button" onClick={() => push('tipoSancion', undefined)}
+                                                variant="contained" className={cla.marginright}>
+                                            Agregar Tipo de sanción
+                                        </Button>
+                                    </Grid>
+
+                                    <FieldArray name="tipoSancion">
+                                        {({fields}) =>
+                                            fields.map((name, index) => (
+                                                <Grid item xs={12} md={3} key={name}>
+                                                    <Grid container>
+                                                        <Grid item xs={8} md={11} alignContent={"flex-start"}>
+                                                            <Typography className={cla.titleCategory} variant="body1"
+                                                                        gutterBottom>
+                                                                Tipo de Sanción. #{index + 1}
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item xs={3} md={1} alignContent={"flex-end"}>
+                                                            <Tooltip title="Remover sanción" placement="left">
+                                                         <span
+                                                             onClick={() => fields.remove(index)}
+                                                             style={{cursor: 'pointer'}}
+                                                         >
+                                                          ❌
+                                                        </span>
+                                                            </Tooltip>
+                                                        </Grid>
+                                                    </Grid>
+                                                    {catalogos.tipoSancion &&
+                                                    <Grid item xs={12} md={12}>
+                                                        <Select inputProps={{
+                                                            classes: {
+                                                                select: cla.overSelect,
+                                                            },
+                                                        }} name={`tipoSancion.${index}.tipoSancion`}
+                                                                label="Tipo de sanción *" data={catalogos.tipoSancion}/>
+                                                    </Grid>}
+                                                    <Grid item xs={12} md={12}>
+                                                        <TextField label="Descripción"
+                                                                   name={`tipoSancion.${index}.descripcion`}/>
+                                                    </Grid>
+                                                </Grid>
+                                            ))
+                                        }
+                                    </FieldArray>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.titulo} align={'center'}>
+                                            Documentos
+                                        </Typography>
+                                    </Grid>
+
+                                    <Grid item xs={12} md={12}>
+                                        <Button type="button" onClick={() => push('documentos', undefined)}
+                                                variant="contained" className={cla.marginright}>
+                                            Agregar Documento
+                                        </Button>
+                                    </Grid>
+
+                                    <FieldArray name="documentos">
+                                        {({fields}) =>
+                                            fields.map((name, index) => (
+                                                <Grid item xs={12} md={3} key={name}>
+                                                    <Grid container>
+                                                        <Grid item xs={8} md={11} alignContent={"flex-start"}>
+                                                            <Typography className={cla.titleCategory} variant="body1"
+                                                                        gutterBottom>
+                                                                Documento . #{index + 1}
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item xs={3} md={1} alignContent={"flex-end"}>
+                                                            <Tooltip title="Remover documento" placement="left">
+                                                         <span
+                                                             onClick={() => fields.remove(index)}
+                                                             style={{cursor: 'pointer'}}
+                                                         >
+                                                          ❌
+                                                        </span>
+                                                            </Tooltip>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <Grid className={cla.hideGrid} key={`${name}.GridId`} item xs={12}
+                                                          md={12}>
+                                                        <TextField label="Id" name={`documentos.${index}.id`}
+                                                                   fieldProps={{initialValue: index}}/>
+                                                    </Grid>
+                                                    <Grid key={`${name}.GridTitulo`} item xs={12} md={12}>
+                                                        <TextField label="Título" name={`documentos.${index}.titulo`}/>
+                                                    </Grid>
+                                                    {catalogos.tipoDoc &&
+                                                    <Grid item xs={12} md={12}>
+                                                        <Select name={`documentos.${index}.tipo`}
+                                                                label="Tipo de documento" data={catalogos.tipoDoc}/>
+                                                    </Grid>
+                                                    }
+                                                    <Grid key={`${name}.GridDes`} item xs={12} md={12}>
+                                                        <TextField label="Descripción"
+                                                                   name={`documentos.${index}.descripcion`}/>
+                                                    </Grid>
+                                                    <Grid key={`${name}.GridUrl`} item xs={12} md={12}>
+                                                        <TextField label="URL" name={`documentos.${index}.url`}/>
+                                                    </Grid>
+                                                    <Grid key={`${name}.GridFecha`} item xs={12} md={12}>
+                                                        <DatePicker
+                                                            locale={deLocale}
+                                                            format={"yyyy-MM-dd"}
+                                                            label="Fecha"
+                                                            name={`documentos.${index}.fecha`}
+                                                            dateFunsUtils={DateFnsUtils}
+                                                            clearable={true}
+                                                            cancelLabel={"Cancelar"}
+                                                            clearLabel={"Limpiar"}
+                                                            okLabel={"Aceptar"}
+                                                        />
+                                                    </Grid>
+                                                </Grid>
+                                            ))
+                                        }
+                                    </FieldArray>
+                                </Grid>
+
+                                <Grid spacing={3} justify="flex-end"
+                                      alignItems="flex-end"
+                                      container
+                                      item
+                                      xs={12}
+                                      md={12}>
+
+                                    <Button onClick={() => redirectToRoute("/consulta/S3P")} variant="contained"
+                                            className={cla.boton1}>
+                                        Cancelar
+                                    </Button>
+                                    <Button className={cla.boton2} variant="contained"
+                                            type="submit"
+                                            disabled={submitting}> Guardar </Button>
+                                </Grid>
+                            </div>
+                        </fieldset>
                         }
 
                         <Dialog
@@ -897,13 +945,14 @@ function MyForm(props: MyFormProps ) {
                             <DialogTitle id="alert-dialog-title">{"Resultado"}</DialogTitle>
                             <DialogContent>
                                 <DialogContent id="alert-dialog-description">
-                                    <Typography  noWrap variant="h6" className={cla.fontblack}>
+                                    <Typography noWrap variant="h6" className={cla.fontblack}>
                                         {alert.message}
                                     </Typography>
                                 </DialogContent>
                             </DialogContent>
                             <DialogActions>
-                                <Button disabled={!alert.status} onClick={ () => redirectToRoute("/consulta/S3P")} color="primary" autoFocus>
+                                <Button disabled={!alert.status} onClick={() => redirectToRoute("/consulta/S3P")}
+                                        color="primary" autoFocus>
                                     Aceptar
                                 </Button>
                             </DialogActions>
@@ -915,13 +964,13 @@ function MyForm(props: MyFormProps ) {
     );
 }
 
-function mapStateToProps(state,ownProps){
+function mapStateToProps(state, ownProps) {
     let alert = state.alert;
     let catalogos = state.catalogs;
-    if( ownProps.match != undefined ){
+    if (ownProps.match != undefined) {
         let id = ownProps.match.params.id;
-        let flagOnlyRead= ownProps.match.params.flagOnlyRead;
-        let registry = state.S3P.find(reg=>reg._id === id);
+        let flagOnlyRead = ownProps.match.params.flagOnlyRead;
+        let registry = state.S3P.find(reg => reg._id === id);
         return {
             id,
             registry,
@@ -929,14 +978,14 @@ function mapStateToProps(state,ownProps){
             catalogos,
             flagOnlyRead
         }
-    }else{
+    } else {
         return {alert, catalogos};
     }
 }
 
 
-function mapDispatchToProps(dispatch, ownProps){
+function mapDispatchToProps(dispatch, ownProps) {
     return {};
 }
 
-export const ConnectedCreateRegS3P = connect(mapStateToProps,mapDispatchToProps)(CreateReg);
+export const ConnectedCreateRegS3P = connect(mapStateToProps, mapDispatchToProps)(CreateReg);
