@@ -1,21 +1,18 @@
 import React from 'react';
 import {Form} from 'react-final-form';
-import {Checkboxes, TextField, makeValidate, makeRequired, Select, Switches} from 'mui-rff';
-import {Grid, Button, Divider, Tooltip} from "@material-ui/core";
+import {TextField, makeValidate, makeRequired, Select} from 'mui-rff';
+import {Grid, Button, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
 import {S2Actions} from "../../_actions/s2.action";
 import {css} from "@emotion/core";
-import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
 import {connect} from 'react-redux';
 import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../../store/history";
 import {useDispatch} from "react-redux";
-import {requestCreationUser, requestEditUser} from "../../store/mutations";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import {alertActions} from "../../_actions/alert.actions";
 import {OnChange} from 'react-final-form-listeners'
