@@ -592,7 +592,56 @@ function MyForm(props: MyFormProps) {
                                     </Grid>
                                     }
                                     <Grid item md={6}/>
-
+                                    <Grid item xs={12} md={12}>
+                                        <Typography className={cla.subtitulo} >
+                                            Tipo sanción
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <Button type="button" onClick={() => push('tipoSancion', undefined)}
+                                                variant="contained" className={cla.marginright}>
+                                            Agregar Tipo de sanción
+                                        </Button>
+                                    </Grid>
+                                    <FieldArray name="tipoSancion">
+                                        {({fields}) =>
+                                            fields.map((name, index) => (
+                                                <Grid item xs={12} md={3} key={name}>
+                                                    <Grid container>
+                                                        <Grid item xs={8} md={11} alignContent={"flex-start"}>
+                                                            <Typography className={cla.titleCategory} variant="body1"
+                                                                        gutterBottom>
+                                                                Tipo de Sanción. #{index + 1}
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item xs={3} md={1} alignContent={"flex-end"}>
+                                                            <Tooltip title="Remover sanción" placement="left">
+                                                         <span
+                                                             onClick={() => fields.remove(index)}
+                                                             style={{cursor: 'pointer'}}
+                                                         >
+                                                          ❌
+                                                        </span>
+                                                            </Tooltip>
+                                                        </Grid>
+                                                    </Grid>
+                                                    {catalogos.tipoSancion &&
+                                                    <Grid item xs={12} md={12}>
+                                                        <Select inputProps={{
+                                                            classes: {
+                                                                select: cla.overSelect,
+                                                            },
+                                                        }} name={`tipoSancion.${index}.tipoSancion`}
+                                                                label="Tipo de sanción *" data={catalogos.tipoSancion}/>
+                                                    </Grid>}
+                                                    <Grid item xs={12} md={12}>
+                                                        <TextField label="Descripción"
+                                                                   name={`tipoSancion.${index}.descripcion`}/>
+                                                    </Grid>
+                                                </Grid>
+                                            ))
+                                        }
+                                    </FieldArray>
                                     <Grid item xs={12} md={12}>
                                         <Typography className={cla.titulo} align={'center'}>
                                             Datos del particular sancionado
@@ -789,58 +838,7 @@ function MyForm(props: MyFormProps) {
                                         </Grid>
                                     </Grid>
                                     }
-                                    <Grid item xs={12} md={12}>
-                                        <Typography className={cla.subtitulo}>
-                                            Tipo sanción
-                                        </Typography>
-                                    </Grid>
 
-                                    <Grid item xs={12} md={12}>
-                                        <Button type="button" onClick={() => push('tipoSancion', undefined)}
-                                                variant="contained" className={cla.marginright}>
-                                            Agregar Tipo de sanción
-                                        </Button>
-                                    </Grid>
-
-                                    <FieldArray name="tipoSancion">
-                                        {({fields}) =>
-                                            fields.map((name, index) => (
-                                                <Grid item xs={12} md={3} key={name}>
-                                                    <Grid container>
-                                                        <Grid item xs={8} md={11} alignContent={"flex-start"}>
-                                                            <Typography className={cla.titleCategory} variant="body1"
-                                                                        gutterBottom>
-                                                                Tipo de Sanción. #{index + 1}
-                                                            </Typography>
-                                                        </Grid>
-                                                        <Grid item xs={3} md={1} alignContent={"flex-end"}>
-                                                            <Tooltip title="Remover sanción" placement="left">
-                                                         <span
-                                                             onClick={() => fields.remove(index)}
-                                                             style={{cursor: 'pointer'}}
-                                                         >
-                                                          ❌
-                                                        </span>
-                                                            </Tooltip>
-                                                        </Grid>
-                                                    </Grid>
-                                                    {catalogos.tipoSancion &&
-                                                    <Grid item xs={12} md={12}>
-                                                        <Select inputProps={{
-                                                            classes: {
-                                                                select: cla.overSelect,
-                                                            },
-                                                        }} name={`tipoSancion.${index}.tipoSancion`}
-                                                                label="Tipo de sanción *" data={catalogos.tipoSancion}/>
-                                                    </Grid>}
-                                                    <Grid item xs={12} md={12}>
-                                                        <TextField label="Descripción"
-                                                                   name={`tipoSancion.${index}.descripcion`}/>
-                                                    </Grid>
-                                                </Grid>
-                                            ))
-                                        }
-                                    </FieldArray>
                                     <Grid item xs={12} md={12}>
                                         <Typography className={cla.titulo} align={'center'}>
                                             Documentos

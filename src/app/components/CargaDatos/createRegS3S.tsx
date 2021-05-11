@@ -449,7 +449,7 @@ function MyForm(props: MyFormProps ) {
                                 }
                                 <Grid item md={6}/>
                                 <Grid item xs={12} md={12}>
-                                    <Typography className={cla.subtitulo}>
+                                    <Typography className={cla.subtitulo} >
                                         Tipo sanción
                                     </Typography>
                                 </Grid>
@@ -493,7 +493,7 @@ function MyForm(props: MyFormProps ) {
                                     }
                                 </FieldArray>
                                 <Grid item xs={12} md={12}>
-                                    <Typography className={cla.subtitulo}>
+                                    <Typography className={cla.titulo} align={'center'}>
                                         Documentos
                                     </Typography>
                                 </Grid>
