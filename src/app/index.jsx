@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import {Main} from "./components/Main";
-import {MenuV} from "./components/Menu/MenuV";
-import { createMuiTheme, ThemeProvider,MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme,MuiThemeProvider } from '@material-ui/core/styles';
 import { esES } from '@material-ui/core/locale';
 
 const theme = createMuiTheme({
