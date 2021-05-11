@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Form } from 'react-final-form';
 import { TextField, makeValidate, makeRequired, Select, DatePicker} from 'mui-rff';
@@ -211,6 +210,20 @@ function MyForm(props: MyFormProps ) {
             'padding-bottom': '10px',
             'padding-left': '10px'
         },
+        titulo: {
+            fontSize: 15,
+            fontWeight: "bold",
+            textDecoration: "underline",
+            textDecorationColor: '#34b3eb',
+            color: '#34b3eb',
+        },
+        subtitulo: {
+            fontSize: 15,
+            fontWeight: "bold",
+            textDecoration: "underline",
+            textDecorationColor: '#585858',
+            color: '#585858',
+        },
     });
 
 
@@ -291,54 +304,9 @@ function MyForm(props: MyFormProps ) {
                         <div>
                             <Grid className= {cla.gridpadding} spacing={3} container >
                                 <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                    <Typography className={cla.titulo} align={'center'}>
                                         Datos generales
                                     </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Expediente" name="expediente"  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Autoridad sancionadora"  name="autoridadSancionadora"  />
-                                </Grid>
-
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Causa, motivo o hechos"  name="causaMotivoHechos" required={true} multiline={true}/>
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Observaciones"  name="observaciones"  multiline={true}/>
-                                </Grid>
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Institución / Dependencia
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField required={true} label="Nombre" name="idnombre" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Siglas" name="idsiglas"  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Clave" name="idclave" />
-                                </Grid>
-
-
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Servidor público sancionado
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="RFC" name="SPrfc" />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="CURP" name="SPcurp" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
                                     <TextField required={true} label="Nombre(s)" name="SPSnombres"  />
@@ -350,41 +318,141 @@ function MyForm(props: MyFormProps ) {
                                     <TextField label="Segundo apellido" name="SPSsegundoApellido" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <Select  name = "SPSgenero" label="Género" data={catalogos.genero} ></Select>
+                                    <Select  name = "SPSgenero" label="Género" data={catalogos.genero}/>
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField required={true} label="Puesto"  name="SPSpuesto"  />
+                                    <TextField label="RFC" name="SPrfc" />
                                 </Grid>
                                 <Grid item xs={12} md={3}>
-                                    <TextField label="Nivel"  name="SPSnivel"  />
+                                    <TextField label="CURP" name="SPcurp" />
                                 </Grid>
-
-
+                                <Grid item xs={12} md={3}>
+                                    <TextField required={true} label="Puesto nombre"  name="SPSpuesto"  />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Puesto nivel"  name="SPSnivel"  />
+                                </Grid>
                                 <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                       Tipo falta
+                                    <Typography className={cla.subtitulo}>
+                                        Institución / Dependencia
                                     </Typography>
-                                    <Divider className={cla.boton} />
                                 </Grid>
-
+                                <Grid item xs={12} md={6}>
+                                    <TextField required={true} label="Nombre" name="idnombre" />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Siglas" name="idsiglas"  />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Clave" name="idclave" />
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.titulo} align={'center'}>
+                                        Datos de la sanción
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Expediente" name="expediente"  />
+                                </Grid>
                                 {catalogos.tipoFalta &&
                                 <Grid item xs={12} md={3}>
-                                    <Select required={true} name="tipoFalta" label="Tipo de falta" data={catalogos.tipoFalta}></Select>
+                                    <Select required={true} name="tipoFalta" label="Tipo de falta" data={catalogos.tipoFalta}
+                                            renderValue={(value: any) => {
+                                                return (
+                                                    <Tooltip title={JSON.parse(value).valor}>
+                                                        <Typography noWrap={true}> {JSON.parse(value).valor} </Typography>
+                                                    </Tooltip>)
+                                            }}
+                                    />
                                 </Grid>
                                 }
-                                <Grid item xs={12} md={3}>
+                                <Grid item xs={12} md={6}>
                                     <TextField label="Descripción"  name="tpfdescripcion"  />
                                 </Grid>
-
-
-
+                                <Grid item xs={12} md={6}>
+                                    <TextField label="Causa, motivo o hechos"  name="causaMotivoHechos" required={true} multiline={true}/>
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField label="Observaciones"  name="observaciones"  multiline={true}/>
+                                </Grid>
                                 <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
+                                    <Typography className={cla.subtitulo}>
+                                        Resolución
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Autoridad sancionadora"  name="autoridadSancionadora"  />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <DatePicker
+                                        locale={deLocale}
+                                        format={"yyyy-MM-dd"}
+                                        label="Fecha de resolución"
+                                        name="resolucionFecha"
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="URL"  name="resolucionURL"  />
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.subtitulo}>
+                                        Inhabilitación
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Plazo"  name="inhabilitacionPlazo"  />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <DatePicker
+                                        locale={deLocale}
+                                        format={"yyyy-MM-dd"}
+                                        label="Fecha Inicial"
+                                        name="inhabilitacionFechaInicial"
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <DatePicker
+                                        locale={deLocale}
+                                        format={"yyyy-MM-dd"}
+                                        label="Fecha Final"
+                                        name="inhabilitacionFechaFinal"
+                                        dateFunsUtils={DateFnsUtils}
+                                        clearable={true}
+                                        cancelLabel={"Cancelar"}
+                                        clearLabel={"Limpiar"}
+                                        okLabel={"Aceptar"}
+                                        minDate={values.inhabilitacionFechaInicial}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.subtitulo}>
+                                        Multa
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} md={3}>
+                                    <TextField label="Monto"  name="multa.monto"  />
+                                </Grid>
+                                {catalogos.moneda &&
+                                <Grid item xs={12} md={3}>
+                                    <Select name="multa.moneda" label="Moneda" data={catalogos.moneda}></Select>
+                                </Grid>
+                                }
+                                <Grid item md={6}/>
+                                <Grid item xs={12} md={12}>
+                                    <Typography className={cla.subtitulo}>
                                         Tipo sanción
                                     </Typography>
-                                    <Divider className={cla.boton} />
                                 </Grid>
-
                                 <Grid item xs={12} md={12}>
                                     <Button  type="button"   onClick={() =>{
                                         verifyTipoSancion(values, push);
@@ -392,7 +460,6 @@ function MyForm(props: MyFormProps ) {
                                         Agregar Tipo de sanción
                                     </Button>
                                 </Grid>
-
                                 <FieldArray name="tipoSancionArray">
                                     {({ fields }) =>
                                         fields.map((name, index) => (
@@ -425,94 +492,10 @@ function MyForm(props: MyFormProps ) {
                                         ))
                                     }
                                 </FieldArray>
-
-
                                 <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Resolución
+                                    <Typography className={cla.subtitulo}>
+                                        Documentos
                                     </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="URL"  name="resolucionURL"  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <DatePicker
-                                        locale={deLocale}
-                                        format={"yyyy-MM-dd"}
-                                        label="Fecha de resolución"
-                                        name="resolucionFecha"
-                                        dateFunsUtils={DateFnsUtils}
-                                        clearable={true}
-                                        cancelLabel={"Cancelar"}
-                                        clearLabel={"Limpiar"}
-                                        okLabel={"Aceptar"}
-                                    />
-                                </Grid>
-
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Multa
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Monto"  name="multa.monto"  />
-                                </Grid>
-
-                                {catalogos.moneda &&
-                                <Grid item xs={12} md={3}>
-                                    <Select name="multa.moneda" label="Moneda" data={catalogos.moneda}></Select>
-                                </Grid>
-                                }
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                        Inhabilitación
-                                    </Typography>
-                                    <Divider className={cla.boton} />
-                                </Grid>
-
-                                <Grid item xs={12} md={3}>
-                                    <TextField label="Plazo"  name="inhabilitacionPlazo"  />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <DatePicker
-                                        locale={deLocale}
-                                        format={"yyyy-MM-dd"}
-                                        label="Fecha Inicial"
-                                        name="inhabilitacionFechaInicial"
-                                        dateFunsUtils={DateFnsUtils}
-                                        clearable={true}
-                                        cancelLabel={"Cancelar"}
-                                        clearLabel={"Limpiar"}
-                                        okLabel={"Aceptar"}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} md={3}>
-                                    <DatePicker
-                                        locale={deLocale}
-                                        format={"yyyy-MM-dd"}
-                                        label="Fecha Final"
-                                        name="inhabilitacionFechaFinal"
-                                        dateFunsUtils={DateFnsUtils}
-                                        clearable={true}
-                                        cancelLabel={"Cancelar"}
-                                        clearLabel={"Limpiar"}
-                                        okLabel={"Aceptar"}
-                                        minDate={values.inhabilitacionFechaInicial}
-                                    />
-                                </Grid>
-
-
-
-                                <Grid item xs={12} md={12}>
-                                    <Typography className={cla.titleCategory} variant="h6" gutterBottom>
-                                       Documentos
-                                    </Typography>
-                                    <Divider className={cla.boton} />
                                 </Grid>
 
                                 <Grid item xs={12} md={12}>
