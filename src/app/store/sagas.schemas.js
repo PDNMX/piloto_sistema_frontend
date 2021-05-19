@@ -682,7 +682,6 @@ export function* getCatalogTipoSancion(){
                 'Authorization': `Bearer ${token}`
             }});
         if(respuestaArray.data.results){
-            respuestaArray.data.results.push({label: "NINGUNO", value:""});
             yield put (catalogActions.setTipoSancionSucces(respuestaArray.data.results));
         }
     }
