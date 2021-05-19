@@ -810,8 +810,9 @@ export function* creationS3PSchema(){
         let arrayObjTipoSancion = [];
         if (values.tipoSancion) {
             for (let sancion of values.tipoSancion) {
-                let tipoSancion = JSON.parse(sancion.tipoSancion);
-                arrayObjTipoSancion.push({...tipoSancion, descripcion: sancion.descripcion ? sancion.descripcion : ""});
+                // let tipoSancion = JSON.parse(sancion.tipoSancion);
+                 let {clave,valor}=sancion;
+                arrayObjTipoSancion.push({clave,valor, descripcion: sancion.descripcion ? sancion.descripcion : ""});
             }
         }
         values.tipoSancion = arrayObjTipoSancion;
@@ -827,9 +828,9 @@ export function* creationS3PSchema(){
             if (Array.isArray(values.documentos)) {
                 for (let i of values.documentos) {
                     i.id = i.id.toString();
-                    if(i.tipo){
-                        i.tipo = JSON.parse(i.tipo).clave;
-                    }
+                    // if(i.tipo){
+                    //     i.tipo = JSON.parse(i.tipo).clave;
+                    // }
                     let fecha = Date.parse(i.fecha);
                     i.fecha = formatISO(fecha, {representation: 'date'});
                 }
@@ -1460,30 +1461,30 @@ export function* fillUpdateRegS3P() {
                 if(row.moneda){
                     row.moneda = JSON.stringify(row.moneda);
                 }
-            } else if (key === "documentos") {
-                if (Array.isArray(row)) {
-                    for (let i of row) {
-                        i.tipo = JSON.stringify({clave: i.tipo, valor: i.tipo});
+            // } else if (key === "documentos") {
+            //     if (Array.isArray(row)) {
+            //         for (let i of row) {
+            //             i.tipo = JSON.stringify({clave: i.tipo, valor: i.tipo});
 
-                        if(i.fecha){
-                            let fecha = new Date(i.fecha+ "T00:00:00.000");
-                            i.fecha = momento(fecha).tz("America/Mexico_City");
-                        }
-                    }
-                }
-            }else if(key === "tipoSancion"){
-                let arraySanciones= [];
-                for(let objTipoSancion of row){
-                    console.log("---------------------------------------"+JSON.stringify(row));
-                    let obj={};
-                    if(objTipoSancion.clave && objTipoSancion.valor){
-                        obj["tipoSancion"] = JSON.stringify({clave:objTipoSancion.clave ,valor : objTipoSancion.valor});
-                    }
-                    if(objTipoSancion.descripcion){obj["descripcion"] = objTipoSancion.descripcion;}
+            //             if(i.fecha){
+            //                 let fecha = new Date(i.fecha+ "T00:00:00.000");
+            //                 i.fecha = momento(fecha).tz("America/Mexico_City");
+            //             }
+            //         }
+            //     }
+            // }else if(key === "tipoSancion"){
+            //     let arraySanciones= [];
+            //     for(let objTipoSancion of row){
+            //         console.log("---------------------------------------"+JSON.stringify(row));
+            //         let obj={};
+            //         if(objTipoSancion.clave && objTipoSancion.valor){
+            //             obj["tipoSancion"] = JSON.stringify({clave:objTipoSancion.clave ,valor : objTipoSancion.valor});
+            //         }
+            //         if(objTipoSancion.descripcion){obj["descripcion"] = objTipoSancion.descripcion;}
 
-                    arraySanciones.push(obj);
-                }
-                registro.tipoSancion = arraySanciones;
+            //         arraySanciones.push(obj);
+            //     }
+            //     registro.tipoSancion = arraySanciones;
             }else if(key=== "resolucion"){
                     if (row.fechaNotificacion) {
                         let fecha = new Date(row.fechaNotificacion+ "T00:00:00.000");
