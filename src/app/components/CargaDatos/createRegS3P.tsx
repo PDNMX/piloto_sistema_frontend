@@ -432,12 +432,10 @@ function MyForm(props: MyFormProps) {
     };
 
     const verifyTipoSancion = (values, push, clear) => {
-        console.log('values: ', values);
 
         let data = { ...JSON.parse(values.tipoSancionElement.tipoSancion), descripcion: values.tipoSancionElement.descripcion }
 
         let registrados = values.tipoSancion.map(e => e.valor);
-        console.log('registrados: ', registrados);
 
         if (registrados.indexOf(data.valor) !== -1) {
             window.alert("Tipo de sanción duplicado");
@@ -476,10 +474,8 @@ function MyForm(props: MyFormProps) {
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS3P) {
 
-        console.log('values: ', values);
         delete values.documentElement;
         delete values.tipoSancionElement;
-        console.log('values: ', values);
 
         if (id != undefined) {
             dispatch(S3PActions.requestCreationS3P({ ...values, _id: id }));
@@ -1099,10 +1095,6 @@ function mapStateToProps(state, ownProps) {
         let id = ownProps.match.params.id;
         let flagOnlyRead = ownProps.match.params.flagOnlyRead;
         let registry = state.S3P.find(reg => reg._id === id);
-
-
-
-        console.log('registry: ', registry);
         return {
             id,
             registry,
