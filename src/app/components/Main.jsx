@@ -194,10 +194,7 @@ export const Main = ()=> (
                                        localStorage.clear();
                                        return <Redirect to="/login"/>;
                                    }else{
-                                       console.log("ROL "+ localStorage.rol);
-                                       console.log("S2 " + localStorage.S2);
                                        if ( localStorage.token && localStorage.rol =="2" && localStorage.S2=="true"){
-                                           console.log("entre");
                                            storeValidate.dispatch(userActions.requesUserInSession(localStorage.token));
                                            storeValidate.dispatch(userActions.requestPermisosSistema());
                                            storeValidate.dispatch(catalogActions.requestCatalogoByType("genero"));

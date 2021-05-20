@@ -253,12 +253,6 @@ function MyForm(props: MyFormProps) {
                                 {catalogos.ramo &&
                                 <Grid item xs={12} md={6}>
                                     <Select name="ramo" label="Ramo" data={catalogos.ramo}
-                                            renderValue={(value: any) => {
-                                                return (
-                                                    <Tooltip title={JSON.parse(value).valor}>
-                                                        <Typography noWrap={true}> {JSON.parse(value).valor} </Typography>
-                                                    </Tooltip>)
-                                            }}
                                     />
                                 </Grid>}
                                 <Grid item xs={12}>
@@ -310,24 +304,14 @@ function MyForm(props: MyFormProps) {
                                 <Grid item xs={12} md={6}>
                                     <Select required={true} name="tipoProcedimiento" label="Tipo de procedimiento"
                                             data={catalogos.tipoProcedimiento} multiple={true}
-                                            renderValue={(value: any) => {
-                                                return value.map(e =>
-                                                    <Tooltip title={JSON.parse(e).valor}><Typography
-                                                        noWrap={true}> {JSON.parse(e).valor} </Typography></Tooltip>
-                                                )
-                                            }}
+
                                     />
                                 </Grid>}
                                 {catalogos.tipoArea &&
                                 <Grid item xs={12} md={6}>
                                     <Select name="tipoArea" label="Tipo de área" data={catalogos.tipoArea}
                                             multiple={true}
-                                            renderValue={(value: any) => {
-                                                return value.map(e =>
-                                                    <Tooltip title={JSON.parse(e).valor}>
-                                                        <Typography noWrap={true}> {JSON.parse(e).valor} </Typography>
-                                                    </Tooltip>)
-                                            }}
+
                                     />
                                 </Grid>}
                                 {catalogos.tipoArea &&
