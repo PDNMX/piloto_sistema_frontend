@@ -668,7 +668,7 @@ function MyForm(props: MyFormProps) {
                                         <Grid item xs={12} md={4}>
                                             <Select
                                                 name={`tipoSancionElement.tipoSancion`}
-                                                label="Tipo de sanción"
+                                                label="Tipo de sanción *"
                                                 data={catalogos.tipoSancion}
                                             />
                                         </Grid>
@@ -926,30 +926,30 @@ function MyForm(props: MyFormProps) {
                                         </Typography>
                                         </Grid>
                                         <Grid item xs={12} md={4}>
-                                            <TextField label="Título" name={`documentElement.titulo`} />
+                                            <TextField label="Título *" name={`documentElement.titulo`} />
                                         </Grid>
                                         {catalogos.tipoDoc && (
                                             <Grid item xs={12} md={4}>
                                                 <Select
                                                     name={`documentElement.tipo`}
-                                                    label="Tipo de documento"
+                                                    label="Tipo de documento *"
                                                     data={catalogos.tipoDoc}
                                                 />
                                             </Grid>
                                         )}
                                         <Grid item xs={12} md={4}>
-                                            <TextField label="Descripción" name={`documentElement.descripcion`} />
+                                            <TextField label="Descripción *" name={`documentElement.descripcion`} />
                                         </Grid>
 
                                         <Grid item xs={12} md={4}>
-                                            <TextField label="URL" name={`documentElement.url`} />
+                                            <TextField label="URL *" name={`documentElement.url`} />
                                         </Grid>
 
                                         <Grid item xs={12} md={4}>
                                             <DatePicker
                                                 locale={deLocale}
                                                 format={'yyyy-MM-dd'}
-                                                label="Fecha"
+                                                label="Fecha *"
                                                 name={`documentElement.fecha`}
                                                 dateFunsUtils={DateFnsUtils}
                                                 clearable={true}
