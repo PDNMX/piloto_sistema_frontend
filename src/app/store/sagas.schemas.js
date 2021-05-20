@@ -778,7 +778,7 @@ export function* getCatalogMoneda() {
 				}
 			}
 		);
-
+		respuestaArray.data.results.push({ label: 'NINGUNO', value: '' });
 		yield put(catalogActions.setMonedaSucces(respuestaArray.data.results));
 	}
 }
@@ -1114,7 +1114,7 @@ export function* creationS3SSchema() {
 		if (values.SPSsegundoApellido) {
 			ObjServidorSancionado = { ...ObjServidorSancionado, segundoApellido: values.SPSsegundoApellido };
 		}
-		if (values.SPSgenero) {
+		if (values.SPSgenero && Object.keys(values.SPSgenero).length > 0) {
 			let genero = JSON.parse(values.SPSgenero);
 			ObjServidorSancionado = { ...ObjServidorSancionado, genero: { clave: genero.clave, valor: genero.valor } };
 		}
@@ -1179,7 +1179,7 @@ export function* creationS3SSchema() {
 
 		//-----------------MULTA
 		let ObjMulta = {};
-		if (values.multa) {
+		if (values.multa && Object.keys(values.multa).length > 0) {
 			if (values.multa.monto) {
 				ObjMulta = { ...ObjMulta, monto: parseFloat(values.multa.monto) };
 			}
