@@ -331,12 +331,12 @@ function MyForm(props: MyFormProps) {
                                 <Grid item xs={12} md={3}>
                                     <Select name="nivelResponsabilidad" label="Nivel de responsabilidad"
                                             data={catalogos.nivelResponsabilidad} multiple={true}
-                                            renderValue={(value: any) => {
-                                                return value.map(e =>
-                                                    <Tooltip title={JSON.parse(e).valor}>
-                                                        <Typography noWrap={true}> {JSON.parse(e).valor} </Typography>
-                                                    </Tooltip>)
-                                            }}
+                                            // renderValue={(value: any) => {
+                                            //     return value.map(e =>
+                                            //         <Tooltip title={JSON.parse(e).valor}>
+                                            //             <Typography noWrap={true}> {JSON.parse(e).valor} </Typography>
+                                            //         </Tooltip>)
+                                            // }}
                                     />
                                 </Grid>}
 
