@@ -419,7 +419,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         }
                         {permisos.map(item => (
                             item==="S2" ?
-                                <Collapse in={checkedAdminDatos2}>
+                                <Collapse in={checkedAdminDatos2} key="S2">
                                     <div>
                                         <Tooltip title="Servidores Públicos que Intervienen en Procedimientos de Contratación" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S2")} key={'m1s2'}>
@@ -435,7 +435,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         ))}
                         {permisos.map(item => (
                             item==="S3S" ?
-                                <Collapse in={checkedAdminDatosS3S}>
+                                <Collapse in={checkedAdminDatosS3S} key="S3S">
                                     <div>
                                         <Tooltip title="Servidores Públicos Sancionados" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3S")} key={'m1s3s'}>
@@ -451,7 +451,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         ))}
                         {permisos.map(item => (
                             item==="S3P" ?
-                                <Collapse in={checkedAdminDatosS3P}>
+                                <Collapse in={checkedAdminDatosS3P} key="S3P">
                                     <div>
                                         <Tooltip title="Particulares Sancionados" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/consulta/S3P")} key={'m1s3p'}>
@@ -490,7 +490,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         }
                         {permisos.map(item => (
                             item==="S2" ?
-                                <Collapse in={checkedDatos2}>
+                                <Collapse in={checkedDatos2} key="S2">
                                     <div>
                                         <Tooltip title="Servidores Públicos que Intervienen en Procedimientos de Contratación" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S2")} key={'m3s2'}>
@@ -506,7 +506,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         ))}
                         {permisos.map(item => (
                             item==="S3S" ?
-                                <Collapse in={checkedDatosS3S}>
+                                <Collapse in={checkedDatosS3S} key="S3S">
                                     <div>
                                         <Tooltip title="Servidores Públicos Sancionados" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3S")} key={'m3s3s'}>
@@ -522,7 +522,7 @@ export const MenuV =({ vistaRender, match , closeSession }) => {
                         ))}
                         {permisos.map(item => (
                             item==="S3P" ?
-                                <Collapse in={checkedDatosS3P}>
+                                <Collapse in={checkedDatosS3P} key="S3P">
                                     <div>
                                         <Tooltip title="Particulares Sancionados" placement="right">
                                             <ListItem button className={classes.submenuicono2} onClick={ () => redirectToRoute("/captura/S3P")} key={'m3s3p'}>
@@ -678,5 +678,3 @@ const mapDispatchToProps = (dispatch, ownProps)=>({
 });
 
 export const ConnectedMenuV = connect(mapStateToProps,mapDispatchToProps)(MenuV);
-
-
