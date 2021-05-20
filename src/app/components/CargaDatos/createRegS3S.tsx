@@ -30,7 +30,7 @@ import {
 } from '@material-ui/core';
 
 const CreateReg = ({ id, alert, catalogos, registry }) => {
-    let data = { ...registry, tipoSancionArray: [], documents: [], SPSgenero: {}, multa: {} };
+    let data = { ...registry, tipoSancionArray: [], documents: [] };
 
 
     return (
