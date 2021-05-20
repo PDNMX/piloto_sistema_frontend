@@ -170,6 +170,7 @@ function MyForm(props: MyFormProps) {
         tpfdescripcion: Yup.string()
             .matches(new RegExp('^[A-zÀ-ú-0-9/ ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres')
             .trim(),
+        tipoSancionArray: Yup.array().min(1,'Se debe registrar al menos una sanción'),
         // tipoSancionArray: Yup.array().of(
         //     Yup.object().shape({
         //         tipoSancion: Yup.string().required('El campo Tipo de sanción es requerido'),

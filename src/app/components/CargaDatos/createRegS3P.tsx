@@ -220,6 +220,7 @@ function MyForm(props: MyFormProps) {
         objetoContrato: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,300}$'), 'No se permiten cadenas vacías, máximo 300 caracteres').trim(),
         autoridadSancionadora: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Autoridad sancionadora es requerido").trim(),
         tipoFalta: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,100}$'), 'No se permiten cadenas vacías, máximo 100 caracteres').required("El campo tipo Falta es requerido").trim(),
+        tipoSancion: Yup.array().min(1,'Se debe registrar al menos una sanción'),
         // tipoSancion: Yup.array().of(
         //     Yup.object().shape({
         //         tipoSancion: Yup.object().required("El campo Tipo de sanción es requerido"),
