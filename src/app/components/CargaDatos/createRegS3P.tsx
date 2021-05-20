@@ -443,10 +443,6 @@ function MyForm(props: MyFormProps) {
             push('tipoSancion', data);
             clear('tipoSancionElement');
         }
-
-
-
-
     };
 
     const removeTipoSancion = (index, remove) => {
