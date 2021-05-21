@@ -87,7 +87,7 @@ function MyForm(props: MyFormProps ) {
         apellidoUno: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required("El campo Primer apellido es requerido").trim(),
         apellidoDos: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).trim(),
         cargo: Yup.string().matches(new RegExp('^[\'A-zÀ-ú ]*$'),'no se permiten números, ni cadenas vacías' ).required("El campo Cargo es requerido").trim(),
-        correoElectronico: Yup.string().required("El campo Correo electrónico es requerido").email(),
+        correoElectronico: Yup.string().required("El campo Correo electrónico es requerido").email('Correo no válido'),
         telefono:  Yup.string().matches(new RegExp('^[0-9]{10}$'), 'Inserta un número de teléfono válido, 10 caracteres').required("El campo Número de teléfono es requerido").trim(),
         extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , máximo 10 caracteres').trim(),
         usuario: Yup.string().matches(new RegExp('^[a-zA-Z0-9]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required("El campo Nombre de usuario es requerido").trim(),
