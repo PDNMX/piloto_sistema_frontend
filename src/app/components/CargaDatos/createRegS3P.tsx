@@ -265,13 +265,11 @@ function MyForm(props: MyFormProps) {
         inhabilitacion: Yup.object().shape({
             plazo: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'), 'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
             fechaInicial: Yup.date().nullable(true)
-                .max(Yup.ref('fechaFinal'), 'La fecha inicial no puede ser posterior a la fecha final'),
+                .when('fechaFinal',(fechaFinal) => {
+                    if(fechaFinal)
+                        return Yup.date().max(fechaFinal, 'La fecha inicial no puede ser posterior a la fecha final')
+                }),
             fechaFinal: Yup.date().nullable(true)
-            // fechaInicial: Yup.string().trim().nullable(true),
-            // fechaFinal: Yup.string().trim().nullable(true)
-            //     .when('fechaInicial', (fechaInicial) => {
-            //         return Yup.date().min(fechaInicial, 'La fecha final no pude ser anterior a la fecha inicial')
-            //     })
         }),
         domicilio: Yup.string(),
         observaciones: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,500}$'), 'No se permiten cadenas vacías, máximo 500 caracteres').trim(),
