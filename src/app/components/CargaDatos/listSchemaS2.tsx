@@ -164,7 +164,7 @@ export const ListS2Schema = () => {
             }
 
         }
-
+        setSelectedCheckBox([]);
         handleClose();
     }
 
@@ -204,12 +204,12 @@ export const ListS2Schema = () => {
             }
         }
         setSelectedCheckBox(array);
-        console.log("array " + array);
+        //console.log("array " + array);
     }
 
     const handleCheckboxClick = (event, id) => {
         event.stopPropagation();
-        console.log("checkbox select");
+        //console.log("checkbox select");
         // @ts-ignore
         const selectedIndex = selectedCheckBox.indexOf(id);
         let newSelected = [];
