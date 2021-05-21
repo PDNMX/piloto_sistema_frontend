@@ -362,7 +362,7 @@ export const ListProvider = () => {
                                            align="left"><b>Proveedor</b></TableCell>
                                 <TableCell className={classes.tableHeaderColumn} style={{width: 'auto'}}
                                            align="left"><b>Estatus</b></TableCell>
-                                <TableCell className={classes.tableHeaderColumn} align="center"><b>Fecha alta</b></TableCell>
+                                <TableCell className={classes.tableHeaderColumn} align="left"><b>Fecha alta</b></TableCell>
                                 <TableCell className={classes.tableHeaderColumn} align="center"><b>Acciones</b></TableCell>
                             </TableRow>
                         </TableHead>
