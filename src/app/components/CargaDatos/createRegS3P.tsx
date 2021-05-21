@@ -39,8 +39,12 @@ const host = process.env.URLAPI;
 const ur = host + process.env.PORTAPI;
 
 const CreateReg = ({ id, alert, catalogos, registry, flagOnlyRead }) => {
-    // @ts-ignore
-    return <MyForm initialValues={registry != undefined ? registry : { ...registry, tipoSancion: [], documentos: [], particularSancionado: { domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } }} catalogos={catalogos} alerta={alert} id={id} flagOnlyRead={flagOnlyRead} />;
+   // @ts-ignore
+    return <MyForm initialValues={
+        registry != undefined ?
+            (registry?.particularSancionado?.domicilioExtranjero ? {...registry, particularSancionado: { ...registry.particularSancionado, domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } }} : registry)
+        : { ...registry, tipoSancion: [], documentos: [], particularSancionado: { domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } }}
+                   catalogos={catalogos} alerta={alert} id={id} flagOnlyRead={flagOnlyRead} />;
 }
 
 interface FormDataEsquemaS3P {
