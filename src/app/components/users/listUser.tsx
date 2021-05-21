@@ -121,7 +121,7 @@ export const ListUser = () => {
 
     const handleChangeRowsPerPage = (event) => {
         let newSize = parseInt(event.target.value, 10);
-        if (pagination.page * newSize > users.length) {
+        if ((pagination.page +1 ) * newSize > users.length) {
             setPagination({page: 0, pageSize: parseInt(event.target.value, 10)});
         } else {
             setPagination({page: pagination.page, pageSize: parseInt(event.target.value, 10)});
@@ -135,7 +135,6 @@ export const ListUser = () => {
         let initialRange = pagination.page * pagination.pageSize;
         let endRange = pagination.page * pagination.pageSize + pagination.pageSize;
         let totalUsers = users.length - 1;
-        console.log("initialRange " + initialRange + " end range " + endRange + " totalusers " + totalUsers);
         if (totalUsers <= initialRange) {
             setPagination({page: pagination.page - 1, pageSize: pagination.pageSize});
         }
@@ -144,7 +143,6 @@ export const ListUser = () => {
 
     const confirmActionPassword = (correoElectronico) => {
         alerta.estatus = false;
-        console.log(correoElectronico);
         let data = [];
         data["correo"] = correoElectronico;
         data["sistema"] = true;
