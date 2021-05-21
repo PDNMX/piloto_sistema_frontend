@@ -1,26 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
-import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
-import {MenuItem, Grid, Button, TableCell, Switch, IconButton, Tooltip} from "@material-ui/core";
+import {  makeValidate,makeRequired, Select} from 'mui-rff';
+import {Grid, Button, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {requestConsultBitacora} from "../../store/mutations";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
 import { connect } from 'react-redux';
-import {userActions} from "../../_actions/user.action";
-import {alertActions} from "../../_actions/alert.actions";
-import {Link} from 'react-router-dom';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {makeStyles} from "@material-ui/core/styles";
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import {history} from "../../store/history";
-import ListItem from "@material-ui/core/ListItem";
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
-import { DatePicker,TimePicker,DateTimePicker } from 'mui-rff';
+import {DateTimePicker } from 'mui-rff';
 import deLocale from "date-fns/locale/es";
 
 const ConsultarBitacora = ({id, user,alert, providers, users }) => {
@@ -62,7 +55,11 @@ function MyForm(props: MyFormProps ) {
 
 
     const schema = Yup.object().shape({
-        fechaInicial: Yup.string().required("Fecha inicial es obligatoria."),
+        fechaInicial: Yup.string().required("Fecha inicial es obligatoria.")
+            .when('fechaFinal',(fechaFinal)=>{
+                if(fechaFinal)
+                    return Yup.date().max(fechaFinal, 'La fecha inicial no puede ser posterior a la fecha final')
+            }),
         fechaFinal: Yup.string().required("Fecha final es obligatoria."),
     });
 
@@ -175,6 +172,7 @@ function MyForm(props: MyFormProps ) {
                                         cancelLabel={"Cancelar"}
                                         clearLabel={"Limpiar"}
                                         okLabel={"Aceptar"}
+                                        minDate={values.fechaInicial}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -193,7 +191,7 @@ function MyForm(props: MyFormProps ) {
                                     </Select>
                                 </Grid>
                             </Grid>
-                            <Grid spacing={3} container justify="flex-end" xs={12} md={12}>
+                            <Grid spacing={3} container justify="flex-end" >
                                 {
                                     <Tooltip title="Limpiar" placement="right">
                                         <Button className={cla.boton}  variant="contained"

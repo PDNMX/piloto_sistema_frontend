@@ -13,8 +13,7 @@ import {
     makeStyles, Button, TableHead, Grid, Typography
 } from "@material-ui/core";
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
-import PropTypes from "prop-types";
+import TablePaginationActions from '../Common/TablePaginationActionsProps';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import {Alert} from "@material-ui/lab";
 import {history} from "../../store/history";
@@ -36,11 +35,9 @@ export const ListBitacora = () => {
 
     const handleChangePage = (event, newPage) => {
         setPagination({page: newPage, pageSize: pagination.pageSize});
-        //dispatch(userActions.requestPerPage({page : newPage ,pageSize: pagination.pageSize}));
     };
 
     const handleChangeRowsPerPage = (event) => {
-        console.log("pagination: ", parseInt(event.target.value,10))
         let newSize = parseInt(event.target.value, 10);
         if (pagination.page * newSize > bitacora.length) {
             setPagination({page: 0, pageSize: parseInt(event.target.value, 10)});
@@ -60,22 +57,12 @@ export const ListBitacora = () => {
         history.push(path);
     }
 
-
-    TablePaginationActions.propTypes = {
-        count: PropTypes.number.isRequired,
-        onChangePage: PropTypes.func.isRequired,
-        page: PropTypes.number.isRequired,
-        rowsPerPage: PropTypes.number.isRequired
-    };
-
     const useStyles = makeStyles((theme) => ({
         fontblack: {
             color: '#666666'
         },
         boton: {
             marginTop: '16px',
-            marginLeft: '16px',
-            marginRight: '16px',
             marginBottom: '12px',
             backgroundColor: '#ffe01b',
             color: '#666666'
@@ -131,7 +118,6 @@ export const ListBitacora = () => {
     const data = bitacora;
 
     const classes = useStyles();
-    console.log(bitacora);
     return (
         <div>
             <Grid item xs={12}>
@@ -146,22 +132,26 @@ export const ListBitacora = () => {
                     {bitacora.length > 0 ?
                         <Table aria-label="custom pagination table">
                             <TableHead className={classes.tableHead}>
-                                <TableRow>
-                                    <TableCell className={classes.tableHeaderColumn} style={{width: 'auto'}}
+                                <TableRow key={'rowhead'}>
+                                    <TableCell key={'tbop'} className={classes.tableHeaderColumn}
+                                               style={{width: 'auto'}}
                                                align="left"><b>Operación</b></TableCell>
-                                    <TableCell className={classes.tableHeaderColumn} style={{width: 'auto'}}
+                                    <TableCell key={'tbfec'} className={classes.tableHeaderColumn}
+                                               style={{width: 'auto'}}
                                                align="left"><b>Fecha</b></TableCell>
-                                    <TableCell className={classes.tableHeaderColumn} style={{width: 'auto'}}
+                                    <TableCell key={'tbSis'} className={classes.tableHeaderColumn}
+                                               style={{width: 'auto'}}
                                                align="left"><b>Sistema</b></TableCell>
-                                    <TableCell className={classes.tableHeaderColumn} style={{width: 'auto'}}
+                                    <TableCell key={'tbreg'} className={classes.tableHeaderColumn}
+                                               style={{width: 'auto'}}
                                                align="center"><b>Registros</b></TableCell>
-                                    <TableCell className={classes.tableHeaderColumn} align="center"><b>Usuario</b></TableCell>
+                                    <TableCell key={'tbusrs'} className={classes.tableHeaderColumn}
+                                               align="center"><b>Usuario</b></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody key="bitacora">
-                                {bitacora.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((rowbitacora) => (
-
-                                    <TableRow key={rowbitacora._id}>
+                                {bitacora.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((rowbitacora, index) => (
+                                    <TableRow key={index}>
                                         <TableCell className={classes.fontblack} component="th" scope="row"
                                                    style={{width: 'auto'}} align="left">
                                             {rowbitacora.tipo}
@@ -184,7 +174,7 @@ export const ListBitacora = () => {
                                 ))}
                             </TableBody>
                             <TableFooter>
-                                <TableRow>
+                                <TableRow key={'rowpaginator'}>
                                     {pagination.pageSize != undefined && pagination.page != undefined &&
                                     <TablePagination
                                         rowsPerPageOptions={[3, 5, 10, 25, {label: 'Todos', value: bitacora.length}]}
@@ -205,43 +195,46 @@ export const ListBitacora = () => {
                         </Table>
                         :
                         <Table>
-                            <TableRow>
-                                <TableCell className={classes.fontblack} style={{width: 'auto'}} align="center">
-                                    No hay registros para está consulta.
-                                </TableCell>
-                            </TableRow>
+                            <TableBody>
+                                <TableRow key={'rowmsj'}>
+                                    <TableCell className={classes.fontblack} style={{width: 'auto'}} align="center">
+                                        No hay registros para está consulta.
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+
                         </Table>}
                 </TableContainer>
             </Grid>
-            <Grid spacing={3} justify="flex-end"
-                  alignItems="flex-end"
-                  container
-                  item
-                  xs={12}
-                  md={12}>
-                <Tooltip title="Reporte Nuevo" placement="left">
-                    <Button onClick={() => redirectToRoute("/bitacora")}
-                            variant="contained"
-                            className={classes.boton}
-                            endIcon={<AddBoxIcon>Reporte Nuevo</AddBoxIcon>}
-                    >
-                        Reporte Nuevo
-                    </Button>
-                </Tooltip>
-                <Tooltip title="Descargar CSV" placement="right">
-                    <CSVLink data={data} headers={headers} filename={"Bitacora.csv"}>
-                        <Button
-                            variant="contained"
-                            className={classes.boton2}
-                            endIcon={<FileCopyIcon>Descargar CSV</FileCopyIcon>}
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={8}/>
+                <Grid item xs={12} md={2}>
+                    <Tooltip title="Reporte Nuevo" placement="left">
+                        <Button onClick={() => redirectToRoute("/bitacora")}
+                                variant="contained"
+                                className={classes.boton}
+                                endIcon={<AddBoxIcon>Reporte Nuevo</AddBoxIcon>}
                         >
-                            Descargar CSV
+                            Generar Nuevo Reporte
                         </Button>
-                    </CSVLink>
-                </Tooltip>
+                    </Tooltip>
+                </Grid>
+                <Grid item xs={12} md={2}>
+                    <Tooltip title="Descargar CSV" placement="right">
+                        <CSVLink data={data} headers={headers} filename={"Bitacora.csv"}>
+                            <Button
+                                variant="contained"
+                                className={classes.boton2}
+                                endIcon={<FileCopyIcon>Descargar CSV</FileCopyIcon>}
+                            >
+                                Descargar CSV
+                            </Button>
+                        </CSVLink>
+                    </Tooltip>
+                </Grid>
             </Grid>
-        </div>
-    );
+</div>
+);
 }
 
 
