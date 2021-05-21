@@ -222,18 +222,21 @@ export const ListS3PSchema = () => {
         dispatch(S3PActions.deleteRecordRequest(id));
         paginationSuper.totalRows = paginationSuper.totalRows - disco;
 
-        if (sizeList < 1) {
-            if (paginationSuper.page - 1 > 0) {
-                dispatch(S3PActions.requestListS3P({
-                    query: query,
-                    page: paginationSuper.page - 1,
-                    pageSize: paginationSuper.pageSize
-                }));
-            } else {
-                dispatch(S3PActions.requestListS3P({query: query, page: 1, pageSize: paginationSuper.pageSize}));
-            }
-
+        let changePage = sizeList < paginationSuper.page;
+        if (changePage && paginationSuper.page > 1) {
+            dispatch(S3PActions.requestListS3P({
+                query: query,
+                page: paginationSuper.page - 1,
+                pageSize: paginationSuper.pageSize
+            }));
+        } else {
+            dispatch(S3PActions.requestListS3P({
+                query: query,
+                page: paginationSuper.page,
+                pageSize: paginationSuper.pageSize
+            }));
         }
+
         setSelectedCheckBox([]);
         handleClose();
     }
@@ -274,12 +277,10 @@ export const ListS3PSchema = () => {
             }
         }
         setSelectedCheckBox(array);
-        console.log("array " + array);
     }
 
     const handleCheckboxClick = (event, id) => {
         event.stopPropagation();
-        console.log("checkbox select");
         // @ts-ignore
         const selectedIndex = selectedCheckBox.indexOf(id);
         let newSelected = [];
@@ -298,7 +299,6 @@ export const ListS3PSchema = () => {
         }
 
         setSelectedCheckBox(newSelected);
-        console.log(newSelected);
     };
 
 
@@ -356,7 +356,6 @@ export const ListS3PSchema = () => {
                 newQuery["particularSancionado.tipoPersona"] = {$in: [objTipoPersona.clave]};
             } else if (key === "tipoSancion") {
                 if (value.length > 0) {
-                    console.log(value);
                     let arrayObjTipoSancion = value;
                     let acumulado = []
                     for (let obSancion of arrayObjTipoSancion) {
@@ -367,14 +366,12 @@ export const ListS3PSchema = () => {
                 }
             } else if (key === "fechaFinal" && value !== null && value !== '') {
                 let fecha = Date.parse(value);
-                console.log(formatISO(fecha, {representation: 'date'}));
                 newQuery["inhabilitacion.fechaFinal"] = {$regex: formatISO(fecha, {representation: 'date'})};
-                ;
+
             } else if (key === "fechaCaptura" && value !== null && value !== '') {
                 let fecha = Date.parse(value);
-                console.log(formatISO(fecha, {representation: 'date'}));
                 newQuery["fechaCaptura"] = {$regex: formatISO(fecha, {representation: 'date'})};
-                ;
+
             } else if (value !== null && value !== '') {
                 newQuery[key] = {$regex: diacriticSensitiveRegex(value), $options: 'i'};
             }

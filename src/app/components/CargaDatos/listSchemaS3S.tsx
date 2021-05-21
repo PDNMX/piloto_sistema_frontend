@@ -165,19 +165,22 @@ export const ListS3SSchema = () => {
 
         dispatch(S3SActions.deleteRecordRequest(id));
         paginationSuper.totalRows = paginationSuper.totalRows - disco;
+        let changePage = sizeList < paginationSuper.page;
 
-        if (sizeList < 1) {
-            if (paginationSuper.page - 1 > 0) {
-                dispatch(S3SActions.requestListS3S({
-                    query: query,
-                    page: paginationSuper.page - 1,
-                    pageSize: paginationSuper.pageSize
-                }));
-            } else {
-                dispatch(S3SActions.requestListS3S({query: query, page: 1, pageSize: paginationSuper.pageSize}));
-            }
-
+        if (changePage && paginationSuper.page > 1) {
+            dispatch(S3SActions.requestListS3S({
+                query: query,
+                page: paginationSuper.page - 1,
+                pageSize: paginationSuper.pageSize
+            }));
+        } else {
+            dispatch(S3SActions.requestListS3S({
+                query: query,
+                page: paginationSuper.page,
+                pageSize: paginationSuper.pageSize
+            }));
         }
+
         setSelectedCheckBox([]);
         handleClose();
     }
@@ -218,12 +221,10 @@ export const ListS3SSchema = () => {
             }
         }
         setSelectedCheckBox(array);
-        console.log("array " + array);
     }
 
     const handleCheckboxClick = (event, id) => {
         event.stopPropagation();
-        console.log("checkbox select");
         // @ts-ignore
         const selectedIndex = selectedCheckBox.indexOf(id);
         let newSelected = [];
@@ -242,7 +243,6 @@ export const ListS3SSchema = () => {
         }
 
         setSelectedCheckBox(newSelected);
-        console.log(newSelected);
     };
 
 
@@ -306,7 +306,6 @@ export const ListS3SSchema = () => {
                 };
             } else if (key === "tipoSancion") {
                 if (value.length > 0) {
-                    console.log(value);
                     let arrayObjTipoSancion = value;
                     let acumulado = []
                     for (let obSancion of arrayObjTipoSancion) {
@@ -317,13 +316,11 @@ export const ListS3SSchema = () => {
                 }
             } else if (key === "inhabilitacionFechaFinal" && value !== null && value !== '') {
                 let fecha = Date.parse(value);
-                console.log(formatISO(fecha, {representation: 'date'}));
                 newQuery["inhabilitacion.fechaFinal"] = formatISO(fecha, {representation: 'date'});
             } else if (key === "fechaCaptura" && value !== null && value !== '') {
                 let fecha = Date.parse(value);
-                console.log(formatISO(fecha, {representation: 'date'}));
                 newQuery["fechaCaptura"] = {$regex: formatISO(fecha, {representation: 'date'})};
-                ;
+
             }
         }
         setQuery(newQuery);
@@ -751,7 +748,7 @@ export const ListS3SSchema = () => {
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
                                     {selectedRegistro.tipoSancion ? selectedRegistro.tipoSancion.map(e => (
-                                        <li>{e.valor}  {e.descripcion ? ' - DESCRIPCIÓN: '+e.descripcion : ''}</li>
+                                        <li>{e.valor} {e.descripcion ? ' - DESCRIPCIÓN: ' + e.descripcion : ''}</li>
                                     )) : <Nota/>}
                                 </Typography>
                             </Grid>
@@ -760,7 +757,8 @@ export const ListS3SSchema = () => {
                                     <b>Tipo de falta</b>
                                 </Typography>
                                 <Typography className={classes.body2} align="left" variant="body2">
-                                    {selectedRegistro.tipoFalta?.valor ?(selectedRegistro.tipoFalta.valor + ' '+ (selectedRegistro.tipoFalta.descripcion ? ' - DESCRIPCIÓN: ' + selectedRegistro.tipoFalta.descripcion : '')) : <Nota/>}
+                                    {selectedRegistro.tipoFalta?.valor ? (selectedRegistro.tipoFalta.valor + ' ' + (selectedRegistro.tipoFalta.descripcion ? ' - DESCRIPCIÓN: ' + selectedRegistro.tipoFalta.descripcion : '')) :
+                                        <Nota/>}
                                 </Typography>
                             </Grid>
                             <Grid className={classes.gridpadding} item md={12} sm={12}>
