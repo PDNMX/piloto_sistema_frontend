@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Form } from 'react-final-form';
-import { Checkboxes ,TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
-import {MenuItem, Grid, Button, TableCell, Switch, IconButton, Tooltip, Snackbar} from "@material-ui/core";
+import {TextField,  makeValidate,makeRequired, Select, Switches} from 'mui-rff';
+import {Grid, Button, Tooltip} from "@material-ui/core";
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
 import {requestCreationUser, requestEditUser} from "../../store/mutations";
@@ -10,17 +9,10 @@ import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import Typography from "@material-ui/core/Typography";
 import { connect } from 'react-redux';
-import {userActions} from "../../_actions/user.action";
 import {alertActions} from "../../_actions/alert.actions";
-import {Link} from 'react-router-dom';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {makeStyles} from "@material-ui/core/styles";
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import {history} from "../../store/history";
-import ListItem from "@material-ui/core/ListItem";
-import { OnChange } from 'react-final-form-listeners'
-import {Alert} from "@material-ui/lab";
-import {providersEnabled} from "../../_reducers/providerEnabled.reducer";
+import { OnChange } from 'react-final-form-listeners';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -68,7 +60,6 @@ function MyForm(props: MyFormProps ) {
     async function onSubmit(values: FormDataUser) {
         alert.status =false;
         if(id != undefined){
-            console.log(values.sistemas);
             /*let arrsistemas: string[] = [];
 
             for (let sis in values.sistemas){
@@ -90,7 +81,7 @@ function MyForm(props: MyFormProps ) {
         correoElectronico: Yup.string().required("El campo Correo electrónico es requerido").email('Correo no válido'),
         telefono:  Yup.string().matches(new RegExp('^[0-9]{10}$'), 'Inserta un número de teléfono válido, 10 caracteres').required("El campo Número de teléfono es requerido").trim(),
         extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , máximo 10 caracteres').trim(),
-        usuario: Yup.string().matches(new RegExp('^[a-zA-Z0-9]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required("El campo Nombre de usuario es requerido").trim(),
+        usuario: Yup.string().matches(new RegExp('^[a-zA-Z]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required("El campo Nombre de usuario es requerido").trim(),
         sistemas: Yup.array().min(1).required("El campo Sistemas aplicables es requerido"),
         proveedorDatos: Yup.string().required("El campo Proveedor de datos es requerido")
     });
