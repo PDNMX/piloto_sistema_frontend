@@ -69,20 +69,9 @@ function MyForm(props: MyFormProps ) {
 
     const styles = makeStyles({
         boton:{
-            marginTop:'16px',
-            marginLeft:'16px',
-            marginRight:'16px',
-            marginBottom:'0px',
             backgroundColor:'#ffe01b',
-            color: '#666666'
-        },
-        boton2:{
-            marginTop:'16px',
-            marginLeft:'16px',
-            marginRight:'-10px',
-            marginBottom:'0px',
-            backgroundColor:'#ffe01b',
-            color: '#666666'
+            color: '#666666',
+            display:'flex'
         },
         marginright:{
             marginRight: '30px',
@@ -105,6 +94,10 @@ function MyForm(props: MyFormProps ) {
         fontblack:{
             color: '#666666'
         },
+        btnContainer:{
+            display:'flex',
+            justifyContent:'center'
+        }
     });
 
 
@@ -190,20 +183,25 @@ function MyForm(props: MyFormProps ) {
                                         data={users} >
                                     </Select>
                                 </Grid>
-                            </Grid>
-                            <Grid spacing={3} container justify="flex-end" >
-                                {
-                                    <Tooltip title="Limpiar" placement="right">
-                                        <Button className={cla.boton}  variant="contained"
-                                                onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
+                                <Grid md={9}/>
+                                <Grid md={10}/>
+
+                                <Grid item xs={12} md={1} justify={"flex-end"} className={cla.btnContainer}>
+                                    {
+                                        <Tooltip title="Limpiar" placement="right">
+                                            <Button className={cla.boton}  variant="contained"
+                                                    onClick={()=> {resetForm(form)}}> LIMPIAR </Button>
+                                        </Tooltip>
+                                    }
+                                </Grid>
+                                <Grid item xs={12} md={1} className={cla.btnContainer}>
+                                    <Tooltip title="Generar" placement="right">
+                                        <Button  className={cla.boton}  variant="contained"
+                                                 type="submit"
+                                                 disabled={submitting}> Generar
+                                        </Button>
                                     </Tooltip>
-                                }
-                                <Tooltip title="Generar" placement="right">
-                                <Button  className={cla.boton2}  variant="contained"
-                                         type="submit"
-                                         disabled={submitting}> Generar
-                                </Button>
-                                </Tooltip>
+                                </Grid>
                             </Grid>
                         </div>
                         }
