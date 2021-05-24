@@ -710,7 +710,6 @@ function MyForm(props: MyFormProps) {
                                                 data={catalogos.tipoSancion}
                                             />
                                             {errors.tipoSancionElement['tipoSancion'] && <span className={cla.mensajeError}>{errors.tipoSancionElement['tipoSancion']}</span>}
-
                                         </Grid>
                                         <Grid item xs={12} md={4}>
                                             <TextField label="Descripción" name={`tipoSancionElement.descripcion`} />
@@ -758,6 +757,12 @@ function MyForm(props: MyFormProps) {
                                                                 </TableRow>
                                                             ))
                                                         }
+                                                        <Field name={'tipoSancion'} render={({ input, meta }) => (
+                                                        <TableRow>
+                                                            {meta.error && <TableCell colSpan={3} align="center" style={{ color: "#721c24", backgroundColor: "#f8d7da", borderColor: "#f5c6cb" }}>{meta.error}</TableCell>}
+                                                        </TableRow>
+
+                                                    )} />
                                                     </TableBody>
                                                 </Table>
                                             </TableContainer>
