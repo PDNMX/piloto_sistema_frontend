@@ -222,9 +222,16 @@ function MyForm(props: MyFormProps) {
         inhabilitacionPlazo: Yup.string()
             .matches(new RegExp('^[A-zÀ-ú-0-9/ ]*$'), 'No se permiten cadenas vacías')
             .trim(),
+        // inhabilitacionFechaInicial: Yup.date().nullable(true)
+        //     .max(Yup.ref('inhabilitacionFechaFinal'), 'La fecha inicial no puede ser posterior a la fecha final'),
+        // inhabilitacionFechaFinal: Yup.date().nullable(true),
         inhabilitacionFechaInicial: Yup.date().nullable(true)
-            .max(Yup.ref('inhabilitacionFechaFinal'), 'La fecha inicial no puede ser posterior a la fecha final'),
+            .when('inhabilitacionFechaFinal', (inhabilitacionFechaFinal) => {
+                if (inhabilitacionFechaFinal)
+                    return Yup.date().max(inhabilitacionFechaFinal, 'La fecha inicial no puede ser posterior a la fecha final')
+            }),
         inhabilitacionFechaFinal: Yup.date().nullable(true),
+
         // inhabilitacionFechaInicial: Yup.string().trim().nullable(true),
         // inhabilitacionFechaFinal: Yup.string()
         //     .trim()
@@ -860,6 +867,9 @@ function MyForm(props: MyFormProps) {
                                         {' '}
 										Guardar{' '}
                                     </Button>
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <pre>{JSON.stringify(values, null, 2)}</pre>
                                 </Grid>
                             </div>
                         )}
