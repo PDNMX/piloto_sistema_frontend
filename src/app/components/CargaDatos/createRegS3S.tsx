@@ -97,9 +97,7 @@ function MyForm(props: MyFormProps) {
     const alert = alerta;
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
-    const [tipoSancion, setTipoSancion] = React.useState([]);
-
-    let schemaMix = Yup.mixed();
+    const [errors, setErrors] = React.useState({ tipoSancionElement: {}, documentElement: {} });
 
     let schema = Yup.object().shape({
         expediente: Yup.string()
@@ -182,6 +180,8 @@ function MyForm(props: MyFormProps) {
         //             .trim()
         //     })
         // ),
+
+
         tsdescripcion: Yup.string()
             .matches(new RegExp('^[A-zÀ-ú-0-9/ ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres')
             .trim(),
@@ -341,7 +341,8 @@ function MyForm(props: MyFormProps) {
         checked: {},
         indeterminate: {
             color: '#666666'
-        }
+        },
+        mensajeError: { color: "#f44336" }
     });
 
     const redirectToRoute = (path) => {
@@ -353,30 +354,94 @@ function MyForm(props: MyFormProps) {
         changeValue(state, name, () => undefined);
     };
 
-    const verifyTipoSancion = (values, push, clear) => {
+    const addSancion = (values, push, clear) => {
 
-        let data = { ...JSON.parse(values.tipoSancionElement.tipoSancion), descripcion: values.tipoSancionElement.descripcion }
+        let schema = Yup.object().shape({
+            tipoSancion: Yup.string().required('El campo Tipo de sanción es requerido')
+        });
 
-        let registrados = values.tipoSancionArray.map(e => e.valor);
+        schema.validate(values.tipoSancionElement).then((result) => {
 
-        if (registrados.indexOf(data.valor) !== -1) {
-            window.alert("Tipo de sanción duplicado");
-        } else {
-            push('tipoSancionArray', data);
-            clear('tipoSancionElement');
-        }
+            let data = { ...JSON.parse(values.tipoSancionElement.tipoSancion), descripcion: values.tipoSancionElement.descripcion }
+
+            let registrados = values.tipoSancionArray.map(e => e.valor);
+
+            if (registrados.indexOf(data.valor) !== -1) {
+                window.alert("Tipo de sanción duplicado");
+            } else {
+                push('tipoSancionArray', data);
+                clear('tipoSancionElement');
+            }
+
+            setErrors({
+                ...errors,
+                tipoSancionElement: {}
+            });
+
+        }).catch((err) => {
+            setErrors({
+                ...errors,
+                tipoSancionElement: { ...errors.tipoSancionElement, [err.path]: err.message }
+            });
+
+        });
+
     };
 
-    const addDocument = (values, push, clear) => {
+    const addDocument = async (values, push, clear) => {
+        let schema = Yup.object().shape({
+            id: Yup.string().trim(),
+            titulo: Yup.string()
+                .required('El campo Título es requerido')
+                .max(50, 'Máximo 50 caracteres')
+                .trim(),
+            descripcion: Yup.string()
+                .required('El campo Descripción es requerido')
+                .max(200, 'Máximo 200 caracteres')
+                .trim(),
+            url: Yup.string()
+                .matches(
+                    /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                    'Introduce una dirección de internet valida'
+                )
+                .required('El campo URL es requerido')
+                .trim(),
+            fecha: Yup.string().required('El campo Fecha es requerido').trim(),
+            tipo: Yup.object()
+        });
 
-        let id = values.documents.length ? parseInt(values.documents[values.documents.length - 1].id) + 1 : 1;
+        schema.validate(values.documentElement, { abortEarly: false }).then((result) => {
 
-        let { tipo, titulo, descripcion, url, fecha } = values.documentElement;
+            let id = values.documents.length ? parseInt(values.documents[values.documents.length - 1].id) + 1 : 1;
 
-        let datos = { id, tipo: JSON.parse(tipo).valor, titulo, descripcion, url, fecha };
+            let { titulo, descripcion, url, fecha } = values.documentElement;
+            let tipo = typeof values.documentElement.tipo === 'undefined' ? '' : JSON.parse(values.documentElement.tipo).valor;
 
-        push('documents', datos);
-        clear('documentElement');
+            let datos = { id, tipo, titulo, descripcion, url, fecha };
+
+            push('documents', datos);
+            clear('documentElement');
+            setErrors({
+                ...errors,
+                documentElement: {}
+            });
+        }).catch((err) => {
+
+            let errores = {};
+
+            err.inner.forEach(e => { errores = { ...errores, [e.path]: e.message } })
+
+
+            setErrors({
+                ...errors,
+                documentElement: errores
+            });
+        });
+
+
+
+
+
     };
 
     const cla = styles();
@@ -586,6 +651,7 @@ function MyForm(props: MyFormProps) {
                                             label="Tipo de sanción *"
                                             data={catalogos.tipoSancion}
                                         />
+                                        {errors.tipoSancionElement['tipoSancion'] && <span className={cla.mensajeError}>{errors.tipoSancionElement['tipoSancion']}</span>}
                                     </Grid>
                                     <Grid item xs={12} md={4}>
                                         <TextField label="Descripción" name={`tipoSancionElement.descripcion`} />
@@ -594,7 +660,7 @@ function MyForm(props: MyFormProps) {
                                         <Button
                                             type="button"
                                             onClick={() => {
-                                                verifyTipoSancion(values, push, clear);
+                                                addSancion(values, push, clear);
                                             }}
                                             variant="contained"
                                             className={cla.marginright}
@@ -637,6 +703,12 @@ function MyForm(props: MyFormProps) {
                                                             </TableRow>
                                                         ))
                                                     }
+                                                    <Field name={'tipoSancionArray'} render={({ input, meta }) => (
+                                                        <TableRow>
+                                                            {meta.error && <TableCell colSpan={3} align="center" style={{ color: "#721c24", backgroundColor: "#f8d7da", borderColor: "#f5c6cb" }}>{meta.error}</TableCell>}
+                                                        </TableRow>
+
+                                                    )} />
                                                 </TableBody>
                                             </Table>
                                         </TableContainer>
@@ -648,22 +720,26 @@ function MyForm(props: MyFormProps) {
                                     </Grid>
                                     <Grid item xs={12} md={4}>
                                         <TextField label="Título *" name={`documentElement.titulo`} />
+                                        {errors.documentElement['titulo'] && <span className={cla.mensajeError}>{errors.documentElement['titulo']}</span>}
                                     </Grid>
                                     {catalogos.tipoDoc && (
                                         <Grid item xs={12} md={4}>
                                             <Select
                                                 name={`documentElement.tipo`}
-                                                label="Tipo de documento *"
+                                                label="Tipo de documento"
                                                 data={catalogos.tipoDoc}
                                             />
                                         </Grid>
                                     )}
                                     <Grid item xs={12} md={4}>
                                         <TextField label="Descripción *" name={`documentElement.descripcion`} />
+                                        {errors.documentElement['descripcion'] && <span className={cla.mensajeError}>{errors.documentElement['descripcion']}</span>}
                                     </Grid>
 
                                     <Grid item xs={12} md={4}>
                                         <TextField label="URL *" name={`documentElement.url`} />
+                                        {errors.documentElement['url'] && <span className={cla.mensajeError}>{errors.documentElement['url']}</span>}
+
                                     </Grid>
 
                                     <Grid item xs={12} md={4}>
@@ -678,6 +754,7 @@ function MyForm(props: MyFormProps) {
                                             clearLabel={'Limpiar'}
                                             okLabel={'Aceptar'}
                                         />
+                                        {errors.documentElement['fecha'] && <span className={cla.mensajeError}>{errors.documentElement['fecha']}</span>}
                                     </Grid>
                                     <Grid item xs={12} md={4}>
                                         <Button
