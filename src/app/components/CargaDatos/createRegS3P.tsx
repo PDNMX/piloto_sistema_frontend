@@ -435,20 +435,6 @@ function MyForm(props: MyFormProps) {
         changeValue(state, name, () => undefined);
     };
 
-    const addSancion2 = (values, push, clear) => {
-
-        let data = { ...JSON.parse(values.tipoSancionElement.tipoSancion), descripcion: values.tipoSancionElement.descripcion }
-
-        let registrados = values.tipoSancion.map(e => e.valor);
-
-        if (registrados.indexOf(data.valor) !== -1) {
-            window.alert("Tipo de sanción duplicado");
-        } else {
-            push('tipoSancion', data);
-            clear('tipoSancionElement');
-        }
-    };
-
     const addSancion = (values, push, clear) => {
 
         let schema = Yup.object().shape({
@@ -483,27 +469,56 @@ function MyForm(props: MyFormProps) {
 
     };
 
-    const removeTipoSancion = (index, remove) => {
-        remove('tipoSancion', index);
-    }
+    const addDocument = async (values, push, clear) => {
+        let schema = Yup.object().shape({
+            id: Yup.string().trim(),
+            titulo: Yup.string()
+                .required('El campo Título es requerido')
+                .max(50, 'Máximo 50 caracteres')
+                .trim(),
+            descripcion: Yup.string()
+                .required('El campo Descripción es requerido')
+                .max(200, 'Máximo 200 caracteres')
+                .trim(),
+            url: Yup.string()
+                .matches(
+                    /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                    'Introduce una dirección de internet valida'
+                )
+                .required('El campo URL es requerido')
+                .trim(),
+            fecha: Yup.string().required('El campo Fecha es requerido').trim(),
+            tipo: Yup.object()
+        });
+
+        schema.validate(values.documentElement, { abortEarly: false }).then((result) => {
+
+            let id = values.documentos.length ? parseInt(values.documentos[values.documentos.length - 1].id) + 1 : 1;
+
+            let { titulo, descripcion, url, fecha } = values.documentElement;
+            let tipo = typeof values.documentElement.tipo === 'undefined' ? '' : JSON.parse(values.documentElement.tipo).valor;
+
+            let datos = { id, tipo, titulo, descripcion, url, fecha };
+
+            push('documentos', datos);
+            clear('documentElement');
+            setErrors({
+                ...errors,
+                documentElement: {}
+            });
+        }).catch((err) => {
+
+            let info = {};
+
+            err.inner && err.inner.forEach(e => { info = { ...info, [e.path]: e.message } })
 
 
-    const addDocument = (values, push, clear) => {
-
-        let id = values.documentos.length ? parseInt(values.documentos[values.documentos.length - 1].id) + 1 : 1;
-
-        let { tipo, titulo, descripcion, url, fecha } = values.documentElement;
-
-        let datos = { id, tipo: JSON.parse(tipo).valor, titulo, descripcion, url, fecha };
-
-        push('documentos', datos);
-        clear('documentElement');
+            setErrors({
+                ...errors,
+                documentElement: info
+            });
+        });
     };
-
-    const removeDocumento = (index, remove) => {
-        remove('documentos', index);
-    }
-
 
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS3P) {
@@ -747,7 +762,7 @@ function MyForm(props: MyFormProps) {
                                                                     <TableCell>
                                                                         <Tooltip title="Remover sanción" placement="left">
                                                                             <span
-                                                                                onClick={() => removeTipoSancion(index, remove)}
+                                                                                onClick={() => remove('tipoSancion', index)}
                                                                                 style={{ cursor: 'pointer' }}
                                                                             >
                                                                                 ❌
@@ -758,11 +773,11 @@ function MyForm(props: MyFormProps) {
                                                             ))
                                                         }
                                                         <Field name={'tipoSancion'} render={({ input, meta }) => (
-                                                        <TableRow>
-                                                            {meta.error && <TableCell colSpan={3} align="center" style={{ color: "#721c24", backgroundColor: "#f8d7da", borderColor: "#f5c6cb" }}>{meta.error}</TableCell>}
-                                                        </TableRow>
+                                                            <TableRow>
+                                                                {meta.error && <TableCell colSpan={3} align="center" style={{ color: "#721c24", backgroundColor: "#f8d7da", borderColor: "#f5c6cb" }}>{meta.error}</TableCell>}
+                                                            </TableRow>
 
-                                                    )} />
+                                                        )} />
                                                     </TableBody>
                                                 </Table>
                                             </TableContainer>
@@ -972,22 +987,25 @@ function MyForm(props: MyFormProps) {
                                         </Grid>
                                         <Grid item xs={12} md={4}>
                                             <TextField label="Título *" name={`documentElement.titulo`} />
+                                            {errors.documentElement['titulo'] && <span className={cla.mensajeError}>{errors.documentElement['titulo']}</span>}
                                         </Grid>
                                         {catalogos.tipoDoc && (
                                             <Grid item xs={12} md={4}>
                                                 <Select
                                                     name={`documentElement.tipo`}
-                                                    label="Tipo de documento *"
+                                                    label="Tipo de documento"
                                                     data={catalogos.tipoDoc}
                                                 />
                                             </Grid>
                                         )}
                                         <Grid item xs={12} md={4}>
                                             <TextField label="Descripción *" name={`documentElement.descripcion`} />
+                                            {errors.documentElement['descripcion'] && <span className={cla.mensajeError}>{errors.documentElement['descripcion']}</span>}
                                         </Grid>
 
                                         <Grid item xs={12} md={4}>
                                             <TextField label="URL *" name={`documentElement.url`} />
+                                            {errors.documentElement['url'] && <span className={cla.mensajeError}>{errors.documentElement['url']}</span>}
                                         </Grid>
 
                                         <Grid item xs={12} md={4}>
@@ -1002,6 +1020,7 @@ function MyForm(props: MyFormProps) {
                                                 clearLabel={'Limpiar'}
                                                 okLabel={'Aceptar'}
                                             />
+                                            {errors.documentElement['fecha'] && <span className={cla.mensajeError}>{errors.documentElement['fecha']}</span>}
                                         </Grid>
                                         <Grid item xs={12} md={4}>
                                             <Button
@@ -1063,11 +1082,8 @@ function MyForm(props: MyFormProps) {
                                                                             placement="left"
                                                                         >
                                                                             <span
-                                                                                onClick={() =>
-                                                                                    removeDocumento(index, remove)}
-                                                                                style={{
-                                                                                    cursor: 'pointer'
-                                                                                }}
+                                                                                onClick={() => remove('documentos', index)}
+                                                                                style={{ cursor: 'pointer' }}
                                                                             >
                                                                                 ❌
                                                                         </span>
@@ -1095,9 +1111,6 @@ function MyForm(props: MyFormProps) {
                                         <Button className={cla.boton2} variant="contained"
                                             type="submit"
                                             disabled={submitting}> Guardar </Button>
-                                    </Grid>
-                                    <Grid item xs={12} md={12}>
-                                        <pre>{JSON.stringify(errors, null, 2)}</pre>
                                     </Grid>
                                 </div>
                             </fieldset>

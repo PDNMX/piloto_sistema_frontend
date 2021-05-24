@@ -436,7 +436,7 @@ function MyForm(props: MyFormProps) {
 
             let errores = {};
 
-            err.inner.forEach(e => { errores = { ...errores, [e.path]: e.message } })
+            err.inner && err.inner.forEach(e => { errores = { ...errores, [e.path]: e.message } })
 
 
             setErrors({
@@ -444,11 +444,6 @@ function MyForm(props: MyFormProps) {
                 documentElement: errores
             });
         });
-
-
-
-
-
     };
 
     const cla = styles();
@@ -746,7 +741,6 @@ function MyForm(props: MyFormProps) {
                                     <Grid item xs={12} md={4}>
                                         <TextField label="URL *" name={`documentElement.url`} />
                                         {errors.documentElement['url'] && <span className={cla.mensajeError}>{errors.documentElement['url']}</span>}
-
                                     </Grid>
 
                                     <Grid item xs={12} md={4}>
@@ -867,10 +861,7 @@ function MyForm(props: MyFormProps) {
                                         {' '}
 										Guardar{' '}
                                     </Button>
-                                </Grid>
-                                <Grid item xs={12} md={12}>
-                                    <pre>{JSON.stringify(values, null, 2)}</pre>
-                                </Grid>
+                                </Grid>                              
                             </div>
                         )}
                         <Dialog
