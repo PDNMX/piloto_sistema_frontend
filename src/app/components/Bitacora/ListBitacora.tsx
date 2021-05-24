@@ -1,6 +1,6 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     Table,
     TableBody,
@@ -15,15 +15,15 @@ import {
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import TablePaginationActions from '../Common/TablePaginationActionsProps';
 import AddBoxIcon from '@material-ui/icons/AddBox';
-import {Alert} from "@material-ui/lab";
-import {history} from "../../store/history";
-import {withStyles} from "@material-ui/core/styles";
-import {CSVLink} from "react-csv";
+import { Alert } from "@material-ui/lab";
+import { history } from "../../store/history";
+import { withStyles } from "@material-ui/core/styles";
+import { CSVLink } from "react-csv";
 
 
 export const ListBitacora = () => {
 
-    const {providers, alerta, providerSelect, idUser, bitacora} = useSelector(state => ({
+    const { providers, alerta, providerSelect, idUser, bitacora } = useSelector(state => ({
         providers: state.providers,
         alerta: state.alert,
         providerSelect: state.providerSelect,
@@ -31,18 +31,18 @@ export const ListBitacora = () => {
         bitacora: state.bitacora
     }));
     const dispatch = useDispatch();
-    const [pagination, setPagination] = React.useState({page: 0, pageSize: 10});
+    const [pagination, setPagination] = React.useState({ page: 0, pageSize: 10 });
 
     const handleChangePage = (event, newPage) => {
-        setPagination({page: newPage, pageSize: pagination.pageSize});
+        setPagination({ page: newPage, pageSize: pagination.pageSize });
     };
 
     const handleChangeRowsPerPage = (event) => {
         let newSize = parseInt(event.target.value, 10);
         if (pagination.page * newSize > bitacora.length) {
-            setPagination({page: 0, pageSize: parseInt(event.target.value, 10)});
+            setPagination({ page: 0, pageSize: parseInt(event.target.value, 10) });
         } else {
-            setPagination({page: pagination.page, pageSize: parseInt(event.target.value, 10)});
+            setPagination({ page: pagination.page, pageSize: parseInt(event.target.value, 10) });
         }
     };
 
@@ -108,11 +108,11 @@ export const ListBitacora = () => {
     }));
 
     const headers = [
-        {label: "Tipo de operación", key: "tipo"},
-        {label: "Fecha", key: "fecha"},
-        {label: "Sistema", key: "sistema_label"},
-        {label: "Número registros", key: "numeroRegistros"},
-        {label: "Usuario", key: "nombre"}
+        { label: "Tipo de operación", key: "tipo" },
+        { label: "Fecha", key: "fecha" },
+        { label: "Sistema", key: "sistema_label" },
+        { label: "Número registros", key: "numeroRegistros" },
+        { label: "Usuario", key: "nombre" }
     ];
 
     const data = bitacora;
@@ -134,40 +134,40 @@ export const ListBitacora = () => {
                             <TableHead className={classes.tableHead}>
                                 <TableRow key={'rowhead'}>
                                     <TableCell key={'tbop'} className={classes.tableHeaderColumn}
-                                               style={{width: 'auto'}}
-                                               align="left"><b>Operación</b></TableCell>
+                                        style={{ width: 'auto' }}
+                                        align="left"><b>Operación</b></TableCell>
                                     <TableCell key={'tbfec'} className={classes.tableHeaderColumn}
-                                               style={{width: 'auto'}}
-                                               align="left"><b>Fecha</b></TableCell>
+                                        style={{ width: 'auto' }}
+                                        align="left"><b>Fecha</b></TableCell>
                                     <TableCell key={'tbSis'} className={classes.tableHeaderColumn}
-                                               style={{width: 'auto'}}
-                                               align="left"><b>Sistema</b></TableCell>
+                                        style={{ width: 'auto' }}
+                                        align="left"><b>Sistema</b></TableCell>
                                     <TableCell key={'tbreg'} className={classes.tableHeaderColumn}
-                                               style={{width: 'auto'}}
-                                               align="center"><b>Registros</b></TableCell>
+                                        style={{ width: 'auto' }}
+                                        align="center"><b>Registros</b></TableCell>
                                     <TableCell key={'tbusrs'} className={classes.tableHeaderColumn}
-                                               align="center"><b>Usuario</b></TableCell>
+                                        align="center"><b>Usuario</b></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody key="bitacora">
                                 {bitacora.slice(pagination.page * pagination.pageSize, pagination.page * pagination.pageSize + pagination.pageSize).map((rowbitacora, index) => (
                                     <TableRow key={index}>
                                         <TableCell className={classes.fontblack} component="th" scope="row"
-                                                   style={{width: 'auto'}} align="left">
+                                            style={{ width: 'auto' }} align="left">
                                             {rowbitacora.tipo}
                                         </TableCell>
-                                        <TableCell className={classes.fontblack} style={{width: 'auto'}} align="left">
+                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="left">
                                             {rowbitacora.fecha}
                                         </TableCell>
-                                        <TableCell className={classes.fontblack} style={{width: 'auto'}} align="left">
+                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="left">
                                             <div>
                                                 {rowbitacora.sistema_label}
                                             </div>
                                         </TableCell>
-                                        <TableCell className={classes.fontblack} style={{width: 'auto'}} align="center">
+                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
                                             {rowbitacora.numeroRegistros}
                                         </TableCell>
-                                        <TableCell className={classes.fontblack} style={{width: 'auto'}} align="center">
+                                        <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
                                             {rowbitacora.nombre}
                                         </TableCell>
                                     </TableRow>
@@ -176,20 +176,20 @@ export const ListBitacora = () => {
                             <TableFooter>
                                 <TableRow key={'rowpaginator'}>
                                     {pagination.pageSize != undefined && pagination.page != undefined &&
-                                    <TablePagination
-                                        rowsPerPageOptions={[3, 5, 10, 25, {label: 'Todos', value: bitacora.length}]}
-                                        colSpan={6}
-                                        count={bitacora.length}
-                                        rowsPerPage={pagination.pageSize}
-                                        page={pagination.page}
-                                        SelectProps={{
-                                            inputProps: {'aria-label': 'Registros por página'},
-                                            native: true,
-                                        }}
-                                        onChangePage={handleChangePage}
-                                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                                        ActionsComponent={TablePaginationActions}
-                                    />}
+                                        <TablePagination
+                                            rowsPerPageOptions={[3, 5, 10, 25, { label: 'Todos', value: bitacora.length }]}
+                                            colSpan={6}
+                                            count={bitacora.length}
+                                            rowsPerPage={pagination.pageSize}
+                                            page={pagination.page}
+                                            SelectProps={{
+                                                inputProps: { 'aria-label': 'Registros por página' },
+                                                native: true,
+                                            }}
+                                            onChangePage={handleChangePage}
+                                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                                            ActionsComponent={TablePaginationActions}
+                                        />}
                                 </TableRow>
                             </TableFooter>
                         </Table>
@@ -197,7 +197,7 @@ export const ListBitacora = () => {
                         <Table>
                             <TableBody>
                                 <TableRow key={'rowmsj'}>
-                                    <TableCell className={classes.fontblack} style={{width: 'auto'}} align="center">
+                                    <TableCell className={classes.fontblack} style={{ width: 'auto' }} align="center">
                                         No hay registros para está consulta.
                                     </TableCell>
                                 </TableRow>
@@ -207,13 +207,13 @@ export const ListBitacora = () => {
                 </TableContainer>
             </Grid>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={8}/>
+                <Grid item xs={12} md={8} />
                 <Grid item xs={12} md={2}>
                     <Tooltip title="Reporte Nuevo" placement="left">
                         <Button onClick={() => redirectToRoute("/bitacora")}
-                                variant="contained"
-                                className={classes.boton}
-                                endIcon={<AddBoxIcon>Reporte Nuevo</AddBoxIcon>}
+                            variant="contained"
+                            className={classes.boton}
+                            endIcon={<AddBoxIcon>Reporte Nuevo</AddBoxIcon>}
                         >
                             Generar Nuevo Reporte
                         </Button>
@@ -221,7 +221,7 @@ export const ListBitacora = () => {
                 </Grid>
                 <Grid item xs={12} md={2}>
                     <Tooltip title="Descargar CSV" placement="right">
-                        <CSVLink data={data} headers={headers} filename={"Bitacora.csv"}>
+                        <CSVLink data={data} headers={headers} filename={"Bitacora.csv"} style={{ textDecoration: "none" }}>
                             <Button
                                 variant="contained"
                                 className={classes.boton2}
@@ -233,8 +233,8 @@ export const ListBitacora = () => {
                     </Tooltip>
                 </Grid>
             </Grid>
-</div>
-);
+        </div>
+    );
 }
 
 
