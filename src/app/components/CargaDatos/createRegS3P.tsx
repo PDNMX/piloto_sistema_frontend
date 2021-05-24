@@ -498,7 +498,13 @@ function MyForm(props: MyFormProps) {
             let { titulo, descripcion, url, fecha } = values.documentElement;
             let tipo = typeof values.documentElement.tipo === 'undefined' ? '' : JSON.parse(values.documentElement.tipo).valor;
 
-            let datos = { id, tipo, titulo, descripcion, url, fecha };
+            let datos = {};
+
+            if (tipo === '') {
+                datos = { id, titulo, descripcion, url, fecha };
+            } else {
+                datos = { id, titulo, tipo, descripcion, url, fecha };
+            }
 
             push('documentos', datos);
             clear('documentElement');
