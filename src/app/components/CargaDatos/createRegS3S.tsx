@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Field } from 'react-final-form';
 import { TextField, makeValidate, makeRequired, Select, DatePicker } from 'mui-rff';
-import { Grid, Button, Divider, Tooltip } from '@material-ui/core';
+import { Grid, Button, Tooltip } from '@material-ui/core';
 import * as Yup from 'yup';
 import { css } from '@emotion/core';
 import Typography from '@material-ui/core/Typography';
@@ -93,8 +93,7 @@ const override = css`
 `;
 
 function MyForm(props: MyFormProps) {
-    let { initialValues, alerta, catalogos, id } = props;
-    const alert = alerta;
+    let { initialValues, alerta: alert, catalogos, id } = props;
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
     const [errors, setErrors] = React.useState({ tipoSancionElement: {}, documentElement: {} });
@@ -375,17 +374,18 @@ function MyForm(props: MyFormProps) {
             let registrados = values.tipoSancionArray.map(e => e.valor);
 
             if (registrados.indexOf(data.valor) !== -1) {
-                window.alert("Tipo de sanción duplicado");
+                setErrors({
+                    ...errors,
+                    tipoSancionElement: { ...errors.tipoSancionElement, ['tipoSancion']: "Tipo de sanción duplicado" }
+                });
             } else {
                 push('tipoSancionArray', data);
                 clear('tipoSancionElement');
+                setErrors({
+                    ...errors,
+                    tipoSancionElement: {}
+                });
             }
-
-            setErrors({
-                ...errors,
-                tipoSancionElement: {}
-            });
-
         }).catch((err) => {
             setErrors({
                 ...errors,
@@ -476,7 +476,7 @@ function MyForm(props: MyFormProps) {
     // @ts-ignore
     // @ts-ignore
     return (
-        <div>
+        <>
             <Grid container justify={'center'}>
                 <Typography noWrap variant="h6" className={cla.fontblack}>
                     <b>Sistema de los Servidores Públicos Sancionados</b>
@@ -901,7 +901,7 @@ function MyForm(props: MyFormProps) {
                     </form>
                 )}
             />
-        </div>
+        </>
     );
 }
 

@@ -42,7 +42,7 @@ const CreateReg = ({ id, alert, catalogos, registry, flagOnlyRead }) => {
     // @ts-ignore
     return <MyForm initialValues={
         registry != undefined ?
-            (registry?.particularSancionado?.domicilioMexico ?  registry : { ...registry, particularSancionado: { ...registry.particularSancionado, domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } })
+            (registry?.particularSancionado?.domicilioMexico ? registry : { ...registry, particularSancionado: { ...registry.particularSancionado, domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } })
             : { ...registry, tipoSancion: [], documentos: [], particularSancionado: { domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } }}
         catalogos={catalogos} alerta={alert} id={id} flagOnlyRead={flagOnlyRead} />;
 }
@@ -449,17 +449,18 @@ function MyForm(props: MyFormProps) {
             let registrados = values.tipoSancion.map(e => e.valor);
 
             if (registrados.indexOf(data.valor) !== -1) {
-                window.alert("Tipo de sanción duplicado");
+                setErrors({
+                    ...errors,
+                    tipoSancionElement: { ...errors.tipoSancionElement, ['tipoSancion']: "Tipo de sanción duplicado" }
+                });
             } else {
                 push('tipoSancion', data);
                 clear('tipoSancionElement');
+                setErrors({
+                    ...errors,
+                    tipoSancionElement: {}
+                });
             }
-
-            setErrors({
-                ...errors,
-                tipoSancionElement: {}
-            });
-
         }).catch((err) => {
             setErrors({
                 ...errors,
@@ -546,7 +547,7 @@ function MyForm(props: MyFormProps) {
     // @ts-ignore
     return (
 
-        <div>
+        <>
             <Grid container justify={"center"}>
                 <Typography noWrap variant="h6" className={cla.fontblack}>
                     <b>Sistema de los Particulares Sancionados</b>
@@ -1149,7 +1150,7 @@ function MyForm(props: MyFormProps) {
                     </form>
                 )}
             />
-        </div>
+        </>
     );
 }
 
