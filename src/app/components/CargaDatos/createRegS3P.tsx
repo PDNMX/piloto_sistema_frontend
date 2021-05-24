@@ -39,12 +39,12 @@ const host = process.env.URLAPI;
 const ur = host + process.env.PORTAPI;
 
 const CreateReg = ({ id, alert, catalogos, registry, flagOnlyRead }) => {
-   // @ts-ignore
+    // @ts-ignore
     return <MyForm initialValues={
         registry != undefined ?
-            (registry?.particularSancionado?.domicilioExtranjero ? {...registry, particularSancionado: { ...registry.particularSancionado, domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } }} : registry)
-        : { ...registry, tipoSancion: [], documentos: [], particularSancionado: { domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } }}
-                   catalogos={catalogos} alerta={alert} id={id} flagOnlyRead={flagOnlyRead} />;
+            (registry?.particularSancionado?.domicilioExtranjero ? { ...registry, particularSancionado: { ...registry.particularSancionado, domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } } : registry)
+            : { ...registry, tipoSancion: [], documentos: [], particularSancionado: { domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } }}
+        catalogos={catalogos} alerta={alert} id={id} flagOnlyRead={flagOnlyRead} />;
 }
 
 interface FormDataEsquemaS3P {
@@ -166,7 +166,7 @@ function MyForm(props: MyFormProps) {
     const alert = alerta;
     const dispatch = useDispatch();
     const [open, setOpen] = React.useState(false);
-    // const [valueDomicilio, setValueDomicilio] = React.useState('');
+    const [errors, setErrors] = React.useState({ tipoSancionElement: {}, documentElement: {} });
 
 
     // @ts-ignore
@@ -224,7 +224,7 @@ function MyForm(props: MyFormProps) {
         objetoContrato: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,300}$'), 'No se permiten cadenas vacías, máximo 300 caracteres').trim(),
         autoridadSancionadora: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,50}$'), 'No se permiten cadenas vacías, máximo 50 caracteres').required("El campo Autoridad sancionadora es requerido").trim(),
         tipoFalta: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9\/ ]{1,100}$'), 'No se permiten cadenas vacías, máximo 100 caracteres').required("El campo tipo Falta es requerido").trim(),
-        tipoSancion: Yup.array().min(1,'Se debe registrar al menos una sanción'),
+        tipoSancion: Yup.array().min(1, 'Se debe registrar al menos una sanción'),
         // tipoSancion: Yup.array().of(
         //     Yup.object().shape({
         //         tipoSancion: Yup.object().required("El campo Tipo de sanción es requerido"),
@@ -269,8 +269,8 @@ function MyForm(props: MyFormProps) {
         inhabilitacion: Yup.object().shape({
             plazo: Yup.string().matches(new RegExp('^[A-zÀ-ú-0-9 ]{1,200}$'), 'No se permiten cadenas vacías, máximo 200 caracteres').trim(),
             fechaInicial: Yup.date().nullable(true)
-                .when('fechaFinal',(fechaFinal) => {
-                    if(fechaFinal)
+                .when('fechaFinal', (fechaFinal) => {
+                    if (fechaFinal)
                         return Yup.date().max(fechaFinal, 'La fecha inicial no puede ser posterior a la fecha final')
                 }),
             fechaFinal: Yup.date().nullable(true)
@@ -377,7 +377,8 @@ function MyForm(props: MyFormProps) {
         checked: {},
         indeterminate: {
             color: '#666666'
-        }
+        },
+        mensajeError: { color: "#f44336" }
     });
 
 
@@ -434,7 +435,7 @@ function MyForm(props: MyFormProps) {
         changeValue(state, name, () => undefined);
     };
 
-    const verifyTipoSancion = (values, push, clear) => {
+    const addSancion2 = (values, push, clear) => {
 
         let data = { ...JSON.parse(values.tipoSancionElement.tipoSancion), descripcion: values.tipoSancionElement.descripcion }
 
@@ -446,6 +447,40 @@ function MyForm(props: MyFormProps) {
             push('tipoSancion', data);
             clear('tipoSancionElement');
         }
+    };
+
+    const addSancion = (values, push, clear) => {
+
+        let schema = Yup.object().shape({
+            tipoSancion: Yup.string().required('El campo Tipo de sanción es requerido')
+        });
+
+        schema.validate(values.tipoSancionElement).then((result) => {
+
+            let data = { ...JSON.parse(values.tipoSancionElement.tipoSancion), descripcion: values.tipoSancionElement.descripcion }
+
+            let registrados = values.tipoSancion.map(e => e.valor);
+
+            if (registrados.indexOf(data.valor) !== -1) {
+                window.alert("Tipo de sanción duplicado");
+            } else {
+                push('tipoSancion', data);
+                clear('tipoSancionElement');
+            }
+
+            setErrors({
+                ...errors,
+                tipoSancionElement: {}
+            });
+
+        }).catch((err) => {
+            setErrors({
+                ...errors,
+                tipoSancionElement: { ...errors.tipoSancionElement, [err.path]: err.message }
+            });
+
+        });
+
     };
 
     const removeTipoSancion = (index, remove) => {
@@ -674,12 +709,14 @@ function MyForm(props: MyFormProps) {
                                                 label="Tipo de sanción *"
                                                 data={catalogos.tipoSancion}
                                             />
+                                            {errors.tipoSancionElement['tipoSancion'] && <span className={cla.mensajeError}>{errors.tipoSancionElement['tipoSancion']}</span>}
+
                                         </Grid>
                                         <Grid item xs={12} md={4}>
                                             <TextField label="Descripción" name={`tipoSancionElement.descripcion`} />
                                         </Grid>
                                         <Grid item xs={12} md={4}>
-                                            <Button type="button" onClick={() => { verifyTipoSancion(values, push, clear) }}
+                                            <Button type="button" onClick={() => { addSancion(values, push, clear) }}
                                                 variant="contained"
                                                 className={cla.marginright}
                                             >
@@ -1053,6 +1090,9 @@ function MyForm(props: MyFormProps) {
                                         <Button className={cla.boton2} variant="contained"
                                             type="submit"
                                             disabled={submitting}> Guardar </Button>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <pre>{JSON.stringify(errors, null, 2)}</pre>
                                     </Grid>
                                 </div>
                             </fieldset>
