@@ -593,7 +593,7 @@ export const ListS3PSchema = () => {
                             <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
                                 <b>Nombre / Razón social</b>
                             </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
+                            <Typography className={classes.body2} align="left" variant="body2" noWrap={true}>
                                 {selectedRegistro.particularSancionado?.nombreRazonSocial}
                             </Typography>
                         </Grid>
@@ -682,7 +682,7 @@ export const ListS3PSchema = () => {
                             <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
                                 <b>Autoridad sancionadora</b>
                             </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
+                            <Typography className={classes.body2} align="left" variant="body2" noWrap={true}>
                                 {selectedRegistro.autoridadSancionadora}
                             </Typography>
                         </Grid>
@@ -701,7 +701,7 @@ export const ListS3PSchema = () => {
                             <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
                                 <b>URL</b>
                             </Typography>
-                            <Typography className={classes.body2} align="left" variant="body2">
+                            <Typography className={classes.body2} align="left" variant="body2" noWrap={true}>
                                 {selectedRegistro.resolucion ? selectedRegistro.resolucion.url : <Nota/>}
                             </Typography>
                         </Grid>
