@@ -42,7 +42,7 @@ const CreateReg = ({ id, alert, catalogos, registry, flagOnlyRead }) => {
     // @ts-ignore
     return <MyForm initialValues={
         registry != undefined ?
-            (registry?.particularSancionado?.domicilioExtranjero ? { ...registry, particularSancionado: { ...registry.particularSancionado, domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } } : registry)
+            (registry?.particularSancionado?.domicilioMexico ?  registry : { ...registry, particularSancionado: { ...registry.particularSancionado, domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } })
             : { ...registry, tipoSancion: [], documentos: [], particularSancionado: { domicilioMexico: { pais: '{"clave":"MX","valor":"México"}' } } }}
         catalogos={catalogos} alerta={alert} id={id} flagOnlyRead={flagOnlyRead} />;
 }

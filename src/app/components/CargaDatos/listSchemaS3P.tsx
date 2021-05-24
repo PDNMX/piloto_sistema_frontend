@@ -1015,7 +1015,7 @@ export const ListS3PSchema = () => {
                                         <b>Código postal</b>
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioMexico?.codigoPostal}
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.codigoPostal ? selectedRegistro.particularSancionado.domicilioMexico.codigoPostal : <Nota/>}
                                     </Typography>
                                 </Grid>
                                 <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -1023,7 +1023,7 @@ export const ListS3PSchema = () => {
                                         <b>Número exterior</b>
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioMexico?.numeroExterior}
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.numeroExterior ? selectedRegistro.particularSancionado.domicilioMexico.numeroExterior : <Nota/>}
                                     </Typography>
                                 </Grid>
                                 <Grid className={classes.gridpadding} item md={3} sm={12}>
@@ -1031,7 +1031,7 @@ export const ListS3PSchema = () => {
                                         <b>Número interior</b>
                                     </Typography>
                                     <Typography className={classes.body2} align="left" variant="body2">
-                                        {selectedRegistro.particularSancionado?.domicilioMexico?.numeroInterior}
+                                        {selectedRegistro.particularSancionado?.domicilioMexico?.numeroInterior ? selectedRegistro.particularSancionado.domicilioMexico.numeroInterior : <Nota/>}
                                     </Typography>
                                 </Grid>
                             </Grid>
