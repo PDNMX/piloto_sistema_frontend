@@ -378,7 +378,8 @@ function MyForm(props: MyFormProps) {
         indeterminate: {
             color: '#666666'
         },
-        mensajeError: { color: "#f44336" }
+        mensajeError: { color: "#f44336" },
+        select: { boxSizing: 'border-box', maxWidth: "376px" }
     });
 
 
@@ -729,6 +730,7 @@ function MyForm(props: MyFormProps) {
                                                 name={`tipoSancionElement.tipoSancion`}
                                                 label="Tipo de sanción *"
                                                 data={catalogos.tipoSancion}
+                                                className={cla.select}
                                             />
                                             {errors.tipoSancionElement['tipoSancion'] && <span className={cla.mensajeError}>{errors.tipoSancionElement['tipoSancion']}</span>}
                                         </Grid>
