@@ -446,9 +446,9 @@ function MyForm(props: MyFormProps) {
 
             let data = { ...JSON.parse(values.tipoSancionElement.tipoSancion), descripcion: values.tipoSancionElement.descripcion }
 
-            let registrados = values.tipoSancion.map(e => e.valor);
+            let registrados = values.tipoSancion.map(e => e.clave.toLowerCase());
 
-            if (registrados.indexOf(data.valor) !== -1) {
+            if (registrados.indexOf(data.clave.toLowerCase()) !== -1) {
                 setErrors({
                     ...errors,
                     tipoSancionElement: { ...errors.tipoSancionElement, ['tipoSancion']: "Tipo de sanción duplicado" }
