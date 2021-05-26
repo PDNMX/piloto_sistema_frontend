@@ -28,11 +28,11 @@ git clone https://github.com/PDNMX/piloto_sistema_frontend.git
 vim .env
 ```
 ```bash
-URLAPI=
-PORTOAUTH=
-PORTAPI=
-CLIENTID=
-CLIENTSECRET=
+URLAPI=<url_front>
+PORTOAUTH=<port_oauth20v2>
+PORTAPI=<port_backend>
+CLIENTID=<client_id>
+CLIENTSECRET=<client_secret>
 ```
 ### Habilitar acceso desde cualquier IP
 Edite el archivo <b>webpack.config.js</b>
