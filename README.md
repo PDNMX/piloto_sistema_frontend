@@ -9,7 +9,7 @@ Por su parte, las Secretarías Ejecutivas Anticorrupción Estatales fungirán de
 ## Tecnologías utilizadas
 
 |Tecnología|Versión|Descripción|
-|----------------|-------------------------------|
+|----------------|-------------------------------|--------------------------------------------------------------|
 |Node.js|12.18.2|Entorno base de JavaScript, se usa como motor de ejecución para otras tecnologías del proyecto.|
 |Express.js|4.16.3|Se usa como servidor para las solicitudes de API REST|
 |React |17.0.1|Biblioteca JavaScript de código abierto diseñada para crear interfaces de usuario, con el objetivo de facilitar el desarrollo de aplicaciones en una sola página.|
