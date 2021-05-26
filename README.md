@@ -6,68 +6,17 @@ El sistema de carga de datos  permite a los generadores de datos transferir a la
 
 Por su parte, las Secretarías Ejecutivas Anticorrupción Estatales fungirán dentro del sistema como entidades concentradoras de los datos, sin embargo, el control y administración de los mismos será responsabilidad de los generadores/proveedores de datos.
 
-## Dependencias 
+## Tecnologías utilizadas
 
-| Dependencia | Versión |
+|Tecnología|Versión|Descripción|
 |----------------|-------------------------------|
-| @date-io/date-fns | ^1.3.13 | 
-| @date-io/moment | ^1.3.13 | 
-| @material-ui/core | ^4.11.1 | 
-| @material-ui/icons | ^4.9.1 | 
-| @material-ui/lab | ^4.0.0-alpha.56 | 
-| @material-ui/pickers | ^3.2.10 | 
-| @testing-library/jest-dom | ^5.11.5 | 
-| @testing-library/react | ^11.1.0 | 
-| @testing-library/user-event | ^12.1.10 | 
-| @types/material-ui | ^0.21.8 | 
-| axios | ^0.18.0 | 
-| body-parser | ^1.18.3 | 
-| bootstrap | ^4.1.3 | 
-| ckey | ^1.0.2 | 
-| cors | ^2.8.4 | 
-| date-fns | ^2.21.1 | 
-| dotenv | ^8.2.0 | 
-| dotenv-webpack | ^6.0.0 | 
-| express | ^4.16.3 | 
-| final-form | ^4.20.1 | 
-| final-form-arrays | ^3.0.2 | 
-| find-config | ^1.0.0 | 
-| history | ^4.7.2 | 
-| i | ^0.3.6 | 
-| ibm-openapi-validator | ^0.31.1 | 
-| js-yaml | ^3.14.0 | 
-| jsonwebtoken | ^8.5.1 | 
-| md5 | ^2.2.1 | 
-| moment | ^2.29.1 | 
-| moment-timezone | ^0.5.33 | 
-| mongoose | ^5.9.26 | 
-| mongoose-paginate-v2 | ^1.3.9 | 
-| mui-rff | ^2.5.6 | 
-| npm | ^7.11.1 | 
-| react | ^17.0.1 | 
-| react-csv | ^2.0.3 | 
-| react-dom | ^17.0.1 | 
-| react-final-form | ^6.5.2 | 
-| react-final-form-arrays | ^3.1.3 | 
-| react-final-form-listeners | ^1.0.3 | 
-| react-number-format | ^4.4.4 | 
-| react-redux | ^7.2.2 | 
-| react-router | ^5.2.0 | 
-| react-router-dom | ^5.2.0 | 
-| react-scripts | 4.0.0 | 
-| react-spinners | ^0.9.0 | 
-| redux | ^4.0.0 | 
-| redux-form | ^8.3.7 | 
-| redux-logger | ^3.0.6 | 
-| redux-saga | ^1.1.3 | 
-| tslib | ^2.0.3 | 
-| underscore | ^1.12.0 | 
-| uuid | ^3.3.2 | 
-| web-vitals | ^0.2.4 | 
-| webpack | ^4.17.2 | 
-| yaml-schema-validator | ^1.2.2 | 
-| yup | ^0.31.0| 
-
+|Node.js|12.18.2|Entorno base de JavaScript, se usa como motor de ejecución para otras tecnologías del proyecto.|
+|Express.js|4.16.3|Se usa como servidor para las solicitudes de API REST|
+|React |17.0.1|Biblioteca JavaScript de código abierto diseñada para crear interfaces de usuario, con el objetivo de facilitar el desarrollo de aplicaciones en una sola página.|
+|Mongoose|5.9.26|Funciona como biblioteca para realizar la conexión e interacción con la base de datos.|
+|Webpack|4.17.2|Empaquetador de módulos.|
+|Babel|7.0.0|Herramienta que nos permite transformar el código JS|
+|Redux|4.0.0|Manejo del estado de las variables en React|
 ## Primeros pasos
 
 ### Descargar repositorio
