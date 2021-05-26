@@ -11,12 +11,11 @@ Por su parte, las Secretarías Ejecutivas Anticorrupción Estatales fungirán de
 |Tecnología|Versión|Descripción|
 |----------------|-------------------------------|--------------------------------------------------------------|
 |Node.js|12.18.2|Entorno base de JavaScript, se usa como motor de ejecución para otras tecnologías del proyecto.|
-|Express.js|4.16.3|Se usa como servidor para las solicitudes de API REST|
-|React |17.0.1|Biblioteca JavaScript de código abierto diseñada para crear interfaces de usuario, con el objetivo de facilitar el desarrollo de aplicaciones en una sola página.|
-|Mongoose|5.9.26|Funciona como biblioteca para realizar la conexión e interacción con la base de datos.|
+|React.js |17.0.1|Biblioteca JavaScript de código abierto diseñada para crear interfaces de usuario, con el objetivo de facilitar el desarrollo de aplicaciones en una sola página.|
 |Webpack|4.17.2|Empaquetador de módulos.|
 |Babel|7.0.0|Herramienta que nos permite transformar el código JS|
 |Redux|4.0.0|Manejo del estado de las variables en React|
+
 ## Primeros pasos
 
 ### Descargar repositorio
