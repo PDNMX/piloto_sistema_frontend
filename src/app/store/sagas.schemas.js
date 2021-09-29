@@ -1324,7 +1324,7 @@ export function* creationS2Schema() {
 		yield put(userActions.setUserInSession(payload.idUser));
 		let usuario = payload.idUser;
 		docSend['usuario'] = usuario;
-
+		docSend['observaciones'] = values.observaciones;
 		const { status, data } = yield axios.post(ur + `/insertS2Schema`, docSend, {
 			headers: {
 				'Content-Type': 'application/json',

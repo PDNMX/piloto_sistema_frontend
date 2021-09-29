@@ -82,7 +82,8 @@ interface FormDataEsquemaS2 {
             nombre: String,
             nivel: String
         }
-    }
+    },
+    observaciones?: String
 }
 
 export const ListS2Schema = () => {
@@ -588,7 +589,7 @@ export const ListS2Schema = () => {
                             <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
                                      light={true}/>
                         </Grid>
-                        <Grid className={classes.gridpadding} item md={3} sm={12}>
+                        <Grid className={classes.gridpadding} item md={6} sm={12}>
                             <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
                                 <b>Puesto</b>
                             </Typography>
@@ -602,6 +603,18 @@ export const ListS2Schema = () => {
                             </Typography>
                             <Typography className={classes.body2} align="left" variant="body2">
                                 {selectedRegistro.puesto?.nivel ? selectedRegistro.puesto.nivel : <Nota/>}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} className={classes.containerDivider}>
+                            <Divider orientation="horizontal" className={classes.divider} variant={'inset'}
+                                     light={true}/>
+                        </Grid>
+                        <Grid className={classes.gridpadding} item md={12} sm={12}>
+                            <Typography className={classes.titlegridModal} align="left" variant="subtitle2">
+                                <b>Observaciones</b>
+                            </Typography>
+                            <Typography className={classes.body2} align="left" variant="body2">
+                                {selectedRegistro.observaciones? selectedRegistro.observaciones: <Nota/>}
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>

@@ -42,7 +42,8 @@ interface FormDataEsquemaS2 {
     siPrimerApellido?: string,
     siSegundoApellido?: string,
     siPuestoNombre?: string,
-    siPuestoNivel?: string
+    siPuestoNivel?: string,
+    observaciones?: string
 }
 
 interface MyFormProps {
@@ -200,7 +201,6 @@ function MyForm(props: MyFormProps) {
                                 <Grid item xs={12} md={3}>
                                     <Select name="genero" label="Género" data={catalogos.genero}></Select>
                                 </Grid>
-
                                 <Grid item xs={12} md={3}>
                                     <TextField label="RFC" name="rfc"/>
                                 </Grid>
@@ -217,10 +217,13 @@ function MyForm(props: MyFormProps) {
                                     <TextField label="Ejercicio fiscal" name="ejercicioFiscal"/>
                                 </Grid>
                                 {catalogos.ramo &&
-                                <Grid item xs={12} md={6}>
+                                <Grid item xs={12} md={9}>
                                     <Select name="ramo" label="Ramo" data={catalogos.ramo}
                                     />
                                 </Grid>}
+                                <Grid item xs={12} md={12}>
+                                    <TextField label="Observaciones" name="observaciones" multiline={true} />
+                                </Grid>
                                 <Grid item xs={12}>
                                     <Typography className={cla.subtitulo} align={"left"}>
                                         Institución / Dependencia

@@ -72,5 +72,8 @@ export default Yup.object().shape({
 			new RegExp('^[a-zA-Z0-9 ]{1,100}$'),
 			'No se permiten números, ni cadenas vacías, máximo 100 caracteres'
 		)
+		.trim(),
+	observaciones: Yup.string()
+		.matches(new RegExp('^[A-zÀ-ú-0-9\n ]{1,1000}$'), 'No se permiten cadenas vacías, máximo 1000 caracteres')
 		.trim()
 });
