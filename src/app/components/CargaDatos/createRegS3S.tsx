@@ -233,7 +233,7 @@ function MyForm(props: MyFormProps) {
             id: Yup.string().trim(),
             titulo: Yup.string()
                 .required('El campo Título es requerido')
-                .max(50, 'Máximo 50 caracteres')
+                .max(100, 'Máximo 100 caracteres')
                 .trim(),
             descripcion: Yup.string()
                 .required('El campo Descripción es requerido')
@@ -241,7 +241,7 @@ function MyForm(props: MyFormProps) {
                 .trim(),
             url: Yup.string()
                 .matches(
-                    /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                    /((https?):\/\/)?(www.)?([\w\-]+)+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9\#\_:]+)*\/?(\?[a-zA-Z0-9\-\_]+=[a-zA-Z0-9-%]+&?)?$/,
                     'Introduce una dirección de internet valida'
                 )
                 .required('El campo URL es requerido')
