@@ -30,6 +30,7 @@ import {
 } from '@material-ui/core';
 
 import schema from './validate.s3s';
+import document from './validate.document';
 
 const CreateReg = ({ id, alert, catalogos, registry }) => {
     let data = { ...registry, tipoSancionArray: [], documents: [] };
@@ -229,29 +230,11 @@ function MyForm(props: MyFormProps) {
     };
 
     const addDocument = async (values, push, clear) => {
-        let schema = Yup.object().shape({
-            id: Yup.string().trim(),
-            titulo: Yup.string()
-                .required('El campo Título es requerido')
-                .max(100, 'Máximo 100 caracteres')
-                .trim(),
-            descripcion: Yup.string()
-                .required('El campo Descripción es requerido')
-                .max(200, 'Máximo 200 caracteres')
-                .trim(),
-            url: Yup.string()
-                .matches(
-                    /((https?):\/\/)?(www.)?([\w\-]+)+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9\#\_:]+)*\/?(\?[a-zA-Z0-9\-\_]+=[a-zA-Z0-9-%]+&?)?$/,
-                    'Introduce una dirección de internet valida'
-                )
-                .required('El campo URL es requerido')
-                .trim(),
-            fecha: Yup.string().required('El campo Fecha es requerido').trim(),
-            tipo: Yup.object()
-        });
-
-        schema.validate(values.documentElement, { abortEarly: false }).then((result) => {
-
+        let schema = document;
+        
+        try {
+            await schema.validate(values.documentElement, { abortEarly: false });
+            
             let id = values.documents.length ? parseInt(values.documents[values.documents.length - 1].id) + 1 : 1;
 
             let { titulo, descripcion, url, fecha } = values.documentElement;
@@ -271,28 +254,26 @@ function MyForm(props: MyFormProps) {
                 ...errors,
                 documentElement: {}
             });
-        }).catch((err) => {
-
+        } catch (err) {
             let errores = {};
 
             err.inner && err.inner.forEach(e => { errores = { ...errores, [e.path]: e.message } })
-
 
             setErrors({
                 ...errors,
                 documentElement: errores
             });
-        });
+        }        
     };
 
     const cla = styles();
 
-    const buttonSubmittProps = {
-        // make sure all required component's inputs/Props keys&types match
-        variant: 'contained',
-        color: 'primary',
-        type: 'submit'
-    };
+    // const buttonSubmittProps = {
+    //     // make sure all required component's inputs/Props keys&types match
+    //     variant: 'contained',
+    //     color: 'primary',
+    //     type: 'submit'
+    // };
 
     // yes, this can even be async!
     async function onSubmit(values: FormDataEsquemaS3S) {
