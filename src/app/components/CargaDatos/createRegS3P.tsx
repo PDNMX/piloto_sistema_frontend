@@ -346,6 +346,7 @@ function MyForm(props: MyFormProps) {
 
     };
 
+    const emailRegrex = /^((https?):\/\/)(www.)?([a-zA-Z0-9.-])+(.[a-zA-Z]{3})(\/[a-zA-Z0-9_:=?.-]+)+$/;
     const addDocument = async (values, push, clear) => {
         let schema = Yup.object().shape({
             id: Yup.string().trim(),
@@ -358,10 +359,7 @@ function MyForm(props: MyFormProps) {
                 .max(200, 'Máximo 200 caracteres')
                 .trim(),
             url: Yup.string()
-                .matches(
-                    /((https?):\/\/)?(www.)?([\w\-]+)+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9\#\_:]+)*\/?(\?[a-zA-Z0-9\-\_]+=[a-zA-Z0-9-%]+&?)?$/,
-                    'Introduce una dirección de internet valida'
-                )
+                .matches(emailRegrex, 'Introduce una dirección de internet valida')
                 .required('El campo URL es requerido')
                 .trim(),
             fecha: Yup.string().required('El campo Fecha es requerido').trim(),
