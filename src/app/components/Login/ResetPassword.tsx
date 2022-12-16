@@ -152,7 +152,7 @@ function MyForm(props: MyFormProps ) {
     }));
 
     const schema = Yup.object().shape({
-        correo: Yup.string().required().email()
+        correo: Yup.string().required("Correo es un campo requerido").email()
     });
 
     const validate = makeValidate(schema);

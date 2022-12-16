@@ -82,7 +82,7 @@ function MyForm(props: MyFormProps ) {
         telefono:  Yup.string().matches(new RegExp('^[0-9]{10}$'), 'Inserta un número de teléfono válido, 10 caracteres').required("El campo Número de teléfono es requerido").trim(),
         extension: Yup.string().matches(new RegExp('^[0-9]{0,10}$'), 'Inserta un número de extensión valido , máximo 10 caracteres').trim(),
         usuario: Yup.string().matches(new RegExp('^[a-zA-Z]{8,}$'),'Inserta al menos 8 caracteres, no se permiten caracteres especiales' ).required("El campo Nombre de usuario es requerido").trim(),
-        sistemas: Yup.array().min(1).required("El campo Sistemas aplicables es requerido"),
+        sistemas: Yup.array().min(1, "El campo Sistemas debe de tener al menos un ítem seleccionado").required("El campo Sistemas aplicables es requerido"),
         proveedorDatos: Yup.string().required("El campo Proveedor de datos es requerido")
     });
 
