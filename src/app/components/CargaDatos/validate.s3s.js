@@ -80,7 +80,7 @@ export default Yup.object().shape({
 		.trim(),
 	resolucionURL: Yup.string()
 		.matches(
-			/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+			/((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9_\-.#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
 			'Introduce una direccion de internet valida'
 		)
 		.trim(),
@@ -146,7 +146,7 @@ export default Yup.object().shape({
 	//             .trim(),
 	//         url: Yup.string()
 	//             .matches(
-	//                 /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+	//                 /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9_\-.#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
 	//                 'Introduce una dirección de internet valida'
 	//             )
 	//             .required('El campo URL de la sección Documentos es requerido')
